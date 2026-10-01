@@ -1,0 +1,66 @@
+# ---------------------------------------------------------------------------
+# ChemiPedia
+# Keep the working tree free of machine-specific and generated files, so that
+# `git status` always shows only authored, intentional changes.
+# ---------------------------------------------------------------------------
+
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editors and IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.pnpm-store/
+
+# Build output
+# Generated per ADR-001 §3. The repository holds authored source; the build
+# script regenerates this. Never commit it.
+dist/
+build/
+.cache/
+.tmp/
+
+# Test and coverage artefacts
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+playwright-report/
+.playwright/
+
+# Logs and local environment
+*.log
+.env
+.env.local
+.env.*.local
+
+# Visual-verification scratch output
+# Screenshots taken during a phase's visual check are scratch, not artefacts.
+screenshots/
+*.tmp.png
