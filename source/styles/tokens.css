@@ -16,6 +16,13 @@
    descriptive of one palette, and no component reads a literal colour, so a
    second theme would be a second set of values under a root attribute rather
    than a refactor.
+
+   Where the boundary sits: a token is a decision a designer would make and a
+   reviewer would want to change in one place — a colour, a size, a rhythm, a
+   duration, a corner. Structural idioms that are not design decisions stay
+   where they are used: the single pixel of an off-screen box, the half of a
+   clip path, the near-zero duration that disables motion for someone who has
+   asked for it. Those are not values anyone will want to tune.
    =========================================================================== */
 
 :root {
@@ -96,6 +103,7 @@
   --step-5: clamp(3.05rem, 2.45rem + 2.98vw, 4.58rem);
 
   --leading-tight: 1.08; /* display headings */
+  --leading-ui: 1.2; /* navigation links, which carry their own padding */
   --leading-body: 1.6;
   --leading-prose: 1.7;
   --measure: 68ch; /* maximum prose width */
@@ -162,11 +170,21 @@
   --pad-submenu: var(--sp-1); /* the band's vertical padding */
   --gap-footer-cols: var(--sp-5); /* between footer columns */
   --gap-footer-rows: var(--sp-2); /* between entries in one footer column */
+
+  --height-masthead: 58px; /* one-row masthead, before its 1px rule */
+  --width-search: 9rem;
   --width-footer-brand: 17rem; /* the brand block's column in the footer */
+  --measure-note: 32ch; /* the short paragraphs beside the footer's columns */
 
   --underline-active: 2px; /* the active navigation item's rule */
   --wordmark-size: 0.95rem; /* the measured lockup size */
   --wordmark-leading: 1.05;
+  /* Display type is set slightly closed. Measured from the reference, where a
+     54.88px heading carries -1.0976px of tracking, which is this ratio. */
+  --tracking-tight: -0.02em;
+  --tracking-heading: 0.06em; /* the small-caps footer headings */
+  --code-scale: 0.92em;
+  --underline-offset: 0.18em;
 
   --focus-width: 2px;
   --focus-offset: 2px;

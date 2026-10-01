@@ -107,9 +107,11 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/components/element-tile.js` | 🚧 One tile: atomic number, symbol, name; compact and detailed variants. | 3 |
 | `scripts/components/element-card.js` | 🚧 The index card: tile plus name, group, weight and state. | 6 |
 | `scripts/components/legend-chips.js` | 🚧 One pill per colour key, with its count; emits the isolation event. | 3 |
-| `scripts/components/site-header.js` | 🚧 Wordmark, primary nav, search field, responsive collapse. | 1 |
-| `scripts/components/site-footer.js` | 🚧 The five link columns, tagline and copyright. | 1 |
-| `scripts/components/submenu.js` | 🚧 The contextual secondary navigation and its active-item underline. | 1 |
+| `scripts/components/wordmark.js` | ✅ The two-line lockup, as a link in the masthead and as plain text in the footer. | 1 |
+| `scripts/components/search-field.js` | ✅ The masthead search: a form, not a script, so it works without JavaScript and needs no behaviour module. | 1 |
+| `scripts/components/site-header.js` | ✅ The masthead: lockup, primary navigation from the manifest, and the search field. Rendered into the HTML at build time, so the chrome exists before any script runs. | 1 |
+| `scripts/components/site-footer.js` | ✅ The five link columns, the identity block, the provenance note and the copyright. | 1 |
+| `scripts/components/submenu.js` | ✅ The contextual band, with the site's dotted rule across its full width. Returns nothing for a section that has no submenu. | 1 |
 | `scripts/components/element-search.js` | 🚧 Live filtering and quick-jump to an element. | 4 |
 | `scripts/components/property-list.js` | 🚧 The ~40-row labelled property table, with unknown-value handling. | 5 |
 | `scripts/components/faq-block.js` | 🚧 Generates question/answer pairs from an element's own record. | 5 |
@@ -140,7 +142,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `styles/tokens.css` | ✅ **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. Surfaces and ink, the eleven group colours and the four block colours, the fluid type scale, spacing, shape, motion, and the handful of measurements the shell needs. One theme only: the light palette at the root (ADR-006). | 1 |
 | `styles/base.css` | ✅ The reset and the element defaults: typography, links, the focus ring, selection, the skip link, and the mandatory reduced-motion block. | 1 |
 | `styles/layout.css` | ✅ The shell, the page's vertical rhythm, the dotted-rule section and separator, prose measurement, and the shared page-heading block. | 1 |
-| `styles/components/*.css` | 🚧 One stylesheet per component, named to match its module. Never styles anything else. | 1–10 |
+| `styles/components/*.css` | ✅ One stylesheet per component, named to match its module. Never styles anything else. Delivered so far: `wordmark`, `search-field`, `site-header`, `submenu`, `site-footer`. | 1–10 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
 ### 3.4 `source/data/` — the data
