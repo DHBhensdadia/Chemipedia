@@ -90,14 +90,14 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `source/README.md` | ✅ A short orientation note for the code root: what lives where, and where the real guide is. | 0 |
 | `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. A foundation placeholder until the home-page phase fills it in. | 0, 4 |
 | `source/pages/404.html` | ✅ The not-found markup, served with a 404 status for any URL that matches no route. | 0 |
-| `source/pages/*.html` | 🚧 One authored template per page family: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `table-view`, `group`, `ranking`, `about`, `contact`. | 5–10 |
+| `source/pages/*.html` | 🚧 The remaining authored templates: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `element-groups-index`, `group`, `properties-and-states`, `orbitals`, `electronegativity`, `evolution`, `melting-point`, `boiling-point`, `orbital-configuration`, `downloads`, `temperature-calculator`, `about`, `contact`. A family shares one template when the difference between its pages is data — the 118 element pages, the eleven group pages, the 418 glossary terms. Where the difference is written copy, each page has its own template. | 5–10 |
 
 ### 3.2 `source/scripts/` — JavaScript
 
 | File | What it owns | Phase |
 |---|---|---|
 | `scripts/app.js` | 🚧 The single entry point. Resolves the theme, installs routing, dispatches to the page module. | 1 |
-| `scripts/router/routes.js` | ✅ **The route manifest.** Every URL the site publishes, with the template, title and description that belong to it. The build renders this list and nothing else, so the manifest is the single answer to "which pages exist?". Plain data, readable by Node and by the browser alike. Static pages declare literal paths; the generated families append entries derived from the data layer. | 0 |
+| `scripts/router/routes.js` | ✅ **The route manifest.** Every URL the site publishes, with its template, title and description, plus the label and order it takes in the navigation and the section whose submenu it carries. The build renders this list and nothing else, so the manifest is the single answer to "which pages exist?" — and since the shell reads the same list, the navigation cannot point at a page the site does not publish. The static inventory is declared in full; a route whose template is not written yet is reported by the build and skipped. Generated families append entries derived from the data layer. Plain data, readable by Node and by the browser alike. | 0–1 |
 | `scripts/router/router.js` | 🚧 Link interception, history, scroll restoration, 404, static-host fallback. | 5 |
 | `scripts/data/elements-repository.js` | 🚧 The only reader of `elements.json`. Lookups by number, symbol and slug; queries by group, block, period and state; sorted views; derived values. | 2 |
 | `scripts/data/glossary-repository.js` | 🚧 The only reader of `glossary.json`. A–Z grouping, prefix search, slug lookup. | 9 |

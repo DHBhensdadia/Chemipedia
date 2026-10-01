@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { access } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 import { routes, templatePathFor } from "../../scripts/router/routes.js";
@@ -43,24 +43,67 @@ test("every route declares its own title and description", () => {
 });
 
 test("the manifest is plain data, so the browser can read it without the build", () => {
-  for (const route of routes) {
-    for (const [field, value] of Object.entries(route)) {
-      assert.equal(
-        typeof value,
-        "string",
-        `${route.path} declares ${field} as a ${typeof value}; the manifest holds data only`,
-      );
+  const serialisable = (value, path) => {
+    if (typeof value === "function") {
+      assert.fail(`${path} holds a function; the manifest must be data the browser can read`);
     }
+
+    if (value !== null && typeof value === "object") {
+      for (const [key, nested] of Object.entries(value)) {
+        serialisable(nested, `${path}.${key}`);
+      }
+    }
+  };
+
+  for (const route of routes) {
+    serialisable(route, route.path);
+    assert.equal(
+      JSON.parse(JSON.stringify(route)).path,
+      route.path,
+      `${route.path} does not survive a round trip through JSON`,
+    );
   }
 });
 
-test("every route names a template that exists under source/pages", async () => {
+test("every route names a template in source/pages", () => {
   for (const route of routes) {
     assert.equal(typeof route.template, "string", `${route.path} names no template`);
-    await assert.doesNotReject(
-      access(path.join(sourceDir, templatePathFor(route))),
-      `${route.path} points at a template that does not exist`,
+    assert.match(
+      route.template,
+      /^[a-z][a-z0-9-]*$/,
+      `${route.path} names a template that is not a plain file name: ${route.template}`,
     );
+  }
+});
+
+test("the manifest declares routes the build can already render", () => {
+  const ready = routes.filter((route) => existsSync(path.join(sourceDir, templatePathFor(route))));
+
+  assert.ok(
+    ready.length > 0,
+    "every declared route is waiting on a template, so the build would produce nothing",
+  );
+});
+
+test("a route that joins the navigation declares a label and an order", () => {
+  const orders = new Set();
+
+  for (const route of routes.filter((candidate) => candidate.nav !== undefined)) {
+    assert.equal(typeof route.nav.label, "string", `${route.path} has no navigation label`);
+    assert.ok(route.nav.label.length > 0, `${route.path} has an empty navigation label`);
+    assert.ok(
+      Number.isInteger(route.nav.order),
+      `${route.path} has no integer navigation order`,
+    );
+    assert.equal(orders.has(route.nav.order), false, `two routes claim order ${route.nav.order}`);
+    orders.add(route.nav.order);
+  }
+});
+
+test("a section, where declared, is a named string", () => {
+  for (const route of routes.filter((candidate) => candidate.section !== undefined)) {
+    assert.equal(typeof route.section, "string", `${route.path} has a section that is not a name`);
+    assert.ok(route.section.length > 0, `${route.path} has an empty section`);
   }
 });
 
