@@ -131,6 +131,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/pages/calculators.js` | 🚧 The calculators. | 10 |
 | `scripts/lib/grid.js` | 🚧 Atomic number → row/column, including the detached f-block rows. Pure. | 3 |
 | `scripts/lib/colour-scale.js` | 🚧 Numeric domain → colour, with clamping. Pure. | 3 |
+| `scripts/lib/html.js` | ✅ Building HTML strings safely: escape text, build an attribute list, join class names. Every value that reaches markup goes through here, because a stray ampersand in an attribute ends the attribute early and the browser builds a different element than the one that was written. Pure and trivial on purpose. | 1 |
 | `scripts/lib/contrast.js` | ✅ Colour maths, pure: hex normalisation, relative luminance, the WCAG contrast ratio, and the rule that picks the foreground for a group fill — the better of the two dark and cream candidates, never merely the acceptable one. | 1 |
 | `scripts/lib/format.js` | 🚧 Value and unit → display string, with first-class handling of unknown. Pure. | 2 |
 | `scripts/lib/keyboard.js` | 🚧 Roving focus and arrow-key grid navigation. | 3 |
@@ -143,7 +144,12 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `styles/tokens.css` | ✅ **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. Surfaces and ink, the eleven group colours and the four block colours, the fluid type scale, spacing, shape, motion, and the handful of measurements the shell needs. One theme only: the light palette at the root (ADR-006). | 1 |
 | `styles/base.css` | ✅ The reset and the element defaults: typography, links, the focus ring, selection, the skip link, and the mandatory reduced-motion block. | 1 |
 | `styles/layout.css` | ✅ The shell, the page's vertical rhythm, the dotted-rule section and separator, prose measurement, and the shared page-heading block. | 1 |
-| `styles/components/*.css` | ✅ One stylesheet per component, named to match its module. Never styles anything else. Delivered so far: `wordmark`, `search-field`, `site-header`, `submenu`, `site-footer`. | 1–10 |
+| `styles/components/wordmark.css` | ✅ The stacked lockup. | 1 |
+| `styles/components/search-field.css` | ✅ The masthead search: bare by design, findable by its focus ring. | 1 |
+| `styles/components/site-header.css` | ✅ The masthead band, the wrapping row, and the navigation item's rule. | 1 |
+| `styles/components/submenu.css` | ✅ The contextual band and its dotted rule. | 1 |
+| `styles/components/site-footer.css` | ✅ The footer's two blocks and the five-column link grid. | 1 |
+| `styles/components/*.css` | 🚧 The remaining one-stylesheet-per-component files, named to match their modules. Never styles anything else. | 3–10 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
 ### 3.4 `source/data/` — the data
