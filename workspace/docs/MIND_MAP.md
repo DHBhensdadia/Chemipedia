@@ -170,6 +170,9 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | Path | What it covers | Phase |
 |---|---|---|
+| `tests/tools/site-paths.test.js` | ✅ The URL-to-file rules: directory-style resolution, file paths left alone, normalisation, and refusal of a path that would escape the build directory. | 0 |
+| `tests/router/routes.test.js` | ✅ The manifest kept honest: unique, absolute, directory-style paths, a title and description per route, plain data rather than functions, and a template on disk for every declared route. | 0 |
+| `tests/tools/build.test.js` | ✅ The document skeleton: doctype, language, the icon link, and escaping of the metadata it injects. | 0 |
 | `tests/lib/*.test.js` | 🚧 Grid placement, colour scales, contrast pairing, formatters, keyboard helpers. | 2–3 |
 | `tests/data/*.test.js` | 🚧 Counts, uniqueness, category membership, lookup correctness, prose completeness. | 2 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
