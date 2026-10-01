@@ -1,6 +1,6 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-01 · **By:** initialisation session · **After commit:** `0ea045d`
+**Written:** 2026-10-01 · **By:** foundation build session · **After commit:** `90abe82`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -9,43 +9,47 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What exists right now
 
-**No application code yet.** `source/` holds only an orientation README. That is the correct state:
-the working system was built first, and the source tree is the first thing the next session creates.
+The site builds and serves. `source/` holds a working pipeline and nothing decorative:
 
-What exists is the system that makes the build survivable:
+- `scripts/router/routes.js` — the route manifest. Every published URL is declared here; the build
+  renders this list and nothing else.
+- `tools/build.js` — renders each declared route into `dist/`, wrapping the authored fragment in one
+  shared document skeleton, and copies the browser-facing directories across.
+- `tools/site-paths.js` — the one place that knows which file a URL owns. The build and the server
+  both use it, so they cannot disagree.
+- `tools/serve.js` — a plain-Node development server that behaves like a static host: directory-style
+  URLs, a redirect to the canonical form, the built not-found document for a miss, and a build on
+  start when `dist/` is missing.
+- `pages/home.html` — a foundation placeholder, deliberately unstyled. The design system comes next.
+- `pages/404.html`, `assets/brand/favicon.svg`.
+- `tests/` — 22 tests, all passing, on Node's built-in runner with nothing to install.
 
-- the folder separation and the rule that decides it,
-- the binding rules (`AGENTS.md`, `WORKING_AGREEMENT.md`),
-- the recovery checkpoint (`RUN_STATE.md`), the handoff note (this file) and the phase ledger
-  (`progress/PHASE_LOG.md`),
-- the specification: implementation plan, six accepted ADRs, design system, brand guidelines, data
-  schema and provenance, commit conventions, verification standard,
-- the research: reference design audit, tooling and visual verification, commit standards,
-- the developer guides, including the walkthrough and the interview reference sheet,
-- the mind map that indexes all of it.
+Commands: `node source/tools/serve.js` (add `--rebuild`), `node source/tools/build.js`,
+`node --test source/tests`. `dist/` is generated and ignored by git.
 
-## Decisions are settled — do not re-litigate them
+## The one thing that is not finished
 
-All six ADRs are `ACCEPTED` in `docs/ARCHITECTURE.md`. The three that shaped this handoff:
+**The screenshots.** The browser tool cannot composite frames in this session, so the 1280 / 768 /
+375 px captures could not be taken. Three lines of the Phase 0 close-out checklist are therefore
+unticked, work item 0.5 is `IN_PROGRESS`, and the phase is not marked complete. That is deliberate:
+this project does not tick a visual check it cannot evidence.
 
-| ADR | Outcome |
-|---|---|
-| ADR-001 | **Zero-dependency Node static site generator.** The 118 element pages and 418 glossary pages are generated from templates plus JSON. Generated output is ignored and rebuilt on demand. |
-| ADR-002 | **Glossary, eleven group pages, temperature calculator, downloads, About and Contact are all in scope.** The reference's blog and tutoring pages are not. |
-| ADR-003 | **Plain imperative commit prose.** No `feat:`/`fix:` prefixes. |
-| ADR-006 | **Single light theme.** No dark variant, no switcher, no `theme.css`. |
+Retry the capture before doing anything else. `preview_open` on `http://localhost:4173/`, then
+`preview_screenshot`. If it works, tick the three lines, commit the corrected record, tag `v0.1.0`,
+and close the phase. If it still does not, ask the author to confirm the rendition from the Preview
+tab and close the phase on that confirmation, recording that it is what happened.
 
-To change one of these, write a **new** ADR that supersedes it. Do not edit an accepted one.
+No styling exists yet, so nothing about this phase's appearance was ever being judged against the
+reference. From Phase 1 that changes and the gate becomes mandatory.
 
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. Start **Phase 0 work item 0.4** — scaffold `source/` to the shape in `guides/02-tour-of-the-codebase.md`:
-   the scripts, styles and data folders, the route manifest, and `source/tools/serve.js`.
-3. Then work item 0.5: confirm the dev server serves a placeholder page with zero console errors,
-   screenshot it at 1280 / 768 / 375 px, and fill in the Phase 0 close-out checklist in
-   `progress/PHASE_LOG.md`.
-4. Tag `v0.1.0` and set Phase 0 to `COMPLETE`.
+2. Resolve the open gate above.
+3. Start **Phase 1** — design system and global shell: `styles/tokens.css` from the values in
+   `docs/DESIGN_SYSTEM.md`, then `base.css`, the layout primitives, the header, submenu and footer,
+   and the development-only style guide at `source/styleguide/`. The build must then link
+   `tokens.css` and `app.js` from the document skeleton, which is the one edit to `tools/build.js`.
 
 ## What is fragile or easy to get wrong
 
@@ -53,20 +57,21 @@ To change one of these, write a **new** ADR that supersedes it. Do not edit an a
   comment or a JSON field. Run the scan in `WORKING_AGREEMENT.md` §4 before every milestone commit.
 - **Scope.** The learning and games sections are *deleted features*, not unfinished ones. Do not
   stub them, link to them, or leave a footer column looking short.
-- **Attribution.** Repo-local git identity is `Devansh <dhbhensdadia@gmail.com>`. Do not change it, and
-  never add an AI co-author or "generated with" trailer.
-- **Shell quoting.** An apostrophe inside a commit message body breaks the heredoc-through-shell path
-  used to write commits, because the command substitution cannot find its closing parenthesis.
-  Phrase messages without contractions, or write the message to a file and use `git commit -F`.
+- **The route manifest.** A URL exists only if it is declared there. Adding a page means adding a
+  manifest entry; the tests will fail if the entry names a template that is not on disk.
+- **Templates are fragments.** `source/pages/*.html` carry no `<head>`, no `<body>` and no doctype —
+  the build owns all of that. There is no `source/index.html`; the home template is
+  `source/pages/home.html`.
+- **Screenshots.** Do not close a phase on geometry measurements once a designed surface exists.
+  Measured layout is a substitute, not a replacement.
+- **Attribution.** Repo-local git identity is `Devansh <dhbhensdadia@gmail.com>`. Do not change it,
+  and never add an AI co-author or "generated with" trailer.
+- **Shell quoting.** An apostrophe inside a commit message body breaks the heredoc-through-shell
+  path. Write the message to a file and use `git commit -F -`, as the previous sessions did.
 - **The light theme is deliberate.** Do not "fix" the missing dark mode. It is ADR-006.
-- **The mind map.** Only useful if updated in the same commit as the change.
-- **Visual truth.** An agent cannot judge appearance by reading DOM. Screenshot it and look at it.
-- **The reference site is live.** Re-open it with the browser tools when a phase needs it; do not
-  trust a screenshot from an earlier session.
+- **The mind map.** Update it in the same commit as the file it describes, or it stops being usable.
 
 ## Anything deliberately left in a half state
 
-No half-finished work, and the working tree is clean. Phase 0 is `IN_PROGRESS` rather than `COMPLETE`
-because two of its exit criteria — a running dev server and a verified visual check — require the
-source tree that work item 0.4 has not yet created. That is recorded honestly in
-`progress/PHASE_LOG.md` rather than marked done.
+Only the screenshot gate, described above. The working tree is clean and every other Phase 0 exit
+criterion is met and evidenced in `progress/PHASE_LOG.md`.
