@@ -29,9 +29,36 @@ import {
   INDEX_FILE,
   NOT_FOUND_FILE,
   distDir,
+  isInside,
   normalisePathname,
   outputFileForPath,
+  sourceDir,
 } from "./site-paths.js";
+
+/**
+ * The style guide is a development tool, so the build never renders it and it never reaches the
+ * built output (ADR-001 §3). It still needs to be viewable, so the server maps this one prefix
+ * onto the source tree instead of the build. Nothing else is served from source: a page that is
+ * not in the build must not appear to be part of the site.
+ */
+const STYLE_GUIDE_PREFIX = "/styleguide/";
+const styleGuideDir = path.join(sourceDir, "styleguide");
+
+/**
+ * @param {string} pathname a normalised URL path
+ * @returns {string | null} the file in the source tree that the path names, if it names one
+ */
+function styleGuideFile(pathname) {
+  if (!pathname.startsWith(STYLE_GUIDE_PREFIX)) {
+    return null;
+  }
+
+  const relative = pathname.slice(STYLE_GUIDE_PREFIX.length);
+  const target = relative === "" || relative.endsWith("/") ? `${relative}${INDEX_FILE}` : relative;
+  const resolved = path.resolve(styleGuideDir, target);
+
+  return isInside(styleGuideDir, resolved) ? resolved : null;
+}
 
 const DEFAULT_PORT = 4173;
 
@@ -169,6 +196,14 @@ export function createStaticServer({ logging = true } = {}) {
       const url = new URL(request.url ?? "/", `http://${request.headers.host ?? "localhost"}`);
       const requested = decodeURIComponent(url.pathname);
       const canonical = normalisePathname(requested);
+      const guide = styleGuideFile(canonical);
+
+      if (guide !== null && (await isFile(guide))) {
+        await sendFile(response, { status: 200, file: guide, head });
+        logged = `200 ${request.method} ${canonical} (style guide)`;
+        return;
+      }
+
       const file = outputFileForPath(canonical);
 
       if (canonical !== requested && (await isFile(file))) {

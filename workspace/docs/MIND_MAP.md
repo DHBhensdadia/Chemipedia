@@ -90,6 +90,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `source/README.md` | ✅ A short orientation note for the code root: what lives where, and where the real guide is. | 0 |
 | `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. A foundation placeholder until the home-page phase fills it in. | 0, 4 |
 | `source/pages/404.html` | ✅ The not-found markup, served with a 404 status for any URL that matches no route. | 0 |
+| `source/styleguide/index.html` | ✅ **The design system on one page**, development only: every token, the type and spacing scales, all eleven group colours with the foreground the site would choose for each and the contrast ratio it reaches, and the shell components rendered by the components themselves. Not a route, never built, never deployed; the development server maps `/styleguide/` onto the source tree so it can still be looked at. | 1 |
 | `source/pages/*.html` | 🚧 The remaining authored templates: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `element-groups-index`, `group`, `properties-and-states`, `orbitals`, `electronegativity`, `evolution`, `melting-point`, `boiling-point`, `orbital-configuration`, `downloads`, `temperature-calculator`, `about`, `contact`. A family shares one template when the difference between its pages is data — the 118 element pages, the eleven group pages, the 418 glossary terms. Where the difference is written copy, each page has its own template. | 5–10 |
 
 ### 3.2 `source/scripts/` — JavaScript
@@ -167,8 +168,8 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it does | Phase |
 |---|---|---|
 | `tools/site-paths.js` | ✅ Where the repository, the source tree and the build directory are, and which file in the built output a published URL owns. Pure path arithmetic with no file-system access, which is what makes it testable on its own. | 0 |
-| `tools/build.js` | ✅ Renders every route in the manifest into `dist/`, wrapping each authored template in the shared document skeleton, and copies the browser-facing directories across. Grows with the page families. | 0–1 |
-| `tools/serve.js` | ✅ The zero-dependency development server. Serves `dist/` the way a static host does: directory-style URLs, a redirect to the canonical form, and the built not-found page for anything else. Builds on start when `dist/` is missing. | 0 |
+| `tools/build.js` | ✅ Renders every ready route in the manifest into `dist/`, wrapping each authored template in the document skeleton, the masthead, the contextual band and the footer, with the stylesheets that page needs. A route whose template is not written yet is skipped and reported rather than rendered as a stub. Copies the browser-facing directories across. | 0–1 |
+| `tools/serve.js` | ✅ The zero-dependency development server. Serves `dist/` the way a static host does: directory-style URLs, a redirect to the canonical form, and the built not-found page for anything else. Builds on start when `dist/` is missing, and maps the one development-only prefix, `/styleguide/`, onto the source tree. | 0–1 |
 | `tools/build-data.js` | 🚧 Fetches the openly licensed dataset and emits our normalised JSON. The reason the data is reproducible rather than magic. | 2 |
 
 ### 3.7 `source/tests/` — tests
