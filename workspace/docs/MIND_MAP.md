@@ -127,7 +127,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/pages/calculators.js` | 🚧 The calculators. | 10 |
 | `scripts/lib/grid.js` | 🚧 Atomic number → row/column, including the detached f-block rows. Pure. | 3 |
 | `scripts/lib/colour-scale.js` | 🚧 Numeric domain → colour, with clamping. Pure. | 3 |
-| `scripts/lib/contrast.js` | 🚧 Group colour → a foreground that passes WCAG AA. Pure. | 1 |
+| `scripts/lib/contrast.js` | ✅ Colour maths, pure: hex normalisation, relative luminance, the WCAG contrast ratio, and the rule that picks the foreground for a group fill — the better of the two dark and cream candidates, never merely the acceptable one. | 1 |
 | `scripts/lib/format.js` | 🚧 Value and unit → display string, with first-class handling of unknown. Pure. | 2 |
 | `scripts/lib/keyboard.js` | 🚧 Roving focus and arrow-key grid navigation. | 3 |
 | `scripts/lib/slug.js` | 🚧 Name → slug, and back. Pure. | 2 |
@@ -172,6 +172,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | Path | What it covers | Phase |
 |---|---|---|
+| `tests/lib/contrast.test.js` | ✅ The colour rules, plus a walk over every group colour that the token stylesheet actually declares: each one must take a foreground that passes AA for text, and the module's two foreground constants must match the stylesheet. | 1 |
 | `tests/tools/site-paths.test.js` | ✅ The URL-to-file rules: directory-style resolution, file paths left alone, normalisation, and refusal of a path that would escape the build directory. | 0 |
 | `tests/router/routes.test.js` | ✅ The manifest kept honest: unique, absolute, directory-style paths, a title and description per route, plain data rather than functions, and a template on disk for every declared route. | 0 |
 | `tests/tools/build.test.js` | ✅ The document skeleton: doctype, language, the icon link, and escaping of the metadata it injects. | 0 |
