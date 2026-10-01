@@ -96,7 +96,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it owns | Phase |
 |---|---|---|
 | `scripts/app.js` | 🚧 The single entry point. Resolves the theme, installs routing, dispatches to the page module. | 1 |
-| `scripts/router/routes.js` | 🚧 The route table: path pattern → page module. The answer to "what renders this URL?". | 5 |
+| `scripts/router/routes.js` | ✅ **The route manifest.** Every URL the site publishes, with the template, title and description that belong to it. The build renders this list and nothing else, so the manifest is the single answer to "which pages exist?". Plain data, readable by Node and by the browser alike. Static pages declare literal paths; the generated families append entries derived from the data layer. | 0 |
 | `scripts/router/router.js` | 🚧 Link interception, history, scroll restoration, 404, static-host fallback. | 5 |
 | `scripts/data/elements-repository.js` | 🚧 The only reader of `elements.json`. Lookups by number, symbol and slug; queries by group, block, period and state; sorted views; derived values. | 2 |
 | `scripts/data/glossary-repository.js` | 🚧 The only reader of `glossary.json`. A–Z grouping, prefix search, slug lookup. | 9 |
