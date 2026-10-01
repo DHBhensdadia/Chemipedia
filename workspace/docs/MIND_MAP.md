@@ -105,7 +105,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/data/elements-repository.js` | ✅ The only reader of `elements.json`. Lookups by number, symbol and slug, queries by category, block, period, group and state, and sorting that always puts the unknowns last. A lookup that finds nothing returns null, because a URL for an element that does not exist is a 404 and a page is not an exception. | 2 |
 | `scripts/data/categories-repository.js` | ✅ The only reader of `categories.json`. The eleven categories, their display names, their palette tokens and the member counts the legend asserts. | 2 |
 | `scripts/data/units-repository.js` | ✅ The only reader of `units.json`. Turns a field name into the unit to print and the number of figures to print it to, which is what keeps the unit next to the value instead of inside the page. | 2 |
-| `scripts/data/glossary-repository.js` | 🚧 The only reader of `glossary.json`. A–Z grouping, prefix search, slug lookup. | 9 |
+| `scripts/data/glossary-repository.js` | ✅ The only reader of `glossary.json`, and the glossary's arrangement rather than its content: reading order, the A–Z letters that actually have terms under them, lookup by slug, and a search that matches the definition as well as the term, because a reader who wants a word often knows the idea and not the name. The 418 definitions arrive in the glossary phase; this knows only what shape they take. | 2, 9 |
 | `scripts/components/periodic-table.js` | 🚧 The centrepiece. The 18×10 grid, four colour modes, group isolation, keyboard navigation, tooltips. | 3 |
 | `scripts/components/element-tile.js` | 🚧 One tile: atomic number, symbol, name; compact and detailed variants. | 3 |
 | `scripts/components/element-card.js` | 🚧 The index card: tile plus name, group, weight and state. | 6 |
@@ -204,6 +204,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/tools/configuration.test.js` | ✅ Shell populations for iron, gold, uranium and a predicted superheavy, and refusal of a configuration that cannot be read. | 2 |
 | `tests/data/elements.test.js` | ✅ The repository against the real file: 118 records, every lookup, unique slugs, the counts the legend asserts, shells that account for every electron, unknown values that are neither empty nor undefined, and six elements checked against what an authoritative table says. | 2 |
 | `tests/data/repositories.test.js` | ✅ The categories and units repositories, including that every palette token a category names is one the token layer actually declares. | 2 |
+| `tests/data/glossary.test.js` | ✅ The glossary's arrangement, against a six-term fixture: reading order, derived letters, lookup, and a search that finds a word that appears only in a definition. | 2 |
 | `tests/brand/brand.test.js` | ✅ Walks the whole of `source/` and fails the suite if the reference's name appears anywhere in it, so the phase log's scan cannot be the only thing standing between a slip and a commit. | 2 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
 

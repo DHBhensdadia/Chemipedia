@@ -125,6 +125,22 @@ that fact: the page machinery is small, the content is not.
 | Output | `source/data/glossary.json` |
 | Output commit | _(Phase 9)_ |
 
+**Record schema — `source/data/glossary.json`**
+
+```jsonc
+{
+  "term": "Kinetics",
+  "slug": "kinetics",
+  "level": "Expert",        // Beginner | Novice | Expert, and nothing else
+  "definition": "One to three sentences, written for this project."
+}
+```
+
+A definition is searched as well as a term, because a reader who wants a word often knows the
+idea and not the name: searching *the study of reaction rates* should reach **kinetics**.
+`level` is a closed set rather than free text, because the badge on the page is one of three and a
+fourth value would render as nothing at all.
+
 **Which phase owns this — the contradiction, and its resolution.** The implementation plan lists
 `glossary.json` under Phase 2, and this table says Phase 9. Both cannot be right, and an unnoticed
 contradiction between two documents is itself a defect. Resolved in Phase 2 as follows: **Phase 2
