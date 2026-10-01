@@ -1,0 +1,174 @@
+/* ===========================================================================
+   Tokens — every design value in the project.
+
+   This is the only stylesheet that contains a literal colour, size, radius,
+   duration or easing. Everything else references these custom properties, so a
+   change to the design is a change in one file, and a review can check the
+   whole visual language by reading one screen.
+
+   The values are the ones measured from the design reference and recorded in
+   workspace/docs/DESIGN_SYSTEM.md and docs/research/01-reference-site-audit.md.
+   The reference declares its light palette at the root and switches to a dark
+   variant at runtime; we adopt the palette it declares at the root and ship it
+   as the only theme (ADR-006).
+
+   One consequence worth stating: the token names are semantic rather than
+   descriptive of one palette, and no component reads a literal colour, so a
+   second theme would be a second set of values under a root attribute rather
+   than a refactor.
+   =========================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------------
+     1. Surfaces and ink — warm paper, pine-green ink.
+     ------------------------------------------------------------------------- */
+  --bg: #fdfbfa;
+  --surface: #ffffff;
+  --surface-sunk: #f6f2ef;
+
+  --ink: #15403d; /* brand ink: rules, headings, the dotted motif */
+  --ink-body: #24312f; /* body copy */
+  --ink-soft: #5d6b68; /* secondary text */
+  --ink-faint: #8a938f; /* captions and tertiary text */
+  --ink-inverse: #fdfbfa; /* text on an ink-coloured surface */
+
+  --line: #e4ddd7;
+  --line-strong: #cfc5bc;
+
+  --accent: var(--ink);
+  --on-accent: var(--ink-inverse);
+
+  /* -------------------------------------------------------------------------
+     2. Element group colours — eleven fixed values, one per category.
+
+     These are load-bearing data, not decoration: they encode which category an
+     element belongs to, and they are reused by every surface that shows a
+     category. Each one is paired with a foreground that reaches WCAG AA
+     against it; the pairing is derived in scripts/lib/contrast.js rather than
+     written per component, so there is one rule and one test.
+     ------------------------------------------------------------------------- */
+  --g-transition-metals: #f9aa62; /* orange */
+  --g-actinides: #559982; /* sage */
+  --g-lanthanides: #d473a2; /* pink */
+  --g-post-transition-metals: #97c0aa; /* pale green */
+  --g-unknown: #efce69; /* yellow */
+  --g-noble-gases: #e57860; /* coral */
+  --g-non-metals: #a6c6d5; /* pale blue */
+  --g-alkali-metals: #456683; /* slate blue */
+  --g-alkaline-earth-metals: #15403d; /* deep pine */
+  --g-metalloids: #6e58ac; /* violet */
+  --g-halogens: #4c575a; /* grey blue */
+
+  /* -------------------------------------------------------------------------
+     3. Orbital block colours — the alternate table view.
+     ------------------------------------------------------------------------- */
+  --g-s-block: #456683;
+  --g-p-block: #97c0aa;
+  --g-d-block: #f9aa62;
+  --g-f-block: #d473a2;
+
+  /* The two foregrounds a group fill may take. Which one a given fill uses is
+     derived by scripts/lib/contrast.js, which reads the better of the two —
+     pale groups take the dark, dark groups take the cream. Those two values
+     are repeated in that module because JavaScript cannot read a custom
+     property outside the DOM, and a test guards against drift. */
+  --on-fill-dark: #12211f;
+  --on-fill-light: #fdfbfa;
+
+  /* -------------------------------------------------------------------------
+     4. Typography.
+
+     The scale is fluid: every step is a clamp() between a small-screen and a
+     large-screen size, so a heading grows with the viewport instead of jumping
+     at a breakpoint. Measured against the reference: the primary navigation
+     sits on --step-0 and the search field on --step--1.
+     ------------------------------------------------------------------------- */
+  --font-body: "Inter", "Work Sans", ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-body);
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --step--1: clamp(0.79rem, 0.77rem + 0.1vw, 0.85rem);
+  --step-0: clamp(1rem, 0.96rem + 0.18vw, 1.1rem);
+  --step-1: clamp(1.25rem, 1.18rem + 0.35vw, 1.45rem);
+  --step-2: clamp(1.56rem, 1.44rem + 0.62vw, 1.94rem);
+  --step-3: clamp(1.95rem, 1.74rem + 1.05vw, 2.58rem);
+  --step-4: clamp(2.44rem, 2.08rem + 1.78vw, 3.43rem);
+  --step-5: clamp(3.05rem, 2.45rem + 2.98vw, 4.58rem);
+
+  --leading-tight: 1.08; /* display headings */
+  --leading-body: 1.6;
+  --leading-prose: 1.7;
+  --measure: 68ch; /* maximum prose width */
+
+  --weight-body: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* -------------------------------------------------------------------------
+     5. Space, shape and layout.
+     ------------------------------------------------------------------------- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  --radius: 2px; /* the default: near-square */
+  --radius-lg: 8px; /* raised panels only */
+  --radius-pill: 999px;
+
+  --shell: 1100px; /* maximum content width */
+  --pad-shell: var(--sp-5); /* horizontal page padding */
+
+  --rule-width: 1px;
+  --rule-solid: var(--rule-width) solid var(--ink);
+  --rule-dotted: var(--rule-width) dotted var(--ink); /* the signature motif */
+  --rule-hairline: var(--rule-width) solid var(--line);
+
+  --shadow-sm: 0 1px 2px #15403d0f;
+  --shadow-md: 0 4px 16px #15403d14;
+
+  /* -------------------------------------------------------------------------
+     6. Motion.
+
+     Short, decelerating, upward. Nothing bouncy, nothing longer than --dur-slow.
+     ------------------------------------------------------------------------- */
+  --dur-fast: 0.16s;
+  --dur-base: 0.3s;
+  --dur-slow: 0.62s;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+
+  --rise: 14px; /* entrance offset */
+  --rise-sm: 8px;
+  --stagger: 70ms;
+  --stagger-sm: 45ms;
+
+  /* -------------------------------------------------------------------------
+     7. Chrome.
+
+     The shell — masthead, contextual submenu and footer — has a few measurements
+     of its own. They are here rather than in the component stylesheets because
+     they are design values, and because the masthead's gap and the submenu's
+     band are part of the same visual rhythm as the spacing scale.
+     ------------------------------------------------------------------------- */
+  --gap-masthead: var(--sp-6); /* between wordmark, navigation and search */
+  --gap-nav: var(--sp-5); /* between primary navigation items */
+  --gap-submenu: var(--sp-4); /* between contextual submenu items */
+  --pad-submenu: var(--sp-1); /* the band's vertical padding */
+  --gap-footer-cols: var(--sp-5); /* between footer columns */
+  --gap-footer-rows: var(--sp-2); /* between entries in one footer column */
+  --width-footer-brand: 17rem; /* the brand block's column in the footer */
+
+  --underline-active: 2px; /* the active navigation item's rule */
+  --wordmark-size: 0.95rem; /* the measured lockup size */
+  --wordmark-leading: 1.05;
+
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --focus-color: var(--ink);
+}
