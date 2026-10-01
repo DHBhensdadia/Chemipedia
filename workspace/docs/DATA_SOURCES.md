@@ -44,21 +44,66 @@ transformed.
 
 **Fields the dataset will not supply, and which we author:** the descriptive paragraph, the Uses
 paragraph, the Sources paragraph, the pronunciation, and the name origin. These are per-element
-writing work — 118 short entries. Budget for it in Phase 2 and treat it as the phase's real cost.
+writing work — 118 short entries — and they are the phase's real cost rather than its mechanical
+part. There were four prose fields in the first draft of this schema; `description` was dropped
+because on the page it and `summary` are the same paragraph twice, and a schema that asks for two
+names for one thing is a schema that will drift.
+
+**Where the authored text lives.** Fetched facts and written prose are kept apart, in
+`source/data/element-notes.json` and the generated `source/data/elements.json` respectively. A
+build script that writes a file the author also edits by hand destroys the author's work the
+second time it runs, and merging two files is a smaller complication than that. `build-data.js`
+will refuse to write an element whose notes are missing, so the merge cannot fail quietly.
 
 **Chosen dataset, licence, retrieval date, and commit hash of the generated output:**
-_To be recorded here in Phase 2, before the data commit. Do not generate data without filling in
-this section first._
 
 | Field | Value |
 |---|---|
-| Dataset name | _(Phase 2)_ |
-| URL | _(Phase 2)_ |
-| Licence | _(Phase 2)_ |
-| Retrieved | _(Phase 2)_ |
+| Dataset name | PubChem Periodic Table (PUG REST) |
+| Publisher | U.S. National Library of Medicine, National Center for Biotechnology Information |
+| URL | `https://pubchem.ncbi.nlm.nih.gov/rest/pug/periodictable/JSON` |
+| Licence | Public domain (work of the U.S. government). NCBI places no restriction on the use or distribution of the data it publishes and asks for acknowledgment; the agency also notes that PubChem aggregates some material contributed under other terms, so attribution is recorded whatever the case. The facts themselves — a melting point, an electron configuration — are not copyrightable subject matter in any jurisdiction. |
+| Retrieved | 2026-10-01 |
+| Coverage | 118 rows, atomic number 1 to 118, one row per element |
 | Transform script | `source/tools/build-data.js` |
 | Output | `source/data/elements.json` |
-| Output commit | _(Phase 2)_ |
+| Output commit | _(recorded with the data commit)_ |
+
+PubChem is chosen over the community JSON files that dominate a search for this data because those
+are almost all CC BY-SA, and ShareAlike would attach to our generated file and to everything built
+from it — a licence obligation the project does not want and ADR-005 does not permit. The one
+other permissively licensed candidate found, `komed3/periodic-table` (MIT), carries the same field
+set as PubChem and no more, so there is nothing to gain by taking on a second community source.
+
+### 2.1 Supplementary dataset — the second tier of physical properties
+
+PubChem's periodic table exposes seventeen columns. The element page needs roughly forty values,
+and the difference is mostly the thermal and atomic-scale properties — heat of fusion, specific
+heat, thermal conductivity, ionic radius, crystal system — which PubChem's periodic-table endpoint
+does not carry.
+
+| Field | Value |
+|---|---|
+| Dataset name | Wikidata |
+| Publisher | Wikimedia Foundation |
+| URL | `https://query.wikidata.org/sparql` (the query is built in `source/tools/data-sources/wikidata.js`) |
+| Licence | CC0 1.0 Universal — a public-domain dedication, no conditions |
+| Retrieved | 2026-10-01 |
+| Coverage | Partial by nature. Where an element has no value in Wikidata the field stays `null`. |
+
+Two sources rather than one is a real cost, and it is the honest one: no single openly licensed
+dataset found supplies the whole schema under a licence this project may accept. Every field
+records which source produced it, so a reader can tell at a glance.
+
+**Units.** Wikidata stores a value with a unit, and the units are not always the ones we want. The
+adapter converts against a small explicit table and **sets the field to `null` rather than guessing
+when it meets a unit it does not recognise**. A silent unit error would put a wrong number on the
+page with no way to notice it; a null is visible.
+
+**Known gaps.** `covalentRadius` and `latticeParameters` are supplied by neither source and are
+`null` for every element. They are kept in the schema so the shape does not change when a source
+is found, and the UI renders them the way it renders any other unknown. Filling them is a
+data-layer task with no page work attached, which is why it is safe to leave open.
 
 ## 3. Glossary
 
@@ -80,6 +125,17 @@ that fact: the page machinery is small, the content is not.
 | Output | `source/data/glossary.json` |
 | Output commit | _(Phase 9)_ |
 
+**Which phase owns this — the contradiction, and its resolution.** The implementation plan lists
+`glossary.json` under Phase 2, and this table says Phase 9. Both cannot be right, and an unnoticed
+contradiction between two documents is itself a defect. Resolved in Phase 2 as follows: **Phase 2
+delivers the glossary's contract — the record schema, the repository that reads it, and the tests
+that hold it to 418 unique terms — and Phase 9 writes the definitions.** The reason is that the
+definitions are writing, and writing 418 of them in the leftovers of a phase that already authors
+118 element entries is how a phase ships bad chemistry. The repository is written now anyway
+because the elements repository and the glossary repository share one shape, and building them
+side by side is cheaper than building the second one four phases later against a stale memory of
+the first.
+
 ## 4. Element group taxonomy
 
 Eleven categories, with the exact member counts observed on the reference. These counts are a test
@@ -100,10 +156,21 @@ assertion, not an observation we may drift from:
 | `halogens` | Halogen | 5 | `--g-halogens` |
 | | **Total** | **118** | |
 
-Category assignment follows standard practice and the reference's counts. Where an element is
-genuinely disputed (the classic cases are the group-3 identity and whether hydrogen belongs in
-group 1), record our decision in `source/data/overrides.json` with a one-line reason, so the choice
-is defensible rather than accidental.
+Category assignment starts from the dataset's own classification and is then corrected to these
+counts. PubChem's taxonomy differs from ours in five places, and each correction is recorded in
+`source/data/overrides.json` with the reason it is right on the chemistry rather than merely
+convenient:
+
+| Change | Elements | Reason recorded |
+|---|---|---|
+| `transition-metals` → `unknown` | Mt (109), Ds (110), Rg (111) | A handful of atoms of each has ever existed. No chemical property of any of them has been measured, so calling them transition metals asserts more than is known. |
+| `post-transition-metals` → `unknown` | Nh (113), Fl (114), Mc (115), Lv (116) | Same: the placement is a prediction from periodic trends, not an observation. |
+| `halogens` → `unknown` | Ts (117) | Same, and the prediction is itself contested; tennessine may not behave as a halogen at all. |
+| `metalloids` → `post-transition-metals` | Po (84) | Polonium is a metal by every measured property. Its classification as a metalloid is a convention inherited from older tables, not a measurement. |
+
+Everything else follows the dataset. `overrides.json` is the complete record, one entry per
+corrected element, and a test asserts that applying it produces exactly the counts in §4 — so a
+dataset that changes its mind cannot quietly change ours.
 
 ## 5. Target schema — `source/data/elements.json`
 
@@ -158,7 +225,6 @@ labels the UI renders.
 
   // Authored prose — ours, never the reference's
   "summary": "…",
-  "description": "…",
   "uses": "…",
   "sources": "…",
 
@@ -170,12 +236,27 @@ labels the UI renders.
 **Conventions**
 
 - `null` means *unknown*, and the UI renders a neutral placeholder. Never `""`, never `0`, never
-  `"Not measured"` — the sentinel is a presentation concern, not a data concern.
+  the reference's own sentinel string — the sentinel is a presentation concern, not a data
+  concern, and it belongs to whoever writes the sentence around it.
 - Units are recorded in `source/data/units.json`, not embedded in field names.
-- Slugs follow the reference's convention so external links stay predictable: lowercase, British
-  spellings (`aluminium`, `caesium`, `sulphur`).
-- `position` is derived by `build-data.js` so the grid maths has one source of truth and can be
-  tested against a fixture.
+- Slugs follow a fixed convention so external links stay predictable: lowercase, British spellings
+  (`aluminium`, `caesium`, `sulphur`). The rule lives in `source/scripts/lib/slug.js`, which is
+  pure and tested.
+- Measured values are converted into the schema's unit **at transform time**, never at render
+  time. PubChem reports temperatures in kelvin and radii in picometres; both are converted once,
+  in `build-data.js`, so nothing downstream has to remember which source a number came from.
+
+**Derived fields.** Five values are computed rather than fetched, by
+`source/tools/data-sources/layout.js`, because they are properties of the periodic table's shape
+and not of any one dataset:
+
+| Field | Rule |
+|---|---|
+| `period`, `group` | From the standard layout. `group` is `null` for the lanthanides and actinides, which have no group in this table. |
+| `block` | `s`, `p`, `d` or `f` from the group and the element's row. Helium is `s`, not `p`. |
+| `shells` | Electrons per principal shell, from the Madelung filling order. Shell populations are not affected by the d- and f-block anomalies, so the derivation is exact rather than approximate. |
+| `valence` | Electrons in the outermost occupied shell. Stated outright because "valence" means different things to different tables, and a document that does not define it is a document that cannot be checked. |
+| `position` | The grid cell, `{ row, column }`, on an 18-column grid: periods 1 to 7 in rows 1 to 7, lanthanides in row 9 and actinides in row 10, both starting at column 3. Derived once so the grid maths has one source of truth and can be tested against a fixture. |
 
 ## 6. Attribution practice
 
@@ -191,6 +272,8 @@ labels the UI renders.
 | Exactly 118 elements; exactly 418 glossary terms | `source/tests/data/*` |
 | Every slug unique and URL-safe | `source/tests/data/*` |
 | Every `category` resolves to a slug in `categories.json`; counts match §4 | `source/tests/data/*` |
-| Every element has non-empty `summary`, `description`, `uses`, `sources` | `source/tests/data/*` |
-| No field contains the sentinel string `Not measured` | `source/tests/data/*` |
+| Every property value is a number, a string, `null`, or an array of those — never `undefined` | `source/tests/data/*` |
+| No field anywhere in the data carries the sentinel string | `source/tests/data/*` |
+| The derived layout matches the table's shape: no two elements share a cell, every group is 1–18 | `source/tests/data/*` |
 | No record or prose field contains a prohibited brand string | `source/tests/brand/*` |
+| Every element has non-empty `summary`, `uses` and `sources` | `source/tests/data/*` — added by the commit that authors them |
