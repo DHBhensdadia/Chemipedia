@@ -283,6 +283,14 @@ The data layer run in a real browser, through the shipped module, against the bu
   a slug that does not exist ......................... null, not an exception
   console and network ................................ 0 console messages, 8 requests, all 200
 
+Spot checks against sources outside the two the data came from. The hardest value to get
+right is a shell population, because it is derived, so uranium was checked against four
+independent references — Wikipedia, American Elements, Chemicool and SchoolMyKids all give
+2, 8, 18, 32, 21, 9, 2 and the configuration [Rn] 5f3 6d1 7s2, which is what the build derived.
+Iron at 55.845 u, gold at 19.282 g/cm³ and uranium at 238.0289 u are the CIAAW values, and the
+same sources give iron's melting point as 1538 °C against our 1537.85 °C — the difference is the
+dataset's kelvin figure, not our conversion.
+
 Layout regression on the home page, measured in the browser:
   1280 px ... shell 1100px, h1 54.88px at weight 400 with -1.0976px tracking, no horizontal
               overflow, paper #fdfbfa, navigation in the required order, four submenu items
