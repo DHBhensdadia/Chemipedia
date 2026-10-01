@@ -15,11 +15,11 @@
 | Field | Value |
 |---|---|
 | **Phase** | Phase 0 — Foundation, Tooling and Working System |
-| **Work item** | 0.4 — Source tree scaffold (blocked) |
+| **Work item** | 0.4 — Source tree scaffold |
 | **Objective** | Establish the folder separation, the binding rules, the recovery system, and the phased plan before any application code exists. |
-| **Status** | `BLOCKED` on ADR-001 |
-| **Current commit** | `e4f7fc4` (documentation set complete; see range below) |
-| **Next action** | Author confirms ADR-001 (delivery architecture), ADR-002 (page scope) and ADR-003 (commit convention). Then begin work item 0.4: scaffold `source/` to the accepted shape, add `source/tools/serve.js`, and tag `v0.1.0`. |
+| **Status** | `IN_PROGRESS` — unblocked, awaiting the author's go-ahead to start the phase build |
+| **Current commit** | `0ea045d`, plus the decision records commit that follows it |
+| **Next action** | Begin work item 0.4: scaffold `source/` to the shape fixed by ADR-001, add `source/tools/serve.js` and the route manifest, verify it serves a placeholder page with zero console errors at three widths, then tag `v0.1.0` and close Phase 0. |
 
 ## Files expected to change in this work item
 
@@ -43,19 +43,23 @@ README.md
 | 0.1 Tooling and Git standards research | `VERIFIED` | Two web searches with sources recorded; `docs/research/02-*.md`, `docs/research/03-*.md` | `6082a63` |
 | 0.2 Workspace documentation and tracking system | `COMPLETE` | All documentation files authored; brand scan clean; tree clean; 11 commits, all authored and committed by the project author, no AI attribution | `81bf871`..`e4f7fc4` |
 | 0.3 Git repository initialised with author identity | `COMPLETE` | `git config --local user.name/user.email` verified; `git log --format='%an <%ae>'` shows the project author on every commit | `81bf871` (init) |
-| 0.4 Source tree scaffold (per accepted ADR-001) | `BLOCKED` | Awaiting ADR-001 | — |
+| 0.4 Source tree scaffold (per ADR-001 Option A) | `NOT_STARTED` | Unblocked; ready to start | — |
 | 0.5 Dev server + verification harness | `NOT_STARTED` | — | — |
+| 0.6 Decision records confirmed and accepted | `COMPLETE` | ADR-001/002/003 accepted by the author, ADR-006 raised and accepted; all six now `ACCEPTED` in `docs/ARCHITECTURE.md` | this commit |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
 
-## Open decisions blocking progress
+## Decisions — resolved
 
-| ADR | Question | Blocks | Status |
-|---|---|---|---|
-| ADR-001 | Delivery architecture: zero-dependency Node SSG, plain multi-page static, or client-side SPA router | The entire `source/` tree shape | `PROPOSED` — awaiting author |
-| ADR-002 | Which supplementary page families to include (glossary, calculators, group pages, downloads/about/contact) | Phase 9–10 scope | `PROPOSED` — awaiting author |
-| ADR-003 | Commit message convention | All commits | `PROPOSED` — awaiting author |
+All decisions are confirmed. Nothing is blocked on a decision any more.
+
+| ADR | Question | Outcome |
+|---|---|---|
+| ADR-001 | Delivery architecture | **Zero-dependency Node static site generator.** The 118 element pages and 418 glossary pages are generated from one template each. Generated output is ignored and rebuilt; the dev server runs the build when `dist/` is missing; the route manifest is explicit and unit-tested. |
+| ADR-002 | Page scope | **All in except the reference's blog and tutoring pages.** Glossary, eleven group pages, temperature calculator, downloads area, and About and Contact are all in scope. Phase 10 grows accordingly. |
+| ADR-003 | Commit message convention | **Plain imperative prose.** No Conventional Commits prefixes. |
+| ADR-006 | Themes | **Light only.** No dark variant, no switcher, no `theme.css`. Recorded as an accepted deviation from the reference. |
 
 ## Known risks and blockers
 
@@ -63,6 +67,7 @@ A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its 
 |---|---|---|
 | Element/glossary data must be obtained from an openly-licensed source and normalised | Phase 2 cannot start without it | Source shortlist and licence notes already recorded in `docs/DATA_SOURCES.md` |
 | Visual parity is judged by eye, which an agent does not have | Phases 1–11 could "pass" while looking wrong | Screenshot-driven verification is mandatory per phase (`docs/TESTING_STRATEGY.md`) |
+| Shipping one light theme diverges visibly from the reference's dark variant | A side-by-side review may read as a mismatch rather than a decision | Recorded as an accepted deviation in ADR-006 and in the phase log; it is reversible without a refactor if the author changes their mind |
 | Reference site copy could leak into our prose | Brand rule violation | All prose authored by us or sourced from openly-licensed datasets; brand scan gates every phase |
 | Long phases spanning sessions | Lost context | Milestone-level checkpoint updates; small commits as recovery boundaries |
 

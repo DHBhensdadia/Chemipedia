@@ -124,8 +124,9 @@ whole reason this architecture is worth its build step.
 
 `scripts/app.js` runs on load and does three things, in order:
 
-1. **Theme** — resolves the colour scheme and applies `data-theme` to the document root, so no
-   component needs to know which theme is active.
+1. **Shared behaviour** — attaches the interactive parts of the chrome that the built HTML cannot
+   carry on its own: the header search field and the narrow-screen navigation toggle. There is no
+   theme resolution step, because the site ships a single light theme (ADR-006).
 2. **Routing** — installs the link interceptor and the history listener (see step 6).
 3. **Page behaviour** — identifies the page family from the path and runs the matching module's
    `hydrate(el)`.

@@ -12,7 +12,7 @@ The rule that decides it: **does the browser load it?** Yes → here. No → `..
 | `index.html` | The home page's authored template |
 | `pages/` | One authored HTML template per page family |
 | `scripts/` | `app.js` entry point, `router/`, `data/` repositories, `components/`, `pages/`, and `lib/` pure helpers |
-| `styles/` | `tokens.css` (every design value), `base.css`, `layout.css`, `theme.css`, plus per-component and per-page stylesheets |
+| `styles/` | `tokens.css` (every design value), `base.css`, `layout.css`, plus per-component and per-page stylesheets. One theme only — light (ADR-006). |
 | `data/` | `elements.json`, `glossary.json`, `categories.json`, `units.json` |
 | `assets/` | Our brand artwork and any self-hosted fonts |
 | `tools/` | Plain-Node development tooling: the dev server, the data build script, the site build script |

@@ -109,19 +109,22 @@ Full recovery procedure: [`WORKING_AGREEMENT.md`](WORKING_AGREEMENT.md) §7.
 | [`guides/`](guides/README.md) | A developer walking another developer through the code. |
 | [`docs/research/`](docs/research/) | The evidence behind our decisions. |
 
-## 6. Open decisions
+## 6. Decision records
 
-Tracked as ADRs in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Read the ADR **before**
-building anything it governs. An ADR marked `PROPOSED` is not yet binding; an ADR marked
-`ACCEPTED` is.
+Tracked as ADRs in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md). Read the ADR **before** building
+anything it governs: an `ACCEPTED` ADR is binding, and superseding one requires a new ADR rather
+than an edit.
 
 | ADR | Subject | Status |
 |-----|---------|--------|
-| ADR-001 | Site delivery architecture (build step vs. no build step) | PROPOSED |
-| ADR-002 | Page scope beyond the core reference surface | PROPOSED |
-| ADR-003 | Commit message convention | PROPOSED |
+| ADR-001 | Site delivery architecture: zero-dependency Node static site generator | ACCEPTED |
+| ADR-002 | Page scope: glossary, group pages, calculators, downloads, about and contact | ACCEPTED |
+| ADR-003 | Commit message convention: plain imperative prose | ACCEPTED |
 | ADR-004 | JavaScript-only, zero-runtime-dependency constraint | ACCEPTED |
 | ADR-005 | Data provenance and licensing | ACCEPTED |
+| ADR-006 | Single light theme; no dark variant, no switcher | ACCEPTED |
+
+No decisions are currently open. Add a new ADR for anything consequential and awkward to reverse.
 
 ---
 

@@ -3,7 +3,7 @@
 **Project:** an interactive periodic table and chemistry reference website
 **Course:** University JavaScript capstone
 **Design reference:** `https://www.breakingatom.com/` (structure and behaviour only — never brand or prose)
-**Status:** awaiting author confirmation of ADR-001 / ADR-002 / ADR-003
+**Status:** accepted. ADR-001, ADR-002 and ADR-003 confirmed 2026-10-01; see `docs/ARCHITECTURE.md`.
 
 ---
 
@@ -60,7 +60,7 @@ uses; column four is ours.
 | 13 | Boiling point ranking | `/boiling-point` | `/properties/boiling-point` | 6 |
 | 14 | Orbital configurations index | `/orbital-configurations` | `/properties/orbital-configuration` | 6 |
 | 15 | About / Contact | `/about`, `/contact` | `/about`, `/contact` | 10 |
-| 16 | Downloads / printables | `/downloads` | **optional — ADR-002** | 10 |
+| 16 | Downloads / printables | `/downloads` | `/downloads` | 10 |
 | — | ~~Learn (courses, tracks, articles)~~ | `/learn-the-periodic-table/*` | **excluded** | — |
 | — | ~~Games (quizzes, flash cards)~~ | `/periodic-table-games`, `/games/*` | **excluded** | — |
 
@@ -97,10 +97,12 @@ architecture. No user-facing features.
 - `.gitignore` and a root `README.md`.
 - `source/` skeleton per ADR-001: entry HTML, `scripts/`, `styles/`, `data/`, `assets/`, `tools/`,
   `tests/`.
-- A **zero-dependency dev server** (`source/tools/serve.js`, plain Node) with SPA fallback if
-  ADR-001 selects one.
+- A **zero-dependency dev server** (`source/tools/serve.js`, plain Node) that runs the build when
+  `dist/` is missing and resolves directory-style routes the way a static host does.
 - A **verification harness**: a documented, repeatable recipe for serving the site and capturing
   screenshots. Optional Playwright-based visual diff script if it can stay dependency-free.
+- The **route manifest** (`source/scripts/router/routes.js`) with its uniqueness and route-count
+  tests, since the build enumerates routes from it (ADR-001 Part 3).
 
 **Tasks**
 
@@ -359,15 +361,17 @@ Four pages that reuse the Phase 3 component with a different colour mode, legend
 
 **Goal:** the interactive utilities, plus the remaining static pages.
 
-**Deliverables**
+**Deliverables** (scope fixed by ADR-002)
 
 - `/calculators/temperature` — three synchronised inputs (Celsius, Fahrenheit, Kelvin) that
   convert live as you type, with input validation, sensible rounding, and keyboard-friendly behaviour.
-- Optional (ADR-002): **molar mass calculator** from a chemical formula, and a **printable
-  element card** generator.
-- `/about` and `/contact` in our own words, describing ChemiPedia and its data provenance.
-- Optional (ADR-002): `/downloads` — printable periodic table and per-element cards.
-- Tests for conversion round-tripping, validation edge cases, and formula parsing.
+- `/downloads` — the printable periodic table and per-element cards. Both print from the stylesheet
+  rules introduced here and shared with Phase 11, rather than from a separate rendering path.
+- `/about` — describing ChemiPedia, and carrying the **data provenance and attribution section**
+  required by ADR-005, linking each dataset and its licence.
+- `/contact` — in our own words.
+- Tests for conversion round-tripping and validation edge cases, and an assertion that every
+  download target exists in the built output.
 
 **Exit criteria**
 
@@ -375,6 +379,8 @@ Four pages that reuse the Phase 3 component with a different colour mode, legend
   (0 °C = 32 °F = 273.15 K; −40 °C = −40 °F).
 - Invalid input is rejected gracefully with no console errors.
 - About/Contact contain no reference-site prose or brand.
+- Every download target resolves in the built output, and the printable periodic table fits a single
+  page at both A4 and Letter.
 
 ---
 
@@ -446,8 +452,8 @@ independent of 3 but shares the design system.
 | 6 Index and rankings | medium |
 | 7 Table views | medium |
 | 8 Group pages | small |
-| 9 Glossary | medium |
-| 10 Calculators and secondary | small |
+| 9 Glossary | medium, and content-heavy: 418 definitions to author |
+| 10 Calculators, downloads and secondary pages | medium |
 | 11 Quality and delivery | medium |
 
 ## 6. Risks and how the plan absorbs them
@@ -458,7 +464,8 @@ independent of 3 but shares the design system.
 | Visual drift from the reference accumulates | Every phase ends with a screenshot comparison, not just the final one. |
 | A phase balloons across many sessions | The phase log and checkpoint are milestone-level, and commits are the recovery boundaries. |
 | Scope creep toward the reference's Learn/Games sections | Explicitly out of scope in `WORKING_AGREEMENT.md` §5; navigation and footer are re-cut in Phase 1. |
-| The architecture choice proves wrong mid-build | ADR-001 is recorded with its alternatives and consequences, so the reversal is a documented decision, not a rewrite from scratch. |
+| The architecture choice proves wrong mid-build | ADR-001 is recorded with its alternatives and consequences, so the reversal is a documented decision, not a rewrite from scratch. The layers are deliberately arranged so a reversal of the page layer leaves the data, repository and component layers intact. |
+| The 418 glossary definitions and 118 element prose entries are a large authoring task | Both are content work, isolated in Phase 2 and Phase 9. The page machinery for each is small, so the phases can be split across several sessions without leaving the repository unusable. |
 
 ---
 

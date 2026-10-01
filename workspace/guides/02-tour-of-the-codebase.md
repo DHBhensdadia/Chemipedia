@@ -122,8 +122,8 @@ source/
 │   ├── base.css               reset, typography defaults, focus, selection, reduced motion
 │   ├── layout.css             shell, ruled sections, spacing, the dotted-rule utilities
 │   ├── components/            one stylesheet per component, same name as its module
-│   ├── pages/                 one stylesheet per page family, same name as its module
-│   └── theme.css              the dark-theme override of the token layer
+│   └── pages/                 one stylesheet per page family, same name as its module
+│                              one theme only: the light palette in tokens.css (ADR-006)
 │
 ├── data/                      ← Layer 1: the data. JSON only, no logic.
 │   ├── elements.json          118 records

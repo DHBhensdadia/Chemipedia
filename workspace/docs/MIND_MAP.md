@@ -137,7 +137,6 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `styles/tokens.css` | 🚧 **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. | 1 |
 | `styles/base.css` | 🚧 Reset, typography defaults, focus ring, selection, reduced motion. | 1 |
 | `styles/layout.css` | 🚧 Shell, ruled sections, spacing, the dotted-rule utilities. | 1 |
-| `styles/theme.css` | 🚧 The dark-theme override of the token layer. | 1 |
 | `styles/components/*.css` | 🚧 One stylesheet per component, named to match its module. Never styles anything else. | 1–10 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
@@ -181,7 +180,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | I need to change… | Open |
 |---|---|
 | A colour, size, radius or animation timing | `source/styles/tokens.css` |
-| The dark theme | `source/styles/theme.css` |
+| Why the site has one light theme only | `docs/ARCHITECTURE.md` — ADR-006 |
 | What an element's data contains | `source/data/elements.json` and `docs/DATA_SOURCES.md` §5 |
 | Where element data is fetched from | `source/tools/build-data.js` and `docs/DATA_SOURCES.md` §2 |
 | How an element is looked up | `source/scripts/data/elements-repository.js` |

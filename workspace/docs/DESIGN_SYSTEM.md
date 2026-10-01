@@ -34,25 +34,22 @@ introduces a raw hex value fails its exit criteria.
 }
 ```
 
-The site renders a **dark theme** in the reference. We support both themes from the same semantic
-names, switched by a single attribute on the document root — never by duplicated component styles.
+**ChemiPedia ships one theme: light.** The warm-paper palette above is the design, and it is the
+only palette. There is no `data-theme` attribute, no theme switcher, no `prefers-color-scheme`
+branch, and no second set of surface tokens. See ADR-006 in `docs/ARCHITECTURE.md` for the decision
+and the reasoning.
 
-```css
-[data-theme="dark"] {
-  --bg:           #12100f;
-  --surface:      #1c1a18;
-  --surface-sunk: #0d0c0b;
-  --ink:          #e6e2de;
-  --ink-body:     #d6d2ce;
-  --ink-soft:     #a8a29c;
-  --ink-faint:    #6e6a66;
-  --ink-inverse:  #12100f;
-  --line:         #2c2926;
-  --line-strong:  #403b37;
-}
-```
-*(Dark values are provisional and must be verified against the reference's dark theme in Phase 1
-before being treated as final.)*
+This simplifies the layer in three ways worth noting, because each one removes a class of bug:
+
+- Every component is authored, reviewed and screenshotted against exactly one background, so a
+  contrast or legibility problem cannot hide in the other theme.
+- Each of the eleven element-group colours has one verified foreground rather than two, which halves
+  the contrast invariants the tests must assert.
+- The visual verification pass at the end of each phase stays at three viewport widths instead of
+  doubling into six.
+
+The reference site does render a dark variant, and its `:root` values are in fact the light ones —
+we are adopting the palette it defines at the root, not the variant it switches to at runtime.
 
 ### 1.2 Element group colours — eleven fixed values
 
@@ -231,6 +228,13 @@ in `source/styles/components/`. Styles never bleed across files.
 - The dotted rule must not be the only signal carrying meaning.
 - Tiles are real links or buttons with accessible names, not `div`s with click handlers.
 - `prefers-reduced-motion` is honoured everywhere, without exception.
+
+## 6.1 If a dark theme is ever wanted
+
+The semantic token names are already theme-neutral: nothing in `tokens.css` is named after the light
+palette, and no component reads a literal colour. Adding a second theme later is therefore a
+contained change — a second value set under a root attribute — rather than a refactor. It is recorded
+here as a deliberate, reversible omission rather than an oversight.
 
 ## 7. Phase 1 deliverable
 

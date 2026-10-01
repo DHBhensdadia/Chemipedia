@@ -285,9 +285,14 @@ This is the exact palette and scale the reference uses. Transcribe it into
 ```
 
 The footer tagline, the light `--bg`, and the deep green `--ink` establish the identity: a **warm
-off-white paper** with **pine-green ink**, not a cold grey. The homepage renders dark in the
-reference's dark theme (observed body background `rgb(18,16,15)`, body text `rgb(230,226,222)`),
-so the token layer must support **both themes** with the same semantic names.
+off-white paper** with **pine-green ink**, not a cold grey.
+
+**Note for our build.** The reference also renders a dark variant at runtime — observed as body
+background `rgb(18,16,15)` with body text `rgb(230,226,222)` — while its `:root` values are the light
+ones above. ChemiPedia adopts the light palette it defines at the root and ships that theme only;
+the decision and its reasoning are recorded as ADR-006 in `docs/ARCHITECTURE.md`. Adopting the
+root palette rather than the runtime variant also means the values above can be transcribed
+directly into `tokens.css` without interpretation.
 
 ### Element group colours — the most important palette in the project
 ```
@@ -403,6 +408,7 @@ the information architecture — is reproduced deliberately.
 - [ ] Melting/boiling point pages — audit before Phase 6.
 - [ ] Glossary term detail page — audit before Phase 9.
 - [ ] Tablet and mobile layouts — capture breakpoints before Phase 1 signs off.
-- [ ] Dark theme — confirm which surface uses it and whether we implement both themes.
+- [x] Dark theme — resolved: the reference switches to it at runtime, but its `:root` palette is
+the light one. We ship light only (ADR-006).
 
 Append findings here rather than in a new file, so this stays the single audit record.

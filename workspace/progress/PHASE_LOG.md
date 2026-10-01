@@ -77,9 +77,9 @@ conventions · `3de07ad` mind map · `e4f7fc4` developer guides
 **Goal:** the complete token layer, base styles, layout primitives, header, submenu bar, footer, and
 a style guide page rendering every token and component.
 
-**Deliverables:** `source/styles/tokens.css`, `base.css`, `layout.css`, `theme.css`, component
+**Deliverables:** `source/styles/tokens.css`, `base.css`, `layout.css`, component
 stylesheets and modules for `site-header`, `submenu`, `site-footer`, `legend-chips`,
-`search-field`; `source/styleguide/`.
+`search-field`; `source/styleguide/`. One theme only — light (ADR-006), so there is no `theme.css`.
 
 **Exit criteria**
 
@@ -89,6 +89,8 @@ stylesheets and modules for `site-header`, `submenu`, `site-footer`, `legend-chi
 - [ ] Focus visible on every interactive element; heading order valid.
 - [ ] Every group-colour foreground pairing passes WCAG AA.
 - [ ] `prefers-reduced-motion` honoured.
+- [ ] Renders identically under a dark operating-system colour preference, since the site ships the
+  light theme only (ADR-006).
 - [ ] Navigation and footer contain no Learn or Games entry; footer columns re-cut.
 - [ ] Brand scan clean.
 
@@ -216,13 +218,19 @@ repositories; `source/tools/build-data.js`; tests.
 
 ---
 
-## Phase 10 — Calculators and secondary pages
+## Phase 10 — Calculators, downloads and secondary pages
+
+**Goal:** the temperature calculator, the downloads area, and About and Contact. Scope fixed by
+ADR-002.
 
 **Exit criteria**
 
 - [ ] Conversions round-trip; `0 °C = 32 °F = 273.15 K`; `−40 °C = −40 °F`.
 - [ ] Invalid input handled gracefully, no console errors.
-- [ ] About and Contact contain no reference prose or brand.
+- [ ] About and Contact contain no reference prose or brand, and About carries the data-provenance
+  section required by ADR-005.
+- [ ] Every download target resolves in the built output, and the printable periodic table fits a
+  single page at both A4 and Letter.
 
 **Verification:** _pending_ · **Commits:** _pending_
 
@@ -255,6 +263,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 |---|---|---|---|---|
 | 2026-10-01 | 0 | Decision pending | ADR-001 (architecture), ADR-002 (page scope), ADR-003 (commit convention) awaiting author confirmation | Raised with author. ADR-001 blocks work items 0.4 and 0.5, and therefore the whole source tree. ADR-002 only affects Phases 9–10. ADR-003 affects every future commit. |
 | 2026-10-01 | 0 | Deviation | The agent tool directory is excluded through `.git/info/exclude` rather than the tracked `.gitignore`, so that the committed ignore rules never name a development tool. | Intentional. Local to this checkout; nothing to review. |
+| 2026-10-01 | 0 | Deviation | **Single light theme.** The reference switches to a dark variant at runtime; we ship the light palette only (ADR-006). A side-by-side comparison in a dark-preference context will therefore differ on purpose. | Accepted by the author. Reversible without a refactor, because the token names are theme-neutral. |
+| 2026-10-01 | 0 | Scope decision | The reference's blog and tutoring pages are excluded, while its glossary, group pages, calculator, downloads and about/contact pages are in scope (ADR-002). | Accepted by the author. Adds the downloads area and a print stylesheet to Phase 10 and Phase 11. |
 
 ---
 

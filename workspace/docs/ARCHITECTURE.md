@@ -9,7 +9,7 @@ choosing. Once accepted, an ADR is binding until a later ADR supersedes it.
 
 ---
 
-## Part 1 — Target architecture (shape, once ADR-001 is settled)
+## Part 1 — Target architecture (shape, per ADR-001)
 
 The build has four layers, each with one job. Nothing skips a layer.
 
@@ -48,7 +48,7 @@ Layer separation is what makes Phase 3 a one-time cost and Phases 4, 7 and 8 sho
 
 ### ADR-001 — Site delivery architecture
 
-**Status:** `PROPOSED` — awaiting author confirmation
+**Status:** `ACCEPTED` (2026-10-01)
 **Date raised:** 2026-10-01
 **Governs:** the entire shape of `source/`
 
@@ -65,9 +65,9 @@ a static host, and (e) is legible to an interviewer and a course grader.
 | **B. Plain multi-page static HTML** | One hand-written HTML file per page family. No build step. | `open index.html` and it works. Trivial to explain. | Shared chrome either duplicated across files or injected by JavaScript; per-element pages cannot be hand-written, so element/glossary detail pages need a query-parameter trick. |
 | **C. Client-side SPA with a router** | One entry HTML; the router renders every route in the browser from ES modules. | Best showcase of JavaScript. Fewest files. Natural component model. | "View source" is empty. Deep links need a server/inline fallback. Per-page SEO metadata is fragile. |
 
-**Decision (proposed).** Option A: a zero-dependency Node static site generator, with shared
-components as ES modules, and the detail pages generated from the data. The shipped site is static
-HTML, CSS and JavaScript — nothing about the running site depends on the build step.
+**Decision.** Option A: a zero-dependency Node static site generator, with shared components as ES
+modules, and the detail pages generated from the data. The shipped site is static HTML, CSS and
+JavaScript — nothing about the running site depends on the build step.
 
 **Consequences**
 
@@ -89,25 +89,41 @@ are separated this way.
 
 ### ADR-002 — Page scope beyond the core reference surface
 
-**Status:** `PROPOSED` — awaiting author confirmation
-**Governs:** Phases 9 and 10
+**Status:** `ACCEPTED` (2026-10-01)
+**Governs:** Phases 6, 8, 9, 10 and the print rules in Phase 11
 
 **Context.** The reference site carries pages that are peripheral to the periodic table itself:
 downloadable printables, an about page, a contact page, a blog, and a tutoring page. Some are
-cheap, some involve generated PDFs.
+cheap, some involve generated print output.
 
-**Decision (proposed).** All in scope: glossary index and term pages, temperature calculator,
-element group pages, and our own About and Contact. Optional and to be confirmed: a
-downloads/printables area, a molar mass calculator, and a chemical-formula parser.
+**Options considered:** the core surface only (home, elements index, element pages, four table
+views, the three attribute rankings); the core plus the reference's reference-and-utility families;
+or the core plus everything including generated printables.
 
-**Consequences.** Confirming the optional set adds work to Phase 10 and a printable-stylesheet
-dependency to Phase 11. Declining it does not affect any other phase, because Phase 10 is a leaf.
+**Decision.** Everything except the reference's blog and tutoring pages is in scope:
+
+| In scope | Why |
+|---|---|
+| Glossary index and 418 term pages | The reference's reference layer, and the internal-link backbone of the site. The page machinery is small; the cost is authoring the definitions. |
+| Eleven element group pages | Small, high value, and they reuse the table component already built in Phase 3. |
+| Temperature calculator | Small, self-contained, and the cleanest unit-test target in the project. |
+| Downloads area, with printable periodic table and per-element cards | Adds a printable-stylesheet requirement, but the print work is shared with Phase 11 and the element cards reuse the existing tile and card components. |
+| About and Contact | Cheap, and needed to state the data provenance and attribution required by ADR-005. |
+
+**Out of scope, and staying out of scope:** the reference's blog and tutoring pages, which are
+content-marketing surfaces rather than part of a chemistry reference.
+
+**Consequences.** Phase 10 grows to carry the downloads area, and Phase 11 must carry a print
+stylesheet that satisfies both the periodic table and the per-element cards. The print rules are
+therefore specified once, in the table and card stylesheets, rather than invented per page.
+Because Phase 10 is a leaf in the dependency graph, a late reversal here still cannot affect any
+other phase.
 
 ---
 
 ### ADR-003 — Commit message convention
 
-**Status:** `PROPOSED` — awaiting author confirmation
+**Status:** `ACCEPTED` (2026-10-01)
 **Governs:** every commit for the life of the project
 
 **Context.** The author requires a history that reads as one experienced developer's work, with no
@@ -120,9 +136,9 @@ trace of AI involvement, several coherent commits per phase.
 | **A. Plain imperative prose** *(recommended)* | `Build interactive periodic table grid with group filtering` | Reads like a human's history. No machine-looking prefixes. Nothing to explain when asked. |
 | **B. Conventional Commits with scopes** | `feat(table): add group filtering` | Widely recognised and machine-parseable, but the `feat(...)` prefix is the single most common tell of a generated history, and a course project rarely needs automated release notes. |
 
-**Decision (proposed).** Option A. Imperative mood, subject ≤ 72 characters, capitalised, no
-trailing period, blank line, body wrapped at 72 characters explaining *why*. No `Co-Authored-By`,
-no emoji, no model or tool attribution.
+**Decision.** Option A. Imperative mood, subject ≤ 72 characters, capitalised, no trailing period,
+blank line, body wrapped at 72 characters explaining *why*. No `Co-Authored-By`, no emoji, no model
+or tool attribution.
 
 **Consequences.** No automated changelog can be generated from prefixes. Acceptable: the phase log
 serves that purpose, and the plan calls for several commits per phase rather than a release
@@ -179,17 +195,58 @@ and genuinely ours, and the author can defend every sentence in an interview.
 
 ---
 
-## Part 3 — Open sub-questions for ADR-001
+### ADR-006 — Single light theme
 
-To be resolved when ADR-001 is accepted:
+**Status:** `ACCEPTED` (2026-10-01, author instruction)
+**Governs:** Phase 1 token layer, Phase 11 verification
 
-- **Generated output:** commit the built HTML (deploys directly to any static host, and the diff
-  shows content changes) or ignore it (keeps the tree clean, requires a build before deploy)?
-  *Leaning: ignore it, and run the build in the deploy step, so the repository contains only
-  authored code.*
-- **Development server:** hand-rolled plain-Node static server in `source/tools/` — it must know
-  about directory-style routes so `/elements/hydrogen/` resolves the way it would on a host.
-- **Style guide:** a development-only page, excluded from the built output and from the sitemap.
+**Context.** The reference design defines a warm-paper palette at its root (`--bg #fdfbfa`, ink
+`#15403d`) and also renders a dark variant at runtime, observed as a near-black body background. We
+had assumed both would be implemented.
+
+**Decision.** Ship **light only**. The warm off-white paper with pine-green ink is the design. No
+`data-theme` attribute, no switcher, no `prefers-color-scheme` branch, no second surface set, and no
+`styles/theme.css`.
+
+**Consequences**
+
+- Positive: every component is verified against one background, so a legibility or contrast defect
+  cannot hide in the variant nobody looked at. Each group colour needs one verified foreground
+  rather than two, which halves the contrast invariants under test. The per-phase visual pass stays
+  at three viewport widths instead of six.
+- Positive: one fewer state to reach through keyboard, and no flash-of-wrong-theme problem to solve
+  on first paint.
+- Negative: the site does not follow a dark operating-system preference, and a side-by-side review
+  against the reference at night will show a difference. This is an accepted deviation from the
+  reference and belongs in the deviations log.
+- Mitigation, and the reason this is safe to accept now: the token names are theme-neutral and no
+  component reads a literal colour, so adding a second value set later is a contained change rather
+  than a refactor. The omission is deliberate and reversible, not structural.
+
+---
+
+## Part 3 — Sub-questions resolved with ADR-001
+
+**Generated output is ignored, and rebuilt on demand.** The repository holds authored source only;
+`dist/` is in `.gitignore` and is regenerated by `node source/tools/build.js`. This keeps the
+tracked tree reviewable — a reader sees templates and data, not five hundred generated files — and
+it keeps the source of truth unambiguous. The trade-off accepted: the site must be built before it
+can be deployed or served, so the build command is the first line of the README and the first step
+of the development server.
+
+**The development server is hand-rolled in plain Node**, at `source/tools/serve.js`. It must
+resolve directory-style routes so that `/elements/hydrogen/` serves
+`dist/elements/hydrogen/index.html`, matching how a static host behaves. It also runs the build
+step on start if `dist/` is missing, so a fresh clone needs one command rather than two.
+
+**The style guide is a development-only page.** It lives at `source/styleguide/`, is excluded from
+the route manifest that the build renders, and is therefore absent from `dist/`, from the sitemap
+and from `robots.txt`.
+
+**Route manifest is explicit and testable.** Because the build enumerates routes rather than
+discovering files, the manifest is a plain array in `source/scripts/router/routes.js`, unit-tested
+for uniqueness and for the expected route count. This is what makes "all 118 element pages exist"
+an assertion rather than a hope.
 
 ---
 

@@ -34,7 +34,7 @@ The agent's browser tools provide, without any installation:
 | Inspect computed style | `preview_evaluate` | Extract exact colours, sizes, grid geometry — how the reference tokens in Research 01 were obtained |
 | Check for errors | `preview_logs` | Console errors, failed requests, warnings after an interaction |
 | Set viewport | `preview_resize` | The 1280 / 768 / 375 px sweep |
-| Emulate colour scheme | `preview_set_color_scheme` | Light and dark theme checks |
+| Emulate colour scheme | `preview_set_color_scheme` | Confirming the site renders identically under a dark OS preference, since it ships one light theme (ADR-006) |
 | Record | `preview_recording_start` / `_stop` | Capture motion and transitions, which a still cannot show |
 
 **Key insight:** `preview_evaluate` is the bridge between "cannot see" and "knows exactly what the

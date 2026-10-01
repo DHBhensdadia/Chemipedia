@@ -53,7 +53,7 @@ replaceable; `lib/` is pure so the hard maths is testable without a browser. Ful
 | Where do the routes live? | `source/scripts/router/routes.js` | *(pending)* `routes` |
 | How do you handle a deep link into a static host? | `source/scripts/router/router.js` | *(pending)* — each route is a real built file |
 | Where are the design tokens? | `source/styles/tokens.css` | — |
-| Where is the dark theme? | `source/styles/theme.css` | — |
+| Why is there only one theme? | `workspace/docs/ARCHITECTURE.md` | ADR-006 — light only, by decision |
 | Where's the dev server? | `source/tools/serve.js` | — |
 | Where does the data build script live? | `source/tools/build-data.js` | — |
 | How do I find any file in this project? | `workspace/docs/MIND_MAP.md` | — |
