@@ -14,7 +14,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 
 | Phase | Name | Status | Commits |
 |---|---|---|---|
-| 0 | Foundation, tooling and working system | `IN_PROGRESS` | — |
+| 0 | Foundation, tooling and working system | `IN_PROGRESS` | `81bf871`..`e4f7fc4` |
 | 1 | Design system and global shell | `NOT_STARTED` | — |
 | 2 | Data layer (elements and glossary) | `NOT_STARTED` | — |
 | 3 | Periodic table engine | `NOT_STARTED` | — |
@@ -40,23 +40,35 @@ shaped by the accepted architecture.
 |---|---|---|---|
 | 0.0 | Reference site audit | `VERIFIED` | Live browser inspection; design tokens read from computed styles and recorded in `docs/research/01-reference-site-audit.md`. |
 | 0.1 | Tooling and Git standards research | `VERIFIED` | Two searches; recorded in `docs/research/02-*` and `03-*` with sources. |
-| 0.2 | Workspace documentation system | `IN_PROGRESS` | `AGENTS.md`, `WORKING_AGREEMENT.md`, `RUN_STATE.md`, `HANDOFF.md`, `docs/**`, `guides/**`, this file. |
-| 0.3 | Git initialised with author identity | `NOT_STARTED` | |
-| 0.4 | Source tree scaffolded | `NOT_STARTED` | Blocked on ADR-001. |
+| 0.2 | Workspace documentation system | `COMPLETE` | `AGENTS.md`, `WORKING_AGREEMENT.md`, `RUN_STATE.md`, `HANDOFF.md`, `docs/**`, `guides/**`, this file. |
+| 0.3 | Git initialised with author identity | `COMPLETE` | Identity set repo-locally; verified on every commit. Tool directory excluded via `.git/info/exclude` so the tracked `.gitignore` stays free of tool names. |
+| 0.4 | Source tree scaffolded | `BLOCKED` | Awaiting ADR-001. |
 | 0.5 | Dev server and verification harness | `NOT_STARTED` | |
 
 **Exit criteria**
 
-- [ ] `git log` shows several coherent commits, all authored by the project author, no AI trace.
-- [ ] `node source/tools/serve.js` serves a placeholder page with zero console errors.
-- [ ] Every file in the repository appears in `docs/MIND_MAP.md`.
-- [ ] A fresh reader can go from `AGENTS.md` to a running site unaided.
+- [x] `git log` shows several coherent commits, all authored by the project author, no AI trace.
+- [ ] `node source/tools/serve.js` serves a placeholder page with zero console errors. *(blocked on ADR-001)*
+- [x] Every file in the repository appears in `docs/MIND_MAP.md`.
+- [ ] A fresh reader can go from `AGENTS.md` to a running site unaided. *(blocked on ADR-001)*
 
 **Verification**
 
-_Pending. Record the brand scan output, the test summary line, and the screenshot comparisons here._
+```
+git log --format='%an <%ae> | committer: %cn <%ce>'   11/11: Devansh <dhbhensdadia@gmail.com>
+AI-attribution scan over all commit bodies ............ PASS: no AI attribution in any commit message
+Brand scan over source/ .............................. PASS: brand scan clean
+git status --short .................................... clean
+```
 
-**Commits:** _pending_
+No screenshots and no test summary line yet: there is no built page and no test suite until
+Phase 0 work items 0.4 and 0.5 complete. These two exit criteria are open, which is why the phase
+remains `IN_PROGRESS` rather than `COMPLETE`.
+
+**Commits:** `81bf871` initialise repository · `0074445` source boundary · `68e1fed` working
+agreement · `6eb2e48` checkpoint system · `6082a63` research · `e3f6f58` plan and ADRs ·
+`898aa74` design system and brand · `9a1dd43` data sources · `2414ba0` verification and commit
+conventions · `3de07ad` mind map · `e4f7fc4` developer guides
 
 ---
 
@@ -241,7 +253,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 
 | Date | Phase | Type | Detail | Resolution |
 |---|---|---|---|---|
-| 2026-10-01 | 0 | Decision pending | ADR-001, ADR-002, ADR-003 awaiting author confirmation | Raised with author; ADR-001 blocks work item 0.4 |
+| 2026-10-01 | 0 | Decision pending | ADR-001 (architecture), ADR-002 (page scope), ADR-003 (commit convention) awaiting author confirmation | Raised with author. ADR-001 blocks work items 0.4 and 0.5, and therefore the whole source tree. ADR-002 only affects Phases 9–10. ADR-003 affects every future commit. |
+| 2026-10-01 | 0 | Deviation | The agent tool directory is excluded through `.git/info/exclude` rather than the tracked `.gitignore`, so that the committed ignore rules never name a development tool. | Intentional. Local to this checkout; nothing to review. |
 
 ---
 

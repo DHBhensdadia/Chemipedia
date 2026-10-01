@@ -15,11 +15,11 @@
 | Field | Value |
 |---|---|
 | **Phase** | Phase 0 — Foundation, Tooling and Working System |
-| **Work item** | 0.2 — Workspace documentation and tracking system |
+| **Work item** | 0.4 — Source tree scaffold (blocked) |
 | **Objective** | Establish the folder separation, the binding rules, the recovery system, and the phased plan before any application code exists. |
-| **Status** | `IN_PROGRESS` |
-| **Current commit** | see `git log -1 --format='%h %s'` (updated on each commit) |
-| **Next action** | Confirm ADR-001/002/003 with the author, then scaffold `source/` per the accepted architecture. |
+| **Status** | `BLOCKED` on ADR-001 |
+| **Current commit** | `e4f7fc4` (documentation set complete; see range below) |
+| **Next action** | Author confirms ADR-001 (delivery architecture), ADR-002 (page scope) and ADR-003 (commit convention). Then begin work item 0.4: scaffold `source/` to the accepted shape, add `source/tools/serve.js`, and tag `v0.1.0`. |
 
 ## Files expected to change in this work item
 
@@ -39,11 +39,11 @@ README.md
 
 | Item | Status | Verification | Commit |
 |---|---|---|---|
-| 0.0 Reference site audit | `VERIFIED` | Live inspection via browser tools; tokens extracted from computed styles | pending |
-| 0.1 Tooling and Git standards research | `VERIFIED` | Two web searches; findings recorded in `docs/research/` | pending |
-| 0.2 Workspace documentation and tracking system | `IN_PROGRESS` | Files authored; not yet committed | pending |
-| 0.3 Git repository initialisation and identity | `NOT_STARTED` | — | — |
-| 0.4 Source tree scaffold (per accepted ADR-001) | `NOT_STARTED` | — | — |
+| 0.0 Reference site audit | `VERIFIED` | Live inspection via browser tools; tokens read from computed styles; recorded in `docs/research/01-reference-site-audit.md` | `6082a63` |
+| 0.1 Tooling and Git standards research | `VERIFIED` | Two web searches with sources recorded; `docs/research/02-*.md`, `docs/research/03-*.md` | `6082a63` |
+| 0.2 Workspace documentation and tracking system | `COMPLETE` | All documentation files authored; brand scan clean; tree clean; 11 commits, all authored and committed by the project author, no AI attribution | `81bf871`..`e4f7fc4` |
+| 0.3 Git repository initialised with author identity | `COMPLETE` | `git config --local user.name/user.email` verified; `git log --format='%an <%ae>'` shows the project author on every commit | `81bf871` (init) |
+| 0.4 Source tree scaffold (per accepted ADR-001) | `BLOCKED` | Awaiting ADR-001 | — |
 | 0.5 Dev server + verification harness | `NOT_STARTED` | — | — |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
@@ -68,8 +68,11 @@ A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its 
 
 ## Deliberately unfinished
 
-Nothing. The working tree is expected to be clean at every checkpoint. If it is not, that is a
-defect and the resuming agent must resolve it before starting new work (`WORKING_AGREEMENT.md` §7.3).
+Nothing. The working tree is clean as of `e4f7fc4`.
+
+The `source/` tree is intentionally empty apart from its orientation README, because ADR-001 decides
+its shape and that decision is the author's. This is a planned stop, not an abandoned task — see the
+open decisions table above.
 
 ## How to resume in 60 seconds
 
@@ -77,8 +80,11 @@ defect and the resuming agent must resolve it before starting new work (`WORKING
 git log --oneline -10            # what has actually been committed
 git status --short               # anything half-done?
 cat workspace/RUN_STATE.md       # this file
-node --test source/tests         # is the last checkpoint real?
+node --test source/tests         # once tests exist: is the last checkpoint real?
 ```
+
+`source/tests/` does not exist yet — that is expected until Phase 2. Until then, treat the commit
+history and the working tree as the only evidence.
 
 Then read `workspace/progress/PHASE_LOG.md` for the phase you are in and resume from its
 "Next action" line.
