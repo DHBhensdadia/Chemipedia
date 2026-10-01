@@ -22,6 +22,7 @@ The master index. **Every file in this repository appears here, with what it is 
 ```
 WDW/                        the project root (the git repository)
 ├── .gitignore              ✅  files git must never track
+├── package.json            ✅  the Node project definition: ES modules for the tooling, and the build, serve and test commands. Declares no dependencies.
 ├── README.md               ✅  the front door: what this is and how to run it
 ├── source/                 ✅  ALL shipped code, and nothing that is not shipped code
 └── workspace/              ✅  ALL planning, research, documentation and tracking
