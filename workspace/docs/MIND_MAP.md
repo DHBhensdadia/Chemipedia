@@ -98,6 +98,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 |---|---|---|
 | `scripts/app.js` | 🚧 The single entry point. Resolves the theme, installs routing, dispatches to the page module. | 1 |
 | `scripts/router/routes.js` | ✅ **The route manifest.** Every URL the site publishes, with its template, title and description, plus the label and order it takes in the navigation and the section whose submenu it carries. The build renders this list and nothing else, so the manifest is the single answer to "which pages exist?" — and since the shell reads the same list, the navigation cannot point at a page the site does not publish. The static inventory is declared in full; a route whose template is not written yet is reported by the build and skipped. Generated families append entries derived from the data layer. Plain data, readable by Node and by the browser alike. | 0–1 |
+| `scripts/router/navigation.js` | ✅ Where the shell's links come from: the primary navigation derived from the manifest, the contextual submenu for each section, and the footer's five columns. Pure data and pure functions, so the arrangement can change without touching a route, and a test proves every path it names is a declared route. | 1 |
 | `scripts/router/router.js` | 🚧 Link interception, history, scroll restoration, 404, static-host fallback. | 5 |
 | `scripts/data/elements-repository.js` | 🚧 The only reader of `elements.json`. Lookups by number, symbol and slug; queries by group, block, period and state; sorted views; derived values. | 2 |
 | `scripts/data/glossary-repository.js` | 🚧 The only reader of `glossary.json`. A–Z grouping, prefix search, slug lookup. | 9 |
@@ -174,8 +175,10 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 |---|---|---|
 | `tests/lib/contrast.test.js` | ✅ The colour rules, plus a walk over every group colour that the token stylesheet actually declares: each one must take a foreground that passes AA for text, and the module's two foreground constants must match the stylesheet. | 1 |
 | `tests/tools/site-paths.test.js` | ✅ The URL-to-file rules: directory-style resolution, file paths left alone, normalisation, and refusal of a path that would escape the build directory. | 0 |
-| `tests/router/routes.test.js` | ✅ The manifest kept honest: unique, absolute, directory-style paths, a title and description per route, plain data rather than functions, and a template on disk for every declared route. | 0 |
+| `tests/router/routes.test.js` | ✅ The manifest kept honest: unique, absolute, directory-style paths, a title and description per route, plain data rather than functions, one navigation order per labelled route, and at least one route the build can already render. | 0–1 |
+| `tests/router/navigation.test.js` | ✅ The shell kept honest: the navigation is the manifest's in order, every path the shell links to is a declared route, no destination repeats inside a set, every submenu belongs to a section that exists, and the footer carries its five columns. | 1 |
 | `tests/tools/build.test.js` | ✅ The document skeleton: doctype, language, the icon link, and escaping of the metadata it injects. | 0 |
+| `tests/lib/html.test.js` | ✅ The escaping rules: the five characters that end a text node or an attribute, absent attributes omitted, a true one written bare, and an attribute value that cannot break out of its quotes. | 1 |
 | `tests/lib/*.test.js` | 🚧 Grid placement, colour scales, contrast pairing, formatters, keyboard helpers. | 2–3 |
 | `tests/data/*.test.js` | 🚧 Counts, uniqueness, category membership, lookup correctness, prose completeness. | 2 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
