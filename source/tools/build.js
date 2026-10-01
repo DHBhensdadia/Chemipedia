@@ -23,6 +23,7 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 
 import { routes, templatePathFor } from "../scripts/router/routes.js";
+import { escapeHtml } from "../scripts/lib/html.js";
 import { NOT_FOUND_FILE, distDir, outputFileForPath, projectRoot, sourceDir } from "./site-paths.js";
 
 /**
@@ -41,22 +42,6 @@ const NOT_FOUND_PAGE = {
   title: "Page not found — ChemiPedia",
   description: "The address you followed does not match a page on ChemiPedia.",
 };
-
-/**
- * Escape text for insertion into markup. Route metadata is written by us, so this is a guard against
- * an accidental angle bracket rather than a defence against hostile input — but metadata will later
- * come from the data layer, and it must be safe then too.
- *
- * @param {string} value
- * @returns {string}
- */
-function escapeHtml(value) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 /**
  * Wrap authored markup in the document skeleton every page shares.
