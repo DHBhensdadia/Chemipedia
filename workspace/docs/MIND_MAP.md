@@ -162,7 +162,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `data/categories.json` | ✅ The eleven element groups: slug, display name, palette token and asserted member count. Hand-written, because it is the taxonomy rather than a product of one, and its counts are what the legend prints. | 2 |
 | `data/overrides.json` | ✅ The nine places this project files an element differently from the dataset that supplied it, each with the chemical reason. A correction without a reason is indistinguishable from a mistake. | 2 |
 | `data/units.json` | ✅ Which unit each field is stored in and how many figures it is printed to, used by `scripts/data/units-repository.js`. | 2 |
-| `data/element-notes.json` | 🚧 The authored prose, keyed by symbol: pronunciation, name origin, and the summary, uses and sources paragraphs. Kept apart from `elements.json` so that rerunning the build cannot overwrite writing. | 2 |
+| `data/element-notes.json` | ✅ The authored prose, keyed by symbol: pronunciation, name origin, and the summary, uses and sources paragraphs, all 118 of them. Kept apart from `elements.json` so that rerunning the build cannot overwrite writing, and validated so that an entry which is present but blank stops the build rather than reaching a page half-finished. | 2 |
 | `data/glossary.json` | 🚧 418 glossary terms with definition and difficulty level. | 9 |
 
 ### 3.5 `source/assets/` — brand artwork

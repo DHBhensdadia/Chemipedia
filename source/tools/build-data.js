@@ -164,6 +164,39 @@ function buildElement(core, supplementary, notes, overrides) {
   };
 }
 
+/** The five fields an element's authored note carries. */
+const NOTE_FIELDS = ["pronunciation", "nameOrigin", "summary", "uses", "sources"];
+
+/**
+ * Everything wrong with the authored prose.
+ *
+ * A note that is absent is fine: the facts and the writing arrive in different commits. A note
+ * that is present but blank is not, because that is someone having started and stopped, and it is
+ * the state that ships half a paragraph to a page.
+ *
+ * @param {Record<string, object>} notes
+ * @returns {string[]}
+ */
+function problemsWithNotes(notes) {
+  const problems = [];
+
+  for (const [symbol, note] of Object.entries(notes)) {
+    // The file carries a short note of its own explaining what it is for. Skip anything that is
+    // not an element's entry.
+    if (typeof note !== "object" || note === null) {
+      continue;
+    }
+
+    for (const field of NOTE_FIELDS) {
+      if (typeof note[field] !== "string" || note[field].trim() === "") {
+        problems.push(`${symbol}: "${field}" is present but blank`);
+      }
+    }
+  }
+
+  return problems;
+}
+
 /**
  * Everything wrong with the set of records, as sentences.
  *
@@ -249,7 +282,7 @@ async function main() {
     buildElement(core, byNumber.get(core.atomicNumber) ?? {}, notes[core.symbol], overrides),
   );
 
-  const problems = problemsWith(elements, categories);
+  const problems = [...problemsWithNotes(notes), ...problemsWith(elements, categories)];
 
   if (problems.length > 0) {
     for (const problem of problems) {

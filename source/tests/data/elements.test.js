@@ -175,6 +175,45 @@ test("six elements are what an authoritative table says they are", () => {
   assert.deepEqual(oganesson.shells, [2, 8, 18, 32, 32, 18, 8]);
 });
 
+test("every element carries the prose its page needs", () => {
+  const written = (text, what) =>
+    assert.ok(typeof text === "string" && text.trim() !== "", `${what} is missing`);
+
+  for (const element of elements.all()) {
+    // A pronunciation and a name origin are phrases, so they only have to be there.
+    written(element.pronunciation, `${element.symbol}: pronunciation`);
+    written(element.discovery.nameOrigin, `${element.symbol}: name origin`);
+
+    for (const [field, minimum] of [
+      ["summary", 30],
+      ["uses", 30],
+      ["sources", 20],
+    ]) {
+      written(element[field], `${element.symbol}: ${field}`);
+      assert.ok(
+        element[field].trim().length >= minimum,
+        `${element.symbol}: the ${field} is too short to say anything`,
+      );
+    }
+  }
+});
+
+test("no two elements lean on the same sentence", () => {
+  // A sentence repeated across records is the signature of a template rather than of writing. It
+  // is checked on the two paragraphs a reader reads in sequence, not on the sources line, where
+  // similar elements legitimately come from similar places.
+  for (const field of ["summary", "uses"]) {
+    const seen = new Map();
+
+    for (const element of elements.all()) {
+      const text = element[field].trim().toLowerCase();
+
+      assert.ok(!seen.has(text), `${element.symbol} and ${seen.get(text)} share a ${field}`);
+      seen.set(text, element.symbol);
+    }
+  }
+});
+
 test("the American spellings are gone", () => {
   assert.equal(elements.bySymbol("Al").name, "Aluminium");
   assert.equal(elements.bySymbol("Al").slug, "aluminium");

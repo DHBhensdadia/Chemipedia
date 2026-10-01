@@ -4,7 +4,7 @@
     "symbol": "H",
     "name": "Hydrogen",
     "slug": "hydrogen",
-    "pronunciation": null,
+    "pronunciation": "HY-druh-jen",
     "category": "non-metals",
     "group": 1,
     "period": 1,
@@ -46,11 +46,11 @@
       "discoveredBy": "Henry Cavendish, Harold Urey",
       "year": 1766,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Greek: hydro, water, and genes, forming, because burning it makes water"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The lightest element and the simplest atom, one proton and one electron, and by a wide margin the most abundant substance in the universe.",
+    "uses": "Ammonia for fertiliser, the refining of petroleum, the hardening of fats, and the fuel cell that turns it back into water.",
+    "sources": "Bound into water, into every hydrocarbon, and into every living thing; almost none of it exists on Earth as a free gas.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -62,7 +62,7 @@
     "symbol": "He",
     "name": "Helium",
     "slug": "helium",
-    "pronunciation": null,
+    "pronunciation": "HEE-lee-um",
     "category": "noble-gases",
     "group": 18,
     "period": 1,
@@ -103,11 +103,11 @@
       "discoveredBy": "William Ramsay, Pierre Janssen, Norman Lockyer",
       "year": 1868,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: helios, the sun, where it was detected before it was found on Earth"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A colourless, odourless gas that will not burn, will not react, and will not freeze at any temperature a laboratory has reached.",
+    "uses": "Cooling superconducting magnets in MRI scanners, lifting balloons, and shielding a weld from the air around it.",
+    "sources": "Extracted from a few natural gas fields where it has accumulated from the radioactive decay of heavy elements.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -119,7 +119,7 @@
     "symbol": "Li",
     "name": "Lithium",
     "slug": "lithium",
-    "pronunciation": null,
+    "pronunciation": "LITH-ee-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 2,
@@ -161,11 +161,11 @@
       "discoveredBy": "Johan August Arfwedson",
       "year": 1817,
       "place": "Sweden",
-      "nameOrigin": null
+      "nameOrigin": "Greek: lithos, stone, because it was first found in a mineral rather than in a plant"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The lightest metal, soft enough to cut with a knife and light enough to float on water, which it then reacts with.",
+    "uses": "Rechargeable batteries, heat-resistant glass and ceramics, and a carbonate that steadies mood.",
+    "sources": "Brine beneath salt flats and a handful of hard minerals such as spodumene.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -177,7 +177,7 @@
     "symbol": "Be",
     "name": "Beryllium",
     "slug": "beryllium",
-    "pronunciation": null,
+    "pronunciation": "buh-RIL-ee-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 2,
@@ -219,11 +219,11 @@
       "discoveredBy": "Antoine Bussy, Louis Nicolas Vauquelin, Friedrich Wöhler",
       "year": 1798,
       "place": "France",
-      "nameOrigin": null
+      "nameOrigin": "Greek: beryllos, the mineral beryl, which also gives emerald and aquamarine"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A light, stiff, steel-grey metal that is transparent to X-rays and poisonous as dust.",
+    "uses": "Windows for X-ray tubes, aerospace alloys, and the springs and mirrors of instruments where stiffness matters more than cost.",
+    "sources": "The minerals beryl and bertrandite, in amounts small enough that the metal stays expensive.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -235,7 +235,7 @@
     "symbol": "B",
     "name": "Boron",
     "slug": "boron",
-    "pronunciation": null,
+    "pronunciation": "BOR-on",
     "category": "metalloids",
     "group": 13,
     "period": 2,
@@ -277,11 +277,11 @@
       "discoveredBy": "Humphry Davy",
       "year": 1808,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "From borax, the mineral it was first isolated from"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A metalloid that forms some of the hardest known materials and some of the softest, depending on how its atoms are arranged.",
+    "uses": "Borosilicate glass that survives a temperature change, detergents, and the boron rods that absorb neutrons in a reactor.",
+    "sources": "Evaporated lake beds, chiefly in Turkey and California, where it is mined as borax.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -293,7 +293,7 @@
     "symbol": "C",
     "name": "Carbon",
     "slug": "carbon",
-    "pronunciation": null,
+    "pronunciation": "KAR-bun",
     "category": "non-metals",
     "group": 14,
     "period": 2,
@@ -337,11 +337,11 @@
       "discoveredBy": "Antoine Lavoisier",
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: carbo, charcoal"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The element that forms more compounds than all the others together, and appears as graphite, diamond, and the framework of every living thing.",
+    "uses": "Steel, and therefore almost everything made of steel; graphite electrodes; and diamond, which is carbon arranged to be the hardest natural substance.",
+    "sources": "Coal, petroleum, limestone, the atmosphere as carbon dioxide, and every organism alive or fossilised.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -353,7 +353,7 @@
     "symbol": "N",
     "name": "Nitrogen",
     "slug": "nitrogen",
-    "pronunciation": null,
+    "pronunciation": "NY-truh-jen",
     "category": "non-metals",
     "group": 15,
     "period": 2,
@@ -402,11 +402,11 @@
       "discoveredBy": "Daniel Rutherford",
       "year": 1772,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Greek: nitron and genes, soda forming, from its presence in saltpetre"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A colourless, nearly inert gas that makes up four fifths of the air, and the element every protein and every strand of DNA is built around.",
+    "uses": "Fertiliser through the Haber process, refrigeration as liquid nitrogen, and an inert atmosphere for food packaging and welding.",
+    "sources": "The air, which is 78 per cent nitrogen by volume; on Earth it is otherwise locked into minerals and living tissue.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -418,7 +418,7 @@
     "symbol": "O",
     "name": "Oxygen",
     "slug": "oxygen",
-    "pronunciation": null,
+    "pronunciation": "OK-suh-jen",
     "category": "non-metals",
     "group": 16,
     "period": 2,
@@ -460,11 +460,11 @@
       "discoveredBy": "Carl Wilhelm Scheele",
       "year": 1774,
       "place": "Sweden",
-      "nameOrigin": null
+      "nameOrigin": "Greek: oxys and genes, acid forming, from the mistaken belief that it was in every acid"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most abundant element in the Earth's crust and the one that makes combustion and breathing possible.",
+    "uses": "Steelmaking, medical breathing support, rocket oxidiser, and the treatment of wastewater.",
+    "sources": "The air, one fifth by volume; water; and the silicate rocks that make up most of the planet's mass.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -476,7 +476,7 @@
     "symbol": "F",
     "name": "Fluorine",
     "slug": "fluorine",
-    "pronunciation": null,
+    "pronunciation": "FLOR-een",
     "category": "halogens",
     "group": 17,
     "period": 2,
@@ -518,11 +518,11 @@
       "discoveredBy": "Henri Moissan, André-Marie Ampère",
       "year": 1670,
       "place": "France",
-      "nameOrigin": null
+      "nameOrigin": "Latin: fluere, to flow, from a mineral used to make molten metal flow"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most reactive of all the elements, a pale yellow gas that attacks glass and will not be tamed by anything else for long.",
+    "uses": "Uranium enrichment, fluoropolymers such as the coating on a frying pan, and the fluoride that hardens tooth enamel.",
+    "sources": "Fluorite and cryolite, and as a trace in apatite; never as the free element, which would react with whatever it touched.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -534,7 +534,7 @@
     "symbol": "Ne",
     "name": "Neon",
     "slug": "neon",
-    "pronunciation": null,
+    "pronunciation": "NEE-on",
     "category": "noble-gases",
     "group": 18,
     "period": 2,
@@ -576,11 +576,11 @@
       "discoveredBy": "William Ramsay, Morris Travers",
       "year": 1898,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Greek: neos, new"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "An inert gas that glows a deep red-orange when a current is passed through it, which is the only reason most people have heard of it.",
+    "uses": "Discharge lighting and signs, and a cryogenic refrigerant.",
+    "sources": "The air, at eighteen parts per million, separated out by cooling air until it liquefies.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -592,7 +592,7 @@
     "symbol": "Na",
     "name": "Sodium",
     "slug": "sodium",
-    "pronunciation": null,
+    "pronunciation": "SO-dee-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 3,
@@ -635,11 +635,11 @@
       "discoveredBy": "Humphry Davy",
       "year": 1807,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "English: soda, and Latin natrium, from the salt it was first extracted from"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft silvery metal that reacts violently with water and has to be stored under oil, and one half of ordinary table salt.",
+    "uses": "Sodium vapour street lamps, the coolant in some nuclear reactors, and, as a compound, soap, glass and salt itself.",
+    "sources": "Rock salt, sea water, and the mineral feldspar that makes up much of the Earth's crust.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -651,7 +651,7 @@
     "symbol": "Mg",
     "name": "Magnesium",
     "slug": "magnesium",
-    "pronunciation": null,
+    "pronunciation": "mag-NEE-zee-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 3,
@@ -694,11 +694,11 @@
       "discoveredBy": "Joseph Black",
       "year": 1808,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "From Magnesia, a district of Greece where its mineral was found"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A light structural metal that burns with a blinding white flame, and the atom at the centre of every chlorophyll molecule.",
+    "uses": "Lightweight alloys for cars and aircraft, fireworks, and a compound that calms an unsettled stomach.",
+    "sources": "Sea water, dolomite, and the mineral carnallite; it is the eighth most abundant element in the crust.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -710,7 +710,7 @@
     "symbol": "Al",
     "name": "Aluminium",
     "slug": "aluminium",
-    "pronunciation": null,
+    "pronunciation": "al-yoo-MIN-ee-um",
     "category": "post-transition-metals",
     "group": 13,
     "period": 3,
@@ -753,11 +753,11 @@
       "discoveredBy": "Humphry Davy, Hans Christian Ørsted",
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: alumen, alum, the salt it was first isolated from"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most abundant metal in the Earth's crust, light and corrosion-resistant, and impossible to extract cheaply until the 1880s.",
+    "uses": "Drinks cans, foil, window frames, aircraft, and the electrical cables of overhead power lines.",
+    "sources": "Bauxite ore, which is refined into alumina and then broken down by electrolysis.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -769,7 +769,7 @@
     "symbol": "Si",
     "name": "Silicon",
     "slug": "silicon",
-    "pronunciation": null,
+    "pronunciation": "SIL-ih-kon",
     "category": "metalloids",
     "group": 14,
     "period": 3,
@@ -814,11 +814,11 @@
       "discoveredBy": "Jöns Jacob Berzelius",
       "year": 1854,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: silex, flint, its most familiar mineral form"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A metalloid that makes up most of the rock and sand of the planet, and the material every computer chip is carved from.",
+    "uses": "Semiconductor devices, glass, concrete, and the silicone that seals a bathroom.",
+    "sources": "Sand and quartz, and the silicate minerals that form most of the Earth's mantle and crust.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -830,7 +830,7 @@
     "symbol": "P",
     "name": "Phosphorus",
     "slug": "phosphorus",
-    "pronunciation": null,
+    "pronunciation": "FOS-fuh-rus",
     "category": "non-metals",
     "group": 15,
     "period": 3,
@@ -875,11 +875,11 @@
       "discoveredBy": "Hennig Brand",
       "year": 1669,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: phosphoros, light bearer, because white phosphorus glows in the dark"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A non-metal that will burst into flame in air, and the element that carries energy around every living cell.",
+    "uses": "Fertiliser, detergents, and the strike plate of a matchbox.",
+    "sources": "Phosphate rock, and the bones and teeth of every vertebrate.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -891,7 +891,7 @@
     "symbol": "S",
     "name": "Sulphur",
     "slug": "sulphur",
-    "pronunciation": null,
+    "pronunciation": "SUL-fur",
     "category": "non-metals",
     "group": 16,
     "period": 3,
@@ -936,11 +936,11 @@
       "discoveredBy": "Antoine Lavoisier",
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Sanskrit: sulvere, and Latin sulphurium"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A yellow non-metal that burns with a blue flame and a choking smell, known since antiquity as brimstone.",
+    "uses": "Sulphuric acid, the most produced industrial chemical; vulcanising rubber; and fungicides.",
+    "sources": "Recovered from natural gas and petroleum, and found pure around volcanoes and hot springs.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -952,7 +952,7 @@
     "symbol": "Cl",
     "name": "Chlorine",
     "slug": "chlorine",
-    "pronunciation": null,
+    "pronunciation": "KLOR-een",
     "category": "halogens",
     "group": 17,
     "period": 3,
@@ -998,11 +998,11 @@
       "discoveredBy": "Carl Wilhelm Scheele",
       "year": 1774,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: chloros, pale green, the colour of the gas"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A green-yellow gas that will bleach and disinfect and, in a high enough concentration, kill; the other half of table salt.",
+    "uses": "Disinfecting drinking water and swimming pools, making plastics, and bleaching paper.",
+    "sources": "Sea water and rock salt, from which it is released by electrolysis.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1014,7 +1014,7 @@
     "symbol": "Ar",
     "name": "Argon",
     "slug": "argon",
-    "pronunciation": null,
+    "pronunciation": "AR-gon",
     "category": "noble-gases",
     "group": 18,
     "period": 3,
@@ -1057,11 +1057,11 @@
       "discoveredBy": "William Ramsay, John William Strutt",
       "year": 1894,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: argos, idle, because it takes part in nothing"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "An inert gas that is the third most abundant in the air, and the one that was discovered by noticing a leftover fraction that would not react.",
+    "uses": "A shielding gas for welding, the fill in a double-glazed window, and the inert atmosphere inside a filament lamp.",
+    "sources": "The air, at just under one per cent, separated by fractional distillation of liquid air.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1073,7 +1073,7 @@
     "symbol": "K",
     "name": "Potassium",
     "slug": "potassium",
-    "pronunciation": null,
+    "pronunciation": "po-TASS-ee-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 4,
@@ -1117,11 +1117,11 @@
       "discoveredBy": "Humphry Davy",
       "year": 1807,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "English: potash, and Latin kalium, from the ash it was first extracted from"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft metal that ignites on contact with water, and the ion whose movement along a nerve carries every thought you have.",
+    "uses": "Fertiliser, and as a compound, glass, soap and a salt substitute.",
+    "sources": "Sylvite and carnallite deposits, and every sea and every soil.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1133,7 +1133,7 @@
     "symbol": "Ca",
     "name": "Calcium",
     "slug": "calcium",
-    "pronunciation": null,
+    "pronunciation": "KAL-see-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 4,
@@ -1177,11 +1177,11 @@
       "discoveredBy": "Humphry Davy",
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: calx, lime, the material it was isolated from"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A reactive metal that is the fifth most abundant element in the crust, and the one your bones and teeth are mostly built from.",
+    "uses": "Cement and mortar, steelmaking, and dietary supplements.",
+    "sources": "Limestone, chalk, gypsum, and the shells and skeletons of marine life.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1193,7 +1193,7 @@
     "symbol": "Sc",
     "name": "Scandium",
     "slug": "scandium",
-    "pronunciation": null,
+    "pronunciation": "SKAN-dee-um",
     "category": "transition-metals",
     "group": 3,
     "period": 4,
@@ -1237,11 +1237,11 @@
       "discoveredBy": "Lars Fredrik Nilson",
       "year": 1879,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: Scandia, Scandinavia, where its ore was found"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A light, rare, silvery metal whose existence was predicted before it was found, the first element to be discovered that way.",
+    "uses": "Aluminium alloys light enough for bicycle frames and aerospace parts, and very bright lamps.",
+    "sources": "Rare minerals such as thortveitite, and as a by-product of refining uranium and tungsten.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1253,7 +1253,7 @@
     "symbol": "Ti",
     "name": "Titanium",
     "slug": "titanium",
-    "pronunciation": null,
+    "pronunciation": "tih-TAY-nee-um",
     "category": "transition-metals",
     "group": 4,
     "period": 4,
@@ -1299,11 +1299,11 @@
       "discoveredBy": "Friedrich Wöhler",
       "year": 1791,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The Titans of Greek myth"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A strong, light, corrosion-proof metal with an excellent reputation and a price to match, named for beings of enormous strength.",
+    "uses": "Aircraft, replacement joints, and the frame of a racing bicycle; and, as the oxide, a white pigment.",
+    "sources": "The minerals rutile and ilmenite, which are common in beach sand.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1315,7 +1315,7 @@
     "symbol": "V",
     "name": "Vanadium",
     "slug": "vanadium",
-    "pronunciation": null,
+    "pronunciation": "vuh-NAY-dee-um",
     "category": "transition-metals",
     "group": 5,
     "period": 4,
@@ -1362,11 +1362,11 @@
       "discoveredBy": "Andrés Manuel del Río",
       "year": 1801,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Vanadis, a name of the Norse goddess Freyja"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard silver-grey metal whose compounds come in an unusually wide range of bright colours.",
+    "uses": "Strengthening steel for tools and springs, and a catalyst for making sulphuric acid.",
+    "sources": "Vanadinite and patronite, and as a trace in crude oil.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1378,7 +1378,7 @@
     "symbol": "Cr",
     "name": "Chromium",
     "slug": "chromium",
-    "pronunciation": null,
+    "pronunciation": "KROH-mee-um",
     "category": "transition-metals",
     "group": 6,
     "period": 4,
@@ -1424,11 +1424,11 @@
       "discoveredBy": "Louis Nicolas Vauquelin",
       "year": 1797,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: chroma, colour, from the colours of its compounds"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, lustrous metal that takes a mirror polish and refuses to tarnish, and the reason stainless steel is stainless.",
+    "uses": "Chrome plating, stainless steel, leather tanning, and pigments in paints and glass.",
+    "sources": "Chromite ore; almost all of it goes into alloys.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1440,7 +1440,7 @@
     "symbol": "Mn",
     "name": "Manganese",
     "slug": "manganese",
-    "pronunciation": null,
+    "pronunciation": "MAN-guh-nees",
     "category": "transition-metals",
     "group": 7,
     "period": 4,
@@ -1487,11 +1487,11 @@
       "discoveredBy": "Johan Gottlieb Gahn",
       "year": 1774,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: magnes, magnet, from the magnetic ore it was found in"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A brittle grey metal that is essential to steelmaking and, in trace amounts, essential to life.",
+    "uses": "Deoxidising and desulphurising steel, dry-cell batteries, and the violet colour in glass.",
+    "sources": "Pyrolusite and other oxide ores, and nodules on the deep ocean floor.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1503,7 +1503,7 @@
     "symbol": "Fe",
     "name": "Iron",
     "slug": "iron",
-    "pronunciation": null,
+    "pronunciation": "EYE-urn",
     "category": "transition-metals",
     "group": 8,
     "period": 4,
@@ -1548,11 +1548,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Anglo-Saxon: iren; the symbol is from Latin ferrum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most-used metal on Earth, the main ingredient of the planet's core, and the atom that carries oxygen in your blood.",
+    "uses": "Steel, which is to say buildings, bridges, ships, vehicles, tools and cutlery.",
+    "sources": "Haematite and magnetite ores, and, in the core, most of the Earth's mass.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1564,7 +1564,7 @@
     "symbol": "Co",
     "name": "Cobalt",
     "slug": "cobalt",
-    "pronunciation": null,
+    "pronunciation": "KOH-balt",
     "category": "transition-metals",
     "group": 9,
     "period": 4,
@@ -1609,11 +1609,11 @@
       "discoveredBy": "Georg Brandt",
       "year": 1735,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "German: kobold, goblin, for the ore that troubled Saxon miners"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, magnetic metal that keeps its strength when hot, which is what makes it useful in an engine.",
+    "uses": "Superalloys for jet turbines, the cobalt-blue pigments in glass and ceramics, and the cathode of a lithium-ion battery.",
+    "sources": "Cobaltite and skutterudite, mostly extracted as a by-product of copper and nickel.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1625,7 +1625,7 @@
     "symbol": "Ni",
     "name": "Nickel",
     "slug": "nickel",
-    "pronunciation": null,
+    "pronunciation": "NIK-ul",
     "category": "transition-metals",
     "group": 10,
     "period": 4,
@@ -1670,11 +1670,11 @@
       "discoveredBy": "Axel Fredrik Cronstedt",
       "year": 1751,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "German: kupfernickel, Old Nick's copper, for an ore that promised copper and gave none"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, silvery metal that resists corrosion, is magnetic, and is the element at the heart of the Earth's core alongside iron.",
+    "uses": "Stainless steel, rechargeable batteries, coins, and electroplating.",
+    "sources": "Laterite and sulphide ores, and, in an unusually pure form, in iron meteorites.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1686,7 +1686,7 @@
     "symbol": "Cu",
     "name": "Copper",
     "slug": "copper",
-    "pronunciation": null,
+    "pronunciation": "KOP-ur",
     "category": "transition-metals",
     "group": 11,
     "period": 4,
@@ -1731,11 +1731,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: cuprum, from the island of Cyprus"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A reddish metal that conducts electricity better than anything except silver, and the first metal people learned to work.",
+    "uses": "Electrical wiring, plumbing, roofing, and alloys such as brass and bronze.",
+    "sources": "Chalcopyrite and malachite ores, and occasionally as native metal.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1747,7 +1747,7 @@
     "symbol": "Zn",
     "name": "Zinc",
     "slug": "zinc",
-    "pronunciation": null,
+    "pronunciation": "ZINK",
     "category": "transition-metals",
     "group": 12,
     "period": 4,
@@ -1791,11 +1791,11 @@
       "discoveredBy": null,
       "year": 1746,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "German: zink, of uncertain origin"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A bluish-white metal that is a poor conductor and a good protector, since it corrodes in place of the steel beneath it.",
+    "uses": "Galvanising steel, brass, die-castings, and sunscreen as the oxide.",
+    "sources": "Sphalerite, and as a trace in almost every ore of lead and copper.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1807,7 +1807,7 @@
     "symbol": "Ga",
     "name": "Gallium",
     "slug": "gallium",
-    "pronunciation": null,
+    "pronunciation": "GAL-ee-um",
     "category": "post-transition-metals",
     "group": 13,
     "period": 4,
@@ -1851,11 +1851,11 @@
       "discoveredBy": "Paul-Émile Lecoq de Boisbaudran",
       "year": 1875,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: Gallia, France"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft silvery metal that melts in the palm of a hand and then refuses to boil until well past a thousand degrees.",
+    "uses": "Light-emitting diodes, high-speed and high-frequency electronics, and solar cells.",
+    "sources": "Never mined for itself; recovered as a trace from bauxite and zinc ore.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1867,7 +1867,7 @@
     "symbol": "Ge",
     "name": "Germanium",
     "slug": "germanium",
-    "pronunciation": null,
+    "pronunciation": "jer-MAY-nee-um",
     "category": "metalloids",
     "group": 14,
     "period": 4,
@@ -1912,11 +1912,11 @@
       "discoveredBy": "Clemens Winkler",
       "year": 1886,
       "place": "Germany",
-      "nameOrigin": null
+      "nameOrigin": "Latin: Germania, Germany"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A metalloid whose prediction preceded its discovery, and the material the first transistor was made from before silicon took over.",
+    "uses": "Fibre-optic cables, infrared optics, and polymerisation catalysts.",
+    "sources": "By-product of zinc refining, and in a handful of rare minerals.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1928,7 +1928,7 @@
     "symbol": "As",
     "name": "Arsenic",
     "slug": "arsenic",
-    "pronunciation": null,
+    "pronunciation": "AR-suh-nik",
     "category": "metalloids",
     "group": 15,
     "period": 4,
@@ -1974,11 +1974,11 @@
       "discoveredBy": "Albertus Magnus",
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: arsenikon, yellow orpiment, the pigment it was found in"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A metalloid notorious as a poison and useful as a semiconductor, with a smell of garlic when it is heated.",
+    "uses": "Gallium arsenide in high-frequency electronics, wood preservatives, and alloy hardening.",
+    "sources": "Arsenopyrite and realgar, and as a contaminant in copper and lead ores.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -1990,7 +1990,7 @@
     "symbol": "Se",
     "name": "Selenium",
     "slug": "selenium",
-    "pronunciation": null,
+    "pronunciation": "suh-LEE-nee-um",
     "category": "non-metals",
     "group": 16,
     "period": 4,
@@ -2036,11 +2036,11 @@
       "discoveredBy": "Johan Gottlieb Gahn, Jöns Jacob Berzelius",
       "year": 1817,
       "place": "Stockholm",
-      "nameOrigin": null
+      "nameOrigin": "Greek: selene, the moon"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A non-metal whose electrical resistance falls when light falls on it, which is the property a photocopier was built on.",
+    "uses": "Glassmaking to remove the green tint of iron, photocopier drums, and a trace nutrient.",
+    "sources": "By-product of copper refining, and in the soils of a few regions in quantities that are toxic rather than nourishing.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2052,7 +2052,7 @@
     "symbol": "Br",
     "name": "Bromine",
     "slug": "bromine",
-    "pronunciation": null,
+    "pronunciation": "BROH-meen",
     "category": "halogens",
     "group": 17,
     "period": 4,
@@ -2098,11 +2098,11 @@
       "discoveredBy": "Antoine-Jérôme Balard, Carl Jacob Löwig",
       "year": 1826,
       "place": "France",
-      "nameOrigin": null
+      "nameOrigin": "Greek: bromos, stench, for its smell"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The only non-metal that is liquid at room temperature, a deep red-brown liquid that gives off an irritating vapour.",
+    "uses": "Flame retardants, water treatment, and photographic film as silver bromide.",
+    "sources": "Sea water and brine wells, extracted by displacement with chlorine.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2114,7 +2114,7 @@
     "symbol": "Kr",
     "name": "Krypton",
     "slug": "krypton",
-    "pronunciation": null,
+    "pronunciation": "KRIP-ton",
     "category": "noble-gases",
     "group": 18,
     "period": 4,
@@ -2158,11 +2158,11 @@
       "discoveredBy": "William Ramsay, Morris Travers",
       "year": 1898,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Greek: kryptos, hidden"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "An inert gas discovered by looking for what was left over, and the one the length of a metre was once defined by.",
+    "uses": "High-performance lighting, photographic flash, and insulating gas in some windows.",
+    "sources": "The air, at one part per million, separated by cooling air until it liquefies.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2174,7 +2174,7 @@
     "symbol": "Rb",
     "name": "Rubidium",
     "slug": "rubidium",
-    "pronunciation": null,
+    "pronunciation": "roo-BID-ee-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 5,
@@ -2219,11 +2219,11 @@
       "discoveredBy": "Robert Bunsen, Gustav Kirchhoff",
       "year": 1861,
       "place": "Germany",
-      "nameOrigin": null
+      "nameOrigin": "Latin: rubidus, deepest red, the colour of the lines in its spectrum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft silver-white metal that melts just above room temperature and catches fire in air.",
+    "uses": "Atomic clocks, and research rather than industry.",
+    "sources": "A minor component of the minerals lepidolite and carnallite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2235,7 +2235,7 @@
     "symbol": "Sr",
     "name": "Strontium",
     "slug": "strontium",
-    "pronunciation": null,
+    "pronunciation": "STRON-shee-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 5,
@@ -2280,11 +2280,11 @@
       "discoveredBy": "William Cruickshank",
       "year": 1790,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Strontian, a village in Scotland"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, reactive metal whose salts burn crimson, which is why it is in every red firework.",
+    "uses": "Red colour in fireworks and flares, and ferrite magnets.",
+    "sources": "The minerals celestine and strontianite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2296,7 +2296,7 @@
     "symbol": "Y",
     "name": "Yttrium",
     "slug": "yttrium",
-    "pronunciation": null,
+    "pronunciation": "IT-ree-um",
     "category": "transition-metals",
     "group": 3,
     "period": 5,
@@ -2341,11 +2341,11 @@
       "discoveredBy": "Johan Gadolin, Friedrich Wöhler",
       "year": 1794,
       "place": "Finland",
-      "nameOrigin": null
+      "nameOrigin": "Ytterby, a village in Sweden, which gave its name to four elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft silvery metal used in small amounts in a wide range of materials that would otherwise not work.",
+    "uses": "Phosphors in older televisions, the stabiliser in cubic zirconia, and superconductors.",
+    "sources": "Monazite and bastnasite, alongside the rare earths it is always found with.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2357,7 +2357,7 @@
     "symbol": "Zr",
     "name": "Zirconium",
     "slug": "zirconium",
-    "pronunciation": null,
+    "pronunciation": "zur-KOH-nee-um",
     "category": "transition-metals",
     "group": 4,
     "period": 5,
@@ -2402,11 +2402,11 @@
       "discoveredBy": "Anton Eduard van Arkel, Jan Hendrik de Boer, Martin Heinrich Klaproth, Jöns Jacob Berzelius",
       "year": 1789,
       "place": "Germany",
-      "nameOrigin": null
+      "nameOrigin": "Persian: zargun, gold-like, from the mineral zircon"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A corrosion-resistant metal that lets neutrons pass through it, which is precisely what a reactor needs of its cladding.",
+    "uses": "Nuclear fuel rod cladding, corrosion-proof chemical piping, and cubic zirconia as a gemstone.",
+    "sources": "Zircon sand, a common by-product of mining heavy mineral sands.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2418,7 +2418,7 @@
     "symbol": "Nb",
     "name": "Niobium",
     "slug": "niobium",
-    "pronunciation": null,
+    "pronunciation": "ny-OH-bee-um",
     "category": "transition-metals",
     "group": 5,
     "period": 5,
@@ -2464,11 +2464,11 @@
       "discoveredBy": "Charles Hatchett",
       "year": 1801,
       "place": "United Kingdom",
-      "nameOrigin": null
+      "nameOrigin": "Niobe, daughter of Tantalus in Greek myth, because it is found with tantalum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft grey metal that becomes superconducting at unusually high temperatures and is found, invariably, alongside tantalum.",
+    "uses": "Superconducting magnets for MRI scanners and particle accelerators, and microalloyed steels for pipelines.",
+    "sources": "The mineral columbite, and as a by-product of tin smelting.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2480,7 +2480,7 @@
     "symbol": "Mo",
     "name": "Molybdenum",
     "slug": "molybdenum",
-    "pronunciation": null,
+    "pronunciation": "muh-LIB-duh-num",
     "category": "transition-metals",
     "group": 6,
     "period": 5,
@@ -2525,11 +2525,11 @@
       "discoveredBy": "Carl Wilhelm Scheele",
       "year": 1778,
       "place": "Sweden",
-      "nameOrigin": null
+      "nameOrigin": "Greek: molybdos, lead, because its ore was mistaken for a lead ore"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard silvery metal with one of the highest melting points of any commercial metal.",
+    "uses": "High-strength steel, furnace parts that must hold their shape when glowing, and a catalyst for refining petroleum.",
+    "sources": "Molybdenite, and as a by-product of copper mining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2541,7 +2541,7 @@
     "symbol": "Tc",
     "name": "Technetium",
     "slug": "technetium",
-    "pronunciation": null,
+    "pronunciation": "tek-NEE-shee-um",
     "category": "transition-metals",
     "group": 7,
     "period": 5,
@@ -2588,11 +2588,11 @@
       "discoveredBy": "Carlo Perrier, Emilio G. Segrè",
       "year": 1937,
       "place": "Italy",
-      "nameOrigin": null
+      "nameOrigin": "Greek: technetos, artificial, because it was the first element made rather than found"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The lightest element with no stable isotope, so every atom of it on Earth has been made by someone.",
+    "uses": "A short-lived isotope that images bones, hearts and kidneys in nuclear medicine.",
+    "sources": "Produced in reactors and extracted from the fission products of uranium.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2604,7 +2604,7 @@
     "symbol": "Ru",
     "name": "Ruthenium",
     "slug": "ruthenium",
-    "pronunciation": null,
+    "pronunciation": "roo-THEE-nee-um",
     "category": "transition-metals",
     "group": 8,
     "period": 5,
@@ -2649,11 +2649,11 @@
       "discoveredBy": "Karl Ernst Claus",
       "year": 1827,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: Ruthenia, Russia"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, brittle platinum-group metal that is one of the rarest on Earth and unusually good at hardening other metals.",
+    "uses": "Electrical contacts, wear-resistant plating, and catalysts.",
+    "sources": "Platinum ores, and as a by-product of nickel refining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2665,7 +2665,7 @@
     "symbol": "Rh",
     "name": "Rhodium",
     "slug": "rhodium",
-    "pronunciation": null,
+    "pronunciation": "ROH-dee-um",
     "category": "transition-metals",
     "group": 9,
     "period": 5,
@@ -2710,11 +2710,11 @@
       "discoveredBy": "William Hyde Wollaston",
       "year": 1803,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: rhodon, rose, from the colour of one of its salts"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A silvery-white metal, rarer than gold and far more expensive, that keeps its shine and speeds up reactions.",
+    "uses": "Catalytic converters, the reflective coating on laboratory mirrors, and electrical contacts.",
+    "sources": "Platinum ores, chiefly in South Africa.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2726,7 +2726,7 @@
     "symbol": "Pd",
     "name": "Palladium",
     "slug": "palladium",
-    "pronunciation": null,
+    "pronunciation": "puh-LAY-dee-um",
     "category": "transition-metals",
     "group": 10,
     "period": 5,
@@ -2771,11 +2771,11 @@
       "discoveredBy": "William Hyde Wollaston",
       "year": 1803,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The asteroid Pallas"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft platinum-group metal that soaks up hydrogen like a sponge, taking in hundreds of times its own volume.",
+    "uses": "Catalytic converters, electronics, dentistry, and the purification of hydrogen.",
+    "sources": "Nickel and platinum ores, chiefly in Russia and South Africa.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2787,7 +2787,7 @@
     "symbol": "Ag",
     "name": "Silver",
     "slug": "silver",
-    "pronunciation": null,
+    "pronunciation": "SIL-vur",
     "category": "transition-metals",
     "group": 11,
     "period": 5,
@@ -2832,11 +2832,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Anglo-Saxon: seolfor; the symbol is from Latin argentum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The best electrical and thermal conductor of any metal, and the one whose antimicrobial property people noticed long before they understood it.",
+    "uses": "Electrical contacts, brazing alloys, photography, solar panels and jewellery.",
+    "sources": "Argentite and horn silver, and alongside lead, zinc and copper ores.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2848,7 +2848,7 @@
     "symbol": "Cd",
     "name": "Cadmium",
     "slug": "cadmium",
-    "pronunciation": null,
+    "pronunciation": "KAD-mee-um",
     "category": "transition-metals",
     "group": 12,
     "period": 5,
@@ -2893,11 +2893,11 @@
       "discoveredBy": "Friedrich Stromeyer, Karl Samuel Leberecht Hermann",
       "year": 1817,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: cadmia, calamine, the zinc ore it was found in"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, bluish-white metal that absorbs neutrons and is highly toxic, which is why its use is being retired.",
+    "uses": "Rechargeable batteries, control rods in older reactors, and pigments.",
+    "sources": "Almost always a by-product of zinc refining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2909,7 +2909,7 @@
     "symbol": "In",
     "name": "Indium",
     "slug": "indium",
-    "pronunciation": null,
+    "pronunciation": "IN-dee-um",
     "category": "post-transition-metals",
     "group": 13,
     "period": 5,
@@ -2954,11 +2954,11 @@
       "discoveredBy": "Hieronymous Theodor Richter, Ferdinand Reich",
       "year": 1863,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The indigo line in its spectrum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A very soft metal that wets glass, which is what makes it possible to make a transparent electrical contact.",
+    "uses": "Indium tin oxide, the invisible conductor in a touchscreen and a flat panel display.",
+    "sources": "A trace in zinc and tin ores, which is the only way it is obtained.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -2970,7 +2970,7 @@
     "symbol": "Sn",
     "name": "Tin",
     "slug": "tin",
-    "pronunciation": null,
+    "pronunciation": "TIN",
     "category": "post-transition-metals",
     "group": 14,
     "period": 5,
@@ -3016,11 +3016,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Anglo-Saxon: tin; the symbol is from Latin stannum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft metal that has been alloyed with copper to make bronze since prehistory, and whose cold crystalline form crumbles.",
+    "uses": "Solder, tinplate for food cans, and bronze.",
+    "sources": "Cassiterite, the ore that made the Bronze Age possible.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3032,7 +3032,7 @@
     "symbol": "Sb",
     "name": "Antimony",
     "slug": "antimony",
-    "pronunciation": null,
+    "pronunciation": "AN-tuh-moh-nee",
     "category": "metalloids",
     "group": 15,
     "period": 5,
@@ -3079,11 +3079,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: anti and monos, not alone, because it is never found uncombined"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A brittle metalloid that makes other materials harder and refuses to catch fire.",
+    "uses": "Flame retardants, lead-acid battery plates, and semiconductors.",
+    "sources": "Stibnite, a striking needle-shaped mineral.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3095,7 +3095,7 @@
     "symbol": "Te",
     "name": "Tellurium",
     "slug": "tellurium",
-    "pronunciation": null,
+    "pronunciation": "tuh-LOOR-ee-um",
     "category": "metalloids",
     "group": 16,
     "period": 5,
@@ -3142,11 +3142,11 @@
       "discoveredBy": "Franz-Joseph Müller von Reichenstein",
       "year": 1782,
       "place": "Zlatna",
-      "nameOrigin": null
+      "nameOrigin": "Latin: tellus, earth"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A metalloid that is rarer than platinum, and that changes its electrical behaviour when light shines on it.",
+    "uses": "Thin-film solar panels, and alloying to make steel easier to machine.",
+    "sources": "Recovered from the anode slimes left behind by copper refining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3158,7 +3158,7 @@
     "symbol": "I",
     "name": "Iodine",
     "slug": "iodine",
-    "pronunciation": null,
+    "pronunciation": "EYE-uh-dyne",
     "category": "halogens",
     "group": 17,
     "period": 5,
@@ -3206,11 +3206,11 @@
       "discoveredBy": "Bernard Courtois",
       "year": 1811,
       "place": "Paris",
-      "nameOrigin": null
+      "nameOrigin": "Greek: iodes, violet-coloured, from the colour of its vapour"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A dark solid that sublimes straight to a violet vapour, and an element the human body cannot do without.",
+    "uses": "Disinfectants, photographic film as silver iodide, and the small dietary supplement that keeps a thyroid working.",
+    "sources": "Brine and seaweed, and the caliche deposits of Chile.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3222,7 +3222,7 @@
     "symbol": "Xe",
     "name": "Xenon",
     "slug": "xenon",
-    "pronunciation": null,
+    "pronunciation": "ZEE-non",
     "category": "noble-gases",
     "group": 18,
     "period": 5,
@@ -3267,11 +3267,11 @@
       "discoveredBy": "William Ramsay, Morris Travers",
       "year": 1898,
       "place": "University College London",
-      "nameOrigin": null
+      "nameOrigin": "Greek: xenon, stranger, for the unfamiliar gas left in a sample"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A heavy inert gas that, despite the name it was given, does form compounds when pushed hard enough.",
+    "uses": "Car headlamps, ion thrusters for spacecraft, and a general anaesthetic.",
+    "sources": "The air, at less than one part in ten million, separated by cooling air until it liquefies.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3283,7 +3283,7 @@
     "symbol": "Cs",
     "name": "Caesium",
     "slug": "caesium",
-    "pronunciation": null,
+    "pronunciation": "SEE-zee-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 6,
@@ -3326,14 +3326,14 @@
     "atomicVolume": null,
     "latticeParameters": null,
     "discovery": {
-      "discoveredBy": "Robert Bunsen, Gustav Kirchhoff, Margaret Melhase, Glenn Theodore Seaborg",
+      "discoveredBy": "Robert Bunsen, Gustav Kirchhoff, Glenn Theodore Seaborg, Margaret Melhase",
       "year": 1860,
       "place": "Heidelberg",
-      "nameOrigin": null
+      "nameOrigin": "Latin: caesius, sky blue, from the colour of its spectrum lines"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft golden metal that melts at room temperature and reacts with water explosively; the second is the standard unit of time.",
+    "uses": "Atomic clocks, which define the second; photoelectric cells; and drilling fluids.",
+    "sources": "Pollucite, and as a by-product of lithium refining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3345,7 +3345,7 @@
     "symbol": "Ba",
     "name": "Barium",
     "slug": "barium",
-    "pronunciation": null,
+    "pronunciation": "BARE-ee-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 6,
@@ -3391,11 +3391,11 @@
       "discoveredBy": "Humphry Davy",
       "year": 1808,
       "place": "Royal Institution",
-      "nameOrigin": null
+      "nameOrigin": "Greek: barys, heavy, because its minerals are unusually dense"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, reactive metal whose insoluble sulphate is swallowed by patients because it blocks X-rays and passes straight through.",
+    "uses": "A contrast medium for medical imaging, drilling mud, and green colour in fireworks.",
+    "sources": "Barite, a common mineral that is also the main source of the barium used in oil wells.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3407,7 +3407,7 @@
     "symbol": "La",
     "name": "Lanthanum",
     "slug": "lanthanum",
-    "pronunciation": null,
+    "pronunciation": "LAN-thuh-num",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3453,11 +3453,11 @@
       "discoveredBy": "Carl Gustaf Mosander",
       "year": 1839,
       "place": "Karolinska Institutet",
-      "nameOrigin": null
+      "nameOrigin": "Greek: lanthanein, to lie hidden"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The first of the lanthanides, a soft metal that gives the group its name and was hidden in a mixture of rare earths for years.",
+    "uses": "Camera lenses with low dispersion, hybrid car batteries, and fluid catalytic cracking.",
+    "sources": "Bastnasite and monazite, the two main rare earth ores.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3469,7 +3469,7 @@
     "symbol": "Ce",
     "name": "Cerium",
     "slug": "cerium",
-    "pronunciation": null,
+    "pronunciation": "SEER-ee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3516,11 +3516,11 @@
       "discoveredBy": "Jöns Jacob Berzelius, Martin Heinrich Klaproth",
       "year": 1803,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The asteroid Ceres"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most abundant of the rare earths, and a metal that will strike a spark when scraped.",
+    "uses": "Polishing powders for glass, catalytic converters, and lighter flints.",
+    "sources": "Bastnasite and monazite, where it is the commonest rare earth present.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3532,7 +3532,7 @@
     "symbol": "Pr",
     "name": "Praseodymium",
     "slug": "praseodymium",
-    "pronunciation": null,
+    "pronunciation": "PRAY-zee-oh-dym-ee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3578,11 +3578,11 @@
       "discoveredBy": "Carl Gustaf Mosander",
       "year": 1885,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: prasios and didymos, green twin, from the colour of its salt"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft silvery metal that tints glass and enamel a clear yellow-green.",
+    "uses": "Colouring glass and enamel, and very strong permanent magnets when alloyed with neodymium.",
+    "sources": "Monazite and bastnasite, separated from the other rare earths with some difficulty.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3594,7 +3594,7 @@
     "symbol": "Nd",
     "name": "Neodymium",
     "slug": "neodymium",
-    "pronunciation": null,
+    "pronunciation": "NEE-oh-dym-ee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3640,11 +3640,11 @@
       "discoveredBy": "Carl Auer von Welsbach",
       "year": 1885,
       "place": "Vienna",
-      "nameOrigin": null
+      "nameOrigin": "Greek: neos and didymos, new twin"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A rare earth metal that gives the strongest permanent magnets in commercial use.",
+    "uses": "Magnets in headphones, hard drives, wind turbines and electric motors; and a violet colour in glass.",
+    "sources": "Monazite and bastnasite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3656,7 +3656,7 @@
     "symbol": "Pm",
     "name": "Promethium",
     "slug": "promethium",
-    "pronunciation": null,
+    "pronunciation": "pruh-MEE-thee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3699,14 +3699,14 @@
     "atomicVolume": null,
     "latticeParameters": null,
     "discovery": {
-      "discoveredBy": "Lawrence E. Glendenin, Jacob Akiba Marinsky, Charles D. Coryell",
+      "discoveredBy": "Charles D. Coryell, Lawrence E. Glendenin, Jacob Akiba Marinsky",
       "year": 1945,
       "place": "Oak Ridge National Laboratory",
-      "nameOrigin": null
+      "nameOrigin": "Prometheus, who stole fire from the gods"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A radioactive rare earth with no stable isotope, and the only lanthanide that takes a long search to find in nature.",
+    "uses": "Nuclear batteries, and luminous paint in the past.",
+    "sources": "Produced in reactors from the fission of uranium; only traces occur in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3718,7 +3718,7 @@
     "symbol": "Sm",
     "name": "Samarium",
     "slug": "samarium",
-    "pronunciation": null,
+    "pronunciation": "suh-MARE-ee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3765,11 +3765,11 @@
       "discoveredBy": "Paul-Émile Lecoq de Boisbaudran",
       "year": 1879,
       "place": "Paris",
-      "nameOrigin": null
+      "nameOrigin": "The mineral samarskite, named after a Russian mine official"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A rare earth metal that stays magnetic at high temperatures, which is what makes it useful in a motor.",
+    "uses": "Samarium-cobalt magnets that work when hot, and neutron absorbers in reactors.",
+    "sources": "Monazite and bastnasite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3781,7 +3781,7 @@
     "symbol": "Eu",
     "name": "Europium",
     "slug": "europium",
-    "pronunciation": null,
+    "pronunciation": "yoo-ROH-pee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3828,11 +3828,11 @@
       "discoveredBy": "Eugène-Anatole Demarçay",
       "year": 1901,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Europe"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft rare earth metal that glows red when it is energized, which is the basis of every bright red phosphor.",
+    "uses": "Red phosphors in displays and fluorescent lamps, and anti-counterfeiting marks on banknotes.",
+    "sources": "Bastnasite and monazite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3844,7 +3844,7 @@
     "symbol": "Gd",
     "name": "Gadolinium",
     "slug": "gadolinium",
-    "pronunciation": null,
+    "pronunciation": "GAD-uh-lin-ee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3890,11 +3890,11 @@
       "discoveredBy": "Jean Charles Galissard de Marignac",
       "year": 1880,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Johan Gadolin, the Finnish chemist who first isolated a rare earth"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A rare earth metal that is unusually good at catching neutrons and unusual in that it warms up when it enters a magnetic field.",
+    "uses": "A contrast agent for MRI scans, neutron shielding, and magnetic refrigeration research.",
+    "sources": "Monazite and bastnasite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3906,7 +3906,7 @@
     "symbol": "Tb",
     "name": "Terbium",
     "slug": "terbium",
-    "pronunciation": null,
+    "pronunciation": "TUR-bee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -3952,11 +3952,11 @@
       "discoveredBy": "Carl Gustaf Mosander",
       "year": 1843,
       "place": "Stockholm",
-      "nameOrigin": null
+      "nameOrigin": "Ytterby, the Swedish village that named four elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, silvery rare earth metal whose alloys change shape when magnetized.",
+    "uses": "Green phosphors in lamps and displays, and magnetostrictive alloys for sonar.",
+    "sources": "Monazite, bastnasite and xenotime.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -3968,7 +3968,7 @@
     "symbol": "Dy",
     "name": "Dysprosium",
     "slug": "dysprosium",
-    "pronunciation": null,
+    "pronunciation": "DIS-proh-zee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4014,11 +4014,11 @@
       "discoveredBy": "Paul-Émile Lecoq de Boisbaudran",
       "year": 1886,
       "place": "Paris",
-      "nameOrigin": null
+      "nameOrigin": "Greek: dysprositos, hard to get at"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A rare earth metal that keeps a magnet working at the temperatures inside an electric motor.",
+    "uses": "High-temperature permanent magnets, and control rods in reactors.",
+    "sources": "Xenotime and monazite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4030,7 +4030,7 @@
     "symbol": "Ho",
     "name": "Holmium",
     "slug": "holmium",
-    "pronunciation": null,
+    "pronunciation": "HOH-mee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4076,11 +4076,11 @@
       "discoveredBy": "Marc Delafontaine, Jacques-Louis Soret, Per Teodor Cleve",
       "year": 1878,
       "place": "Geneva, Uppsala",
-      "nameOrigin": null
+      "nameOrigin": "Latin: Holmia, Stockholm"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A rare earth metal with the strongest magnetic moment of any element.",
+    "uses": "The strongest magnets known when its moment is concentrated; and glass that filters certain wavelengths.",
+    "sources": "Monazite and gadolinite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4092,7 +4092,7 @@
     "symbol": "Er",
     "name": "Erbium",
     "slug": "erbium",
-    "pronunciation": null,
+    "pronunciation": "UR-bee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4138,11 +4138,11 @@
       "discoveredBy": "Carl Gustaf Mosander",
       "year": 1843,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Ytterby, the Swedish village that named four elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft rare earth metal whose ions amplify light, which is what makes a long-distance optical cable possible.",
+    "uses": "Optical fibre amplifiers, and pink colouring in glass.",
+    "sources": "Xenotime and euxenite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4154,7 +4154,7 @@
     "symbol": "Tm",
     "name": "Thulium",
     "slug": "thulium",
-    "pronunciation": null,
+    "pronunciation": "THOO-lee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4200,11 +4200,11 @@
       "discoveredBy": "Per Teodor Cleve",
       "year": 1879,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Thule, the ancient name for the far north"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The rarest of the stable rare earths, soft and silvery, and in demand for one specific job.",
+    "uses": "A portable X-ray source, and the highest-temperature superconductor behaviour known.",
+    "sources": "Monazite, in very small quantities.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4216,7 +4216,7 @@
     "symbol": "Yb",
     "name": "Ytterbium",
     "slug": "ytterbium",
-    "pronunciation": null,
+    "pronunciation": "ih-TUR-bee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4263,11 +4263,11 @@
       "discoveredBy": "Jean Charles Galissard de Marignac",
       "year": 1878,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Ytterby, the Swedish village that named four elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft rare earth metal that has become the standard way of measuring time with light.",
+    "uses": "Optical atomic clocks, the most accurate timekeepers built; and stainless steel.",
+    "sources": "Monazite, euxenite and xenotime.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4279,7 +4279,7 @@
     "symbol": "Lu",
     "name": "Lutetium",
     "slug": "lutetium",
-    "pronunciation": null,
+    "pronunciation": "loo-TEE-shee-um",
     "category": "lanthanides",
     "group": null,
     "period": 6,
@@ -4325,11 +4325,11 @@
       "discoveredBy": "Georges Urbain, Carl Auer von Welsbach",
       "year": 1907,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Lutetia, the Latin name for Paris"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The last and densest of the lanthanides, and the element whose placing in the table is still argued over.",
+    "uses": "A catalyst for refining petroleum, and detectors in PET scanners.",
+    "sources": "Monazite, and the only rare earth that is difficult to separate for a second reason: it is rarer than the rest.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4341,7 +4341,7 @@
     "symbol": "Hf",
     "name": "Hafnium",
     "slug": "hafnium",
-    "pronunciation": null,
+    "pronunciation": "HAF-nee-um",
     "category": "transition-metals",
     "group": 4,
     "period": 6,
@@ -4387,11 +4387,11 @@
       "discoveredBy": "Dirk Coster, George de Hevesy",
       "year": 1923,
       "place": "Denmark",
-      "nameOrigin": null
+      "nameOrigin": "Hafnia, the Latin name for Copenhagen"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A corrosion-resistant metal that absorbs neutrons readily, which is exactly the opposite of what zirconium, its constant companion, does.",
+    "uses": "Control rods in reactors, and superalloys for jet engines.",
+    "sources": "Zircon, where it always accompanies zirconium and has to be separated from it.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4403,7 +4403,7 @@
     "symbol": "Ta",
     "name": "Tantalum",
     "slug": "tantalum",
-    "pronunciation": null,
+    "pronunciation": "TAN-tuh-lum",
     "category": "transition-metals",
     "group": 5,
     "period": 6,
@@ -4449,11 +4449,11 @@
       "discoveredBy": "Anders Gustaf Ekeberg",
       "year": 1802,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Tantalus of Greek myth, because the metal refuses to absorb acid"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, blue-grey metal that is almost completely immune to attack by acid.",
+    "uses": "Capacitors small enough for a phone, surgical implants, and chemical plant vessels.",
+    "sources": "The mineral tantalite, found with niobium.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4465,7 +4465,7 @@
     "symbol": "W",
     "name": "Tungsten",
     "slug": "tungsten",
-    "pronunciation": null,
+    "pronunciation": "TUNG-sten",
     "category": "transition-metals",
     "group": 6,
     "period": 6,
@@ -4511,11 +4511,11 @@
       "discoveredBy": "Juan José Elhuyar, Fausto Elhuyar",
       "year": 1783,
       "place": "Spain",
-      "nameOrigin": null
+      "nameOrigin": "Swedish: tung sten, heavy stone; the symbol is from wolframite"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The metal with the highest melting point of all, and the one that stays solid when everything else has run.",
+    "uses": "Cutting tools, drill bits, the filament of an incandescent lamp, and radiation shielding.",
+    "sources": "Wolframite and scheelite.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4527,7 +4527,7 @@
     "symbol": "Re",
     "name": "Rhenium",
     "slug": "rhenium",
-    "pronunciation": null,
+    "pronunciation": "REE-nee-um",
     "category": "transition-metals",
     "group": 7,
     "period": 6,
@@ -4572,14 +4572,14 @@
     "atomicVolume": null,
     "latticeParameters": null,
     "discovery": {
-      "discoveredBy": "Otto Berg, Ida Noddack, Walter Noddack",
+      "discoveredBy": "Ida Noddack, Walter Noddack, Otto Berg",
       "year": 1925,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: Rhenus, the Rhine"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "One of the rarest elements in the crust, and the one with the highest boiling point of any element known.",
+    "uses": "Superalloys for the hottest parts of a jet engine, and platinum-rhenium catalysts.",
+    "sources": "Recovered from the flue dust of molybdenum roasting, which is the only practical source.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4591,7 +4591,7 @@
     "symbol": "Os",
     "name": "Osmium",
     "slug": "osmium",
-    "pronunciation": null,
+    "pronunciation": "OZ-mee-um",
     "category": "transition-metals",
     "group": 8,
     "period": 6,
@@ -4635,14 +4635,14 @@
     "atomicVolume": null,
     "latticeParameters": null,
     "discovery": {
-      "discoveredBy": "William Hyde Wollaston, Smithson Tennant",
+      "discoveredBy": "Smithson Tennant, William Hyde Wollaston",
       "year": 1803,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: osme, smell, from the pungent oxide it forms"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The densest naturally occurring element, and dense enough that a litre of it weighs more than twenty kilograms.",
+    "uses": "Fountain pen nibs and instrument pivots, where hardness matters more than cost; electrical contacts.",
+    "sources": "Platinum ores, and the residue left after refining them.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4654,7 +4654,7 @@
     "symbol": "Ir",
     "name": "Iridium",
     "slug": "iridium",
-    "pronunciation": null,
+    "pronunciation": "ih-RID-ee-um",
     "category": "transition-metals",
     "group": 9,
     "period": 6,
@@ -4701,11 +4701,11 @@
       "discoveredBy": "Smithson Tennant",
       "year": 1803,
       "place": "London",
-      "nameOrigin": null
+      "nameOrigin": "Latin: iris, rainbow, from the many colours of its salts"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most corrosion-resistant metal known, and the marker in the clay layer that records the impact that ended the dinosaurs.",
+    "uses": "Spark plugs, crucibles for growing crystals, and the standard kilogram of old.",
+    "sources": "Platinum ores, and as a trace in meteorites, which is how it was found in that clay.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4717,7 +4717,7 @@
     "symbol": "Pt",
     "name": "Platinum",
     "slug": "platinum",
-    "pronunciation": null,
+    "pronunciation": "PLAT-uh-num",
     "category": "transition-metals",
     "group": 10,
     "period": 6,
@@ -4764,11 +4764,11 @@
       "discoveredBy": "Antonio de Ulloa, Julius Caesar Scaliger",
       "year": 1735,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Spanish: platina, little silver, a term of contempt for a metal that would not melt"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A dense, unreactive precious metal that is unusually good at making a chemical reaction go faster.",
+    "uses": "Catalytic converters, laboratory equipment, jewellery, and the electrodes of a fuel cell.",
+    "sources": "Native metal in river gravels, and in sulphide ores with nickel and copper.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4780,7 +4780,7 @@
     "symbol": "Au",
     "name": "Gold",
     "slug": "gold",
-    "pronunciation": null,
+    "pronunciation": "GOLD",
     "category": "transition-metals",
     "group": 11,
     "period": 6,
@@ -4827,11 +4827,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Anglo-Saxon: gold; the symbol is from Latin aurum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A dense yellow metal that does not tarnish, can be beaten thinner than a wavelength of light, and has been money for six thousand years.",
+    "uses": "Jewellery and reserves, electrical contacts, and the reflective coating on a spacecraft.",
+    "sources": "Native metal in quartz veins and river gravels, and recovered from copper refining.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4843,7 +4843,7 @@
     "symbol": "Hg",
     "name": "Mercury",
     "slug": "mercury",
-    "pronunciation": null,
+    "pronunciation": "MER-kyoo-ree",
     "category": "transition-metals",
     "group": 12,
     "period": 6,
@@ -4890,11 +4890,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The planet Mercury, and Latin hydrargyrum, water-silver"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The only metal that is liquid at room temperature, dense enough to float iron, and poisonous in a way that took centuries to notice.",
+    "uses": "Historically thermometers and barometers, and now mostly in compact fluorescent lamps and chemical manufacture.",
+    "sources": "Cinnabar, from which it is roasted out as a vapour.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4906,7 +4906,7 @@
     "symbol": "Tl",
     "name": "Thallium",
     "slug": "thallium",
-    "pronunciation": null,
+    "pronunciation": "THAL-ee-um",
     "category": "post-transition-metals",
     "group": 13,
     "period": 6,
@@ -4953,11 +4953,11 @@
       "discoveredBy": "William Crookes",
       "year": 1861,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: thallos, a green shoot, from the bright green line in its spectrum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft grey metal once used as a rat poison and now avoided, because it is as toxic to people as to rats.",
+    "uses": "Historically rat poison and ant bait; now infrared detectors and high-temperature superconductors.",
+    "sources": "As a trace in lead, zinc and copper ores.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -4969,7 +4969,7 @@
     "symbol": "Pb",
     "name": "Lead",
     "slug": "lead",
-    "pronunciation": null,
+    "pronunciation": "LED",
     "category": "post-transition-metals",
     "group": 14,
     "period": 6,
@@ -5016,11 +5016,11 @@
       "discoveredBy": null,
       "year": null,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Anglo-Saxon: lead; the symbol is from Latin plumbum"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A heavy, soft, easily worked metal that is pleasant to use and damages the nervous system, which is why it has been removed from petrol and paint.",
+    "uses": "Lead-acid batteries, radiation shielding, and the ballast of a keel.",
+    "sources": "Galena, which is mostly lead sulphide and very easy to smelt.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5032,7 +5032,7 @@
     "symbol": "Bi",
     "name": "Bismuth",
     "slug": "bismuth",
-    "pronunciation": null,
+    "pronunciation": "BIZ-muth",
     "category": "post-transition-metals",
     "group": 15,
     "period": 6,
@@ -5079,11 +5079,11 @@
       "discoveredBy": null,
       "year": 1753,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "German: weisse Masse, white mass"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A brittle pinkish-white metal that forms the most spectacular crystals of any element as it cools.",
+    "uses": "A replacement for lead in plumbing and shot, and stomach medicine; and, as bismuth telluride, thermoelectric cooling.",
+    "sources": "Native metal, and as a by-product of refining lead, copper and tin.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5095,7 +5095,7 @@
     "symbol": "Po",
     "name": "Polonium",
     "slug": "polonium",
-    "pronunciation": null,
+    "pronunciation": "puh-LOH-nee-um",
     "category": "post-transition-metals",
     "group": 16,
     "period": 6,
@@ -5142,11 +5142,11 @@
       "discoveredBy": null,
       "year": 1898,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Poland, the birthplace of Marie Curie"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A radioactive metal so intensely radioactive that a sample glows blue and warms itself, discovered in pitchblende.",
+    "uses": "An alpha source for antistatic devices, and, historically, a heat source for spacecraft.",
+    "sources": "In uranium ores, at about one part in ten thousand billion; made in reactors.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5158,7 +5158,7 @@
     "symbol": "At",
     "name": "Astatine",
     "slug": "astatine",
-    "pronunciation": null,
+    "pronunciation": "ASS-tuh-teen",
     "category": "halogens",
     "group": 17,
     "period": 6,
@@ -5208,11 +5208,11 @@
       "discoveredBy": "Emilio G. Segrè",
       "year": 1940,
       "place": "United States",
-      "nameOrigin": null
+      "nameOrigin": "Greek: astatos, unstable"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The rarest naturally occurring element, and so radioactive that a visible sample has never existed.",
+    "uses": "Research, and investigation into targeted cancer therapy.",
+    "sources": "Fleeting decay products in uranium and thorium ores; less than a gram exists in the whole crust at any moment.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5224,7 +5224,7 @@
     "symbol": "Rn",
     "name": "Radon",
     "slug": "radon",
-    "pronunciation": null,
+    "pronunciation": "RAD-on",
     "category": "noble-gases",
     "group": 18,
     "period": 6,
@@ -5270,11 +5270,11 @@
       "discoveredBy": "Robert Bowie Owens, Friedrich Ernst Dorn, Ernest Rutherford",
       "year": 1900,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "From radium, the element it is produced by"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A heavy radioactive gas that seeps out of the ground and concentrates indoors, and the leading cause of lung cancer after smoking.",
+    "uses": "Historic use in cancer treatment; now a hazard to be ventilated away rather than a tool.",
+    "sources": "Produced by the decay of radium in soil, rock and building stone.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5286,7 +5286,7 @@
     "symbol": "Fr",
     "name": "Francium",
     "slug": "francium",
-    "pronunciation": null,
+    "pronunciation": "FRAN-see-um",
     "category": "alkali-metals",
     "group": 1,
     "period": 7,
@@ -5333,11 +5333,11 @@
       "discoveredBy": "Marguerite Perey",
       "year": 1939,
       "place": "France",
-      "nameOrigin": null
+      "nameOrigin": "France"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The most unstable of the first 101 elements, with a half-life of twenty-two minutes, so no one has ever seen a piece of it.",
+    "uses": "Research only; its most commonly quoted use is as an example of something that exists only fleetingly.",
+    "sources": "Decay product in uranium ores, where a few thousand atoms exist at a time.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5349,7 +5349,7 @@
     "symbol": "Ra",
     "name": "Radium",
     "slug": "radium",
-    "pronunciation": null,
+    "pronunciation": "RAY-dee-um",
     "category": "alkaline-earth-metals",
     "group": 2,
     "period": 7,
@@ -5396,11 +5396,11 @@
       "discoveredBy": null,
       "year": 1898,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Latin: radius, ray, for the radiation it gives off"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A radioactive metal that glows faintly and was once considered a health tonic, before the people who painted watch dials with it began to die.",
+    "uses": "Historically luminous paint and cancer therapy, both abandoned when the harm became clear.",
+    "sources": "Pitchblende and other uranium ores at a few parts per million.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5412,7 +5412,7 @@
     "symbol": "Ac",
     "name": "Actinium",
     "slug": "actinium",
-    "pronunciation": null,
+    "pronunciation": "ak-TIN-ee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5459,11 +5459,11 @@
       "discoveredBy": "André-Louis Debierne",
       "year": 1899,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: aktis, ray, from its radioactivity"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, silvery radioactive metal that glows blue in the dark and gives the actinides their name.",
+    "uses": "A neutron source, and targeted alpha therapy in research.",
+    "sources": "Trace amounts in uranium ores; made in reactors for practical use.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5475,7 +5475,7 @@
     "symbol": "Th",
     "name": "Thorium",
     "slug": "thorium",
-    "pronunciation": null,
+    "pronunciation": "THOR-ee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5522,11 +5522,11 @@
       "discoveredBy": "Jöns Jacob Berzelius",
       "year": 1828,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Thor, the Norse god of thunder"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A weakly radioactive metal that is three times as abundant as uranium and has been proposed as a safer nuclear fuel.",
+    "uses": "Gas mantles, high-refractive-index glass, and experimental reactor fuel.",
+    "sources": "Monazite sand, where it is the main radioactive component.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5538,7 +5538,7 @@
     "symbol": "Pa",
     "name": "Protactinium",
     "slug": "protactinium",
-    "pronunciation": null,
+    "pronunciation": "PRO-tak-TIN-ee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5586,11 +5586,11 @@
       "discoveredBy": "Kazimierz Fajans, Otto Hahn, Lise Meitner",
       "year": 1913,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Greek: protos, first, and actinium, because it decays into actinium"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A dense, silvery, highly radioactive metal that is rarer than radium and difficult to handle.",
+    "uses": "Research, and dating sediments and rock by its decay.",
+    "sources": "Uranium ores, at about one part in ten million.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5602,7 +5602,7 @@
     "symbol": "U",
     "name": "Uranium",
     "slug": "uranium",
-    "pronunciation": null,
+    "pronunciation": "yoo-RAY-nee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5652,11 +5652,11 @@
       "discoveredBy": null,
       "year": 1789,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The planet Uranus, discovered shortly before the element"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A dense, weakly radioactive metal whose heaviest natural isotope splits under a neutron, releasing energy in a chain that either powers a city or does something much worse.",
+    "uses": "Fuel for nuclear reactors, and the source of the plutonium used in weapons; also, because it is dense, armour and counterweights.",
+    "sources": "Pitchblende and uraninite, at a few parts per million in the crust, and dissolved in sea water.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5668,7 +5668,7 @@
     "symbol": "Np",
     "name": "Neptunium",
     "slug": "neptunium",
-    "pronunciation": null,
+    "pronunciation": "NEP-too-nee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5718,11 +5718,11 @@
       "discoveredBy": "Philip Abelson, Edwin McMillan",
       "year": 1940,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The planet Neptune"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The first transuranium element to be made, and the first produced in quantity rather than in traces.",
+    "uses": "A neutron detector, and the precursor from which plutonium is made.",
+    "sources": "Produced in reactors from uranium; traces occur naturally in uranium ores.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5734,7 +5734,7 @@
     "symbol": "Pu",
     "name": "Plutonium",
     "slug": "plutonium",
-    "pronunciation": null,
+    "pronunciation": "ploo-TOH-nee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5781,14 +5781,14 @@
     "atomicVolume": null,
     "latticeParameters": null,
     "discovery": {
-      "discoveredBy": "Joseph W. Kennedy, Arthur Wahl, Glenn Theodore Seaborg, Edwin McMillan",
+      "discoveredBy": "Arthur Wahl, Joseph W. Kennedy, Glenn Theodore Seaborg, Edwin McMillan",
       "year": 1940,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The dwarf planet Pluto"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A silvery radioactive metal that is warm to the touch from its own decay, and the element whose name most people meet in a context they would rather not.",
+    "uses": "Reactor fuel and nuclear weapons; and a long-lived isotope that powers deep-space probes.",
+    "sources": "Manufactured in reactors; only traces occur naturally.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5800,7 +5800,7 @@
     "symbol": "Am",
     "name": "Americium",
     "slug": "americium",
-    "pronunciation": null,
+    "pronunciation": "am-uh-RISH-ee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5850,11 +5850,11 @@
       "discoveredBy": "Glenn Theodore Seaborg",
       "year": 1944,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The Americas, since it sits below europium"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal that is mildly luminous, which is why it was once found in almost every household.",
+    "uses": "Ionisation smoke detectors, and industrial thickness gauges.",
+    "sources": "Produced in reactors from plutonium; not found in nature in meaningful amounts.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5866,7 +5866,7 @@
     "symbol": "Cm",
     "name": "Curium",
     "slug": "curium",
-    "pronunciation": null,
+    "pronunciation": "KOO-ree-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5913,11 +5913,11 @@
       "discoveredBy": "Glenn Theodore Seaborg",
       "year": 1944,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Marie and Pierre Curie"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A hard, silvery radioactive metal that glows purple in the dark and is intensely dangerous to handle.",
+    "uses": "An alpha source for spectrometers on Mars rovers, and the power source of a pacemaker battery in the past.",
+    "sources": "Made in reactors; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5929,7 +5929,7 @@
     "symbol": "Bk",
     "name": "Berkelium",
     "slug": "berkelium",
-    "pronunciation": null,
+    "pronunciation": "BURK-lee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -5977,11 +5977,11 @@
       "discoveredBy": "Stanley Gerald Thompson, Albert Ghiorso, Glenn Theodore Seaborg",
       "year": 1949,
       "place": "University of California, Berkeley",
-      "nameOrigin": null
+      "nameOrigin": "Berkeley, California, where it was made"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A soft, silvery radioactive metal produced one atom at a time in the first sample ever assembled.",
+    "uses": "Research, chiefly as a target for making still heavier elements.",
+    "sources": "Made in reactors; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -5993,7 +5993,7 @@
     "symbol": "Cf",
     "name": "Californium",
     "slug": "californium",
-    "pronunciation": null,
+    "pronunciation": "kal-ih-FOR-nee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6040,11 +6040,11 @@
       "discoveredBy": "Stanley Gerald Thompson, Kenneth Street Jr., Albert Ghiorso, Glenn Theodore Seaborg",
       "year": 1950,
       "place": "University of California, Berkeley",
-      "nameOrigin": null
+      "nameOrigin": "The state and University of California"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A radioactive metal that throws off neutrons so freely that a small sample is a usable neutron source.",
+    "uses": "Starting a reactor, finding water and oil underground, and detecting explosives.",
+    "sources": "Made in reactors; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6056,7 +6056,7 @@
     "symbol": "Es",
     "name": "Einsteinium",
     "slug": "einsteinium",
-    "pronunciation": null,
+    "pronunciation": "ine-STY-nee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6103,11 +6103,11 @@
       "discoveredBy": "Albert Ghiorso, Glenn Theodore Seaborg",
       "year": 1952,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Albert Einstein"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal first identified in the debris of a hydrogen bomb test.",
+    "uses": "Research only; it is made in quantities of micrograms.",
+    "sources": "Made in reactors; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6119,7 +6119,7 @@
     "symbol": "Fm",
     "name": "Fermium",
     "slug": "fermium",
-    "pronunciation": null,
+    "pronunciation": "FUR-mee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6166,11 +6166,11 @@
       "discoveredBy": "Glenn Theodore Seaborg",
       "year": 1952,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Enrico Fermi"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal that has never been made in a quantity anyone could see.",
+    "uses": "Research only: it is made in quantities nobody can see, so there is nothing to use it for.",
+    "sources": "Discovered in the fallout of the first hydrogen bomb test; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6182,7 +6182,7 @@
     "symbol": "Md",
     "name": "Mendelevium",
     "slug": "mendelevium",
-    "pronunciation": null,
+    "pronunciation": "men-DEEL-ee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6230,11 +6230,11 @@
       "discoveredBy": "Glenn Theodore Seaborg",
       "year": 1955,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Dmitri Mendeleev, who arranged the table"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal made an atom at a time, and named after the man who first predicted where it would sit.",
+    "uses": "Research only: atoms are made one at a time by bombarding einsteinium with helium nuclei.",
+    "sources": "Made by bombarding einsteinium with helium; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6246,7 +6246,7 @@
     "symbol": "No",
     "name": "Nobelium",
     "slug": "nobelium",
-    "pronunciation": null,
+    "pronunciation": "NO-bee-lee-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6294,11 +6294,11 @@
       "discoveredBy": "Glenn Theodore Seaborg",
       "year": 1957,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Alfred Nobel"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal whose most stable isotopes last about an hour.",
+    "uses": "Research only: it is made by firing carbon ions at curium, a few atoms per experiment.",
+    "sources": "Made by bombarding curium with carbon ions; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6310,7 +6310,7 @@
     "symbol": "Lr",
     "name": "Lawrencium",
     "slug": "lawrencium",
-    "pronunciation": null,
+    "pronunciation": "law-REN-see-um",
     "category": "actinides",
     "group": null,
     "period": 7,
@@ -6355,11 +6355,11 @@
       "discoveredBy": "Albert Ghiorso",
       "year": 1961,
       "place": "University of California, Berkeley",
-      "nameOrigin": null
+      "nameOrigin": "Ernest Lawrence, inventor of the cyclotron"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The last of the actinides, and the element whose position in group three is the most argued-over question in the table.",
+    "uses": "Research only: it settles a long argument about which element belongs in group three.",
+    "sources": "Made by bombarding californium with boron ions; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6371,7 +6371,7 @@
     "symbol": "Rf",
     "name": "Rutherfordium",
     "slug": "rutherfordium",
-    "pronunciation": null,
+    "pronunciation": "ruth-er-FORD-ee-um",
     "category": "transition-metals",
     "group": 4,
     "period": 7,
@@ -6416,11 +6416,11 @@
       "discoveredBy": "Albert Ghiorso",
       "year": 1964,
       "place": "Dubna",
-      "nameOrigin": null
+      "nameOrigin": "Ernest Rutherford, who first split an atom"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The first of the transactinides, and an element whose chemistry has been studied only a handful of atoms at a time.",
+    "uses": "Research only: it exists for seconds, and is studied to see whether it behaves like hafnium.",
+    "sources": "Made by fusing plutonium with neon nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6432,7 +6432,7 @@
     "symbol": "Db",
     "name": "Dubnium",
     "slug": "dubnium",
-    "pronunciation": null,
+    "pronunciation": "dub-NEE-um",
     "category": "transition-metals",
     "group": 5,
     "period": 7,
@@ -6479,11 +6479,11 @@
       "discoveredBy": "Lawrence Berkeley National Laboratory, Joint Institute for Nuclear Research",
       "year": 1967,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Dubna, the Russian town with a heavy-element laboratory"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal whose longest-lived isotope lasts about a day, longer than most of its neighbours.",
+    "uses": "Research only: its chemistry has been examined a few atoms at a time, in solution.",
+    "sources": "Made by fusing americium with neon nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6495,7 +6495,7 @@
     "symbol": "Sg",
     "name": "Seaborgium",
     "slug": "seaborgium",
-    "pronunciation": null,
+    "pronunciation": "see-BOR-gee-um",
     "category": "transition-metals",
     "group": 6,
     "period": 7,
@@ -6544,11 +6544,11 @@
       "discoveredBy": "Yuri Oganessian",
       "year": 1974,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Glenn Seaborg, who made ten of the transuranium elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal, and the one element named for a person while that person was still alive.",
+    "uses": "Research only: it is made by fusing lighter nuclei and studied for under a minute.",
+    "sources": "Made by fusing californium with oxygen nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6560,7 +6560,7 @@
     "symbol": "Bh",
     "name": "Bohrium",
     "slug": "bohrium",
-    "pronunciation": null,
+    "pronunciation": "BOR-ee-um",
     "category": "transition-metals",
     "group": 7,
     "period": 7,
@@ -6608,11 +6608,11 @@
       "discoveredBy": "Yuri Oganessian",
       "year": 1976,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Niels Bohr"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal produced only a few atoms at a time, with a half-life measured in seconds.",
+    "uses": "Research only: a few atoms at a time, from a machine that runs for weeks to make them.",
+    "sources": "Made by fusing bismuth with chromium nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6624,7 +6624,7 @@
     "symbol": "Hs",
     "name": "Hassium",
     "slug": "hassium",
-    "pronunciation": null,
+    "pronunciation": "HASS-ee-um",
     "category": "transition-metals",
     "group": 8,
     "period": 7,
@@ -6674,11 +6674,11 @@
       "discoveredBy": "GSI Helmholtz Centre for Heavy Ion Research",
       "year": 1984,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Hesse, the German state where it was made"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal whose chemistry has been shown to resemble osmium, which was not a given.",
+    "uses": "Research only: it is used to test whether the heaviest elements still follow the table.",
+    "sources": "Made by fusing lead with iron nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6690,7 +6690,7 @@
     "symbol": "Mt",
     "name": "Meitnerium",
     "slug": "meitnerium",
-    "pronunciation": null,
+    "pronunciation": "mite-NEER-ee-um",
     "category": "unknown",
     "group": 9,
     "period": 7,
@@ -6740,11 +6740,11 @@
       "discoveredBy": "GSI Helmholtz Centre for Heavy Ion Research",
       "year": 1982,
       "place": "GSI Helmholtz Centre for Heavy Ion Research",
-      "nameOrigin": null
+      "nameOrigin": "Lise Meitner, who explained nuclear fission"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal made a few atoms at a time, with no measured chemistry to place it by.",
+    "uses": "Research only: no use is possible for an element that exists for a few seconds.",
+    "sources": "Made by fusing bismuth with iron nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6756,7 +6756,7 @@
     "symbol": "Ds",
     "name": "Darmstadtium",
     "slug": "darmstadtium",
-    "pronunciation": null,
+    "pronunciation": "darm-STAT-ee-um",
     "category": "unknown",
     "group": 10,
     "period": 7,
@@ -6805,11 +6805,11 @@
       "discoveredBy": "GSI Helmholtz Centre for Heavy Ion Research",
       "year": 1994,
       "place": "GSI Helmholtz Centre for Heavy Ion Research",
-      "nameOrigin": null
+      "nameOrigin": "Darmstadt, the German city where it was made"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal whose heaviest known isotopes survive for seconds.",
+    "uses": "Research only: identified by the trail of alpha particles its decay leaves behind.",
+    "sources": "Made by fusing lead with nickel nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6821,7 +6821,7 @@
     "symbol": "Rg",
     "name": "Roentgenium",
     "slug": "roentgenium",
-    "pronunciation": null,
+    "pronunciation": "rent-GEN-ee-um",
     "category": "unknown",
     "group": 11,
     "period": 7,
@@ -6869,11 +6869,11 @@
       "discoveredBy": "GSI Helmholtz Centre for Heavy Ion Research",
       "year": 1994,
       "place": "GSI Helmholtz Centre for Heavy Ion Research",
-      "nameOrigin": null
+      "nameOrigin": "Wilhelm Röntgen, who discovered X-rays"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal, and one of the last whose expected behaviour is a prediction rather than a measurement.",
+    "uses": "Research only: studied to see whether relativity changes how the heaviest metals behave.",
+    "sources": "Made by fusing bismuth with nickel nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6885,7 +6885,7 @@
     "symbol": "Cn",
     "name": "Copernicium",
     "slug": "copernicium",
-    "pronunciation": null,
+    "pronunciation": "kop-er-NISH-ee-um",
     "category": "transition-metals",
     "group": 12,
     "period": 7,
@@ -6932,11 +6932,11 @@
       "discoveredBy": "GSI Helmholtz Centre for Heavy Ion Research",
       "year": 1996,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Nicolaus Copernicus"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal that may behave like a gas rather than a metal, which is a strange thing to say about the element under mercury.",
+    "uses": "Research only: it may be a gas at room temperature, which no other metal is.",
+    "sources": "Made by fusing lead with zinc nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -6948,7 +6948,7 @@
     "symbol": "Nh",
     "name": "Nihonium",
     "slug": "nihonium",
-    "pronunciation": null,
+    "pronunciation": "nih-HOH-nee-um",
     "category": "unknown",
     "group": 13,
     "period": 7,
@@ -6991,11 +6991,11 @@
       "discoveredBy": "Joint Institute for Nuclear Research",
       "year": 2004,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Nihon, a Japanese name for Japan, the country where it was made"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The first element discovered in Asia, and one whose every property is an extrapolation from the column above it.",
+    "uses": "Research only: made a few atoms at a time in a heavy-ion accelerator.",
+    "sources": "Made by fusing bismuth with zinc nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -7007,7 +7007,7 @@
     "symbol": "Fl",
     "name": "Flerovium",
     "slug": "flerovium",
-    "pronunciation": null,
+    "pronunciation": "flair-OH-vee-um",
     "category": "unknown",
     "group": 14,
     "period": 7,
@@ -7056,11 +7056,11 @@
       "discoveredBy": "Joint Institute for Nuclear Research",
       "year": 1998,
       "place": "Joint Institute for Nuclear Research",
-      "nameOrigin": null
+      "nameOrigin": "The Flerov Laboratory in Dubna"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal that is expected to be a volatile metal, which would set it apart from every other member of its group.",
+    "uses": "Research only: its volatility is the property worth measuring, and there is barely enough to measure.",
+    "sources": "Made by fusing plutonium with calcium nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -7072,7 +7072,7 @@
     "symbol": "Mc",
     "name": "Moscovium",
     "slug": "moscovium",
-    "pronunciation": null,
+    "pronunciation": "moss-KOH-vee-um",
     "category": "unknown",
     "group": 15,
     "period": 7,
@@ -7118,11 +7118,11 @@
       "discoveredBy": "Joint Institute for Nuclear Research",
       "year": 2003,
       "place": "Joint Institute for Nuclear Research",
-      "nameOrigin": null
+      "nameOrigin": "Moscow, and the region around Dubna"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal with a half-life of a fraction of a second and no measured chemistry at all.",
+    "uses": "Research only: its atoms last a fraction of a second, long enough to identify and no longer.",
+    "sources": "Made by fusing americium with calcium nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -7134,7 +7134,7 @@
     "symbol": "Lv",
     "name": "Livermorium",
     "slug": "livermorium",
-    "pronunciation": null,
+    "pronunciation": "liv-er-MOR-ee-um",
     "category": "unknown",
     "group": 16,
     "period": 7,
@@ -7181,11 +7181,11 @@
       "discoveredBy": "Joint Institute for Nuclear Research",
       "year": 2000,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "The Lawrence Livermore National Laboratory"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "A synthetic radioactive metal whose atoms survive for milliseconds, so almost nothing about it is more than predicted.",
+    "uses": "Research only: it is identified by its decay products rather than by anything it does.",
+    "sources": "Made by fusing curium with calcium nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -7197,7 +7197,7 @@
     "symbol": "Ts",
     "name": "Tennessine",
     "slug": "tennessine",
-    "pronunciation": null,
+    "pronunciation": "TEN-uh-seen",
     "category": "unknown",
     "group": 17,
     "period": 7,
@@ -7245,11 +7245,11 @@
       "discoveredBy": "Yuri Oganessian",
       "year": 2010,
       "place": "Joint Institute for Nuclear Research",
-      "nameOrigin": null
+      "nameOrigin": "Tennessee, the American state with a heavy-element laboratory"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The heaviest halogen, and probably not really a halogen: relativity is expected to pull it towards behaving like a metal.",
+    "uses": "Research only: its chemistry would settle whether it is a halogen, and there is too little to try.",
+    "sources": "Made by fusing berkelium with calcium nuclei; not found in nature.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
@@ -7261,7 +7261,7 @@
     "symbol": "Og",
     "name": "Oganesson",
     "slug": "oganesson",
-    "pronunciation": null,
+    "pronunciation": "oh-GAN-uh-son",
     "category": "noble-gases",
     "group": 18,
     "period": 7,
@@ -7311,11 +7311,11 @@
       "discoveredBy": "Joint Institute for Nuclear Research",
       "year": 2006,
       "place": null,
-      "nameOrigin": null
+      "nameOrigin": "Yuri Oganessian, who made several of the heaviest elements"
     },
-    "summary": null,
-    "uses": null,
-    "sources": null,
+    "summary": "The heaviest element yet made, a noble gas that is predicted not to behave like one, and probably a solid rather than a gas.",
+    "uses": "Research only: a few atoms have ever existed, which leaves nothing to use.",
+    "sources": "Made by fusing californium with calcium nuclei; only a few atoms have ever existed.",
     "dataSource": {
       "facts": "PubChem Periodic Table (public domain)",
       "supplementary": "Wikidata (CC0)",
