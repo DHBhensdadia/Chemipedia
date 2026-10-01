@@ -72,6 +72,12 @@ Also validate the generated HTML where practical: no unclosed tags, no duplicate
 Run this at the end of **every** phase, for **every** page the phase touched, and re-run it for at
 least one page from each earlier phase to catch regressions.
 
+**Before anything else: make the preview composite.** A browser preview that is not filling the
+panel produces no frames, and every capture attempt fails with a message saying the webview is not
+being composited. Resizing the preview with fill enabled is what makes capture work. Do that first,
+then set the width you want. If a capture still fails, the problem is the capture and not the page:
+say so, rather than treating a missing screenshot as a passed check.
+
 **Procedure — identical every time** (full version in `docs/research/02-tooling-and-visual-verification.md` §3):
 
 1. Serve the build: `node source/tools/serve.js`.

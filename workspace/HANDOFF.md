@@ -1,6 +1,6 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-01 · **By:** foundation build session · **After commit:** `90abe82`
+**Written:** 2026-10-01 · **By:** foundation build session · **After commit:** `112ebfe` plus the close-out commit
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -27,29 +27,28 @@ The site builds and serves. `source/` holds a working pipeline and nothing decor
 Commands: `node source/tools/serve.js` (add `--rebuild`), `node source/tools/build.js`,
 `node --test source/tests`. `dist/` is generated and ignored by git.
 
-## The one thing that is not finished
+## Phase 0 is closed
 
-**The screenshots.** The browser tool cannot composite frames in this session, so the 1280 / 768 /
-375 px captures could not be taken. Three lines of the Phase 0 close-out checklist are therefore
-unticked, work item 0.5 is `IN_PROGRESS`, and the phase is not marked complete. That is deliberate:
-this project does not tick a visual check it cannot evidence.
+Tagged `v0.1.0`. Every line of the close-out checklist is ticked and the evidence is in
+`progress/PHASE_LOG.md`: 22 tests passing, every module parsing, brand and attribution scans clean,
+the development server's responses for a page, an icon, a miss, a non-canonical URL, a non-GET
+method and two traversal attempts, and screenshots at 1280 / 768 / 375 px taken and looked at.
 
-Retry the capture before doing anything else. `preview_open` on `http://localhost:4173/`, then
-`preview_screenshot`. If it works, tick the three lines, commit the corrected record, tag `v0.1.0`,
-and close the phase. If it still does not, ask the author to confirm the rendition from the Preview
-tab and close the phase on that confirmation, recording that it is what happened.
-
-No styling exists yet, so nothing about this phase's appearance was ever being judged against the
-reference. From Phase 1 that changes and the gate becomes mandatory.
+**Capture needs one step first.** A preview that is not filling the panel produces no frames and
+the capture fails. Resize the preview so that it fills the panel, then set the width you want.
+This cost real time this session and is now step zero of the visual recipe in
+`docs/TESTING_STRATEGY.md` §4. A failed capture is a failed check, never a passed one.
 
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. Resolve the open gate above.
-3. Start **Phase 1** — design system and global shell: `styles/tokens.css` from the values in
+2. Start **Phase 1** — design system and global shell: `styles/tokens.css` from the values in
    `docs/DESIGN_SYSTEM.md`, then `base.css`, the layout primitives, the header, submenu and footer,
    and the development-only style guide at `source/styleguide/`. The build must then link
    `tokens.css` and `app.js` from the document skeleton, which is the one edit to `tools/build.js`.
+3. Fix the measure first. The 1280 px screenshot shows body text running the full viewport width,
+   about 160 characters a line, because no stylesheet exists yet. The shell and the measure are what
+   make the page read as designed rather than unstyled, and they belong at the top of the phase.
 
 ## What is fragile or easy to get wrong
 
@@ -62,8 +61,8 @@ reference. From Phase 1 that changes and the gate becomes mandatory.
 - **Templates are fragments.** `source/pages/*.html` carry no `<head>`, no `<body>` and no doctype —
   the build owns all of that. There is no `source/index.html`; the home template is
   `source/pages/home.html`.
-- **Screenshots.** Do not close a phase on geometry measurements once a designed surface exists.
-  Measured layout is a substitute, not a replacement.
+- **Screenshots.** Capture before you claim. Measured layout is a substitute, not a replacement, and
+  a phase is not closed on geometry evidence once a designed surface exists.
 - **Attribution.** Repo-local git identity is `Devansh <dhbhensdadia@gmail.com>`. Do not change it,
   and never add an AI co-author or "generated with" trailer.
 - **Shell quoting.** An apostrophe inside a commit message body breaks the heredoc-through-shell
@@ -73,5 +72,5 @@ reference. From Phase 1 that changes and the gate becomes mandatory.
 
 ## Anything deliberately left in a half state
 
-Only the screenshot gate, described above. The working tree is clean and every other Phase 0 exit
-criterion is met and evidenced in `progress/PHASE_LOG.md`.
+Nothing. The working tree is clean, Phase 0 is closed and tagged, and the next session starts from a
+standstill rather than from a repair.

@@ -14,7 +14,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 
 | Phase | Name | Status | Commits |
 |---|---|---|---|
-| 0 | Foundation, tooling and working system | `IN_PROGRESS` | `81bf871`..`9597a5c`, `90abe82`+ |
+| 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`112ebfe`, plus the close-out commit |
 | 1 | Design system and global shell | `NOT_STARTED` | — |
 | 2 | Data layer (elements and glossary) | `NOT_STARTED` | — |
 | 3 | Periodic table engine | `NOT_STARTED` | — |
@@ -43,7 +43,7 @@ shaped by the accepted architecture.
 | 0.2 | Workspace documentation system | `COMPLETE` | `AGENTS.md`, `WORKING_AGREEMENT.md`, `RUN_STATE.md`, `HANDOFF.md`, `docs/**`, `guides/**`, this file. |
 | 0.3 | Git initialised with author identity | `COMPLETE` | Identity set repo-locally; verified on every commit. Tool directory excluded via `.git/info/exclude` so the tracked `.gitignore` stays free of tool names. |
 | 0.4 | Source tree scaffolded, with the route manifest | `COMPLETE` | `source/scripts/router/routes.js`, `source/pages/`, `source/tools/site-paths.js`, `source/tests/`; the manifest, the path rules and the document skeleton are unit-tested. Commits `517f51c`..`90abe82`. |
-| 0.5 | Dev server and verification harness | `IN_PROGRESS` | The dev server is delivered and verified over HTTP. The harness is the documented recipe in `docs/TESTING_STRATEGY.md` §4, and its screenshot step could not be run this session — see the open gate below. |
+| 0.5 | Dev server and verification harness | `COMPLETE` | Dev server verified over HTTP, and the page visually verified at three widths. The harness is the recipe in `docs/TESTING_STRATEGY.md` §4, which now records how to make the preview composite before a capture. Commits `4dcca48`+ |
 
 **Exit criteria**
 
@@ -76,23 +76,25 @@ Console and network, on a clean page load: 0 console messages, 1 request, 200.
 Layout, at each of the three widths: no horizontal overflow, no clipped text.
 ```
 
-**Open gate — the appearance layer**
+**Appearance — captured and inspected**
 
-Three lines of the close-out checklist below are not ticked: the 1280 / 768 / 375 px screenshots.
-The preview webview produced no frames this session (the capture tool reports it is not being
-composited), so no screenshot exists to look at, and this project does not tick a visual check it
-cannot evidence.
+Screenshots were taken at all three widths from the served build and looked at. What they show, and
+what was recorded about each:
 
-The substitute evidence is real but narrower: an accessibility-tree snapshot, and measured geometry
-at all three widths — no horizontal overflow, no clipped text, one `<h1>`, headings in order, one
-`main` landmark. It is narrower because it can only prove that the page is structured and does not
-overflow; it cannot prove the page *looks* right.
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | Unstyled browser rendering: serif default, no shell, no measure. Lede on one line, both sections and the list present, order correct, page does not overflow. | Everything visual: no type scale, no ink, no dotted rules, no shell, and body text runs the full viewport width — roughly 160 characters a line against a measure of 68. All of it is Phase 1's deliverable, and none of it is a defect in this phase. |
+| 768 px | The same document, wrapping. No overflow, nothing clipped. | Same as above. |
+| 375 px | The same document, wrapping further. Longest paragraph holds, list indents correctly, no horizontal scroll. | Same as above. |
 
-What makes this tolerable for this phase, and not for any later one: Phase 0 ships no designed
-surface. The page is deliberately unstyled, so there is no visual language to compare against the
-reference and nothing a screenshot could reveal that the geometry does not already. From Phase 1
-the appearance gate is mandatory and the capture must be working before that phase can close. It is
-recorded as a risk in `RUN_STATE.md`.
+Capture failed on the first attempts with the tool reporting that the preview webview was not being
+composited. Resizing the preview so that it fills the panel makes it composite, and capture then
+works; that is now step zero of the visual recipe in `docs/TESTING_STRATEGY.md` §4, so the next
+session does not lose time to it.
+
+The one substantive observation is the line length at desktop width. It is not a defect here,
+because no stylesheet exists yet, but it is the first thing Phase 1 must fix: the shell and the
+measure are what stop the page reading as an unstyled document.
 
 **Close-out checklist**
 
@@ -108,12 +110,13 @@ Phase 0 verification
 [x] Keyboard traversal ...................... pass — the page has no interactive elements yet, so
                                               there is nothing to reach and no focus trap
 [x] Reduced motion .......................... not applicable — no animation or transition exists yet
-[ ] 1280 px screenshot vs reference ......... NOT CAPTURED — no frames from the preview webview
-[ ] 768 px  screenshot vs reference ......... NOT CAPTURED — as above
-[ ] 375 px  screenshot vs reference ......... NOT CAPTURED — as above
+[x] 1280 px screenshot vs reference ......... compared — no styling exists to compare; see the table
+[x] 768 px  screenshot vs reference ......... compared — as above
+[x] 375 px  screenshot vs reference ......... compared — as above
 [x] Regression check on an earlier phase .... none to check: this is the first phase with a page
 [x] Deliberate deviations recorded .......... the favicon delivered early; folders a later phase
-                                              owns left uncreated; the capture gap, above
+                                              owns left uncreated; the unstyled rendition, which
+                                              is this phase's agreed starting point
 [x] docs/MIND_MAP.md updated ................ yes, inside each commit that added a file
 [x] RUN_STATE.md + HANDOFF.md updated ....... yes
 ```
@@ -125,7 +128,8 @@ conventions · `3de07ad` mind map · `e4f7fc4` developer guides · `0ea045d` ini
 verification · `58e2365` adopt confirmed decisions · `517f51c` project definition · `b131544` path
 rules · `5b044f3` path rule tests · `aa7a3e0` route manifest · `9828aab` manifest tests ·
 `333f12f` static build · `c998a3a` skeleton tests · `4dcca48` development server · `9597a5c`
-README · `90abe82` spec reconciliation
+README · `90abe82` spec reconciliation · `112ebfe` foundation verification record · plus the
+close-out commit that records the captures and closes the phase
 
 ---
 
@@ -324,7 +328,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-01 | 0 | Scope decision | The reference's blog and tutoring pages are excluded, while its glossary, group pages, calculator, downloads and about/contact pages are in scope (ADR-002). | Accepted by the author. Adds the downloads area and a print stylesheet to Phase 10 and Phase 11. |
 | 2026-10-01 | 0 | Deviation | **The favicon was drawn in Phase 0 rather than Phase 1.** A document that declares no icon still makes every browser request one and fail, which is a failed request on every page and would fail the health gate for every phase. The rest of the brand — wordmark, mark, social image — stays in Phase 1, where the favicon is refined alongside them and given a raster fallback. | Accepted. The mark is our own drawing, uses two token colours, and is listed in `docs/MIND_MAP.md` as a Phase 0 and Phase 1 file. |
 | 2026-10-01 | 0 | Deviation | **Folders a later phase owns were left uncreated** rather than created empty: `styles/`, `data/`, and most of the `scripts/` and `tests/` layers. Git does not track an empty directory, and the alternative — a placeholder file in each — is the stub the working agreement forbids. Each folder arrives with its first real file. | Accepted. The plan's Phase 0 deliverable list records the same exception. |
-| 2026-10-01 | 0 | Blocker | **Screenshot capture is unavailable in this session.** The browser tool reports that the preview webview is not being composited, so no frame can be captured at any width, which leaves three lines of the close-out checklist unticked and keeps work item 0.5 `IN_PROGRESS`. Everything else in the phase is verified and committed. | Open. The next session retries the capture before closing the phase, or the author confirms the rendition from the Preview tab. The design-system phase cannot close without it. |
+| 2026-10-01 | 0 | Blocker | **Screenshot capture failed at first.** The browser tool reported that the preview webview was not being composited, so no frame could be captured at any width. | Resolved in the same session: resizing the preview so that it fills the panel makes the webview composite, and all three captures then succeeded. The step is now the first line of the visual recipe in `docs/TESTING_STRATEGY.md` §4. |
+| 2026-10-01 | 0 | Observation | **Body text runs the full viewport width at desktop** — about 160 characters a line against a measure of 68. Visible in the 1280 px screenshot. | Not a defect of this phase: the page is deliberately unstyled. Recorded as the first thing the design-system phase must fix, since the shell and the measure are what make it read as a designed page. |
 
 ---
 

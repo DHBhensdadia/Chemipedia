@@ -6,7 +6,7 @@
 > **It is never sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-01 (foundation build session)
+**Last updated:** 2026-10-01 (foundation build session, closed)
 
 ---
 
@@ -14,24 +14,32 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | Phase 0 — Foundation, Tooling and Working System |
-| **Work item** | 0.5 — Development server and verification harness |
+| **Phase** | Phase 0 — Foundation, Tooling and Working System — `COMPLETE`, tagged `v0.1.0` |
+| **Work item** | 0.5 — Development server and verification harness — `COMPLETE` |
 | **Objective** | Prove the pipeline end to end: a declared route is rendered to static HTML, copied into a build directory, and served the way a static host serves it. |
-| **Status** | `IN_PROGRESS` — everything is built, committed and verified except three lines of the close-out checklist: the 1280 / 768 / 375 px screenshots, because the browser tool cannot composite frames in this session. No styling exists yet, so no appearance claim is being made. |
-| **Current commit** | `90abe82` (working tree clean) |
-| **Next action** | Retry the screenshots. If they can be captured, tick the three lines in `progress/PHASE_LOG.md`, commit the corrected record, tag `v0.1.0`, and set Phase 0 `COMPLETE`. If the capture stays unavailable, the author confirms the rendition from the Preview tab and the phase closes on that confirmation, recorded as such. Then start Phase 1 — the design system and the global shell. |
+| **Status** | `COMPLETE`. Built, committed, unit-tested, verified over HTTP, and visually inspected at 1280 / 768 / 375 px. |
+| **Current commit** | `112ebfe`, plus the close-out commit that follows it (working tree clean) |
+| **Next action** | Start **Phase 1 — Design system and global shell**. Write `source/styles/tokens.css` from the values in `docs/DESIGN_SYSTEM.md`, then `base.css`, the layout primitives, the header, the submenu and the footer, and the development-only style guide at `source/styleguide/`. The build must then link the stylesheet and the entry script from the document skeleton — the one edit `tools/build.js` needs — and the first thing to fix is the measure, since body text currently runs the full viewport width. |
 
-## Files expected to change in this work item
+## Files expected to change in the next work item
 
 ```
-workspace/progress/PHASE_LOG.md     the three screenshot lines and the phase status
-workspace/RUN_STATE.md              this file
-workspace/HANDOFF.md                the note to the next session
+source/styles/tokens.css                    every design value in the project
+source/styles/base.css                      reset, typography, focus, reduced motion
+source/styles/layout.css                    shell, ruled sections, the dotted-rule utilities
+source/styles/components/site-header.css    one stylesheet per component, from here on
+source/scripts/app.js                       the single entry point
+source/scripts/components/site-header.js
+source/scripts/components/site-footer.js
+source/scripts/components/submenu.js
+source/styleguide/index.html                the development-only style guide
+source/tools/build.js                       link the stylesheet and the entry script
+source/tests/**                             tests for any new pure logic
+workspace/docs/MIND_MAP.md                  as always, in the same commits
+workspace/progress/PHASE_LOG.md
+workspace/RUN_STATE.md
+workspace/HANDOFF.md
 ```
-
-Phase 1 will then change, in addition: `source/styles/**`, `source/scripts/components/**`,
-`source/scripts/app.js`, `source/pages/**`, `source/tools/build.js` (to link the stylesheet and the
-entry script), `source/tests/**`, and the documents that describe them.
 
 ## Work item ledger
 
@@ -42,7 +50,7 @@ entry script), `source/tests/**`, and the documents that describe them.
 | 0.2 Workspace documentation and tracking system | `COMPLETE` | All documentation files authored; brand scan clean; 13 commits, all authored and committed by the project author, no AI attribution | `81bf871`..`58e2365` |
 | 0.3 Git repository initialised with author identity | `COMPLETE` | `git config --local user.name/user.email` verified; `git log --format='%an <%ae>'` shows one identity, the project author, on every commit | `81bf871` |
 | 0.4 Source tree scaffolded, with the route manifest | `COMPLETE` | Route manifest, path rules and document skeleton built and unit-tested; `node --test source/tests` → 22 passed | `517f51c`..`90abe82` |
-| 0.5 Development server and verification harness | `IN_PROGRESS` | Dev server verified over HTTP: 200 on the page and the icon, 404 with our document for a miss, 301 to the canonical URL, 405 for a non-GET, traversal refused, zero console messages on load. Harness = the recipe in `docs/TESTING_STRATEGY.md` §4; its screenshot step is the open item. | `4dcca48`+ |
+| 0.5 Development server and verification harness | `COMPLETE` | Dev server verified over HTTP: 200 on the page and the icon, 404 with our document for a miss, 301 to the canonical URL, 405 for a non-GET, traversal refused, zero console messages on load. Visually inspected at 1280 / 768 / 375 px; the recipe in `docs/TESTING_STRATEGY.md` §4 now records how to make the preview composite before capturing. | `4dcca48`+ |
 | 0.6 Decision records confirmed and accepted | `COMPLETE` | ADR-001/002/003 accepted by the author, ADR-006 raised and accepted, ADR-004 and ADR-005 confirmed; all six `ACCEPTED` in `docs/ARCHITECTURE.md` | `58e2365` |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
@@ -67,7 +75,7 @@ To change one of these, write a **new** ADR that supersedes it. Do not edit an a
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| **The browser tool cannot composite frames in this session, so screenshots cannot be captured** | The visual gate every phase depends on cannot currently be run; from Phase 1 it is mandatory | Recorded as the single open item. Retry the capture first thing next session; the author can also confirm a rendition from the Preview tab. Do not close a phase on geometry evidence once a designed surface exists. |
+| **A browser preview that is not filling the panel produces no frames, so capture fails** | Without a screenshot the visual gate cannot run, and a phase could be closed on measured geometry alone | Resolved once and written down: resize the preview so that it fills the panel before capturing. It is step zero of the visual recipe in `docs/TESTING_STRATEGY.md` §4. A failed capture is never a passed check. |
 | The element and glossary data must come from an openly licensed source and be normalised | Phase 2 cannot start without it | Source shortlist and licence notes already in `docs/DATA_SOURCES.md`; the repository layer is the only consumer, so a swap touches one module |
 | Visual parity is judged by eye, which an agent does not have | Phases 1–11 could "pass" while looking wrong | Screenshot-driven verification is mandatory per phase; deviations must be recorded with a reason |
 | Shipping one light theme diverges visibly from the reference's dark variant | A side-by-side review may read as a mismatch rather than a decision | Accepted deviation in ADR-006 and in the phase log; reversible without a refactor |
@@ -76,8 +84,8 @@ To change one of these, write a **new** ADR that supersedes it. Do not edit an a
 
 ## Deliberately unfinished
 
-**One item: the three screenshots of the close-out checklist.** Everything in Phase 0 that can be
-built and verified has been, and the working tree is clean.
+**Nothing.** The working tree is clean at the close-out commit, and every line of the Phase 0
+close-out checklist is ticked with its evidence recorded in `progress/PHASE_LOG.md`.
 
 The `styles/`, `data/` and most `scripts/` and `tests/` folders do not exist yet. That is a planned
 stop, not an abandoned task: git does not track an empty directory, a placeholder file would be a
@@ -94,4 +102,4 @@ node source/tools/serve.js        # look at the site; it builds dist/ first if m
 ```
 
 Then read `workspace/progress/PHASE_LOG.md` for the phase you are in and resume from its
-"Next action" line. The one open gate is described there under **Open gate — the appearance layer**.
+"Next action" line. Phase 0 is closed; Phase 1 starts at the design tokens.
