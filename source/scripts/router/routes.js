@@ -136,7 +136,7 @@ export const routes = [
     description:
       "Convert temperatures between Celsius, Fahrenheit and Kelvin, with the notable reference " +
       "points listed alongside.",
-    nav: { label: "Calculators", order: 3 },
+    nav: { label: "Calculators", order: 4 },
     section: "tools",
   },
   {
@@ -146,7 +146,7 @@ export const routes = [
     description:
       "A glossary of the vocabulary of the periodic table and chemistry, from absolute zero to " +
       "the terms that only make sense once two elements sit next to each other.",
-    nav: { label: "Glossary", order: 4 },
+    nav: { label: "Glossary", order: 3 },
     section: "reference",
   },
   {
