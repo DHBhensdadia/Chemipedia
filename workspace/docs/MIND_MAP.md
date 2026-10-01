@@ -101,9 +101,11 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/router/routes.js` | ✅ **The route manifest.** Every URL the site publishes, with its template, title and description, plus the label and order it takes in the navigation and the section whose submenu it carries. The build renders this list and nothing else, so the manifest is the single answer to "which pages exist?" — and since the shell reads the same list, the navigation cannot point at a page the site does not publish. The static inventory is declared in full; a route whose template is not written yet is reported by the build and skipped. Generated families append entries derived from the data layer. Plain data, readable by Node and by the browser alike. | 0–1 |
 | `scripts/router/navigation.js` | ✅ Where the shell's links come from: the primary navigation derived from the manifest, the contextual submenu for each section, and the footer's five columns. Pure data and pure functions, so the arrangement can change without touching a route, and a test proves every path it names is a declared route. | 1 |
 | `scripts/router/router.js` | 🚧 Link interception, history, scroll restoration, 404, static-host fallback. | 5 |
-| `scripts/data/elements-repository.js` | 🚧 The only reader of `elements.json`. Lookups by number, symbol and slug; queries by group, block, period and state; sorted views; derived values. | 2 |
+| `scripts/data/json-source.js` | ✅ The one place that knows how a data file is fetched: a file name in the data folder becomes parsed JSON. Owned by the data layer, so no component ever learns a URL. | 2 |
+| `scripts/data/elements-repository.js` | ✅ The only reader of `elements.json`. Lookups by number, symbol and slug, queries by category, block, period, group and state, and sorting that always puts the unknowns last. A lookup that finds nothing returns null, because a URL for an element that does not exist is a 404 and a page is not an exception. | 2 |
+| `scripts/data/categories-repository.js` | ✅ The only reader of `categories.json`. The eleven categories, their display names, their palette tokens and the member counts the legend asserts. | 2 |
+| `scripts/data/units-repository.js` | ✅ The only reader of `units.json`. Turns a field name into the unit to print and the number of figures to print it to, which is what keeps the unit next to the value instead of inside the page. | 2 |
 | `scripts/data/glossary-repository.js` | 🚧 The only reader of `glossary.json`. A–Z grouping, prefix search, slug lookup. | 9 |
-| `scripts/data/categories-repository.js` | 🚧 The eleven element categories, their palette keys and member counts. | 2 |
 | `scripts/components/periodic-table.js` | 🚧 The centrepiece. The 18×10 grid, four colour modes, group isolation, keyboard navigation, tooltips. | 3 |
 | `scripts/components/element-tile.js` | 🚧 One tile: atomic number, symbol, name; compact and detailed variants. | 3 |
 | `scripts/components/element-card.js` | 🚧 The index card: tile plus name, group, weight and state. | 6 |
@@ -133,9 +135,9 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/lib/colour-scale.js` | 🚧 Numeric domain → colour, with clamping. Pure. | 3 |
 | `scripts/lib/html.js` | ✅ Building HTML strings safely: escape text, build an attribute list, join class names. Every value that reaches markup goes through here, because a stray ampersand in an attribute ends the attribute early and the browser builds a different element than the one that was written. Pure and trivial on purpose. | 1 |
 | `scripts/lib/contrast.js` | ✅ Colour maths, pure: hex normalisation, relative luminance, the WCAG contrast ratio, and the rule that picks the foreground for a group fill — the better of the two dark and cream candidates, never merely the acceptable one. | 1 |
-| `scripts/lib/format.js` | 🚧 Value and unit → display string, with first-class handling of unknown. Pure. | 2 |
+| `scripts/lib/format.js` | ✅ Value and unit → the string a reader sees. An unknown is a word rather than an empty cell, and a measurement is formatted with its unit or not at all, because half of a value's meaning lives in the unit. The definitions that say which unit a field takes arrive as an argument, so this stays pure. | 2 |
 | `scripts/lib/keyboard.js` | 🚧 Roving focus and arrow-key grid navigation. | 3 |
-| `scripts/lib/slug.js` | 🚧 Name → slug, and back. Pure. | 2 |
+| `scripts/lib/slug.js` | ✅ Name → URL segment, and back. British spellings are applied before the slug is built rather than after, because a URL cannot be taken back. | 2 |
 
 ### 3.3 `source/styles/` — CSS
 
@@ -156,10 +158,12 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | File | What it holds | Phase |
 |---|---|---|
-| `data/elements.json` | 🚧 118 element records against the schema in `docs/DATA_SOURCES.md` §5. | 2 |
-| `data/glossary.json` | 🚧 418 glossary terms with definition and difficulty level. | 2, 9 |
-| `data/categories.json` | 🚧 The eleven element groups: slug, display name, palette key, expected member count. | 2 |
-| `data/units.json` | 🚧 Unit definitions used by the formatter. | 2 |
+| `data/elements.json` | ✅ 118 element records against the schema in `docs/DATA_SOURCES.md` §5. **Generated** by `tools/build-data.js` and committed anyway, so the data is reproducible *and* readable without a network. Facts come from PubChem, the second tier from Wikidata, the prose from `element-notes.json`, and the layout from `tools/data-sources/layout.js`. | 2 |
+| `data/categories.json` | ✅ The eleven element groups: slug, display name, palette token and asserted member count. Hand-written, because it is the taxonomy rather than a product of one, and its counts are what the legend prints. | 2 |
+| `data/overrides.json` | ✅ The nine places this project files an element differently from the dataset that supplied it, each with the chemical reason. A correction without a reason is indistinguishable from a mistake. | 2 |
+| `data/units.json` | ✅ Which unit each field is stored in and how many figures it is printed to, used by `scripts/data/units-repository.js`. | 2 |
+| `data/element-notes.json` | 🚧 The authored prose, keyed by symbol: pronunciation, name origin, and the summary, uses and sources paragraphs. Kept apart from `elements.json` so that rerunning the build cannot overwrite writing. | 2 |
+| `data/glossary.json` | 🚧 418 glossary terms with definition and difficulty level. | 9 |
 
 ### 3.5 `source/assets/` — brand artwork
 
@@ -176,7 +180,11 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tools/site-paths.js` | ✅ Where the repository, the source tree and the build directory are, and which file in the built output a published URL owns. Pure path arithmetic with no file-system access, which is what makes it testable on its own. | 0 |
 | `tools/build.js` | ✅ Renders every ready route in the manifest into `dist/`, wrapping each authored template in the document skeleton, the masthead, the contextual band and the footer, with the stylesheets that page needs. A route whose template is not written yet is skipped and reported rather than rendered as a stub. Copies the browser-facing directories across. | 0–1 |
 | `tools/serve.js` | ✅ The zero-dependency development server. Serves `dist/` the way a static host does: directory-style URLs, a redirect to the canonical form, and the built not-found page for anything else. Builds on start when `dist/` is missing, and maps the one development-only prefix, `/styleguide/`, onto the source tree. | 0–1 |
-| `tools/build-data.js` | 🚧 Fetches the openly licensed dataset and emits our normalised JSON. The reason the data is reproducible rather than magic. | 2 |
+| `tools/build-data.js` | ✅ Fetches both sources, merges the authored prose, derives the layout, verifies the result and only then writes `data/elements.json`. Nothing is written that has not passed verification, because a half-updated data file is worse than a day-old one. `--dry-run` reports without writing. | 2 |
+| `tools/data-sources/pubchem.js` | ✅ The primary dataset: one request, 118 rows, seventeen columns. All the unit conversion happens here — kelvin to Celsius, picometres to ångströms — so nothing downstream has to remember where a number came from. | 2 |
+| `tools/data-sources/wikidata.js` | ✅ The supplementary properties PubChem does not carry. Converts against an explicit unit table and **sets a field to null rather than guessing** when it meets a unit it does not know, because a wrong number cannot be noticed on a page and an empty one can. | 2 |
+| `tools/data-sources/layout.js` | ✅ Period, group, block and grid cell, from the atomic number alone. The datasets publish values; they do not publish geometry, and the table engine and the element page must not be able to disagree about which cell an element occupies. | 2 |
+| `tools/data-sources/configuration.js` | ✅ Expands an electron configuration string into shell populations. Does not use the Madelung filling order, which gets chromium, copper and palladium wrong, and reports the electron total so the build can refuse a configuration that does not add up. | 2 |
 
 ### 3.7 `source/tests/` — tests
 
@@ -188,10 +196,16 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/router/navigation.test.js` | ✅ The shell kept honest: the navigation is the manifest's in order, every path the shell links to is a declared route, no destination repeats inside a set, every submenu belongs to a section that exists, and the footer carries its five columns. | 1 |
 | `tests/tools/build.test.js` | ✅ The document skeleton: doctype, language, the icon link, and escaping of the metadata it injects. | 0 |
 | `tests/lib/html.test.js` | ✅ The escaping rules: the five characters that end a text node or an attribute, absent attributes omitted, a true one written bare, and an attribute value that cannot break out of its quotes. | 1 |
-| `tests/lib/*.test.js` | 🚧 Grid placement, colour scales, contrast pairing, formatters, keyboard helpers. | 2–3 |
-| `tests/data/*.test.js` | 🚧 Counts, uniqueness, category membership, lookup correctness, prose completeness. | 2 |
+| `tests/lib/slug.test.js` | ✅ The three preferred spellings, punctuation dropped rather than turned into a separator, accent folding, and the honest inverse: a slug reads back as a label, not as the name it came from. | 2 |
+| `tests/lib/format.test.js` | ✅ Significant figures against decimals, trailing zeros, zero kept as a value, an unknown rendered as a word, and a measurement that never loses its unit. | 2 |
+| `tests/lib/contrast.test.js` | ✅ The colour rules, plus a walk over every group colour that the token stylesheet actually declares. | 1 |
+| `tests/lib/html.test.js` | ✅ The escaping rules: the five characters that end a text node or an attribute. | 1 |
+| `tests/tools/layout.test.js` | ✅ The table's shape held to account: no two elements in a cell, row eight empty, every main-table element in a real group, both detached rows contiguous from column three. | 2 |
+| `tests/tools/configuration.test.js` | ✅ Shell populations for iron, gold, uranium and a predicted superheavy, and refusal of a configuration that cannot be read. | 2 |
+| `tests/data/elements.test.js` | ✅ The repository against the real file: 118 records, every lookup, unique slugs, the counts the legend asserts, shells that account for every electron, unknown values that are neither empty nor undefined, and six elements checked against what an authoritative table says. | 2 |
+| `tests/data/repositories.test.js` | ✅ The categories and units repositories, including that every palette token a category names is one the token layer actually declares. | 2 |
+| `tests/brand/brand.test.js` | ✅ Walks the whole of `source/` and fails the suite if the reference's name appears anywhere in it, so the phase log's scan cannot be the only thing standing between a slip and a commit. | 2 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
-| `tests/brand/*.test.js` | 🚧 Asserts no prohibited brand string appears in any data record or prose field. | 2 |
 
 ---
 
@@ -202,8 +216,15 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | A colour, size, radius or animation timing | `source/styles/tokens.css` |
 | Why the site has one light theme only | `docs/ARCHITECTURE.md` — ADR-006 |
 | What an element's data contains | `source/data/elements.json` and `docs/DATA_SOURCES.md` §5 |
-| Where element data is fetched from | `source/tools/build-data.js` and `docs/DATA_SOURCES.md` §2 |
+| Where element data is fetched from | `source/tools/data-sources/pubchem.js`, `…/​wikidata.js`, and `docs/DATA_SOURCES.md` §2 |
 | How an element is looked up | `source/scripts/data/elements-repository.js` |
+| How many elements are in a category, or which ones | `source/data/categories.json` and `elements-repository.withCategory()` |
+| Why an element is filed differently from the dataset | `source/data/overrides.json` |
+| What unit a value is printed in | `source/data/units.json` and `scripts/data/units-repository.js` |
+| Where an element sits on the table | `source/tools/data-sources/layout.js`, precomputed into `elements.json` |
+| How many electrons are in each shell | `source/tools/data-sources/configuration.js`, precomputed into `elements.json` |
+| The description, uses or sources paragraph for an element | `source/data/element-notes.json` |
+| How to regenerate the element data | `node source/tools/build-data.js` |
 | The periodic table's appearance or behaviour | `source/scripts/components/periodic-table.js` + `source/styles/components/periodic-table.css` |
 | The f-block grid placement | `source/scripts/lib/grid.js` |
 | The colour scale for a numeric view | `source/scripts/lib/colour-scale.js` |

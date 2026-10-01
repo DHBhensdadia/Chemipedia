@@ -1,0 +1,13 @@
+[
+  { "slug": "transition-metals", "name": "Transition metal", "token": "--g-transition-metals", "count": 35 },
+  { "slug": "actinides", "name": "Actinide", "token": "--g-actinides", "count": 15 },
+  { "slug": "lanthanides", "name": "Lanthanide", "token": "--g-lanthanides", "count": 15 },
+  { "slug": "post-transition-metals", "name": "Post-transition metal", "token": "--g-post-transition-metals", "count": 8 },
+  { "slug": "unknown", "name": "Unknown", "token": "--g-unknown", "count": 8 },
+  { "slug": "noble-gases", "name": "Noble gas", "token": "--g-noble-gases", "count": 7 },
+  { "slug": "non-metals", "name": "Non-metal", "token": "--g-non-metals", "count": 7 },
+  { "slug": "alkali-metals", "name": "Alkali metal", "token": "--g-alkali-metals", "count": 6 },
+  { "slug": "alkaline-earth-metals", "name": "Alkaline earth metal", "token": "--g-alkaline-earth-metals", "count": 6 },
+  { "slug": "metalloids", "name": "Metalloid", "token": "--g-metalloids", "count": 6 },
+  { "slug": "halogens", "name": "Halogen", "token": "--g-halogens", "count": 5 }
+]

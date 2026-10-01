@@ -1,0 +1,59 @@
+{
+  "note": "Category assignments where this project departs from the dataset. Each entry carries the reason, because a correction without a reason is indistinguishable from a mistake. The order is by atomic number.",
+  "categories": [
+    {
+      "atomicNumber": 84,
+      "symbol": "Po",
+      "category": "post-transition-metals",
+      "reason": "Polonium is a metal by every property that has been measured: it is a soft, silvery, electrically conducting solid. Its usual listing as a metalloid is a convention inherited from older tables rather than an observation, and this project follows the observation."
+    },
+    {
+      "atomicNumber": 109,
+      "symbol": "Mt",
+      "category": "unknown",
+      "reason": "No chemical property of meitnerium has been measured. Placing it among the transition metals asserts a similarity to iridium that rests on a trend in the periodic table and not on an experiment."
+    },
+    {
+      "atomicNumber": 110,
+      "symbol": "Ds",
+      "category": "unknown",
+      "reason": "Darmstadtium has been produced in quantities of a few atoms. Its chemistry is predicted from its neighbours in the table, not observed, so it is filed as unknown."
+    },
+    {
+      "atomicNumber": 111,
+      "symbol": "Rg",
+      "category": "unknown",
+      "reason": "Roentgenium's placement among the transition metals is an extrapolation. Nothing about its reactivity has been measured."
+    },
+    {
+      "atomicNumber": 113,
+      "symbol": "Nh",
+      "category": "unknown",
+      "reason": "Nihonium's classification as a post-transition metal follows its position in group 13 and not its behaviour, which has not been measured."
+    },
+    {
+      "atomicNumber": 114,
+      "symbol": "Fl",
+      "category": "unknown",
+      "reason": "Flerovium is expected to be a volatile metal, which would be unusual for group 14. An expectation that goes against the trend is exactly the case for recording that the property is unknown."
+    },
+    {
+      "atomicNumber": 115,
+      "symbol": "Mc",
+      "category": "unknown",
+      "reason": "Moscovium has no measured chemistry. Its classification is a prediction from periodicity."
+    },
+    {
+      "atomicNumber": 116,
+      "symbol": "Lv",
+      "category": "unknown",
+      "reason": "Livermorium has no measured chemistry; the classification is an extrapolation along group 16."
+    },
+    {
+      "atomicNumber": 117,
+      "symbol": "Ts",
+      "category": "unknown",
+      "reason": "Tennessine is placed in the halogens by its group, but relativistic effects are predicted to make it behave more like a metal. Even the prediction is contested, so the honest category is unknown."
+    }
+  ]
+}
