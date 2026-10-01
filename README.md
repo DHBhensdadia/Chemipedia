@@ -9,8 +9,10 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**In development.** This repository is being built in phases. The plan, the current state, and the
-rules for working on it live in [`workspace/`](workspace/).
+**In development.** This repository is built in phases, and the plan, the current state and the
+rules for working on it live in [`workspace/`](workspace/). The foundation is in place — the route
+manifest, the static build and the development server all work — and the design system is next. The
+site currently serves one placeholder page rather than the periodic table.
 
 | | |
 |---|---|
@@ -34,11 +36,22 @@ The rule that decides which is which: *does the browser load it?* Yes → `sourc
 node source/tools/serve.js
 ```
 
-Then open the URL it prints. No install step and no dependencies — the development server is plain
-Node.
+Then open the URL it prints — `http://localhost:4173/` unless that port is taken. No install step
+and no dependencies: the build and the development server are plain Node, and the server builds the
+site for you if it has not been built yet.
 
-*(This is the intended command. It is created in Phase 0; until then, see
-[`workspace/RUN_STATE.md`](workspace/RUN_STATE.md) for the current state.)*
+The individual steps, if you want them:
+
+```bash
+git clone <this repository> && cd chemipedia
+node source/tools/build.js     # render every declared route into dist/
+node source/tools/serve.js     # serve dist/ locally
+node --test source/tests       # run the test suite
+```
+
+The same three commands are available as `npm run build`, `npm start` and `npm test`. The built
+output lives in `dist/`, which git ignores: the repository holds authored source, and the site is
+generated from it.
 
 ## Working on it
 
