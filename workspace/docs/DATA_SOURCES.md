@@ -67,7 +67,7 @@ will refuse to write an element whose notes are missing, so the merge cannot fai
 | Coverage | 118 rows, atomic number 1 to 118, one row per element |
 | Transform script | `source/tools/build-data.js` |
 | Output | `source/data/elements.json` |
-| Output commit | _(recorded with the data commit)_ |
+| Output commit | `9460ae0` for the fetched facts, `ac0404f` for the file as it stands with the authored prose merged in |
 
 PubChem is chosen over the community JSON files that dominate a search for this data because those
 are almost all CC BY-SA, and ShareAlike would attach to our generated file and to everything built
@@ -99,6 +99,14 @@ records which source produced it, so a reader can tell at a glance.
 adapter converts against a small explicit table and **sets the field to `null` rather than guessing
 when it meets a unit it does not recognise**. A silent unit error would put a wrong number on the
 page with no way to notice it; a null is visible.
+
+**A field the first draft asked for and does not get.** Ionic radius was in this schema, written
+as a string such as `"1.54 (+1)"`. It has been dropped rather than filled. An ionic radius is a
+property of an ion and not of an element: the same atom is a different size at every charge it
+takes, Wikidata models one value per charge, and picking one of them to print beside the name
+would put a number on a page that is not true of the element in general. The reason it is recorded
+here rather than simply deleted is that the next person to want the field should find the argument
+against it instead of having to have it again.
 
 **Known gaps.** `covalentRadius` and `latticeParameters` are supplied by neither source and are
 `null` for every element. They are kept in the schema so the shape does not change when a source
@@ -227,7 +235,6 @@ labels the UI renders.
 
   "atomicRadius": 0.79,             // Å
   "covalentRadius": 0.32,
-  "ionicRadius": "1.54 (+1)",
   "atomicVolume": 14.4,             // cm³/mol
   "ionizationEnergies": [13.5984],  // V
   "latticeParameters": [10.478, 3.584],

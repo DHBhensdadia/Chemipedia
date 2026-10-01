@@ -16,7 +16,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 |---|---|---|---|
 | 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
 | 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
-| 2 | Data layer (elements and glossary) | `NOT_STARTED` | — |
+| 2 | Data layer (elements and glossary) | `IN_PROGRESS` | `d985245`..`26229e2` |
 | 3 | Periodic table engine | `NOT_STARTED` | — |
 | 4 | Home page | `NOT_STARTED` | — |
 | 5 | Routing and element detail pages | `NOT_STARTED` | — |
@@ -238,14 +238,73 @@ repositories; `source/tools/build-data.js`; tests.
 
 **Exit criteria**
 
-- [ ] Exactly 118 elements and 418 glossary terms; uniqueness and count asserted by tests.
-- [ ] Every element resolves by number, symbol and slug.
-- [ ] Category member counts match the eleven expected values.
-- [ ] Six elements spot-checked against an authoritative external source.
-- [ ] `docs/DATA_SOURCES.md` complete: dataset, URL, licence, retrieval date, output commit.
-- [ ] Unit tests green.
+- [x] Exactly 118 elements; uniqueness, lookups and count asserted by tests.
+- [ ] 418 glossary terms — **moved to Phase 9**, with the reason below.
+- [x] Every element resolves by number, symbol and slug.
+- [x] Category member counts match the eleven expected values, asserted by the build and by a test.
+- [x] Six elements spot-checked against an authoritative external source.
+- [x] `docs/DATA_SOURCES.md` complete: both datasets, URLs, licences, retrieval date, output commits.
+- [x] Unit tests green.
+- [ ] **Visual gate open.** No screenshot was captured this session; see Deviations.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Exit criterion moved, and why.** The plan lists the 418 glossary terms under this phase;
+`docs/DATA_SOURCES.md` §3 has always said the definitions are Phase 9's work. Both cannot be right.
+Resolved in favour of the split the data-source document already described: this phase delivers the
+glossary's **contract** — the record schema, the repository that reads it, and the rules for A–Z
+grouping, lookup and search, tested against a six-term fixture — and the glossary phase writes the
+definitions. Four hundred definitions are writing, and writing them in the remains of a phase that
+already authored 590 element entries is how a phase ships bad chemistry.
+
+**Verification**
+
+```
+node --test source/tests ............................. tests 126 · pass 126 · fail 0
+node --check on every changed module ................. all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+Brand scan, as a test over the whole tree ............ pass
+AI-attribution scan over all commit messages ......... PASS: no AI attribution in any commit message
+git log --format='%an <%ae>' ......................... one identity: Devansh <dhbhensdadia@gmail.com>
+mind-map completeness loop over git ls-files ......... PASS: every tracked file is indexed
+
+node source/tools/build-data.js ...................... 118 elements, verified
+  categories  transition-metals 35, actinides 15, lanthanides 15, post-transition-metals 8,
+              unknown 8, noble-gases 7, non-metals 7, alkali-metals 6, alkaline-earth-metals 6,
+              metalloids 6, halogens 5
+  no prose    none
+  units       unconverted: specificHeat (1) — one element records it with no unit at all
+  elements with no melting point 15, no boiling point 25, no density 22, no electronegativity 23
+
+The data layer run in a real browser, through the shipped module, against the built output:
+  /data/elements.json ................................ 200, 199 711 bytes, 118 records
+  118 elements and 11 categories ..................... loaded by the repository themselves
+  iron by slug ....................................... { column 8, row 4 }, shells [2, 8, 14, 2]
+  formatted readings ................................. 1537.85 °C, 7.874 g/cm³, gold 1064.18 °C
+  a value the sources do not carry ................... oganesson melting point renders "Unknown"
+  a slug that does not exist ......................... null, not an exception
+  console and network ................................ 0 console messages, 8 requests, all 200
+
+Layout regression on the home page, measured in the browser:
+  1280 px ... shell 1100px, h1 54.88px at weight 400 with -1.0976px tracking, no horizontal
+              overflow, paper #fdfbfa, navigation in the required order, four submenu items
+   375 px ... no horizontal overflow, h1 fluid to 39.955px, 17 footer links
+```
+
+**Deviations and scope notes**
+
+| Item | Decision |
+|---|---|
+| **No screenshot was captured.** | The preview webview would not composite: every capture reported that it produced no frames. Filling the preview first, which fixed the same failure in the previous session, did not fix it this time, and neither did reloading or opening a fresh tab. Recorded as an **open gate**, not as a passed check. Phase 2 adds no page surface of its own, so what is missing is a regression capture of the home page, not a comparison of anything new. |
+| The datasets are two, not one | No single openly licensed source was found that supplies the whole schema under a licence ADR-005 permits. PubChem is public domain and carries seventeen columns; Wikidata is CC0 and carries the thermal and atomic-scale properties PubChem omits. The community JSON files that dominate a search for this data are almost all ShareAlike, which would attach to our generated file. |
+| Category assignment departs from the dataset in nine places | PubChem files 109, 110, 111 as transition metals, 113 to 116 as post-transition metals, 117 as a halogen and 84 as a metalloid. Its counts are therefore 38 / 11 / 7 / 6 / 0 against the required 35 / 8 / 6 / 5 / 8. Each of the nine corrections is recorded in `source/data/overrides.json` with the chemistry that justifies it, and a test holds the result to the required counts. |
+| `covalentRadius` and `latticeParameters` are null for all 118 | Neither source carries them, and inventing a value is not an option. Kept in the schema so the shape does not change when a source is found. |
+| `ionicRadius` was dropped from the schema | An ionic radius belongs to an ion, not an element: the same atom is a different size at every charge. Wikidata models one value per charge and printing one of them beside the name would assert something untrue of the element. Recorded in `docs/DATA_SOURCES.md` so the next person finds the argument rather than having to have it again. |
+| `description` was dropped from the schema | It and `summary` are the same paragraph under two names, and a schema with two names for one thing drifts. |
+| `ionizationEnergies` holds one value, not several | The dataset supplies the first ionisation energy only. The page will say so rather than imply a full series. |
+| The 418 glossary definitions | Moved to Phase 9; see the note above the verification block. |
+| Shell populations are read, not calculated | The Madelung filling order gets chromium, copper and palladium wrong. The dataset's own configuration is expanded instead, and the build refuses a configuration that does not account for every electron — which is the check that makes the difference visible. |
+
+**Commits:** `d985245` record the datasets and licences · `9460ae0` build the element data layer ·
+`ac0404f` write the notes for every element · `26229e2` add the glossary repository
 
 ---
 
@@ -398,6 +457,10 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-01 | 0 | Deviation | **Folders a later phase owns were left uncreated** rather than created empty: `styles/`, `data/`, and most of the `scripts/` and `tests/` layers. Git does not track an empty directory, and the alternative — a placeholder file in each — is the stub the working agreement forbids. Each folder arrives with its first real file. | Accepted. The plan's Phase 0 deliverable list records the same exception. |
 | 2026-10-01 | 0 | Blocker | **Screenshot capture failed at first.** The browser tool reported that the preview webview was not being composited, so no frame could be captured at any width. | Resolved in the same session: resizing the preview so that it fills the panel makes the webview composite, and all three captures then succeeded. The step is now the first line of the visual recipe in `docs/TESTING_STRATEGY.md` §4. |
 | 2026-10-01 | 0 | Observation | **Body text runs the full viewport width at desktop** — about 160 characters a line against a measure of 68. Visible in the 1280 px screenshot. | Not a defect of this phase: the page is deliberately unstyled. Recorded as the first thing the design-system phase must fix, since the shell and the measure are what make it read as a designed page. |
+| 2026-10-01 | 2 | Blocker | **Screenshot capture failed, again, and the known fix did not work.** Every attempt reported that the preview produced no frames because the webview was not being composited. Filling the preview first — which resolved the identical failure in the foundation phase, and is step zero of the recipe — did not resolve it; neither did reloading the tab nor opening a fresh one. | **Open.** The appearance gate for Phase 2 is not satisfied and is recorded as unmet rather than as passed. Layout was measured numerically in the browser instead, at 1280 and 375 px. Phase 2 adds no page surface, so what is outstanding is a regression capture of the home page. Retry at the start of the next session. |
+| 2026-10-01 | 2 | Scope decision | **The 418 glossary definitions moved from this phase to the glossary phase.** The plan listed them here; `docs/DATA_SOURCES.md` §3 has always scoped them to Phase 9. Two documents disagreeing is a defect in itself. | Resolved in favour of the data-source document, and both documents now say the same thing. This phase delivers the glossary's schema, repository and tests; Phase 9 writes the definitions. |
+| 2026-10-01 | 2 | Deviation | **The element dataset's category assignment is corrected in nine places** to reach the eleven counts this project asserts. PubChem files the superheavy elements under transition metal, post-transition metal, metalloid and halogen; their chemistry is unmeasured, so calling them any of those asserts more than is known. | Accepted and recorded per element in `source/data/overrides.json` with its chemistry, so the choice is defensible rather than convenient. A test holds the eleven counts to their required values. |
+| 2026-10-01 | 2 | Deviation | **Two schema fields stay null for every element** (`covalentRadius`, `latticeParameters`) and **one was removed from the schema** (`ionicRadius`). | Recorded in `docs/DATA_SOURCES.md` §2.1 and §5. null means unknown and the UI renders it as such; the removed field was removed because an ionic radius belongs to an ion and not to an element. |
 
 ---
 

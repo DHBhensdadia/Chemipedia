@@ -1,6 +1,6 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-01 · **By:** design system and shell session · **After commit:** `cc2151f` plus the close-out commit
+**Written:** 2026-10-01 · **By:** data layer session · **After commit:** `26229e2` plus the close-out commit
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -9,61 +9,65 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What exists right now
 
-The site has a visual language and a shell. `node source/tools/serve.js`, then look at it.
+The site has a design language, a shell, and the whole data layer behind them. `node
+source/tools/serve.js`, then look at it.
 
-- `styles/tokens.css` — **every** design value in the project. No colour lives anywhere else.
-- `styles/base.css`, `styles/layout.css` — element defaults, and the primitives a page is assembled
-  from: the content column, the vertical rhythm, the dotted rule.
-- `scripts/lib/contrast.js` — the rule that picks the foreground for a group fill, with a test that
-  walks every group colour the stylesheet declares.
-- `scripts/lib/html.js` — escaping, so nothing reaches markup unescaped.
-- `router/routes.js` — the site's **whole static inventory**, with the title, description and
-  navigation placement of each. The build renders the ones whose template exists and reports the
-  rest.
-- `router/navigation.js` — the navigation, the three contextual submenus and the footer's five
-  columns. A test proves every path it names is a declared route.
-- `components/` — wordmark, search field, masthead, submenu band, footer, as string builders, so the
-  chrome is in the HTML before any script runs.
-- `styleguide/index.html` — every token and the shell on one screen. Development only; served from
-  the source tree at `/styleguide/`, never built, never deployed.
-- 51 tests, all passing, still with nothing to install.
+- `source/data/elements.json` — 118 element records, ~40 fields each, generated and committed.
+- `source/data/element-notes.json` — the authored half: what each element is, what it is used for,
+  where it comes from, how it is said, where the name came from. 118 entries, five fields each.
+- `source/data/categories.json`, `overrides.json`, `units.json` — the taxonomy, the nine recorded
+  corrections to the dataset's own, and which unit each field prints in.
+- `source/tools/build-data.js` — fetches both sources, merges the writing, derives the layout,
+  verifies everything, and only then writes. `--dry-run` reports without writing.
+- `source/tools/data-sources/` — one adapter per source, plus the two derivation modules.
+- `source/scripts/data/` — the only readers of that JSON: elements, categories, units, glossary.
+- `source/scripts/lib/slug.js`, `format.js` — names to URLs, and values to readings.
+- 126 tests, all passing, still with nothing to install.
 
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. Start **Phase 2 — the data layer**. Check the licence of the dataset you choose and record it in
-   `docs/DATA_SOURCES.md` before writing the transform, not after.
-3. Note that the shell's links point at pages that do not exist yet. That is deliberate: the
-   manifest declares the whole inventory so nothing needs editing as phases land. The build reports
-   how many routes are waiting on templates — keep that number falling.
+2. **Retry the visual gate.** The preview webview would not composite, so no screenshot was taken
+   and Phase 2 is still `IN_PROGRESS` because of it. Try filling the preview, reloading, and a
+   fresh tab. If it still fails, record that again — do not close the phase on a missing capture.
+3. Then start **Phase 3 — the periodic table engine**. It needs no new data: `position` is already
+   computed for every element, and `docs/DATA_SOURCES.md` §5 defines what the records hold.
 
 ## What is fragile or easy to get wrong
 
-- **Branding.** Watch the edges of what you copy. This session's near miss was a footer sentence
-  that echoed the reference's own footer almost exactly; it was caught by reading their page
-  side by side with ours, not by the scan, because the scan only knows the forbidden strings.
-- **No literal values.** A colour, size, radius, duration or easing goes in `tokens.css`. The
-  breakpoints are the one exception, because a media query cannot read a custom property; they are
-  written down there and echoed in the queries.
-- **Headings are regular weight.** The design sets its biggest type at weight 400 with -0.02em of
-  tracking. Bold headings are a regression, and they were the one real mismatch this phase found.
-- **Components are string builders.** They are handed their links and must not look anything up;
-  that is what keeps them reusable and what keeps the router out of the chrome.
+- **A missing value is `null` and it is not zero.** The dataset signals "unmeasured" with an empty
+  string; passing that through `Number` gives zero, which is a measurement. Everything that reads
+  a value has to keep that distinction, and the formatter turns it into the word `Unknown`.
+- **Never compute shell populations from the Madelung filling order.** It gets chromium, copper and
+  palladium wrong. They come from the dataset's own configuration, and `build-data.js` refuses a
+  configuration that does not account for every electron. That check is what makes the difference
+  visible rather than silent.
+- **An unknown unit becomes `null`, never a guess.** A wrong number on a page cannot be noticed.
+- **Rerunning `build-data.js` overwrites `elements.json` but never `element-notes.json`.** That
+  separation is the whole reason the writing is in its own file; do not put prose back into the
+  generated one.
+- **Ask the layout module, do not recompute a grid cell.** `tools/data-sources/layout.js` is the
+  single answer to where an element sits, and `position` in each record is that answer, frozen.
 - **The route manifest is the single source of truth for URLs.** Adding a page means adding an
-  entry, not a link.
-- **The style guide is development-only.** It must never enter `dist/`, the sitemap or `robots.txt`.
-- **Capture needs one step.** Resize the preview so it fills the panel before screenshotting, or the
-  tool reports that the webview is not being composited and nothing can be captured. It cost time
-  once; it is written into `docs/TESTING_STRATEGY.md` §4.
+  entry, not a link. Fourteen routes are still waiting on templates.
+- **`source/tests/brand/brand.test.js` will fail the suite** if the reference's name appears
+  anywhere under `source/`, including in a comment or a data record. It is the phase log's scan,
+  made unskippable.
+- **No literal values.** A colour, size, radius or duration goes in `tokens.css`. The breakpoints
+  are the one exception and are recorded there.
+- **Headings are regular weight**, 54.88px at weight 400 with -0.02em of tracking. Bold is a
+  regression.
+- **Capture needs one step.** Resize the preview so it fills the panel before screenshotting. It
+  did not work this session; that is recorded, not worked around.
 - **Attribution.** Identity is `Devansh <dhbhensdadia@gmail.com>`. Never add a co-author or a
   generated-with footer.
-- **Shell quoting.** An apostrophe in a commit message body breaks the heredoc path. Write the
-  message to a file and use `git commit -F -`, as this session did.
-- **The light theme is deliberate.** It is ADR-006, verified under a dark preference.
+- **Shell quoting.** Write commit messages to a file and use `git commit -F -`; an apostrophe in a
+  heredoc breaks the path.
 
 ## Anything deliberately left in a half state
 
-Nothing is half-done. Two things are deferred on purpose and recorded in the phase log:
-`legend-chips` waits for the element data its counts come from, and `scripts/app.js` waits for a
-phase with behaviour to install. Neither exists as a stub, because a stub is what the working
-agreement forbids.
+Nothing is half-done. Three things are deferred on purpose and all three are recorded in the phase
+log: the 418 glossary definitions belong to the glossary phase and its schema, repository and tests
+are already built; `covalentRadius` and `latticeParameters` are `null` because no acceptable source
+supplies them; and `ionicRadius` was removed from the schema with its argument written down. The
+visual gate is not deferred — it is blocked, and it is the first thing to try again.
