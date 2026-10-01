@@ -161,9 +161,10 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | File | What it does | Phase |
 |---|---|---|
-| `tools/serve.js` | 🚧 A zero-dependency static development server in plain Node, with directory-style route resolution. | 0 |
+| `tools/site-paths.js` | ✅ Where the repository, the source tree and the build directory are, and which file in the built output a published URL owns. Pure path arithmetic with no file-system access, which is what makes it testable on its own. | 0 |
+| `tools/build.js` | ✅ Renders every route in the manifest into `dist/`, wrapping each authored template in the shared document skeleton, and copies the browser-facing directories across. Grows with the page families. | 0–1 |
+| `tools/serve.js` | ✅ The zero-dependency development server. Serves `dist/` the way a static host does: directory-style URLs, a redirect to the canonical form, and the built not-found page for anything else. Builds on start when `dist/` is missing. | 0 |
 | `tools/build-data.js` | 🚧 Fetches the openly licensed dataset and emits our normalised JSON. The reason the data is reproducible rather than magic. | 2 |
-| `tools/build.js` | 🚧 Renders every route to static HTML from the templates and the data, if ADR-001 Option A is accepted. | 0–1 |
 
 ### 3.7 `source/tests/` — tests
 
