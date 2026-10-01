@@ -132,6 +132,11 @@
   --shell: 1100px; /* maximum content width */
   --pad-shell: var(--sp-5); /* horizontal page padding */
 
+  /* Breakpoints: 40rem, 56rem, 72rem. They cannot be custom properties — a
+     media query does not resolve var() — so they are recorded here as the one
+     place the design states them, and the queries that use them are echoes of
+     this line rather than separate decisions. */
+
   --rule-width: 1px;
   --rule-solid: var(--rule-width) solid var(--ink);
   --rule-dotted: var(--rule-width) dotted var(--ink); /* the signature motif */

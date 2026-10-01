@@ -14,8 +14,8 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 
 | Phase | Name | Status | Commits |
 |---|---|---|---|
-| 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`112ebfe`, plus the close-out commit |
-| 1 | Design system and global shell | `NOT_STARTED` | — |
+| 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
+| 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
 | 2 | Data layer (elements and glossary) | `NOT_STARTED` | — |
 | 3 | Periodic table engine | `NOT_STARTED` | — |
 | 4 | Home page | `NOT_STARTED` | — |
@@ -138,26 +138,94 @@ close-out commit that records the captures and closes the phase
 **Goal:** the complete token layer, base styles, layout primitives, header, submenu bar, footer, and
 a style guide page rendering every token and component.
 
-**Deliverables:** `source/styles/tokens.css`, `base.css`, `layout.css`, component
-stylesheets and modules for `site-header`, `submenu`, `site-footer`, `legend-chips`,
-`search-field`; `source/styleguide/`. One theme only — light (ADR-006), so there is no `theme.css`.
+**Deliverables:** `source/styles/tokens.css`, `base.css`, `layout.css`; the shell components
+`site-header`, `submenu`, `site-footer`, `wordmark`, `search-field` with their stylesheets;
+`source/styleguide/index.html`; the route manifest carrying the shell's information architecture.
+One theme only — light (ADR-006), so there is no `theme.css`.
 
 **Exit criteria**
 
-- [ ] Style guide renders every token and component at 1280 / 768 / 375 px.
-- [ ] Colour values match the reference's computed values, verified in the browser.
-- [ ] No literal colour or size value exists outside `tokens.css`.
-- [ ] Focus visible on every interactive element; heading order valid.
-- [ ] Every group-colour foreground pairing passes WCAG AA.
-- [ ] `prefers-reduced-motion` honoured.
-- [ ] Renders identically under a dark operating-system colour preference, since the site ships the
+- [x] Style guide renders every token and component at 1280 / 768 / 375 px.
+- [x] Colour values match the reference's computed values, verified in the browser.
+- [x] No literal colour or size value exists outside `tokens.css`, with two named exceptions — see
+  the note below.
+- [x] Focus visible on every interactive element; heading order valid.
+- [x] Every group-colour foreground pairing passes WCAG AA.
+- [x] `prefers-reduced-motion` honoured.
+- [x] Renders identically under a dark operating-system colour preference, since the site ships the
   light theme only (ADR-006).
-- [ ] Navigation and footer contain no Learn or Games entry; footer columns re-cut.
-- [ ] Brand scan clean.
+- [x] Navigation and footer contain no Learn or Games entry; footer columns re-cut.
+- [x] Brand scan clean.
 
-**Verification:** _pending_
+**Verification**
 
-**Commits:** _pending_
+```
+node --test source/tests ............................. tests 51 · pass 51 · fail 0
+node --check on every tracked module under source/ ... all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+AI-attribution scan over all commit messages ......... PASS: no AI attribution in any commit message
+git log --format='%an <%ae>' ......................... one identity: Devansh <dhbhensdadia@gmail.com>
+hex colours outside styles/tokens.css ................ none
+
+Measured against the reference in the browser, at 1280 px:
+  heading font-size ............ reference 54.88px   ours --step-4  54.88px   exact
+  section heading .............. reference 30.98px   ours --step-2  30.98px   exact
+  submenu item and label ....... reference 13.6px    ours --step--1  13.6px   exact
+  navigation item .............. reference 17.6px    ours --step-0   17.6px   exact
+  navigation item order ........ reference Periodic Table, Elements, Learn, Games, Glossary,
+                                 Calculations — ours Periodic Table, Elements, Glossary, Calculators
+the content column ............. 1100px and 24px of page padding at every width, in both
+
+Layout facts at 375 px: no horizontal overflow, no clipped text, masthead wraps to three rows
+(lockup, navigation, search) exactly as the reference does, the submenu band wraps to two rows,
+the footer's link grid falls to two columns of 151.5px, which is the reference's own figure.
+
+Console and network: 0 console messages on load, 9 requests, all 200. The style guide loads 8
+modules and 9 stylesheets with 0 console messages, which is also the first end-to-end check that
+the components build in a browser and not only in Node.
+
+Dark operating-system preference: prefers-color-scheme resolves to dark and the page still renders
+#fdfbfa paper with #15403d ink, which is ADR-006.
+
+Screenshots taken and looked at at 1280, 768 and 375 px, for the home page and the style guide,
+compared side by side with the reference in a second tab of the same session.
+```
+
+**Verification notes**
+
+- **The one substantive mismatch found, and fixed.** Headings were set in the bold weight. The
+  reference sets them in the regular weight with -0.02em of tracking: its 54.88px heading is
+  weight 400, and so is its 30.98px section heading. Both sizes matched our scale exactly, so the
+  fix was one declaration, and the reason is recorded in `base.css` where the next person will
+  find it.
+- **The brand scan's near miss.** Reading the reference's footer while checking the column layout
+  showed its own note begins *An open reference for the periodic table*, which our draft tagline
+  closely echoed. The footer note was rewritten on the spot to be about provenance only, because a
+  brand rule that is satisfied by paraphrase is not satisfied.
+- **Literal values outside the token layer.** No colour value exists outside `tokens.css`, and the
+  only size literals are the three breakpoints inside media queries, which cannot read a custom
+  property, plus the structural idioms of an off-screen box in `base.css`. The breakpoints are now
+  recorded in `tokens.css` as the single place the design states them.
+
+**Deviations and scope notes**
+
+| Item | Decision |
+|---|---|
+| `legend-chips` was listed for this phase | Moved to the phase that has the element data. A chip carries a member count and a group colour, and neither exists yet, so building it now would mean inventing data to fill it. |
+| `scripts/app.js` was listed for this phase | Deferred to the phase that needs it. With one light theme and no router, an entry point would install nothing: it would be a stub file, which the working agreement forbids. |
+| The footer's five columns sit in one row | The reference lays its five groups into a four-column grid, so its last group wraps to a second row with one item in it. Our five columns are re-cut for a site without the learning and games sections and are deliberately even, so they share one row. A wrapped single-item row is the one thing that would look like a column that lost its entries. |
+| The footer's columns hold three to five entries each | Two of the reference's five columns were the removed sections. Ours hold only real destinations rather than filler, so the counts differ between columns. |
+| `/element-groups/` was added to the inventory | The group pages are per-slug, so a column or a submenu that links to *groups* had nowhere in-scope to point. An index of the eleven groups is a small page inside ADR-002's accepted scope, and it is listed for the phase that builds the group pages. |
+| The search field submits to `/` | The elements index, which owns search, arrives in the elements phase. Until then the query goes to the home page, which is a real destination rather than a page that does not exist. |
+| The navigation links destinations not built yet | Accepted construction state. The manifest declares the whole inventory so the shell is complete and does not need editing as phases land; a destination whose template is not written answers with our own not-found page and 404 status. The build reports the count on every run, so the gap is visible rather than forgotten. |
+| The submenu's active underline | Implemented as a 1px rule in the ink colour. Not yet compared against the reference's active state, which lives on a table-view page that does not exist here yet; it is verified in the alternate-views phase. |
+| The identity is typographic | Matching the reference, whose masthead is a text lockup with no drawn mark. The own-drawn mark exists as `assets/brand/favicon.svg` and is not yet needed in the header. |
+
+**Commits:** `2ba459d` design token layer · `c659417` base and layout layers · `10207be` readable
+foreground for a group fill · `ddc23cd` one escape for every interpolated value · `6cbcc97`
+full static inventory in the route map · `0e667dd` shell navigation, submenu and footer arrangement ·
+`fe2a113` shell components · `8d5ca6f` shell rendering in the build · `1392eec` headings in the
+regular weight · `cc2151f` navigation order
 
 ---
 
