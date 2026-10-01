@@ -137,8 +137,8 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it owns | Phase |
 |---|---|---|
 | `styles/tokens.css` | ✅ **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. Surfaces and ink, the eleven group colours and the four block colours, the fluid type scale, spacing, shape, motion, and the handful of measurements the shell needs. One theme only: the light palette at the root (ADR-006). | 1 |
-| `styles/base.css` | 🚧 Reset, typography defaults, focus ring, selection, reduced motion. | 1 |
-| `styles/layout.css` | 🚧 Shell, ruled sections, spacing, the dotted-rule utilities. | 1 |
+| `styles/base.css` | ✅ The reset and the element defaults: typography, links, the focus ring, selection, the skip link, and the mandatory reduced-motion block. | 1 |
+| `styles/layout.css` | ✅ The shell, the page's vertical rhythm, the dotted-rule section and separator, prose measurement, and the shared page-heading block. | 1 |
 | `styles/components/*.css` | 🚧 One stylesheet per component, named to match its module. Never styles anything else. | 1–10 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
