@@ -88,7 +88,8 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it is | Phase |
 |---|---|---|
 | `source/README.md` | ✅ A short orientation note for the code root: what lives where, and where the real guide is. | 0 |
-| `source/index.html` | 🚧 The home page's authored template. | 4 |
+| `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. A foundation placeholder until the home-page phase fills it in. | 0, 4 |
+| `source/pages/404.html` | ✅ The not-found markup, served with a 404 status for any URL that matches no route. | 0 |
 | `source/pages/*.html` | 🚧 One authored template per page family: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `table-view`, `group`, `ranking`, `about`, `contact`. | 5–10 |
 
 ### 3.2 `source/scripts/` — JavaScript
@@ -154,7 +155,8 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | File | What it holds | Phase |
 |---|---|---|
-| `assets/brand/*` | 🚧 Our wordmark, mark, favicon and social image. **All drawn by us.** | 1 |
+| `assets/brand/favicon.svg` | ✅ Our own-drawn mark, serving as the favicon. Delivered with the foundation rather than with the rest of the brand, because a document that declares no icon makes the browser request one on every page and fail; it is refined alongside the wordmark in the design-system phase. | 0, 1 |
+| `assets/brand/*` | 🚧 The two-line wordmark, the mark, the raster icon fallback and the social image. **All drawn by us.** | 1 |
 | `assets/fonts/*` | 🚧 Self-hosted webfonts, if any. Licence must be recorded in `docs/DATA_SOURCES.md`. | 1 |
 
 ### 3.6 `source/tools/` — development tooling

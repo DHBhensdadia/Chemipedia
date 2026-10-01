@@ -1,0 +1,32 @@
+<article class="intro">
+  <h1>ChemiPedia</h1>
+
+  <p class="intro__lede">
+    An open chemistry reference: all 118 elements, the table that organises them, and the glossary
+    behind the vocabulary.
+  </p>
+
+  <p>
+    This is the foundation build. It exists to prove the pipeline end to end &mdash; a route declared
+    in the manifest is rendered to static HTML at build time and served from a plain directory
+    &mdash; before any of the design or the chemistry data is written. The design system comes next,
+    then the element data, then the periodic table itself.
+  </p>
+
+  <h2>What is already in place</h2>
+
+  <ul>
+    <li>a route manifest that the build, the tests and the development server all read from one place;</li>
+    <li>a dependency-free build that renders every declared route to a static HTML file;</li>
+    <li>a dependency-free development server that resolves directory-style URLs and builds on demand;</li>
+    <li>a test suite that runs on the Node test runner, with nothing to install.</li>
+  </ul>
+
+  <h2>How this document is produced</h2>
+
+  <p>
+    The markup above is authored in <code>source/pages/home.html</code>. The build wraps it in the
+    document skeleton and writes the result to <code>dist/index.html</code>, so no output file is
+    ever edited by hand.
+  </p>
+</article>
