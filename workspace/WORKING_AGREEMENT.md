@@ -44,10 +44,18 @@ If a file is ambiguous, ask: *does the browser load it?* If yes → `source/`. I
 
 ### 2.1 Source layout rules
 
-- One **page family** = one top-level folder under `source/`. A page family is a group of URLs
-  that share a template, e.g. all 118 element pages are one family.
+Layout is by layer, as ADR-001 fixes it: `pages/` for templates, `scripts/` (with `router/`,
+`data/`, `components/`, `pages/` and `lib/` inside it), `styles/`, `data/`, `assets/`, `tools/` and
+`tests/`.
+
+- One **page family** = one template, one page module and one stylesheet, all named after the
+  family: `pages/element-detail.html`, `scripts/pages/element-detail.js`,
+  `styles/pages/element-detail.css`. All 118 element pages are one family and one set of files, never
+  118 folders. A family never shares a file with another family.
 - One **component** = one module, in `source/scripts/components/`, with its own stylesheet in
   `source/styles/components/` of the same name.
+- **Generated output lives in `dist/`**, is ignored by git, and is produced only by
+  `source/tools/build.js`. Never hand-edit a file in `dist/`, and never commit one.
 - Shared behaviour never lives in a page file. If two pages need it, it is a module.
 - No file may exceed **400 lines**. If it does, split it by responsibility and say so in the commit.
 - No file may be named `utils.js`, `helpers.js`, `misc.js`, `common.js`, or `main.js` beyond the

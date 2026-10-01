@@ -246,7 +246,15 @@ and from `robots.txt`.
 **Route manifest is explicit and testable.** Because the build enumerates routes rather than
 discovering files, the manifest is a plain array in `source/scripts/router/routes.js`, unit-tested
 for uniqueness and for the expected route count. This is what makes "all 118 element pages exist"
-an assertion rather than a hope.
+an assertion rather than a hope. The entries carry plain data rather than callbacks, so the same
+list is readable by the Node build and by the browser router without either depending on the other.
+
+**Templates live in `source/pages/`, one per page family, and only the build writes a `<head>`.**
+An authored template is a fragment: the document skeleton in `source/tools/build.js` wraps it. The
+consequence is that the doctype, the language, the metadata, the icon and — from Phase 1 — the
+stylesheet and script links are declared once rather than once per family, and that a page template
+contains nothing but the markup peculiar to that page. There is no `source/index.html`: the home
+page is a family like any other, and its template is `source/pages/home.html`.
 
 ---
 

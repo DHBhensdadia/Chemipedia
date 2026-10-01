@@ -194,7 +194,11 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | The periodic table's appearance or behaviour | `source/scripts/components/periodic-table.js` + `source/styles/components/periodic-table.css` |
 | The f-block grid placement | `source/scripts/lib/grid.js` |
 | The colour scale for a numeric view | `source/scripts/lib/colour-scale.js` |
-| How a URL is routed | `source/scripts/router/routes.js` |
+| Which URLs the site publishes | `source/scripts/router/routes.js` |
+| How a URL becomes a file in `dist/` | `source/tools/site-paths.js` |
+| How the site is built, and what gets copied | `source/tools/build.js` |
+| Why the dev server redirected or 404'd | `source/tools/serve.js` |
+| How to build, serve or test the site | `README.md` |
 | A whole page family's behaviour | `source/scripts/pages/<family>.js` |
 | The header, footer or submenu | `source/scripts/components/site-header.js` / `site-footer.js` / `submenu.js` |
 | What may never appear in the code | `docs/BRAND_GUIDELINES.md` §2 |

@@ -40,8 +40,9 @@ table of all 118 elements. A visitor can:
 
 ## 2. Deliverable: the page inventory
 
-Every page family below is one folder in `source/`. "Reference path" is what the reference site
-uses; column four is ours.
+Each page family below is one template, one page module and one stylesheet, all named after the
+family; the source tree is laid out by layer, as ADR-001 fixes it. "Reference path" is what the
+reference site uses; column four is ours.
 
 | # | Page family | Reference path | Our path | Phase |
 |---|---|---|---|---|
@@ -95,8 +96,9 @@ architecture. No user-facing features.
   `HANDOFF.md`, `progress/PHASE_LOG.md`, `docs/*`, `guides/*`, `docs/research/*`.
 - Git repository initialised with repo-local author identity `Devansh <dhbhensdadia@gmail.com>`.
 - `.gitignore` and a root `README.md`.
-- `source/` skeleton per ADR-001: entry HTML, `scripts/`, `styles/`, `data/`, `assets/`, `tools/`,
-  `tests/`.
+- `source/` skeleton per ADR-001: a template per page family in `source/pages/`, then `scripts/`,
+  `styles/`, `data/`, `assets/`, `tools/`, `tests/`. Folders a later phase owns are created with their
+  first real file, since git does not track an empty directory and a placeholder would be a stub.
 - A **zero-dependency dev server** (`source/tools/serve.js`, plain Node) that runs the build when
   `dist/` is missing and resolves directory-style routes the way a static host does.
 - A **verification harness**: a documented, repeatable recipe for serving the site and capturing
@@ -108,12 +110,12 @@ architecture. No user-facing features.
 
 | ID | Task | Output |
 |---|---|---|
-| 0.1 | Reference site audit | `docs/research/01-reference-site-audit.md` |
-| 0.2 | Tooling + Git standards research | `docs/research/02-*.md`, `docs/research/03-*.md` |
-| 0.3 | Working system authored | `workspace/**` |
-| 0.4 | Git initialised, identity set | `.git/`, `.gitignore` |
-| 0.5 | Source tree scaffolded | `source/**` skeleton |
-| 0.6 | Dev server + harness | `source/tools/serve.js` |
+| 0.0 | Reference site audit | `docs/research/01-reference-site-audit.md` |
+| 0.1 | Tooling and Git standards research | `docs/research/02-*.md`, `docs/research/03-*.md` |
+| 0.2 | Working system authored | `AGENTS.md`, `WORKING_AGREEMENT.md`, `RUN_STATE.md`, `docs/**`, `guides/**` |
+| 0.3 | Git initialised with the author's identity | `.git/`, `.gitignore`, `README.md` |
+| 0.4 | Source tree scaffolded, with the route manifest | `source/**`, `source/scripts/router/routes.js` |
+| 0.5 | Build, development server and verification harness | `source/tools/build.js`, `source/tools/serve.js`, the recipe in `docs/TESTING_STRATEGY.md` §4 |
 
 **Exit criteria**
 
@@ -222,7 +224,7 @@ layer. This is the phase that makes every later phase short.
 
 **Deliverables**
 
-- `source/scripts/pages/home.js` plus `source/index.html`.
+- `source/scripts/pages/home.js` plus the home template, `source/pages/home.html`.
 - Hero: display heading and supporting paragraph.
 - "Explore periodic tables" quickswitch strip linking the four table views.
 - Legend chips for the eleven groups, with counts, wired to the isolation interaction.
