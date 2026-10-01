@@ -40,9 +40,12 @@ body {
 /* ---------------------------------------------------------------------------
    Typography defaults.
 
-   Headings take the ink colour and the tight leading; the display face is the
-   body face in heavier weight, which is what gives the reference its plain,
-   unhurried character.
+   Headings take the ink colour, the tight leading, slightly closed tracking,
+   and the body weight. That last one is worth stating because it is the
+   opposite of the reflex: the design sets its largest type in the regular
+   weight, so a hero carries its size rather than its heaviness. Measured from
+   the reference, where a 54.88px heading is set at weight 400 with -0.02em of
+   tracking, and where a section heading is the same.
    --------------------------------------------------------------------------- */
 h1,
 h2,
@@ -50,7 +53,8 @@ h3,
 h4 {
   color: var(--ink);
   font-family: var(--font-display);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-body);
+  letter-spacing: var(--tracking-tight);
   line-height: var(--leading-tight);
   text-wrap: balance;
 }
