@@ -177,6 +177,9 @@
   --gap-footer-rows: var(--sp-2); /* between entries in one footer column */
 
   --height-masthead: 58px; /* one-row masthead, before its 1px rule */
+  --height-submenu: var(--sp-6); /* the band's row, used as a minimum so it keeps its
+                                    measured 33px including the rule while still growing
+                                    when the items wrap on a narrow screen */
   --width-search: 9rem;
   --width-footer-brand: 17rem; /* the brand block's column in the footer */
   --measure-note: 32ch; /* the short paragraphs beside the footer's columns */

@@ -17,7 +17,7 @@
 /** The sections a page can belong to, each with the submenu it carries. */
 export const submenus = {
   "periodic-table": {
-    label: "Explore periodic tables",
+    label: "Explore Periodic Tables:",
     items: [
       { label: "States", path: "/periodic-table/properties-and-states/" },
       { label: "Orbitals", path: "/periodic-table/orbitals/" },

@@ -21,6 +21,11 @@
   justify-content: center;
   gap: var(--gap-submenu);
   padding-block: var(--pad-submenu);
+  /* The band has a row height of its own rather than taking the height of its
+     tallest item, which is what the reference measures: 33px including the
+     dotted rule. It is a minimum and not a fixed height because the items wrap
+     to two rows on a narrow screen, and a fixed height would clip the second. */
+  min-height: var(--height-submenu);
 }
 
 .submenu__label {
