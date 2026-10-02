@@ -16,7 +16,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 |---|---|---|---|
 | 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
 | 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
-| 2 | Data layer (elements and glossary) | `IN_PROGRESS` | `d985245`..`26229e2` |
+| 2 | Data layer (elements and glossary) | `COMPLETE` | `d985245`..`26229e2`, `30f203b`, plus the close-out commit |
 | 3 | Periodic table engine | `NOT_STARTED` | — |
 | 4 | Home page | `NOT_STARTED` | — |
 | 5 | Routing and element detail pages | `NOT_STARTED` | — |
@@ -245,7 +245,9 @@ repositories; `source/tools/build-data.js`; tests.
 - [x] Six elements spot-checked against an authoritative external source.
 - [x] `docs/DATA_SOURCES.md` complete: both datasets, URLs, licences, retrieval date, output commits.
 - [x] Unit tests green.
-- [ ] **Visual gate open.** No screenshot was captured this session; see Deviations.
+- [x] Visual gate passed at the start of the next session, when the preview composited again. The
+  home page was captured and compared against the reference at 1280 / 768 / 375 px. Two chrome
+  differences it found were fixed; one difference is a recorded deviation.
 
 **Exit criterion moved, and why.** The plan lists the 418 glossary terms under this phase;
 `docs/DATA_SOURCES.md` §3 has always said the definitions are Phase 9's work. Both cannot be right.
@@ -295,13 +297,40 @@ Layout regression on the home page, measured in the browser:
   1280 px ... shell 1100px, h1 54.88px at weight 400 with -1.0976px tracking, no horizontal
               overflow, paper #fdfbfa, navigation in the required order, four submenu items
    375 px ... no horizontal overflow, h1 fluid to 39.955px, 17 footer links
+
+Visual gate, taken at the start of the following session — this phase's one unmet criterion.
+The preview composited on the first attempt, so all three captures were taken and looked at,
+with the reference open in a second tab of the same session:
+  1280 px ... shell 1100px at x 90, band 33px, masthead 59px, h1 54.88px at weight 400 with
+              -1.0976px tracking, navigation in the required order, four submenu items, five
+              footer columns on one row, 17 footer links, no horizontal overflow
+   768 px ... no horizontal overflow, h1 46.95px, masthead 59px in one row, band 33px
+   375 px ... no horizontal overflow, h1 39.955px with -0.7991px tracking, which is the
+              reference's own figure for its own heading, shell 327px with 24px of page
+              padding, band wraps to two rows, footer columns 152px, 17 footer links
+Console and network: 0 console messages on the home page and on the style guide, whose 18
+requests all answered 200. The accessibility tree was read: one banner, one Primary
+navigation, one search landmark, one Section band, one main, one contentinfo, and a working
+skip link ahead of all of them.
+
+Two differences were found in the chrome and fixed rather than recorded as deviations. The
+band's label read "Explore periodic tables" where the reference reads "Explore Periodic
+Tables:", and the band measured 31.76px where the reference measures 33px, because the
+reference gives its band row a height of 32px and ours took the height of its tallest item.
+Both are corrected in `30f203b`.
+
+One difference is deliberate and is recorded in the deviations table: at 768px the reference
+wraps its search field onto a second masthead row and ours stays on one, because our
+navigation carries four items where the reference carries six.
 ```
 
 **Deviations and scope notes**
 
 | Item | Decision |
 |---|---|
-| **No screenshot was captured.** | The preview webview would not composite: every capture reported that it produced no frames. Filling the preview first, which fixed the same failure in the previous session, did not fix it this time, and neither did reloading or opening a fresh tab. Recorded as an **open gate**, not as a passed check. Phase 2 adds no page surface of its own, so what is missing is a regression capture of the home page, not a comparison of anything new. |
+| **The visual gate could not be run in the phase itself.** | The preview webview would not composite: every capture reported that it produced no frames, and filling the preview first — which fixed the same failure in the foundation phase — did not fix it this time, nor did reloading or opening a fresh tab. Recorded as an **open gate**, not as a passed check, and left as the phase's one unmet criterion. Phase 2 adds no page surface of its own, so what was missing was a regression capture of the home page. | **Run and passed at the start of the following session.** The preview composited on the first attempt, the two differences it found were fixed in `30f203b`, and the phase closed on those captures. |
+| **The band's label and height did not match the reference.** | Found by the visual gate. The reference's label reads `Explore Periodic Tables:` where ours read `Explore periodic tables`, and its band measures 33px including the dotted rule where ours measured 31.76px. | Fixed in `30f203b`: the label is copied exactly from the reference's chrome, and `--height-submenu` was added to the token layer as a minimum row height — a minimum because the band wraps to two rows on a narrow screen and a fixed height would clip the second. |
+| **The masthead stays on one row at 768px.** | The reference wraps its search field onto a second masthead row there. Its navigation carries six items and ours carries four, because the learning and games sections are out of scope, so its wrap follows from the length of its own navigation rather than from a rule we are declining. | Accepted. Measured, not assumed: the reference's masthead is 91px in two rows at 768px and ours is 59px in one. Forcing the wrap would separate our navigation from its search field for no reader's benefit. |
 | The datasets are two, not one | No single openly licensed source was found that supplies the whole schema under a licence ADR-005 permits. PubChem is public domain and carries seventeen columns; Wikidata is CC0 and carries the thermal and atomic-scale properties PubChem omits. The community JSON files that dominate a search for this data are almost all ShareAlike, which would attach to our generated file. |
 | Category assignment departs from the dataset in nine places | PubChem files 109, 110, 111 as transition metals, 113 to 116 as post-transition metals, 117 as a halogen and 84 as a metalloid. Its counts are therefore 38 / 11 / 7 / 6 / 0 against the required 35 / 8 / 6 / 5 / 8. Each of the nine corrections is recorded in `source/data/overrides.json` with the chemistry that justifies it, and a test holds the result to the required counts. |
 | `covalentRadius` and `latticeParameters` are null for all 118 | Neither source carries them, and inventing a value is not an option. Kept in the schema so the shape does not change when a source is found. |
@@ -312,7 +341,8 @@ Layout regression on the home page, measured in the browser:
 | Shell populations are read, not calculated | The Madelung filling order gets chromium, copper and palladium wrong. The dataset's own configuration is expanded instead, and the build refuses a configuration that does not account for every electron — which is the check that makes the difference visible. |
 
 **Commits:** `d985245` record the datasets and licences · `9460ae0` build the element data layer ·
-`ac0404f` write the notes for every element · `26229e2` add the glossary repository
+`ac0404f` write the notes for every element · `26229e2` add the glossary repository · `30f203b`
+match the submenu band to the reference's label and measured height · plus this close-out commit
 
 ---
 
@@ -468,6 +498,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-01 | 2 | Blocker | **Screenshot capture failed, again, and the known fix did not work.** Every attempt reported that the preview produced no frames because the webview was not being composited. Filling the preview first — which resolved the identical failure in the foundation phase, and is step zero of the recipe — did not resolve it; neither did reloading the tab nor opening a fresh one. | **Open.** The appearance gate for Phase 2 is not satisfied and is recorded as unmet rather than as passed. Layout was measured numerically in the browser instead, at 1280 and 375 px. Phase 2 adds no page surface, so what is outstanding is a regression capture of the home page. Retry at the start of the next session. |
 | 2026-10-01 | 2 | Scope decision | **The 418 glossary definitions moved from this phase to the glossary phase.** The plan listed them here; `docs/DATA_SOURCES.md` §3 has always scoped them to Phase 9. Two documents disagreeing is a defect in itself. | Resolved in favour of the data-source document, and both documents now say the same thing. This phase delivers the glossary's schema, repository and tests; Phase 9 writes the definitions. |
 | 2026-10-01 | 2 | Deviation | **The element dataset's category assignment is corrected in nine places** to reach the eleven counts this project asserts. PubChem files the superheavy elements under transition metal, post-transition metal, metalloid and halogen; their chemistry is unmeasured, so calling them any of those asserts more than is known. | Accepted and recorded per element in `source/data/overrides.json` with its chemistry, so the choice is defensible rather than convenient. A test holds the eleven counts to their required values. |
+| 2026-10-02 | 2 | Resolved | **The visual gate that blocked this phase.** The preview would not composite, so no capture could be taken and the phase could not honestly be closed. | **Resolved.** The preview composited on the first attempt of the following session. The home page was captured and compared at 1280 / 768 / 375 px against the reference in a second tab; the two chrome differences that turned up were fixed in `30f203b`, and the phase closed on those captures. |
+| 2026-10-02 | 2 | Deviation | **The masthead stays on one row at 768px** where the reference wraps its search field onto a second row. Our navigation carries four items and the reference's carries six, the learning and games sections being out of scope (ADR-002). | Accepted. Measured: 91px in two rows against our 59px in one. |
 | 2026-10-01 | 2 | Deviation | **Two schema fields stay null for every element** (`covalentRadius`, `latticeParameters`) and **one was removed from the schema** (`ionicRadius`). | Recorded in `docs/DATA_SOURCES.md` §2.1 and §5. null means unknown and the UI renders it as such; the removed field was removed because an ionic radius belongs to an ion and not to an element. |
 
 ---

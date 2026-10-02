@@ -6,7 +6,7 @@
 > **It is never sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-01 (data layer session)
+**Last updated:** 2026-10-02 (the session that closed the data layer and opened the table engine)
 
 ---
 
@@ -14,12 +14,12 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | Phase 2 — Data Layer — `IN_PROGRESS` |
-| **Work item** | The element data layer and the glossary contract are **built, committed and tested**. Two things remain: the 418 glossary definitions (Phase 9) and the phase's visual gate. |
-| **Objective achieved** | 118 element records, fetched from two openly licensed sources, merged with authored prose, verified, and readable by the shipped repositories in a browser. |
-| **Status** | `IN_PROGRESS`. 126 tests pass. Every structural assertion holds. **One exit criterion is unmet: no screenshot was captured** — the preview webview would not composite — and one was moved to Phase 9 by a recorded scope decision. |
-| **Current commit** | `26229e2`, plus the close-out commit that follows it |
-| **Next action** | Retry the visual gate first: open `http://localhost:4173/` in the preview, make it fill the panel, and capture at 1280 / 768 / 375 px. If capture still fails, say so again rather than closing the phase. Then Phase 3 — the periodic table engine — which needs no new data. |
+| **Phase** | Phase 2 — Data Layer — `COMPLETE` |
+| **Work item** | Phase 3 — the periodic table engine. Not started. |
+| **Objective achieved** | 118 element records, fetched from two openly licensed sources, merged with authored prose, verified, readable by the shipped repositories in a browser, and now **seen** in one: the visual gate was taken, compared against the reference, and passed. |
+| **Status** | `COMPLETE`. 126 tests pass. Every exit criterion is met; the only criterion that moved was the 418 glossary definitions, which are Phase 9's by recorded decision. |
+| **Current commit** | `30f203b`, plus the close-out commit that follows it |
+| **Next action** | Build Phase 3. Start by pulling the reference's tile markup and behaviour from the tab that is already open on it, then write `lib/grid.js` and `element-tile.js` against what the reference actually renders: a 65.367px square tile, 3px radius, `--step-0` type, `data-key` carrying the category, and `--fill` / `--on-fill` custom properties for the colour. |
 
 ## Files expected to change in the next work item
 
@@ -51,28 +51,30 @@ need `build-data.js` to be rerun. `position` is already precomputed for every el
 | 2.2 The authored notes for all 118 elements | `COMPLETE` | Five written fields per element; the build refuses a blank one and a test refuses two elements sharing a sentence | `ac0404f` |
 | 2.3 The glossary contract | `COMPLETE` | Schema, repository and arrangement tested against a six-term fixture; the 418 definitions are Phase 9's | `26229e2` |
 | 2.4 The data layer running in a browser | `COMPLETE` | The shipped module loaded from the built output in a real page: 118 records, lookups, formatting, 0 console messages | `26229e2` |
-| 2.5 Visual gate | `BLOCKED` | **No screenshot captured.** The preview webview did not composite. Layout measured numerically instead. | — |
+| 2.5 Visual gate | `COMPLETE` | **Captured, not merely measured.** Home page at 1280 / 768 / 375 px against the reference in a second tab; 0 console messages; the style guide's 18 requests all 200. Found two chrome differences, both fixed. | `30f203b` |
+| 2.6 The two chrome differences the gate found | `COMPLETE` | The band's label now reads `Explore Periodic Tables:` and the band measures 33px including its rule, both matching the reference. | `30f203b` |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
 
 ## Accepted decisions
 
-All six ADRs stand; nothing is blocked on a decision. What this session exercised:
+All six ADRs stand; nothing is blocked on a decision. What the last two sessions exercised:
 
 | ADR | Outcome | Where it shows up |
 |---|---|---|
 | ADR-001 | The build pipeline is a committed transform plus a committed artefact: rerunnable, and readable without a network. | `source/tools/build-data.js`, `source/data/elements.json` |
+| ADR-002 | The learning and games sections are out of scope, and the visual gate is where that shows: our navigation is four items where the reference's is six, so ours stays on one masthead row at 768px. | `scripts/router/navigation.js`, the deviations table in `progress/PHASE_LOG.md` |
 | ADR-003 | Plain imperative commit prose; the glossary split is explained in the commit that makes it, not in a phase number. | every commit |
 | ADR-004 | Zero dependencies. The transform fetches with the runtime's own `fetch`; the tests use a stand-in and never touch the network. | all of `source/` |
 | ADR-005 | Two sources, both public domain or CC0. A unit that cannot be converted becomes `null` rather than a guess, because a wrong number on a page cannot be noticed and an empty one can. | `docs/DATA_SOURCES.md`, `tools/data-sources/` |
-| ADR-006 | Untouched by this phase; the token layer is unchanged. | — |
+| ADR-006 | Single light theme. The reference switches to a dark variant at runtime, which is why a capture of it can come back dark; **set the reference tab to light before comparing.** | `source/styles/tokens.css` |
 
 ## Known risks and blockers
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| **The preview will not composite, so nothing can be captured** | The visual gate cannot be closed and the phase cannot honestly be marked complete | Retry at the start of the next session; if it persists, the capture tooling is the problem and it is worth reporting, not working around. Layout was measured numerically in the meantime. |
+| The reference is theme-adaptive and a capture can come back in its dark palette | A side-by-side done carelessly compares our light theme against its dark one, which reads as a colour catastrophe that is not there | Set the reference tab to the light colour scheme before capturing, and read the computed styles rather than trusting the pixels alone. Both were needed this session: the screenshot came back light while `getComputedStyle` resolved `prefers-color-scheme: dark`, so the two disagreed until the scheme was pinned. |
 | `covalentRadius` and `latticeParameters` are `null` for all 118 | Two rows of the element page will read "Unknown" | Recorded in `docs/DATA_SOURCES.md`; filling them needs a third source and touches one adapter, no page. |
 | Two datasets and a live SPARQL endpoint | A rerun of `build-data.js` depends on Wikidata being reachable and on its property values not changing | The generated file is committed, so nothing depends on the network until someone chooses to rerun the transform. First value wins where the wiki disagrees with itself, so row order cannot change the output. |
 | The category taxonomy is nine corrections away from its dataset | A dataset edit could silently move an element | The corrections are explicit and per-element, and both the build and a test assert the eleven counts. |
@@ -83,11 +85,13 @@ All six ADRs stand; nothing is blocked on a decision. What this session exercise
 
 **Nothing is half-done in the tree.** The working tree is clean at the close-out commit.
 
-Three things are deferred on purpose:
+Two things are deferred on purpose:
 
 1. **The 418 glossary definitions** — Phase 9, by recorded scope decision.
 2. **Two schema fields** that no acceptable source supplies — see DATA_SOURCES.
-3. **The visual gate** — not deferred by choice. It is blocked, and it is the first thing to retry.
+
+The visual gate is no longer among them. It was blocked, it was retried first as instructed, and it
+passed.
 
 ## How to resume in 60 seconds
 
@@ -101,4 +105,4 @@ node source/tools/serve.js        # the site; /data/elements.json is served from
 node source/tools/build-data.js --dry-run   # re-verifies the data without rewriting it
 ```
 
-Then read `workspace/progress/PHASE_LOG.md` for Phase 2 and resume from its "Next action" line.
+Then read `workspace/progress/PHASE_LOG.md` for Phase 3 and resume from its exit criteria.

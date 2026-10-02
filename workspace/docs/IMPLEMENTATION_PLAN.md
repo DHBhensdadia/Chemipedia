@@ -226,7 +226,8 @@ layer. This is the phase that makes every later phase short.
 
 - `source/scripts/pages/home.js` plus the home template, `source/pages/home.html`.
 - Hero: display heading and supporting paragraph.
-- "Explore periodic tables" quickswitch strip linking the four table views.
+- The "Explore Periodic Tables:" quickswitch strip linking the four table views, labelled as the
+  reference labels it.
 - Legend chips for the eleven groups, with counts, wired to the isolation interaction.
 - The periodic table component in group mode.
 - **"Understanding the Periodic Table"** explainer: the Periods and Groups panels.
