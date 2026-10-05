@@ -17,7 +17,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
 | 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
 | 2 | Data layer (elements and glossary) | `COMPLETE` | `d985245`..`26229e2`, `30f203b`, plus the close-out commit |
-| 3 | Periodic table engine | `NOT_STARTED` | — |
+| 3 | Periodic table engine | `VERIFIED` | `bf1d8e3`..`2f06018`, plus the close-out commit |
 | 4 | Home page | `NOT_STARTED` | — |
 | 5 | Routing and element detail pages | `NOT_STARTED` | — |
 | 6 | Elements index and attribute rankings | `NOT_STARTED` | — |
@@ -350,16 +350,109 @@ match the submenu band to the reference's label and measured height · plus this
 
 **Goal:** one reusable, accessible, data-driven table component with four colour modes.
 
+**Deliverables:** `scripts/components/periodic-table.js`, `element-tile.js`, `legend-chips.js`;
+`scripts/lib/grid.js`, `colour-scale.js`, `keyboard.js`; the three matching component
+stylesheets and the table section of the token layer; logic and component tests; the table demo in
+`source/styleguide/index.html`.
+
 **Exit criteria**
 
-- [ ] All 118 tiles in correct grid positions, asserted for every f-block element.
-- [ ] Four colour modes render; legend counts match the data.
-- [ ] Group isolation works by mouse and by keyboard.
-- [ ] Arrow-key navigation traverses the grid; focus always visible.
-- [ ] Horizontally scrollable on narrow screens without clipping the first or last column.
-- [ ] Tile geometry and colour mapping visually compared against the reference.
+- [x] All 118 tiles in correct grid positions, asserted for every f-block element. A test walks
+  every element against its record's own `position`, and every f-block element against rows 9 and
+  10, columns 3–17, with the `grid-column`/`grid-row` it is drawn with.
+- [x] Four colour modes render; legend counts match the data. Group: eleven chips in taxonomy order
+  carrying the declared counts. Block: 14/36/38/30. State: 104/2/12, with no zero-count chip. The
+  numeric view bands every measurement into the data's own domain, six bands plus the unknown
+  colour, and its legend prints 0.7, 3.98 and the unknown swatch.
+- [x] Group isolation works by mouse and by keyboard. Verified in the browser through the shipped
+  attachment: a click and a focus each isolated the halogens — five tiles matched, every other tile
+  fell to `opacity: 0.22` with `saturate(0.35)` — and a press pinned and unpinned the key.
+- [x] Arrow-key navigation traverses the grid; focus always visible. Right from hydrogen reaches
+  helium, down from rutherfordium reaches cerium in the detached row, Home and End reach a row's
+  ends, and an edge step neither moves nor swallows the key. One tile is in the tab order at a
+  time and it follows focus; a focused tile is exempt from isolation's dimming; focus scrolls into
+  view, and at a narrow width it lands inside the opaque part of the edge fade.
+- [x] Horizontally scrollable on narrow screens without clipping the first or last column. At
+  375px the grid keeps a 700px minimum, the first column begins at the 16px mark where the edge
+  fade becomes opaque, and after a keyboard move to the last column the scroller is at its maximum
+  and the final tile ends at the same 16px inset. At 768px the same holds with an 820px minimum,
+  and the names are still shown.
+- [ ] Tile geometry and colour mapping visually compared against the reference. **Measured, but not
+  captured.** The preview webview produced no frames for any capture this session — `preview_resize
+  {fill: true}` and a freshly opened tab both failed — so the comparison was made by reading both
+  tables' computed styles with the reference open in a second tab of the same session. Every metric
+  matches (below), but on this project's own rule — a capture, not merely a measurement — the
+  criterion stays open. Phase 2 was held open on the same rule; so is this.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+node --test source/tests ............................. tests 194 · pass 194 · fail 0
+node --check on every changed module ................. all modules parse
+Brand scan over source/, as a test ................... pass
+Commit identities .................................... one: Devansh <dhbhensdadia@gmail.com>
+
+Tile geometry, both tables measured in the same browser session at 1280px, light scheme pinned
+(ours / the reference):
+  container ......................... 1228.8px / 1228.8px
+  gap ............................... 3.07199px / 3.07199px
+  tile .............................. 65.36px / 65.37px        (one hundredth of a pixel)
+  radius ............................ 3px / 3px
+  padding ........................... 4px 2.4px / 4px 2.4px
+  symbol / name / number ............ 26.4191 / 9.83037 / 10.4448px — identical on both sides
+  grid .............................. 18 columns × 10 rows, 118 tiles, 11 group chips — both
+
+Four modes, read from computed styles in the style guide:
+  group   hydrogen #a6c6d5 with #12211f ink · 11 chips, counts exact against categories.json
+  block   s #456683 cream · p #97c0aa dark · d #f9aa62 dark · f #d473a2 dark
+  state   solid #456683 cream · liquid #559982 dark · gas #e57860 dark
+  en      fluorine band 5 #15403d cream · francium band 0 #dce9f0 dark · helium none #e8e2dc
+          domain 0.7–3.98 from the data · six band swatches plus the unknown swatch
+
+Keyboard, through the listeners the shipped module attaches:
+  right from H → He across period one's gap · down from H → Li
+  down from Rf → Ce, across row eight and the empty cells of column 3
+  Home / End → a row's ends · the left edge of H does not move and does not swallow the key
+  exactly one tile carries tabindex 0, and it follows the focused tile
+
+Isolation, by click and by focus:
+  halogens → 5 tiles matched, everything else at opacity 0.22 and saturate(0.35)
+  focusing another chip shows that key while the pressed one stays pinned; leaving returns to it;
+  pressing it again clears the table
+  a focused tile stays at opacity 1 while the grid is isolated
+
+Narrow screens (the same session):
+  375px  grid min-width 700 · scroller 375/732 · first column at 16px · after a move to the last
+         column, scrollLeft 357 = max and the final tile ends at 359 = 375 − 16
+  768px  grid min-width 820 · names shown · last column ends at 752 = 768 − 16 · masks on both
+
+Health: with error and rejection listeners installed, all four modes switched, six key movements
+and two chip presses produced 0 errors and 0 unhandled rejections; 32 resources loaded and none
+answered 4xx or 5xx. The preview's own console/network capture recorded nothing this session, so
+the instrumented listeners are the evidence rather than `preview_logs`.
+
+The accessibility tree read in the browser: one named list of 118 items, each "Name, symbol X,
+atomic number N"; the eleven chips named with their counts; the four mode controls with their
+pressed states.
+
+One thing the reference does not have and this phase adds, because the plan requires it: roving
+focus. The reference's tiles are ordinary tab stops, so a keyboard user walks through 118 links.
+Ours puts one tile in the tab order and moves it with the arrows.
+```
+
+**Deviations and scope notes**
+
+| Item | Decision |
+|---|---|
+| **The visual capture could not be taken.** | The preview webview produced no frames for any capture, and neither `preview_resize {fill: true}` nor a freshly opened tab changed that. | Recorded as an **open gate**, not as a passed check, exactly as Phase 2's was: the phase section above leaves the criterion unticked and this phase is `VERIFIED`, not `COMPLETE`. The measured comparison is written down above the table so the retry starts from evidence rather than from nothing. |
+| The state legend shows three chips, not four | Our dataset records a state for every element, so the unknown state has nothing behind it. | A chip with a zero beside it is noise, so the legend omits keys with no members. The `--state-unknown` token stays, because the taxonomy is four states even when the data fills three. |
+| The scroll and hide-names breakpoints are 56rem and 40rem | The reference scrolls at 900px and hides names at 560px. | Our breakpoint scale is the project's own and is recorded in the token layer; 896px and 640px are the same two decisions expressed in the units the rest of the site uses. |
+| The electronegativity band counts differ from the reference's | The reference bands 100 measured values; ours has 95 measured and 23 unknown. | The domain is computed from our own data rather than written down, so the legend and the tiles cannot disagree; the counts follow from the dataset, not from the reference's. |
+| Colours are emitted as keys, not as custom properties | The reference writes `--fill` and `--on-fill` inline as hex values on every tile. | A hex literal in JavaScript is a colour outside `tokens.css`, which the project forbids. Tiles carry `data-key` or `data-band`; `periodic-table.css` maps each to a token. A test holds every pairing to the foreground `lib/contrast.js` chooses. |
+| The legend's chips are buttons in the engine | On the reference's home page a chip links to its group page. | Buttons here, because the component's contract is isolation; the chip module renders a link when a caller passes a destination, which the group pages will use in Phase 8. |
+
+**Commits:** `bf1d8e3` lay out the table grid, its colour scale and its keyboard rules · `2f06018`
+render the periodic table in four colour modes · plus this close-out commit
 
 ---
 
