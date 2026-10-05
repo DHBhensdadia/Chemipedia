@@ -204,7 +204,7 @@ in `source/styles/components/`. Styles never bleed across files.
 | `periodic-table` | the 18×10 grid, colour modes, isolation, keyboard nav, tooltips | home, 4 table views, group pages |
 | `element-tile` | one tile: number, symbol, name; compact and detailed variants | table, index, cards |
 | `element-card` | index card: tile + name + group + weight · state | elements index, rankings, group pages |
-| `legend-chips` | one pill per colour key, with count; emits isolate events | table views, home |
+| `legend-chips` | one pill per colour key, with count; emits isolate events, or links to a key's own page | home, 4 table views, group pages |
 | `element-search` | input, live filtering, quick-jump behaviour | home, elements index |
 | `property-list` | the ~40-row labelled property table, with sentinel handling | element detail |
 | `definition-list` | key/value pairs for Discovery and similar | element detail, glossary |

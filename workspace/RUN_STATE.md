@@ -6,7 +6,7 @@
 > **It is never sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-06 (the session that built the four alternate table views and closed Phase 7)
+**Last updated:** 2026-10-06 (the session that built the eleven element group pages and closed Phase 8)
 
 ---
 
@@ -14,32 +14,35 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | Phase 7 — Alternate periodic table views — `COMPLETE` |
-| **Work item** | Phase 7 closed on a reference audit of the four views, a browser pass over all four built pages, harness captures against the reference, and 369 green tests. Phase 8 — the element group pages — is next |
-| **Objective achieved** | `/periodic-table/properties-and-states/`, `/orbitals/`, `/electronegativity/` and `/evolution/` — the Phase 3 engine answering four different questions. Each view is a colour mode plus the line written under its table; two of the four add a section below the table (the electronegativity trend, the evolution timeline). The discovery mode and the era timeline are new; the block palette was corrected to the reference's own four group colours |
-| **Status** | `COMPLETE`. 369 tests pass, the build renders 127 routes plus the not-found page, and all four pages were captured, pixel-diffed and measured in one headless browser at 1280 / 768 / 375. Our legend lands on the reference's own y (364) and the grid within 2.1px on three views; tile-by-tile colour agreement is 104–114/118 on the three keyed views and 109/118 on evolution. What is left is the typeface, the reference's own era boundaries and the seven recorded deviations |
-| **Current commit** | `d1a4ad4`, plus the close-out commit that follows (`a0b0df8` is the era model, the electronegativity model and the timeline). Phase 7 range: `a0b0df8`..`d1a4ad4` |
-| **Next action** | Phase 8 — `/element-groups/:slug` for the eleven categories, and the `/element-groups/` landing page. **Audit the reference's group pages live before writing their CSS**, as Phase 6 and Phase 7 each audited their own families: `docs/research/01-reference-site-audit.md` §3.6 is still a one-line expectation, not measurements. Check the exit criterion "member counts match the reference exactly" against our own taxonomy before adopting its numbers |
+| **Phase** | Phase 8 — Element group pages — `COMPLETE` |
+| **Work item** | Phase 8 closed on a live reference audit, eleven generated pages plus an index, a browser pass over four pages at three widths, harness captures against the reference, and 383 green tests. Phase 9 — the glossary — is next |
+| **Objective achieved** | `/element-groups/:slug` for the eleven categories and `/element-groups/` over them. Each group page is a hero in the group's own colour, the table arriving already isolated to it, the members as cards, our two paragraphs on what the group has in common, and the other ten as pills. Every figure is derived from the members; the written copy is deliberately free of counts. The reference publishes **no group index at all** |
+| **Status** | `COMPLETE`. 383 tests pass, the build renders 139 routes plus the not-found page, and the pages were captured, pixel-diffed and measured in one headless browser at 1280 / 768 / 375. The table region is within **0.53% / 1.98% / 0.73%** of the reference's own and identical in size at all three widths; the page is 9.75% / 14.36% / 12.72%. The reference's eleven counts match ours member for member. What is left is the typeface, our taller band and the nine recorded deviations |
+| **Current commit** | `54832b4`, plus the close-out commit that follows (`a49dd6d` is the audit, `3b5cd60` the table's resting isolation). Phase 8 range: `a49dd6d`..`54832b4` |
+| **Next action** | Phase 9 — the glossary: `/glossary/` with an A–Z jump index and live filtering, and `/glossary/:slug` per term, over the 418 terms. The schema, the repository and their tests already exist from Phase 2; the definitions are unwritten. **Audit the reference's glossary pages live before writing their CSS**, as Phases 6, 7 and 8 each audited their own families: `docs/research/01-reference-site-audit.md` §3.7 is a sketch, not measurements |
 
 ## Files expected to change in the next work item
 
 ```
-(Phase 8)  source/scripts/router/routes.js            a groupRoutes(elements) family beside elementRoutes
-source/pages/group.html                                one template behind the eleven pages
-source/pages/element-groups-index.html                 the /element-groups/ landing page (route already declared)
-source/scripts/pages/group.js                          the family module: hero, count, members, isolation
-source/styles/pages/group.css
-source/tests/pages/group.test.js
-workspace/docs/research/01-reference-site-audit.md     §3.6 is not yet audited; capture it live first
-workspace/docs/MIND_MAP.md                             in the same commit as each file
+(Phase 9)  source/data/glossary.json                    the 418 definitions, currently a schema with no content
+source/scripts/pages/glossary.js                        the index: hero, A-Z jump index, filter
+source/scripts/pages/glossary-term.js                   a single term, with its cross-links
+source/pages/glossary-index.html                        one template for the index
+source/pages/glossary-term.html                         one template behind the 418 terms
+source/styles/pages/glossary.css
+source/scripts/router/routes.js                         glossaryRoutes(terms) beside groupRoutes
+source/tools/build.js                                   two FAMILY_RENDERERS entries
+source/tests/pages/glossary.test.js
+workspace/docs/research/01-reference-site-audit.md      §3.7 audited live first
+workspace/docs/MIND_MAP.md                              in the same commit as each file
 ```
 
-The pieces already exist and need little or no change: `categories-repository.js` holds the eleven
-categories with their display names, palette tokens and asserted member counts; `elementRoutes` is the
-pattern a generated family follows; `legend-chips.js` already renders a **link** when a caller passes a
-destination, which is what the group pages will use. The one decision to make first is where the eleven
-groups' shared-character sentences live — a data file beside `element-notes.json`, or written in the
-module like the table views' notes.
+The pieces already exist and need little or no change: `glossary-repository.js` holds the reading
+order, the letters that actually have terms under them, lookup by slug and a search that matches the
+definition as well as the term; `filter-bar.js` is sketched for the index's search input plus letter
+jump index; `/glossary/` is a declared route waiting on its template. The one decision to make first
+is the shape of the 418 records — `docs/DATA_SOURCES.md` §3 scopes the definitions to this phase and
+the record schema is already fixed by the repository and its tests.
 
 ## Work item ledger
 
@@ -52,29 +55,31 @@ module like the table views' notes.
 | 4.0–4.6 Home page and the harness | `COMPLETE` | See the Phase 4 entry; table crop 2.28% at 1280px with no box differing in size | `7587a66`..`7837dce` |
 | 5.0–5.6 Routing and the element pages | `COMPLETE` | See the Phase 5 entry; 278 tests, the router verified in a browser | `4763e89`..`2cd6460` |
 | 6.0–6.6 Elements index and attribute rankings | `COMPLETE` | See the Phase 6 entry; the index's card grid and the ranking pages' skeletons measured live | `6cd3b14`..`44e3493` |
-| 7.0 The reference audit Phase 7 owed | `VERIFIED` | The four views measured live at 1280: the hero bands, the body, the four legends with their counts and every fill read off the tiles, and that the reference's note sits *under* its table. Appended to `docs/research/01-reference-site-audit.md` §3.5 | before `a0b0df8` |
-| 7.1 The discovery era model | `COMPLETE` | `tests/lib/discovery.test.js`: every century boundary, the undated bucket, the declared order, six counts summing to 118, members in year order | `a0b0df8` |
-| 7.2 The electronegativity derivation | `COMPLETE` | `tests/lib/electronegativity.test.js`: 95 measured of 118, ends francium 0.7 and fluorine 3.98, two rising periods, six of sixteen falling groups, the fifteen-element tail | `a0b0df8` |
-| 7.3 The engine's fifth mode | `COMPLETE` | `tests/components/periodic-table.test.js`: discovery added to the keyed-mode test with the centuries derived independently, its legend counts, `attachPeriodicTable` exported | `a0b0df8` |
-| 7.4 The era timeline | `COMPLETE` | `tests/components/era-timeline.test.js`: the range line's four wordings, chips with and without a year, six cards, an era with members but no sentence refused | `a0b0df8` |
-| 7.5 The four views | `COMPLETE` | `tests/pages/table-views.test.js`; in a browser: 118 tiles each, isolation, keyboard, no overflow, reduced motion, zero console errors | `d1a4ad4` |
-| 7.6 The route wiring | `COMPLETE` | The build renders 127 routes and reports 6 waiting; four routes declare the table's sheet; four `FAMILY_RENDERERS` entries and four `PAGE_BEHAVIOUR` names | `d1a4ad4` |
+| 7.0–7.6 The four alternate table views | `COMPLETE` | See the Phase 7 entry; 369 tests, four pages captured and pixel-diffed | `a0b0df8`..`d1a4ad4` |
+| 8.0 The reference audit Phase 8 owed | `VERIFIED` | All eleven group pages measured live at 1280 / 768 / 375; the counts match ours member for member; the reference has no group index. Appended to `docs/research/01-reference-site-audit.md` §3.6 | `a49dd6d` |
+| 8.1 The table's resting isolation and its linking legend | `COMPLETE` | `createPeriodicTable`'s `isolate` and `legendLinks`, `attachPeriodicTable`'s `data-isolated` resting rule, the tile's `match` mark, `lib/plural.js` | `3b5cd60` |
+| 8.2 The family module | `COMPLETE` | `pages/group.js`: the derived facts, `GROUP_NOTES` free of counts, the member and sibling lists, the index's values, `startGroup` | `54832b4` |
+| 8.3 The two templates | `COMPLETE` | `pages/group.html` behind all eleven, and `pages/element-groups-index.html` | `54832b4` |
+| 8.4 The family sheet and its tokens | `COMPLETE` | `styles/pages/group.css` names no colour; the hero's wash and the lede come from `--fill` and `--fill-deep` | `54832b4` |
+| 8.5 The route wiring and the band | `COMPLETE` | `groupRoutes(categories)`, `GROUP_STYLES`, `allRoutes(elements, categories)`, the `group` behaviour name, and a twelve-item band — the build renders 139 routes and reports 5 waiting | `54832b4` |
+| 8.6 The tests | `COMPLETE` | `tests/pages/group.test.js`, fourteen tests; the manifest-holding tests widened. 383 pass | `54832b4` |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
 
 ## Accepted decisions
 
-All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 7 join the Phase 6 set:
+All six ADRs stand; nothing is blocked on a decision. Three decisions from Phase 8 join the Phase 7 set:
 
 | Decision | Why |
 |---|---|
-| **The page's note sits under its table.** | The reference puts its note there. Our first build kept the note between the legend and the grid, which is where the home page's helper line lives, and the paragraph's own height pushed our table 224px down the page and made the comparison meaningless. Moving it below the table and giving the legend the reference's 24px gap brought our legend to the reference's own y. |
-| **A hero's band excludes the page's own top spacing.** | The reference's 240px hero contains the 56px between its submenu and its first heading; ours is `main`'s, which every family pays. The views' token is the reference's band less that spacing — which is why the token is `calc(240px - var(--sp-7))` and not a bare 240px. |
-| **The block colours are four of the eleven group colours.** | The reference's orbitals view paints s/p/d/f with its alkali, actinide, transition and lanthanide colours. Pointing `--g-s-block` and its siblings at those group tokens means a correction to a group colour moves both views at once; a literal here would be a fifth opinion. |
-| **The eras are centuries, not the plan's decades.** | The plan asked for a colour per decade of discovery. Our years run 1669–2010 and fall in thirty-one decades; thirty-one legend chips is a chart, not a legend, and the reference groups its own evolution view into six eras for the same reason. The undated bucket is named for what it is and placed last, because five of the thirteen records without a year name a chemist who isolated the element in the eighteenth or nineteenth century. |
-| **Derive a claim rather than assert it.** | Carried forward from Phase 6 and applied again: the discovery eras, the electronegativity trend, the two liquids, the four warm-room solids and the missing-value counts are all read off the records, so a correction to the data changes the sentence instead of contradicting it. |
-| **A colour is a key, and the key-to-colour map is one stylesheet.** | Unchanged: every route of a page family must declare `styles/components/periodic-table.css`, because that sheet is where a `data-key`/`data-band` becomes `--fill`/`--on-fill`. |
+| **A table written isolated rests on its own `data-isolated`.** | A group page's subject is one key, so the table has to be right before any script runs — which means the isolation cannot live only in the behaviour. Reading the resting key back off the markup gives a group page the behaviour it wants for free: pointing at a chip previews that group and moving away restores the page's own, where a table that was never written isolated correctly clears. One rule, and both kinds of page get the right answer. |
+| **A group's copy holds no counts.** | Carried forward from Phases 6 and 7 and applied hardest here: the hero's count, its range, its block and its states are all read off the members, so a copy that also asserted a number could contradict the page after any correction to the data. `GROUP_NOTES` is written in prose that stays true. |
+| **The band lists all eleven groups, not the reference's six.** | The reference's band on these pages carries seven of the eleven names, removes the page's own group, and hides four groups in the page foot. Ours lists all eleven in the order a reader meets them reading the table, then the index. The cost is recorded: twelve full names do not fit one row at the shell's width, so our band wraps to two rows at desktop where the reference's stays one. |
+| **The engine's legend is links on a group page and buttons elsewhere.** | The chips' contract is isolation, but on a group page the useful thing a chip can do is lead to the group it names. Pointing at one still previews it, so the page keeps the home page's behaviour as well as gaining the door. |
+| **A hero's band excludes the page's own top spacing.** | Unchanged from Phase 7: the reference's 240px hero contains the 56px between its submenu and its first heading; ours is `main`'s, which every family pays. |
+| **Derive a claim rather than assert it.** | Unchanged and now applied to six families. |
+| **A colour is a key, and the key-to-colour map is one stylesheet.** | Unchanged: every route of a page family must declare `styles/components/periodic-table.css`, because that sheet is where a `data-key`/`data-band` becomes `--fill`/`--on-fill`. The group index is the case that proves it — nothing on it is a periodic table, and it still needs the sheet. |
 | ADR-001..006 | Unchanged; see `docs/ARCHITECTURE.md` and the previous sessions' notes in the phase log. |
 
 ## Known risks and blockers
@@ -83,26 +88,27 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 |---|---|---|
 | The preview webview does not composite | The panel's own screenshot tool may still fail; it is not on the critical path | `workspace/tools/visual` captures, diffs and measures both pages in headless Chrome. Use the panel tool first because it is cheaper, and fall back to the harness the moment it reports no frames. |
 | The preview window has no operating-system focus | `focus`, `blur` and real key events are never delivered, so tab-order and hover behaviour cannot be exercised as a person would | The harness's own Playwright pages are real browsers: use them for keyboard and focus checks. |
-| The shell links destinations whose pages are not built yet | A reader clicking through arrives at the not-found page | Accepted construction state; the build reports the count on every run. Now **6** (`/downloads/`, `/calculators/temperature/`, `/glossary/`, `/element-groups/`, `/about/`, `/contact/`). Phase 8 closes `/element-groups/`. |
-| **Phase 8's exit criteria say "member counts match the reference exactly".** | The reference's taxonomy may file an element in a different group than our `category` field does (as its states, blocks and eras each already differ) | Audit the reference's group pages live first, then compare its counts with ours before adopting them. Our own counts are transition metals 35 · lanthanides 15 · actinides 15 · post-transition metals 8 · unknown 8 · non-metals 7 · noble gases 7 · alkali metals 6 · alkaline earth metals 6 · metalloids 6 · halogens 5 (total 118). The plan's own examples — 35, 5, 8 — already match ours |
-| A swap is easy to get subtly wrong | The router touches the document's title, description, body, focus and scroll | `tests/router/router.test.js` holds every one of them under fakes, and Phase 6 re-checked the two that only a real document shows |
+| The shell links destinations whose pages are not built yet | A reader clicking through arrives at the not-found page | Accepted construction state; the build reports the count on every run. Now **5** (`/downloads/`, `/calculators/temperature/`, `/glossary/`, `/about/`, `/contact/`). Phase 9 closes `/glossary/`. |
+| **Our group band wraps to two rows at desktop** | Twelve group names do not fit the shell's 1100px in one row, so our band is 70.5px against the reference's 33px and the page's content starts 37px lower | Recorded as a deliberate deviation in `progress/PHASE_LOG.md`, with the numbers. Shortening the names would fix 1280 and still wrap at 768, so it was rejected. Revisit only if the band's contents change. |
+| A swap is easy to get subtly wrong | The router touches the document's title, description, body, focus and scroll | `tests/router/router.test.js` holds every one of them under fakes, and Phase 8 re-checked the swap with a real navigation between two group pages |
 | `covalentRadius` and `latticeParameters` are `null` for all 118 | Two rows of an element page read "Unknown" | Recorded in `docs/DATA_SOURCES.md`; filling them needs a third source and touches one adapter, no page. |
-| The 418 glossary definitions are unwritten | The glossary phase is bigger than its page work | Deliberate and recorded; the schema and the arrangement are already built and tested. |
+| The 418 glossary definitions are unwritten | Phase 9 is bigger than its page work | Deliberate and recorded; the schema and the arrangement are already built and tested. |
+| The typeface is not the reference's | Every page's text measures a few per cent differently, which inflates the harness's page-level number | A Phase 1 deviation, recorded. The harness's region crops and its own `fontFamily` reading in `report.json` are how a typeface difference is told apart from a layout one. |
 
 ## Deliberately unfinished
 
-**Nothing.** Phase 7 closed `COMPLETE` on a reference audit, harness captures against the reference, a
-browser pass over all four pages, and 369 green tests, and the working tree is clean at the close-out
-commit. The remaining differences from the reference are the seven recorded deviations in
-`progress/PHASE_LOG.md`, not open work.
+**Nothing.** Phase 8 closed `COMPLETE` on a live reference audit, harness captures against the
+reference, a browser pass over four group pages at three widths, and 383 green tests, and the working
+tree is clean at the close-out commit. The remaining differences from the reference are the nine
+recorded deviations in `progress/PHASE_LOG.md`, not open work.
 
 Deferred on purpose, as before:
 
 1. **The 418 glossary definitions** — Phase 9, by recorded scope decision.
 2. **Two schema fields** that no acceptable source supplies — see `docs/DATA_SOURCES.md`.
-3. **Six declared routes still waiting on their templates** — `/downloads/`,
-   `/calculators/temperature/`, `/glossary/`, `/element-groups/`, `/about/`, `/contact/`. This is the
-   construction state the build reports on every run, not an open work item.
+3. **Five declared routes still waiting on their templates** — `/downloads/`,
+   `/calculators/temperature/`, `/glossary/`, `/about/`, `/contact/`. This is the construction state
+   the build reports on every run, not an open work item.
 
 ## How to resume in 60 seconds
 
@@ -110,18 +116,18 @@ Deferred on purpose, as before:
 git log --oneline -20             # what has actually been committed
 git status --short                # anything half-done?
 cat workspace/RUN_STATE.md        # this file
-node --test source/tests          # is the last checkpoint real?  expect: 369 passing
-node source/tools/build.js        # renders 127 routes and reports 6 waiting
-node source/tools/serve.js --port 4180   # the site; the four views are under /periodic-table/
+node --test source/tests          # is the last checkpoint real?  expect: 383 passing
+node source/tools/build.js        # renders 139 routes and reports 5 waiting
+node source/tools/serve.js --port 4180   # the site; the groups are under /element-groups/
 ```
 
 And when a page needs looking at:
 
 ```bash
 cd workspace/tools/visual && npm install && \
-  node compare.mjs --ours http://127.0.0.1:4180/periodic-table/orbitals/ \
-    --reference https://www.breakingatom.com/periodic-table/orbitals --label view-orbitals --widths 1280,768,375
+  node compare.mjs --ours http://127.0.0.1:4180/element-groups/halogens/ \
+    --reference https://www.breakingatom.com/element-groups/halogens --label group-halogens --widths 1280,768,375
 ```
 
-Then open `workspace/progress/PHASE_LOG.md` at Phase 7. Phase 8 next: the eleven element group pages.
-Audit the reference's group pages and the `/element-groups/` landing page live before writing their CSS.
+Then open `workspace/progress/PHASE_LOG.md` at Phase 8. Phase 9 next: the glossary. Audit the
+reference's `/terms` index and its term pages live before writing their CSS.

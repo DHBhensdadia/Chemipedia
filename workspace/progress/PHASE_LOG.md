@@ -22,7 +22,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 5 | Routing and element detail pages | `COMPLETE` | `4763e89`..`2cd6460`, plus the close-out commit |
 | 6 | Elements index and attribute rankings | `COMPLETE` | `6cd3b14`..`44e3493`, plus the close-out commit |
 | 7 | Alternate periodic table views | `COMPLETE` | `a0b0df8`..`d1a4ad4`, plus the close-out commit |
-| 8 | Element group pages | `NOT_STARTED` | — |
+| 8 | Element group pages | `COMPLETE` | `a49dd6d`..`54832b4`, plus the close-out commit |
 | 9 | Glossary | `NOT_STARTED` | — |
 | 10 | Calculators and secondary pages | `NOT_STARTED` | — |
 | 11 | Quality, accessibility, performance, delivery | `NOT_STARTED` | — |
@@ -890,16 +890,107 @@ The audit also corrected three colour facts and one attribution. The orbital blo
 
 ## Phase 8 — Element group pages
 
+**Goal:** each of the table's eleven groups as a page about itself, and one page over all eleven.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 8.0 | The reference audit Phase 8 owed | `VERIFIED` | All eleven pages measured live at 1280 / 768 / 375: the 33px band that lists six groups and drops the current one, the hero's four derived facts, the table arriving already isolated (non-members at `opacity: 0.22`, `saturate(0.35)`), the member cards' 210px column floor, the sibling pills' 9.52px dot — and the finding that the reference publishes **no group index at all**: `/element-groups/` is a 404 and its band's `All` points at `/`. Its eleven counts match ours **member for member**, so the exit criterion is satisfiable as written. Appended to `docs/research/01-reference-site-audit.md` §3.6. `a49dd6d` |
+| 8.1 | The table arrives isolated, and its legend is a door | `COMPLETE` | `createPeriodicTable` gains `isolate` and `legendLinks`; a table written isolated rests on its own `data-isolated`, so pointing at a chip previews that group and moving away restores the page's group rather than clearing the table. A tile gains a `match` mark, and `lib/plural.js` derives the eleven categories' plural rather than storing a second name. `3b5cd60` |
+| 8.2 | The family module | `COMPLETE` | `pages/group.js`: the eleven pages' values and the index's, `GROUP_NOTES` (a lede and two paragraphs per group, deliberately free of counts), and the derived facts — `count`, atomic-number range, the block only where every member shares one, the states in member order. A route carrying no category, or a category with no copy, is refused rather than drawn in the wrong colour. `54832b4` |
+| 8.3 | The two templates | `COMPLETE` | `pages/group.html`, one template behind all eleven, and `pages/element-groups-index.html`. `54832b4` |
+| 8.4 | The family's sheet and its tokens | `COMPLETE` | `styles/pages/group.css` plus the group section of `tokens.css`. Nothing in the sheet names a colour: the hero's wash is `--fill` mixed 16% into the paper and the lede is `--fill-deep`, the pair the palette already owns. `54832b4` |
+| 8.5 | The route wiring and the band | `COMPLETE` | `groupRoutes(categories)` beside `elementRoutes`, `GROUP_STYLES` declared by the eleven pages and by the index (which asks for the family's own sheet by name, because the build appends it only for the family's template), `allRoutes(elements, categories)`, the `group` behaviour name, and the band linking all eleven groups and the index. `54832b4` |
+| 8.6 | The tests | `COMPLETE` | `tests/pages/group.test.js`: eleven routes and their titles and descriptions, the sheets each declares, the eleven memberships partitioning the 118 records at the asserted counts, the derived facts with the block stated only where it is shared, all 118 tiles with exactly the group's own marked, the note counting both halves, every member link resolving, every group's copy present and count-free, the index's eleven cards, and the band. The three tests that hold the family list and the manifest were widened to the whole manifest. `54832b4` |
+
 **Exit criteria**
 
-- [ ] Eleven group pages; member counts match the expected values exactly.
-- [ ] Every member link resolves.
-- [ ] Group colour applied from the token layer, no literals.
+- [x] Eleven group pages; member counts match the expected values exactly.
+- [x] Every member link resolves.
+- [x] Group colour applied from the token layer, no literals.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
 
-> **Reminder:** the reference's `/element-groups/:slug` family has not been audited yet. Audit it live
-> before implementing, and append the findings to `docs/research/01-reference-site-audit.md` §3.6.
+```
+node --test source/tests ............................. tests 383 · pass 383 · fail 0
+                                                       (was 369; the family adds 14)
+node source/tools/build.js ........................... Built 139 routes and the not-found page into dist/
+                                                       5 declared routes still waiting on their templates
+                                                       (was 6; /element-groups/ now renders)
+node --check on every changed module ................. all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+MIND_MAP completeness over source/ ................... 137 files, 0 missing (141 counting the four
+                                                       .DS_Store files, which are not source)
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity: Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+
+Served by the dev server and exercised in a real browser (Playwright, system Chrome):
+  the seven URLs ....................................... all 200: /, /element-groups/, /element-groups/halogens/,
+                                                       transition-metals/, unknown/, /elements/hydrogen/,
+                                                       /periodic-table/orbitals/
+  four group pages × three widths ...................... 0 console messages, 0 failed requests, no horizontal
+                                                       overflow at 1280 / 768 / 375
+  the table ............................................ 118 tiles on every page, data-isolated set to the page's
+                                                       own slug, exactly 5 / 35 / 8 tiles bright on halogens /
+                                                       transition metals / unknowns and the rest at opacity 0.22
+                                                       with saturate(0.35)
+  the legend ........................................... eleven links, no buttons and no aria-pressed, one roving
+                                                       tab stop
+  the hero's lede ...................................... the deep token: rgb(76,87,90) halogens ·
+                                                       rgb(152,104,60) transition metals · rgb(129,111,57) unknowns
+  the members .......................................... 5 / 3 / 1 columns at 1280 / 768 / 375
+  the sibling pills .................................... padding 8px 16px, radius 999px, dot 9.52px
+  the index ............................................ eleven cards at 3 / 2 / 1 columns, the right counts
+  pointer and keyboard, reduced motion at 1280 .......... hovering "Alkali metal" isolates alkali-metals (6 matches);
+                                                       moving away restores halogens (5); focus does the same and
+                                                       blur restores; transitions 1e-05s; no errors
+  a chip is a door at 1280 .............................. clicking "Noble gas" navigates through the router to
+                                                       /element-groups/noble-gases/, h1 "Noble gas",
+                                                       data-isolated noble-gases, body data-page="group"
+  regression, earlier phases ............................ home: eleven button chips, hovering transition-metals gives
+                                                       35 matches, cleared gives 0. orbitals: four button chips,
+                                                       hovering s gives 14, cleared gives 0
+  accessibility bones ................................... one h1, four content h2 (Where they sit, The halogens,
+                                                       About the halogens, Other groups), six landmarks
+                                                       (header, nav Primary, nav Section, main, footer, nav
+                                                       Footer), no link without a name, no image without alt,
+                                                       and the route's own title and description in the head
+
+Harness against the reference (workspace/tools/visual, 1280 / 768 / 375; the reference's halogens page):
+  page ................................................. 9.75% / 14.36% / 12.72%
+  the table ............................................ 0.53% / 1.98% / 0.73% — and the same size at all three:
+                                                       1228.8×625.52 at 1280, 820×420.61 at 768,
+                                                       700×360.16 at 375
+  the hero ............................................. 7.76% / 10.74% / 11.58%
+  the band ............................................. 9.87% / 14.69% / 8.11% — the one structural difference,
+                                                       recorded below: ours is 70.5px against its 33px at 1280
+```
+
+**Appearance — captured and inspected**
+
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | The group's own colour three times over — the hero's wash, the lede beneath the name, and the member tiles — then the whole table with that group's cells at full colour and the rest dimmed to a ghost, the note counting them under the grid, the members five cards to a row, our two paragraphs, and the other ten groups as pills each carrying its own dot. The index is eleven cards, three to a row. | Its band is one row of eight where ours is two rows of twelve. Our table sits **67.6px lower** than its own (y674.55 against y606.97) — the band's second row plus a taller heading. Its hero text column is capped at 620px and its heading is 57.6px; ours is not capped and the heading is 54.88px, the site's single page-heading size. Its explainer runs to thousands of words where ours is two paragraphs. |
+| 768 px | The same page with the table in a horizontal scroller that keeps its 65px tiles rather than shrinking them, the members three to a row and the pills wrapping. | Our table sits **104px above** the reference's at this width — its lede wraps to three lines against our two — and our band is still two rows against its one. |
+| 375 px | One column: the hero, the table scrolling sideways behind its edge fades, the members one to a row, the prose, then the pills — and a band four rows deep. | Both bands wrap at this width — its three rows of eight, ours four rows of twelve, 142.19px against 101.89px. `Post-transition metal` wraps its heading to two lines in both. |
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **Our band lists all eleven groups and the index; the reference's lists six and drops the current one.** | The reference's band carries Actinide, Alkali metal, Alkaline earth metal, Halogen, Lanthanide, Metalloid and Noble gas, removes the page's own group, and leaves Non-metal, Post-transition metal, Transition metal and Unknown reachable only from the page's foot. A reader who wants the noble gases should not have to know which page they are standing on to find them, so ours lists all eleven in the order a reader meets them reading the table, then `All groups`. |
+| **The band therefore wraps at desktop, where the reference's does not.** | Twelve full group names at the shell's 1100px do not fit one row: ours is 70.5px tall at 1280 (ten items then two) and 68.88px at 768, against the reference's flat 33px at both. Shortening the names to fit 1280 exactly would still wrap at 768 — the row needs 1168px there — so it would buy one width at the cost of calling a page something the page does not call itself. |
+| **We publish a group index, and the reference does not.** | `/element-groups/` is a 404 on the reference and its band's `All` link goes to the site root. Ours is a page of eleven cards, one per group, each in the group's own colour with its count and its sentence; the route was already declared in Phase 5 and waiting on this phase. |
+| **The hero carries the group's colour as a wash.** | The reference's hero has no background of its own and spends the group's colour on the lede alone. Ours mixes it into the paper at 16%, the same device the element pages use, so the page announces its group before the first word is read. |
+| **The lede is written in `--fill-deep`.** | The reference's lede colours — `#4c575a` halogens, `#98683c` transition metals, `#a85846` noble gases, `#816f39` unknowns — are exactly the `--g-*-deep` tokens transcribed from the same site in Phase 1. Spending the token rather than the value keeps the pairing in the one map that already owns it. |
+| **The explainer is ours, and free of counts.** | The reference's "About the halogens" sections run to thousands of words of its own copy. Ours is two paragraphs per group, written here, and deliberately holds no number: the hero's facts are derived from the records, so a copy that also asserted a count could contradict them after any correction to the data. |
+| **The note counts both halves of the table.** | The reference's line is `The 5 highlighted cells are the halogens.` Ours names the group and says how many of the 118 are not in it, because a reader who has just seen 113 dimmed tiles is owed the number. |
+| **The table's legend is links here, buttons everywhere else.** | The engine's chips isolate on the home page and the four views; on a group page a chip leads to that group's own page, which is what makes the eleven reachable from each other. Pointing at one still previews it, and moving away restores the page's group rather than clearing the table. |
+| **The hero's heading is not capped at the hero's measure.** | The reference caps its whole 620px hero text block, heading included. Ours caps the two elements long enough to need it — the lede and the facts. Every one of the eleven group names renders on one line at 1280 either way, and the same single name wraps at 375 in both. |
+
+**Commits:** `a49dd6d` (the reference audit §3.6), `3b5cd60` (the table's resting isolation, the linking legend, the plural), `54832b4` (the family, its templates, its sheet, the wiring and the tests), plus the close-out commit.
 
 ---
 
