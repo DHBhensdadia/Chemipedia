@@ -1,0 +1,32 @@
+/* The electron shell diagram: an atom's shells as rings and its electrons as dots.
+ *
+ * The geometry lives in the component, in the SVG's own 200-unit coordinate space, and the
+ * stylesheet decides only how large that space appears and what the marks are painted with.
+ * The drawing is the panel's own width up to the size the reference's diagram occupies, centred,
+ * so it stays inside its dotted border on a narrow screen instead of overflowing it.
+ *
+ * A hairline for the rings and the ink for the electrons: the diagram is a figure in the panel,
+ * not a second colour key, and the one thing a reader must be able to count is the dots.
+ */
+
+.shells {
+  display: block;
+  width: 100%;
+  max-width: var(--size-diagram);
+  aspect-ratio: var(--ratio-diagram);
+  margin-inline: auto;
+}
+
+.shells__ring {
+  fill: none;
+  stroke: var(--line-strong);
+  stroke-width: var(--rule-width);
+}
+
+.shells__dot {
+  fill: var(--ink);
+}
+
+.shells__nucleus {
+  fill: var(--ink);
+}

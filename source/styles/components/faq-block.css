@@ -1,0 +1,37 @@
+/* The FAQ block: generated questions, each with its answer under it.
+ *
+ * Measured from the reference's element page: the block starts 32px below the prose above it, and
+ * every row is 12px of padding above and below, closed by the project's dotted rule. The answer
+ * sits directly under its question, separated by a 4px step rather than by a full paragraph gap,
+ * because the two are one thought.
+ *
+ * The question is the one place on these pages where display type is set bold. A question in a
+ * list has to be findable while scrolling, and weight is what makes it findable without making it
+ * larger — the size belongs to the page's headings.
+ */
+
+.faq {
+  margin-block-start: var(--margin-faq);
+}
+
+.faq__title {
+  margin-block-end: var(--sp-4);
+  font-size: var(--step-2);
+  font-weight: var(--weight-bold);
+}
+
+.faq__row {
+  padding: var(--pad-faq-row);
+  border-bottom: var(--rule-dotted);
+}
+
+.faq__q {
+  margin-block-end: var(--sp-1);
+  font-size: var(--step-0);
+  font-weight: var(--weight-bold);
+}
+
+.faq__a {
+  font-size: var(--step-0);
+  line-height: var(--leading-body);
+}

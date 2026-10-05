@@ -1,0 +1,381 @@
+/* The element detail page.
+ *
+ * One template behind 118 URLs, and the layout is the same on every one of them. The measurements
+ * come from the reference's own element page at 1280px and from its narrow layout at 375px, and
+ * every value that is not a token is recorded in tokens.css §11.
+ *
+ * The page's shape, top to bottom:
+ *
+ *   strip   the previous / current / next band, where the shell's submenu would be
+ *   hero    the element's card, the miniature table, and the rules between this block and the next
+ *   body    two columns: the prose and the questions on the left, the facts on the right
+ *   similar a row of the element's siblings
+ *   pager   the same two neighbours as the strip, at the foot
+ *
+ * The text the reference tints with the element's own colour — its summary, its pronunciation and
+ * the values in the facts panel — takes the element's *deep* colour, not its tile colour: the tile
+ * fills are pale by design and fail the contrast rule as text on paper, and the eleven deepened
+ * variants exist for exactly this. `periodic-table.css` maps the element's `data-key` to both
+ * pairs, so text here and the tile that names the same group cannot drift apart. A section title
+ * is one size on this page rather than the reference's two, so the page's outline and its type
+ * agree.
+ */
+
+/* The strip takes the submenu band's place, so the page begins at the masthead's rule rather than
+   48px below it, exactly as the reference's band does. */
+main {
+  padding-block-start: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   The strip.
+   --------------------------------------------------------------------------- */
+
+.el-strip {
+  background: var(--bg);
+  border-bottom: var(--rule-dotted);
+  font-size: var(--step--1);
+}
+
+.el-strip__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  padding-block: var(--pad-submenu);
+  min-height: var(--height-submenu);
+}
+
+.el-strip__item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-strip-part);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.el-strip__item:hover {
+  color: var(--ink);
+}
+
+/* The current element is marked the way the shell marks a current page — an aria-current and a rule
+   under it — and the rule takes the element's own colour, as the reference's does. */
+.el-strip__item--current {
+  color: var(--ink);
+  border-bottom: var(--underline-active) solid var(--fill, currentColor);
+}
+
+/* ---------------------------------------------------------------------------
+   The hero.
+
+   The card is 240px square and hangs 40px below the hero's rule, into the gap the section
+   underneath begins with. The miniature table takes 58% of the inner column and keeps 6% of it as
+   a margin on the right, which is what puts the table's right edge where the reference's is.
+   --------------------------------------------------------------------------- */
+
+.el-hero {
+  position: relative;
+  padding: var(--pad-hero);
+  /* The wash is the element's own colour, mixed over the paper: the hero carries the category key,
+     the table's mode map turns that key into `--fill`, and nothing here names a colour. */
+  background-image: linear-gradient(
+    var(--angle-hero),
+    color-mix(in srgb, var(--fill, var(--bg)) var(--mix-hero-strong), transparent) 0%,
+    color-mix(in srgb, var(--fill, var(--bg)) var(--mix-hero-soft), transparent) var(--stop-hero-mid),
+    transparent 100%
+  );
+  border-bottom: var(--rule-solid);
+}
+
+.el-hero__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.el-hero__card {
+  display: flex;
+  align-items: flex-end;
+  margin-block-end: var(--margin-card-overhang);
+}
+
+.el-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--width-hero-card);
+  height: var(--width-hero-card);
+  background: var(--fill-deep, var(--surface-sunk));
+  color: var(--on-fill-deep, var(--ink-body));
+  border: var(--rule-solid);
+  border-radius: var(--radius-lg);
+}
+
+.el-card__z {
+  position: absolute;
+  top: var(--inset-card-z-block);
+  right: var(--inset-card-z-inline);
+  font-size: var(--step--1);
+}
+
+.el-card__sym {
+  font-family: var(--font-display);
+  font-size: var(--size-card-symbol);
+  line-height: var(--leading-tile-symbol);
+  letter-spacing: var(--tracking-tight);
+}
+
+.el-hero__table {
+  width: var(--width-hero-table);
+  margin: var(--margin-hero-table);
+}
+
+/* The second rule, two pixels above the hero's own border. The reference draws both, and the pair
+   is what makes the hero read as a panel closed at the bottom rather than a section that ends. */
+.el-hero__line {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--overhang-hero-line);
+  height: var(--rule-width);
+  background: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------
+   The two columns.
+   --------------------------------------------------------------------------- */
+
+.el-body {
+  padding-block-start: var(--pad-body-top);
+}
+
+.el-cols {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-8);
+}
+
+.el-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.el-panel {
+  flex: 0 0 var(--width-panel);
+}
+
+/* ---------------------------------------------------------------------------
+   The heading, the rule and the summary.
+   --------------------------------------------------------------------------- */
+
+.el-headline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-4);
+}
+
+.el-name {
+  font-size: var(--type-jumbo);
+  line-height: var(--leading-jumbo);
+  letter-spacing: var(--tracking-jumbo);
+}
+
+.el-say {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-2);
+  font-size: var(--step--1);
+}
+
+.el-say__k {
+  color: var(--ink-soft);
+}
+
+.el-say__v {
+  color: var(--fill-deep, var(--ink));
+}
+
+/* The solid rule over the dotted one, stopping a percent short of the column. */
+.el-rule {
+  width: var(--width-rule-double);
+  height: var(--height-rule-double);
+  margin: var(--margin-rule);
+  border-top: var(--rule-solid);
+  border-bottom: var(--rule-dotted);
+}
+
+.el-lede {
+  max-width: var(--measure-lede);
+  padding-block: var(--sp-5);
+  color: var(--fill-deep, var(--ink));
+  font-size: var(--step-2);
+  line-height: var(--leading-lede);
+}
+
+/* ---------------------------------------------------------------------------
+   Uses, sources and discovery. The three abut, as the reference's do: each heading's own leading
+   is the space between it and the paragraph it introduces.
+   --------------------------------------------------------------------------- */
+
+.el-section__title {
+  font-size: var(--step-1);
+}
+
+/* ---------------------------------------------------------------------------
+   The orbital figure.
+   --------------------------------------------------------------------------- */
+
+.el-orbital {
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-4);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.el-orbital__caption {
+  margin-block-start: var(--sp-2);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* ---------------------------------------------------------------------------
+   The siblings row.
+
+   The tiles are painted from the mode map the table owns: the page's wrapper declares the group
+   mode, each tile carries its category, and `periodic-table.css` turns that key into a fill and a
+   foreground. So a tile here and a tile on the home page cannot be coloured differently.
+   --------------------------------------------------------------------------- */
+
+/* The section is a `.shell`, so only its top margin is set here: the inline centring belongs to
+   the layout primitive and a margin shorthand would overwrite it. */
+.el-similar {
+  margin-block-start: var(--margin-similar);
+  padding: var(--pad-similar);
+  border-top: var(--rule-solid);
+  border-bottom: var(--rule-solid);
+}
+
+.el-similar__title {
+  margin-block-end: var(--sp-4);
+  font-size: var(--step-1);
+  font-weight: var(--weight-bold);
+}
+
+.el-similar__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  padding-left: 0;
+  list-style: none;
+}
+
+.el-similar__tile {
+  position: relative;
+  display: grid;
+  /* Items, not tracks: `center` on the content would still stretch each tile's own box, which
+     measured 34px wide against the reference's 18. */
+  place-items: center;
+  gap: var(--sp-1);
+  width: var(--size-similar-tile);
+  height: var(--size-similar-tile);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
+  border-radius: var(--radius);
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+.el-similar__tile:hover,
+.el-similar__tile:focus-visible {
+  transform: translateY(var(--lift-tile-sm));
+}
+
+/* The badge is pinned to the tile's top right corner: 4px down, 6px in, measured. */
+.el-similar__z {
+  position: absolute;
+  top: var(--inset-similar-z-block);
+  right: var(--inset-similar-z-inline);
+  font-size: var(--type-similar-z);
+}
+
+.el-similar__sym {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-tile-symbol);
+}
+
+.el-similar__name {
+  font-size: var(--type-similar-name);
+}
+
+/* ---------------------------------------------------------------------------
+   The pager.
+   --------------------------------------------------------------------------- */
+
+.el-pager {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-block-start: var(--margin-pager);
+}
+
+.el-pager__link {
+  display: grid;
+  gap: var(--gap-pager-part);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.el-pager__k {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.el-pager__n {
+  font-size: var(--step-1);
+}
+
+.el-pager__link--next {
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------------
+   Narrow screens.
+
+   The hero stacks — table above, card below, because the card is this element's portrait and the
+   table is its address — and the two columns become one, the prose first and the facts after it.
+   The reference shifts its miniature table a few pixels left here to keep a margin that no longer
+   fits; ours takes the full column instead.
+   --------------------------------------------------------------------------- */
+
+@media (max-width: 56rem) {
+  .el-hero {
+    padding: var(--pad-hero-narrow);
+  }
+
+  .el-hero__inner {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+  }
+
+  .el-hero__table {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .el-cols {
+    flex-direction: column;
+  }
+
+  .el-panel {
+    flex-basis: auto;
+    width: 100%;
+  }
+}

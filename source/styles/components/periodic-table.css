@@ -29,7 +29,7 @@
 /* -------------------------------------------------------------------------
    The four colour modes.
 
-   Each mode paints a keyed tile — and the legend chip with the same key — by setting the two
+   Each mode paints a keyed element — a tile, a legend chip with the same key — by setting the two
    custom properties element-tile.css and legend-chips.css consume: --fill and --on-fill. The
    foreground of every pairing is the one scripts/lib/contrast.js selects for that fill, and
    tests/components/periodic-table.test.js holds this file to that rule rather than trusting it.
@@ -37,134 +37,168 @@
    The keys are scoped by mode because "unknown" is both a category and a state, and an element
    painted slate-blue as an alkali metal must not turn yellow because a different view would have
    filed it otherwise.
+
+   The mode is a fact about a subtree, not about one component. A table declares its own with
+   `data-mode` on the `.pt` wrapper; an element page declares one around its whole body, so its
+   hero card, its miniature table and its row of siblings are painted from this same map rather
+   than from a second copy of the eleven pairings kept somewhere else. The rule is still "a colour
+   is a key": nothing writes a colour or a token name into markup, it writes the category it is
+   about.
+
+   A group also has a deeper value of its own, and both are set here: `--fill-deep` and
+   `--on-fill-deep`, the pair an element's card uses and the colour its summary and its measured
+   values are written in. They are the one pairing that is not a tile's, so the same test checks
+   both — a deeper colour that fails contrast as text is exactly as wrong as a tile that does.
    ------------------------------------------------------------------------- */
 
-.pt[data-mode="group"] [data-key="transition-metals"] {
+[data-mode="group"] [data-key="transition-metals"] {
   --fill: var(--g-transition-metals);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-transition-metals-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="actinides"] {
+[data-mode="group"] [data-key="actinides"] {
   --fill: var(--g-actinides);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-actinides-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="lanthanides"] {
+[data-mode="group"] [data-key="lanthanides"] {
   --fill: var(--g-lanthanides);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-lanthanides-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="post-transition-metals"] {
+[data-mode="group"] [data-key="post-transition-metals"] {
   --fill: var(--g-post-transition-metals);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-post-transition-metals-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="unknown"] {
+[data-mode="group"] [data-key="unknown"] {
   --fill: var(--g-unknown);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-unknown-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="noble-gases"] {
+[data-mode="group"] [data-key="noble-gases"] {
   --fill: var(--g-noble-gases);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-noble-gases-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="non-metals"] {
+[data-mode="group"] [data-key="non-metals"] {
   --fill: var(--g-non-metals);
   --on-fill: var(--on-fill-dark);
+  --fill-deep: var(--g-non-metals-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="alkali-metals"] {
+[data-mode="group"] [data-key="alkali-metals"] {
   --fill: var(--g-alkali-metals);
   --on-fill: var(--on-fill-light);
+  --fill-deep: var(--g-alkali-metals-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="alkaline-earth-metals"] {
+[data-mode="group"] [data-key="alkaline-earth-metals"] {
   --fill: var(--g-alkaline-earth-metals);
   --on-fill: var(--on-fill-light);
+  --fill-deep: var(--g-alkaline-earth-metals-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="metalloids"] {
+[data-mode="group"] [data-key="metalloids"] {
   --fill: var(--g-metalloids);
   --on-fill: var(--on-fill-light);
+  --fill-deep: var(--g-metalloids-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="group"] [data-key="halogens"] {
+[data-mode="group"] [data-key="halogens"] {
   --fill: var(--g-halogens);
   --on-fill: var(--on-fill-light);
+  --fill-deep: var(--g-halogens-deep);
+  --on-fill-deep: var(--on-fill-light);
 }
 
-.pt[data-mode="block"] [data-key="s"] {
+[data-mode="block"] [data-key="s"] {
   --fill: var(--g-s-block);
   --on-fill: var(--on-fill-light);
 }
 
-.pt[data-mode="block"] [data-key="p"] {
+[data-mode="block"] [data-key="p"] {
   --fill: var(--g-p-block);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="block"] [data-key="d"] {
+[data-mode="block"] [data-key="d"] {
   --fill: var(--g-d-block);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="block"] [data-key="f"] {
+[data-mode="block"] [data-key="f"] {
   --fill: var(--g-f-block);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="state"] [data-key="solid"] {
+[data-mode="state"] [data-key="solid"] {
   --fill: var(--state-solid);
   --on-fill: var(--on-fill-light);
 }
 
-.pt[data-mode="state"] [data-key="liquid"] {
+[data-mode="state"] [data-key="liquid"] {
   --fill: var(--state-liquid);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="state"] [data-key="gas"] {
+[data-mode="state"] [data-key="gas"] {
   --fill: var(--state-gas);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="state"] [data-key="unknown"] {
+[data-mode="state"] [data-key="unknown"] {
   --fill: var(--state-unknown);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="electronegativity"] [data-band="0"] {
+[data-mode="electronegativity"] [data-band="0"] {
   --fill: var(--scale-1);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="electronegativity"] [data-band="1"] {
+[data-mode="electronegativity"] [data-band="1"] {
   --fill: var(--scale-2);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="electronegativity"] [data-band="2"] {
+[data-mode="electronegativity"] [data-band="2"] {
   --fill: var(--scale-3);
   --on-fill: var(--on-fill-dark);
 }
 
-.pt[data-mode="electronegativity"] [data-band="3"] {
+[data-mode="electronegativity"] [data-band="3"] {
   --fill: var(--scale-4);
   --on-fill: var(--on-fill-light);
 }
 
-.pt[data-mode="electronegativity"] [data-band="4"] {
+[data-mode="electronegativity"] [data-band="4"] {
   --fill: var(--scale-5);
   --on-fill: var(--on-fill-light);
 }
 
-.pt[data-mode="electronegativity"] [data-band="5"] {
+[data-mode="electronegativity"] [data-band="5"] {
   --fill: var(--scale-6);
   --on-fill: var(--on-fill-light);
 }
 
-.pt[data-mode="electronegativity"] [data-band="none"] {
+[data-mode="electronegativity"] [data-band="none"] {
   --fill: var(--scale-none);
   --on-fill: var(--on-fill-dark);
 }
@@ -191,6 +225,60 @@
 .pt__grid[data-isolated] .tile:focus-visible {
   opacity: 1;
   filter: none;
+}
+
+/* -------------------------------------------------------------------------
+   The miniature table.
+
+   The element page shows the whole table small, as a figure: the position of the element the page
+   is about. It is not a control — the tiles keep their links and their colour keys, but the
+   numbers and the names are gone, because a 33px square has room for a symbol and nothing else,
+   and the element it is about is marked with a thinner outline than the full table's.
+
+   Its width is the page's decision, not this file's: the hero gives it a share of its column and
+   this file decides what a tile does once it is that small.
+   ------------------------------------------------------------------------- */
+
+.pt--mini {
+  container-type: inline-size;
+}
+
+.pt--mini .pt__grid {
+  gap: var(--gap-mini);
+  /* The full table scrolls rather than shrinking on a narrow screen; a miniature that is a share
+     of the hero's column must not inherit that floor, or it would be wider than the page. */
+  min-width: 0;
+}
+
+/* Unpainted on purpose: the miniature is a light grid of outlined cells, and the one place the
+   colour of the element is carried is the cell it marks. No fill and no padding, so the hero's
+   wash runs behind the whole grid the way it does in the reference. */
+.pt--mini .tile {
+  /* A compact tile is a single line, so the miniature's cells collapse to one centred row: the
+     full table's stacked rows would leave the symbol resting against the top border. */
+  grid-template-rows: 1fr;
+  align-items: center;
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  border: var(--rule-width) solid var(--border-mini);
+  border-radius: var(--radius);
+}
+
+.pt--mini .tile__z {
+  display: none;
+}
+
+.pt--mini .tile__sym {
+  font-size: var(--type-mini-symbol);
+  letter-spacing: var(--tracking-mini-symbol);
+}
+
+/* The reference marks the page's own element with a white fill of its cell, which is nearly
+   invisible against the pale wash it sits on. Ours draws a thin rule instead: the same fact, and
+   one a reader can actually see. */
+.pt--mini .tile[aria-current="page"] {
+  outline-width: var(--outline-mini-current);
 }
 
 /* The line under the legend, when a page asks for one: what the colours and the

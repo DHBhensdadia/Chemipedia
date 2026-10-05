@@ -148,6 +148,37 @@ const PROBE = `(() => {
       families: ["Inter", "Work Sans", "Faktum", "Helvetica Neue"].filter((family) => document.fonts.check('16px "' + family + '"')),
       body: getComputedStyle(document.body).fontFamily,
     },
+    detail: (() => {
+      /* A comma list inside one selector string would let the document decide which element a
+         metric describes; splitting it keeps the list's order — most specific first — in charge. */
+      const candidates = (selector) => selector.split(",").map((one) => one.trim());
+      const rectOf = (selector) => { const el = first(candidates(selector)); return el ? rect(el) : null; };
+      const describe = (selector, properties) => {
+        const el = first(candidates(selector));
+        if (!el) return null;
+        const s = getComputedStyle(el);
+        const out = { rect: rect(el) };
+        for (const p of properties) out[p] = s[p];
+        return out;
+      };
+      const rows = [...document.querySelectorAll(".properties__row, .facts__row, .el-facts__row")];
+      return {
+        strip: describe(".el-strip, .submenu", ["fontSize", "minHeight", "borderBottomWidth", "borderBottomStyle"]),
+        stripItem: describe(".el-strip__item, .submenu a", ["fontSize", "color", "gap", "display"]),
+        headline: { h1: describe(".el-headline h1, .headline h1", ["fontSize", "lineHeight", "fontWeight", "letterSpacing", "color"]), say: describe(".el-say, .say", ["fontSize", "color", "marginBottom"]) },
+        lede: describe(".el-lede, .lede", ["fontSize", "lineHeight", "color", "maxWidth", "paddingTop", "paddingBottom"]),
+        prose: { box: rectOf(".el-prose, .prose.body-copy"), paragraphs: document.querySelectorAll(".el-prose p, .prose.body-copy > *").length },
+        cols: { shell: describe(".el-cols, .shell.cols", ["display", "gap", "gridTemplateColumns", "flexDirection", "marginTop"]), main: rectOf(".el-main, .col-main"), panel: rectOf(".el-panel, .panel") },
+        counts: { list: describe(".particles, .el-counts, .counts", ["display", "gap", "gridTemplateColumns"]), item: describe(".particles__item, .el-counts li, .counts li", ["padding", "borderWidth", "borderColor", "backgroundColor", "textAlign"]), value: describe(".particles__v, .el-counts li span, .counts li span", ["fontSize", "lineHeight", "color"]), count: document.querySelectorAll(".particles li, .el-counts li, .counts li").length },
+        facts: { box: describe(".properties, .el-facts, .facts", ["padding", "borderWidth", "borderStyle", "borderColor", "marginTop", "borderRadius"]), head: describe(".properties__head, .el-facts__head, .facts__head", ["padding", "marginBottom", "borderBottomWidth", "borderBottomColor", "display", "justifyContent", "gap"]), symbol: describe(".properties__sym, .el-facts__sym, .facts__sym", ["fontSize", "lineHeight", "color"]), row: describe(".properties__row, .el-facts__row, .facts__row", ["padding", "borderBottomWidth", "borderBottomColor", "display", "justifyContent", "gap"]), key: describe(".properties__k, .el-facts__k, .facts__k", ["fontSize", "color"]), value: describe(".properties__v, .el-facts__v, .facts__v", ["fontSize", "color", "textAlign"]), rows: rows.length, labels: rows.slice(0, 40).map((row) => (row.firstElementChild ? row.firstElementChild.textContent.trim() : "")) },
+        card: describe(".el-card, .el-hero__card, .card", ["width", "height", "borderRadius", "borderWidth", "backgroundColor", "color", "padding", "marginBottom"]),
+        mini: { figure: rectOf(".el-hero__table, .hero__table"), cell: describe(".pt--mini .tile, .pt--mini .cell", ["borderWidth", "borderColor", "borderRadius", "padding", "backgroundColor"]), cellSym: describe(".pt--mini .tile__sym, .pt--mini .cell__sym", ["fontSize", "fontWeight", "lineHeight", "letterSpacing"]), caption: rectOf(".el-hero__table figcaption, .pt__caption") },
+        faq: { section: describe(".el-faq, .faq", ["marginTop"]), heading: describe(".el-faq h2, .faq h2", ["fontSize", "fontWeight", "marginBottom", "letterSpacing"]), row: describe(".el-faq__row, .faq__row", ["padding", "borderBottomWidth", "borderBottomColor"]), question: describe(".el-faq__row h3, .faq__row h3", ["fontSize", "fontWeight", "marginBottom"]), answer: describe(".el-faq__row p, .faq__row p", ["fontSize", "lineHeight", "color"]), rows: document.querySelectorAll(".el-faq__row, .faq__row").length },
+        orbital: { figure: describe(".el-orbital, .orbital", ["padding", "borderWidth", "borderStyle", "borderColor", "marginTop", "textAlign", "borderRadius"]), diagram: rectOf(".el-orbital svg, .orbital img"), caption: describe(".el-orbital figcaption, .orbital figcaption", ["fontSize", "color", "textAlign", "marginTop"]) },
+        similar: { section: describe(".el-similar, .similar", ["marginTop", "paddingTop", "paddingBottom", "borderTopWidth", "borderBottomWidth"]), heading: describe(".el-similar h2, .similar__h", ["fontSize", "fontWeight", "marginBottom"]), list: describe(".el-similar ul, .similar ul", ["display", "gap"]), tile: describe(".el-similar li a, .similar li a", ["backgroundColor", "color", "borderRadius"]), z: describe(".el-similar__z, .similar__z", ["fontSize"]), sym: describe(".el-similar__sym, .similar__sym", ["fontSize", "lineHeight"]), name: describe(".el-similar__name, .similar__name", ["fontSize", "lineHeight"]), count: document.querySelectorAll(".el-similar li, .similar li").length },
+        pager: { nav: describe(".el-pager, .pager", ["marginTop", "gap", "display", "justifyContent"]), link: describe(".el-pager a, .pager a", ["display", "gap", "textAlign"]), key: describe(".el-pager__k, .pager__k", ["fontSize", "color", "textAlign"]), name: describe(".el-pager__n, .pager__n", ["fontSize", "lineHeight", "color", "textAlign"]) },
+      };
+    })(),
     counts: {
       tiles: document.querySelectorAll(".pt__grid > *").length,
       chips: document.querySelectorAll(".chip").length,
@@ -163,6 +194,16 @@ const REGIONS = [
   { name: "table", selectors: [".pt__grid", ".pt"] },
   { name: "hero", selectors: ["h1", ".intro__lede"] },
   { name: "finder", selectors: [".element-search", "section.find form", "form"] },
+  { name: "strip", selectors: [".el-strip", ".submenu"] },
+  { name: "card", selectors: [".el-hero__card", ".card"] },
+  { name: "mini", selectors: [".el-hero__table", ".pt--mini"] },
+  { name: "cols", selectors: [".el-cols", ".shell.cols"] },
+  { name: "counts", selectors: [".particles", ".el-counts", ".counts"] },
+  { name: "facts", selectors: [".properties", ".el-facts", ".facts"] },
+  { name: "orbitalBlock", selectors: [".el-orbital", ".orbital"] },
+  { name: "faqBlock", selectors: [".el-faq", ".faq"] },
+  { name: "similar", selectors: [".el-similar", ".similar"] },
+  { name: "pager", selectors: [".el-pager", ".pager"] },
 ];
 
 /** Every measurement field the probe returns, so the report can compare them one by one. */
@@ -184,6 +225,7 @@ const MEASUREMENTS = [
   "finder",
   "fonts",
   "counts",
+  "detail",
 ];
 
 /**

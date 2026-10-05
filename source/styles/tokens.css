@@ -41,6 +41,7 @@
 
   --line: #e4ddd7;
   --line-strong: #cfc5bc;
+  --line-faint: #15403d1a; /* the brand ink at a tenth: the facts panel's interior rules, measured */
 
   --accent: var(--ink);
   --on-accent: var(--ink-inverse);
@@ -65,6 +66,25 @@
   --g-alkaline-earth-metals: #15403d; /* deep pine */
   --g-metalloids: #6e58ac; /* violet */
   --g-halogens: #4c575a; /* grey blue */
+
+  /* The same eleven colours, deepened — the second value each group has on the element detail
+     pages. A group is painted in its own colour on the table's tiles; the page about one of its
+     elements paints the element's card in the deeper value and sets the summary, the pronunciation
+     and the panel's values in it, because a pale group colour fails the contrast rule as text on
+     paper while its deeper value does not. Each value is measured from the reference's own card for
+     one element of that group, and each is checked against the paper colour by
+     tests/components/periodic-table.test.js like every other pairing. */
+  --g-transition-metals-deep: #98683c;
+  --g-actinides-deep: #477f6c;
+  --g-lanthanides-deep: #a65a7e;
+  --g-post-transition-metals-deep: #5c7568;
+  --g-unknown-deep: #816f39;
+  --g-noble-gases-deep: #a85846;
+  --g-non-metals-deep: #5f717a;
+  --g-alkali-metals-deep: #456683;
+  --g-alkaline-earth-metals-deep: #15403d;
+  --g-metalloids-deep: #6e58ac;
+  --g-halogens-deep: #4c575a;
 
   /* -------------------------------------------------------------------------
      3. Orbital block colours — the alternate table view.
@@ -141,6 +161,7 @@
   --rule-solid: var(--rule-width) solid var(--ink);
   --rule-dotted: var(--rule-width) dotted var(--ink); /* the signature motif */
   --rule-hairline: var(--rule-width) solid var(--line);
+  --rule-faint: var(--rule-width) solid var(--line-faint);
 
   --shadow-sm: 0 1px 2px #15403d0f;
   --shadow-md: 0 4px 16px #15403d14;
@@ -301,4 +322,84 @@
   --gap-search-home: var(--sp-2);
   --pad-search-input: var(--sp-3) var(--sp-4);
   --pad-search-button: var(--sp-3) var(--sp-5);
+
+  /* -------------------------------------------------------------------------
+     11. The element detail pages.
+
+     Every value here was measured from the reference's own element page — mostly
+     at 1280px, and the narrow-screen behaviour at 375px — and each one is the
+     family's alone: the band that carries the previous and next elements where
+     the submenu would be, the hero card with the miniature table beside it, the
+     two columns below, and the panels in the sidebar.
+
+     The element's name is the one piece of type the site sets larger than its
+     own scale. The reference sets it at 76.8px on a desktop and 48px on a
+     phone, a step above its home page's heading, so it is a step above ours and
+     switches at the same breakpoint the rest of the site collapses its wide
+     layouts at.
+     ------------------------------------------------------------------------- */
+  --type-jumbo: 3rem; /* 48px; 76.8px above 56rem */
+  --gap-strip-part: 0.4em; /* 5.44px between a name and its atomic number, measured */
+  /* The hero's wash. The reference tints each element page with that element's own category
+     colour: measured across all eleven categories, the wash is that colour at 55% over the paper,
+     softening to 22% by the 45% mark and fading out before the right edge. The miniature table's
+     cells are transparent, so this is what shows through them. */
+  --angle-hero: 292deg;
+  --mix-hero-strong: 55%;
+  --mix-hero-soft: 22%;
+  --stop-hero-mid: 45%;
+  --leading-jumbo: 1; /* the element's name sits on its own size, measured */
+  --tracking-jumbo: -0.01em; /* and is tracked less tightly than a heading: -0.768px at 76.8px */
+
+  --width-hero-card: 240px;
+  --size-card-symbol: 100px;
+  --inset-card-z-block: 14px;
+  --inset-card-z-inline: 16px;
+  --margin-card-overhang: -40px; /* the card hangs past the hero's rule */
+
+  --width-hero-table: 58%; /* the miniature table's share of the hero's inner column */
+  --margin-hero-table: 0 6% 0 0;
+  --gap-mini: 2px; /* the miniature table's hairline between tiles */
+  --border-mini: var(--surface); /* the white line around a miniature tile */
+  --type-mini-symbol: clamp(0.72rem, 2.4cqw, 0.96rem);
+  --tracking-mini-symbol: -0.01em; /* -0.15312px at the reference's 15.312px, measured */
+  --outline-mini-current: 1.5px; /* smaller than the full table's mark on its current tile */
+
+  --pad-hero: var(--sp-4) 0 var(--sp-5); /* 16px 0 24px */
+  --pad-hero-narrow: var(--sp-6) 0; /* 32px 0 below the first breakpoint */
+  --overhang-hero-line: 2px; /* the hero's inner rule sits this far above its border */
+  --pad-body-top: 4.5rem; /* 72px between the hero and the columns */
+
+  --width-panel: 330px;
+  --measure-lede: 19.646em; /* the summary's own measure: 608.56px at 1280 */
+  --leading-lede: 1.35; /* 41.8176px on 30.976px, measured */
+  --height-rule-double: 5px; /* the solid rule over the dotted one: 1 + 3 + 1 */
+  --width-rule-double: 99%; /* and it stops a percent short of the column, measured */
+  --margin-rule: var(--sp-4) 0 0;
+
+  --type-similar-z: 0.62rem; /* 9.92px on a 74px tile, measured */
+  --type-similar-name: 0.6rem; /* 9.6px, measured */
+  --size-similar-tile: 74px;
+  --inset-similar-z-block: 4px; /* the badge's offsets inside a tile, top and right, measured */
+  --inset-similar-z-inline: 6px;
+  --margin-similar: var(--sp-8); /* 64px above, measured; the shell centres it inline */
+  --pad-similar: var(--sp-5) 0; /* 24px inside, measured */
+
+  --margin-pager: var(--sp-7); /* 48px above, measured */
+  --gap-pager-part: 2px; /* between a link's label and the element's name, measured */
+
+  --margin-faq: var(--sp-6); /* 32px above the questions, measured */
+  --pad-faq-row: var(--sp-3) 0; /* 12px above and below a question, measured */
+  --size-diagram: 200px; /* the shell diagram's box */
+  /* The diagram's box in the reference is its image's own 200 x 219.16, and the figure's height
+     follows from it. Ours is drawn square and centres inside the same box. */
+  --ratio-diagram: 200 / 219.16;
+}
+
+/* The element's name takes its larger step once the hero has room for the card and the
+   miniature table side by side. Measured: 48px below the breakpoint, 76.8px above it. */
+@media (min-width: 56rem) {
+  :root {
+    --type-jumbo: 4.8rem;
+  }
 }

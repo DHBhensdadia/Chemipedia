@@ -5,7 +5,7 @@ import { readFile } from "node:fs/promises";
 import { createCategoriesRepository } from "../../scripts/data/categories-repository.js";
 import { createElementsRepository } from "../../scripts/data/elements-repository.js";
 import { createPeriodicTable, renderPeriodicTable } from "../../scripts/components/periodic-table.js";
-import { readableForeground } from "../../scripts/lib/contrast.js";
+import { contrastRatio, meetsAA, readableForeground } from "../../scripts/lib/contrast.js";
 
 /**
  * A stand-in for the browser's fetch that reads the real file from disk.
@@ -329,7 +329,7 @@ test("every fill in every mode takes the foreground the contrast rule chooses", 
   const map = tokenMap();
   const rules = [
     ...tableStyles.matchAll(
-      /\.pt\[data-mode="([\w-]+)"\] \[data-(key|band)="([\w-]+)"\]\s*\{([^}]*)\}/g,
+      /\[data-mode="([\w-]+)"\] \[data-(key|band)="([\w-]+)"\]\s*\{([^}]*)\}/g,
     ),
   ];
 
@@ -348,11 +348,40 @@ test("every fill in every mode takes the foreground the contrast rule chooses", 
   }
 });
 
+test("every group's deeper colour is a pairing too, and legible as text on paper", () => {
+  const map = tokenMap();
+  const rules = [
+    ...tableStyles.matchAll(
+      /\[data-mode="group"\] \[data-key="([\w-]+)"\]\s*\{([^}]*)\}/g,
+    ),
+  ];
+  const paper = resolveColour("var(--bg)", map);
+
+  assert.equal(rules.length, 11, "a group has no deeper colour");
+
+  for (const [, key, body] of rules) {
+    const deep = resolveColour(body.match(/--fill-deep:\s*([^;]+);/)[1], map);
+    const onDeep = resolveColour(body.match(/--on-fill-deep:\s*([^;]+);/)[1], map);
+    const ratio = contrastRatio(deep, paper);
+
+    assert.match(deep, /^#[0-9a-f]{6}$/i, `group/${key} has no deeper colour`);
+    assert.equal(
+      onDeep.toLowerCase(),
+      readableForeground(deep).toLowerCase(),
+      `group/${key}: ${deep} should take ${readableForeground(deep)}, not ${onDeep}`,
+    );
+    assert.ok(
+      meetsAA(ratio),
+      `group/${key}: ${deep} is used as text on ${paper} at ${ratio.toFixed(2)}:1, below AA`,
+    );
+  }
+});
+
 test("the stylesheet covers every key the renderer can emit, and no others", () => {
   const keysByMode = new Map();
 
   for (const [, mode, kind, key] of tableStyles.matchAll(
-    /\.pt\[data-mode="([\w-]+)"\] \[data-(key|band)="([\w-]+)"\]/g,
+    /\[data-mode="([\w-]+)"\] \[data-(key|band)="([\w-]+)"\]/g,
   )) {
     if (!keysByMode.has(mode)) {
       keysByMode.set(mode, new Set());

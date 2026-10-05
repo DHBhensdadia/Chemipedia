@@ -1,0 +1,122 @@
+/* The property panel: one element's labelled facts.
+ *
+ * Measured from the reference's element page at 1280px: a 330px panel with a 1px dotted border
+ * and 2px radius, 16px 8px of padding around the rows, a symbol row closed by a hairline, and rows
+ * that put their label left and their value right with 8px 16px of padding of their own.
+ *
+ * The block has three parts because an element does: the particle counts in their own tiles, the
+ * list of labelled facts, and the discovery block, which is a description list wherever it appears.
+ */
+
+.properties {
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-4) var(--sp-2);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+}
+
+.properties__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-2);
+  padding: 0 var(--sp-3) var(--sp-3);
+  border-bottom: var(--rule-hairline);
+}
+
+.properties__sym {
+  font-family: var(--font-display);
+  font-size: var(--step-3);
+  line-height: var(--leading-tile-symbol);
+  color: var(--fill-deep, var(--ink));
+}
+
+.properties__label {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.properties__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  /* Quieter than the head's rule: the reference draws its interior rules from the ink at a
+     tenth, not from the warm line the surrounding surfaces use. */
+  border-bottom: var(--rule-faint);
+}
+
+/* The last row keeps its hairline: the panel's own padding closes the list, and a rule that
+   disappears on the final row reads as a table that has been cut off. */
+
+.properties__k {
+  color: var(--ink);
+  font-size: var(--step--1);
+}
+
+.properties__v {
+  color: var(--fill-deep, var(--ink-body));
+  font-size: var(--step--1);
+  text-align: right;
+}
+
+/* ---------------------------------------------------------------------------
+   The particle counts.
+
+   Two tiles, not the reference's three: an element's atoms are neutral, so the protons and the
+   electrons are the same count, and the neutron count cannot be worked out from the data without
+   rounding an atomic weight — right for hydrogen, wrong for bromine.
+   --------------------------------------------------------------------------- */
+
+.particles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+.particles__item {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-3) var(--sp-2);
+  background: var(--surface);
+  border: var(--rule-hairline);
+  border-radius: var(--radius);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  text-align: center;
+}
+
+.particles__v {
+  color: var(--ink);
+  font-size: var(--step-2);
+  line-height: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Discovery.
+
+   A description list laid out as two columns: labels sized to the longest of them, values taking
+   the rest. The reference's own gap is 24px between the columns and 8px between the rows.
+   --------------------------------------------------------------------------- */
+
+.discovery {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--sp-5);
+  row-gap: var(--sp-2);
+}
+
+.discovery__row {
+  display: contents;
+}
+
+.discovery__k {
+  color: var(--ink-soft);
+}
+
+.discovery__v {
+  color: var(--ink-body);
+}
