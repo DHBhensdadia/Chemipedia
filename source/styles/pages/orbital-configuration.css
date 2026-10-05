@@ -1,0 +1,106 @@
+/* The orbital configurations page.
+
+   Five sections — the four blocks in the table's own order, then the exception — each a heading
+   with its count, a sentence and a list of elements. A row is two columns: the element on the left
+   at a fixed width, so a configuration always starts at the same place down the page, and the
+   notation beside it, set in the mono face and allowed to wrap when a superheavy element's string
+   runs long.
+
+   The symbol chips are painted by the category key, like every other chip in the site. */
+
+.cfg-hero__lede {
+  max-width: var(--measure-hero);
+  margin: var(--margin-page-lede);
+  color: var(--ink-soft);
+}
+
+.cfg-body {
+  margin-block-start: var(--margin-idx-body);
+}
+
+.cfg__block + .cfg__block {
+  margin-block-start: var(--sp-7);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--rule-dotted);
+}
+
+.cfg__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--step-2);
+}
+
+.cfg__count {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-weight: var(--weight-body);
+}
+
+.cfg__note {
+  margin-block: var(--sp-3) var(--sp-4);
+  color: var(--ink-soft);
+}
+
+.cfg__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cfg__row {
+  display: grid;
+  grid-template-columns: minmax(var(--min-width-cfg-element), var(--width-cfg-element)) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: var(--min-height-cfg-row);
+}
+
+.cfg__row + .cfg__row {
+  border-block-start: var(--rule-faint);
+}
+
+.cfg__element {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.cfg__element:hover .cfg__name,
+.cfg__element:focus-visible .cfg__name {
+  text-decoration-line: none;
+}
+
+.cfg__sym {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-cfg-sym);
+  block-size: var(--size-cfg-sym);
+  border-radius: var(--radius);
+  background: var(--fill-deep, var(--surface-sunk));
+  color: var(--on-fill-deep, var(--ink-inverse));
+  font-weight: var(--weight-bold);
+}
+
+.cfg__name {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.cfg__z {
+  color: var(--ink-faint);
+  font-size: var(--step--1);
+}
+
+/* The configuration is notation rather than prose: the mono face is what makes `[Rn]7s2 5f14` read
+   as a set of subshells instead of as a word. */
+.cfg__notation {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  color: var(--ink);
+}

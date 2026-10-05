@@ -1,0 +1,31 @@
+/* The two ranking pages.
+
+   One stylesheet for both, because the two pages differ in the field they rank and in their copy
+   and in nothing else: the hero, the note and the list are the same. Both routes declare this file
+   in their own `styles` list, which is how a shared page sheet is named in a project with no
+   bundler to resolve one.
+
+   The hero keeps the reference's 240px and the rows keep its 47px rhythm — the row's own
+   measurements are in `bar-ranking.css`, beside the component that draws it. */
+
+.rank-hero {
+  min-height: var(--min-height-rank-hero);
+}
+
+.rank-hero__lede {
+  max-width: var(--measure-hero);
+  margin: var(--margin-page-lede);
+  color: var(--ink-soft);
+}
+
+.rank-note {
+  margin-block-end: var(--sp-5);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.rank-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

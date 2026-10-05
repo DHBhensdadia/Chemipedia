@@ -28,6 +28,8 @@ import { createRouter } from "./router/router.js";
  */
 export const PAGE_BEHAVIOUR = {
   home: (doc) => import("./pages/home.js").then((module) => module.startHome(doc)),
+  "elements-index": (doc) =>
+    import("./pages/elements-index.js").then((module) => module.startElementsIndex(doc)),
 };
 
 /**

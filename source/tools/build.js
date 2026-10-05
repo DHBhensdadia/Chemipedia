@@ -30,6 +30,9 @@ import { siteHeader } from "../scripts/components/site-header.js";
 import { submenu as submenuBand } from "../scripts/components/submenu.js";
 import { attributes, escapeHtml } from "../scripts/lib/html.js";
 import { elementPageValues } from "../scripts/pages/element-detail.js";
+import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
+import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
+import { rankingPageValues } from "../scripts/pages/ranking.js";
 import { footerColumns, isCurrent, primaryNavigation, submenuForSection } from "../scripts/router/navigation.js";
 import { allRoutes, routes, templatePathFor } from "../scripts/router/routes.js";
 import { buildContext } from "./build-context.js";
@@ -81,9 +84,16 @@ const NOT_FOUND_PAGE = {
  * name is missing here renders as its raw template — which is why
  * `tests/tools/render-template.test.js` holds the table, the templates and the modules to each
  * other.
+ *
+ * The two rankings share one renderer because they are one page about two fields: the route
+ * carries the field it ranks, so a second row here is a second ranking page.
  */
 const FAMILY_RENDERERS = {
   "element-detail": elementPageValues,
+  "elements-index": elementsIndexPageValues,
+  "melting-point": rankingPageValues,
+  "boiling-point": rankingPageValues,
+  "orbital-configuration": configurationPageValues,
 };
 
 /**
@@ -102,6 +112,7 @@ async function bodyFor(route, context) {
   }
 
   const values = renderer({
+    route,
     element: route.element,
     elements: context.elements,
     categories: context.categories,

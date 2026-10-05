@@ -126,8 +126,22 @@ Order of sections:
 
 - Submenu: Attributes · Melting Points · Boiling Points · Orbital Configuration · Downloads.
 - Hero: `Elements in the Periodic Table`, sub-paragraph `All 118 elements, ordered by atomic
-  number.`, and a full-width search input with placeholder `Search By Element Name...`.
-- Body: a **two-column** grid of 118 element cards.
+  number.`, and a search input with placeholder `Search By Element Name...`.
+- Body: a grid of 118 element cards.
+
+**Measured 2026-10-05** (1280px and 375px, live):
+
+- Hero: `min-height` 270px. Heading 54.4px / 59.84px with −1.088px tracking. Sub-paragraph 17.6px /
+  28.16px in the soft ink, margins `12px 0 16px`. Search field 420 × 54.14px — 1px dotted ink, 2px
+  radius, white fill, `12px 16px` padding, 17.6px type. At 375px the field is the column's full
+  width (327px) and 51.64px tall; the hero stays 270px.
+- Grid: **four columns** of 266px with 12px row and column gaps at 1280px, starting 32px below the
+  hero; one column of 327px at 375px. 118 cards over 30 rows.
+- Card: 266 × 99.64px — flex row, 12px padding, 12px gap, white, 2px radius. The 54 × 54px tile
+  carries the category fill and the contrasting foreground; its number is 9.6px at `top: 3px;
+  right: 5px`, 0.85 opacity; its symbol 23.2px. The meta column is a grid with a 1px gap: the name
+  at 17.6px / 28.16px in the brand ink, then the category at 13.6px / 21.76px in the soft ink and
+  the weight and state on one line below it (`1.008 · Gas`).
 - Card anatomy (from the live markup):
 
 ```html
@@ -262,6 +276,35 @@ before implementing it, and append findings here.
   to convert between Fahrenheit, Celsius, and Kelvin."* (ours to rewrite).
 - Three numeric inputs that convert live in both directions.
 - Small, self-contained, and a good candidate for the cleanest unit-test suite in the project.
+
+### 3.9 Attribute rankings — `/melting-point`, `/boiling-point`, `/orbital-configurations`
+
+**Measured 2026-10-05.** All three are one skeleton: hero → a shell with a filter field → a table.
+
+- Hero: 240px. Heading 51.2px, plus one sub-paragraph of the reference's own copy.
+- Shell: first element is a filter field, 260 × 46.14px — 1px dotted ink, 2px radius, `8px 12px`
+  padding, 17.6px type, placeholder `Filter by element name…`.
+- Table: 1100px wide, 119 rows (a 38.25px header and 118 data rows of 47px), 13.6px type.
+  Columns, in order:
+  - melting point — Element (364px) · Melting point (°C), right-aligned (257px) · Boiling point
+    (°C), right (251px) · State at 20 °C (227px);
+  - boiling point — the two numeric columns swapped;
+  - orbital configurations — Element (295px) · Configuration (271px) · Electrons per shell (216px)
+    · Block (118px) · Valence, right (199px).
+- Every header is a button carrying `data-sort` and an ↕ affordance. The default order is atomic
+  number, so the reference publishes a **sortable table**, not a ranking.
+- A data row: a row-header link holding a 30px symbol chip in the category's fill, the element's
+  name and its atomic number; right-aligned numeric cells in tabular figures (`-259.2 °C`); then
+  the state word. An element with no measurement prints `Not measured` and stays in atomic order
+  with everything else. Rows carry `data-name`, `data-symbol`, `data-atomicnumber` and the values,
+  which is how the reference's own filter hides them.
+
+**What we take, and what we deliberately change.** The skeleton — hero, one field, one 1100px
+surface, one row per element with the symbol chip, the name and the atomic number on the left — is
+reproduced. The sortable table is not: Phase 6's deliverable is a *ranking*, one order per page,
+with the bar visualisation the implementation plan names, and the project's one word for a missing
+value (`Unknown`) rather than the reference's “Not measured”. The index's hero search is kept, and
+the ranking pages carry no filter of their own.
 
 ---
 
@@ -405,7 +448,8 @@ the information architecture — is reproduced deliberately.
 ## 6. Outstanding audit work
 
 - [ ] Element group pages (`/element-groups/:slug`) — audit before Phase 8.
-- [ ] Melting/boiling point pages — audit before Phase 6.
+- [x] Melting/boiling point pages — audited 2026-10-05; see §3.9, which also covers the orbital
+  configurations page.
 - [ ] Glossary term detail page — audit before Phase 9.
 - [ ] Tablet and mobile layouts — capture breakpoints before Phase 1 signs off.
 - [x] Dark theme — resolved: the reference switches to it at runtime, but its `:root` palette is

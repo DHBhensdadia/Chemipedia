@@ -1,0 +1,26 @@
+<section class="rank-hero">
+  <div class="shell rank-hero__inner">
+    <h1>Boiling points of the elements</h1>
+
+    <p class="rank-hero__lede">
+      The temperature at which each element turns from liquid to gas, in degrees Celsius. The
+      ranking runs from the lowest boiling point to the highest, and the bar beside each value shows
+      where that element sits between the two ends of the page — not a length measured from zero.
+    </p>
+  </div>
+</section>
+
+<section class="rank-body">
+  <div class="shell">
+    <h2 class="visually-hidden">Every element ranked by boiling point</h2>
+
+    <p class="rank-note">
+      {{measured}} of the {{total}} elements have a measured boiling point; the other {{missing}} are
+      listed last, without a bar.
+    </p>
+
+    <ol class="rank-list" data-mode="group" data-ranking>
+{{rows}}
+    </ol>
+  </div>
+</section>

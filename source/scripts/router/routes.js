@@ -23,6 +23,8 @@
  *   title        The document title, written by us.
  *   description  The meta description, written by us.
  *   nav          Optional. The label and order this route takes in the primary navigation.
+ *   ranking      Optional. The field a ranking page orders its elements by, and the direction —
+ *                plain data, so a second ranking of another field is one line here and no code.
  *   section      Optional. Which contextual submenu the page carries, if any. The submenus
  *                themselves live in `navigation.js`, because they are an arrangement rather than a
  *                set of URLs.
@@ -66,6 +68,9 @@ export const routes = [
       "atomic weight and state at room temperature.",
     nav: { label: "Elements", order: 2 },
     section: "elements",
+    // The periodic table's sheet carries the key-to-colour map every surface that shows a category
+    // is painted by, so a page of cards names the same key the table does and gets the same colour.
+    styles: ["styles/components/periodic-table.css", "styles/components/element-card.css"],
   },
   {
     path: "/periodic-table/properties-and-states/",
@@ -108,9 +113,15 @@ export const routes = [
     template: "melting-point",
     title: "Melting points of the elements",
     description:
-      "Every element ranked by melting point, from helium to tungsten, with the values that " +
-      "make the extremes worth knowing.",
+      "Every element ranked by melting point, from helium at the bottom of the scale to carbon " +
+      "at the top, with the values that make the extremes worth knowing.",
     section: "elements",
+    ranking: { field: "meltingPoint", direction: "ascending" },
+    styles: [
+      "styles/components/periodic-table.css",
+      "styles/components/bar-ranking.css",
+      "styles/pages/ranking.css",
+    ],
   },
   {
     path: "/properties/boiling-point/",
@@ -120,6 +131,12 @@ export const routes = [
       "Every element ranked by boiling point, with the elements that are gases, the metals that " +
       "refuse to boil, and the values that need qualifying.",
     section: "elements",
+    ranking: { field: "boilingPoint", direction: "ascending" },
+    styles: [
+      "styles/components/periodic-table.css",
+      "styles/components/bar-ranking.css",
+      "styles/pages/ranking.css",
+    ],
   },
   {
     path: "/properties/orbital-configuration/",
@@ -129,6 +146,7 @@ export const routes = [
       "The electron configuration of every element, grouped by block, with the notation " +
       "explained and the irregularities named.",
     section: "elements",
+    styles: ["styles/components/periodic-table.css"],
   },
   {
     path: "/downloads/",

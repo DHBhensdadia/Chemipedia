@@ -1,0 +1,25 @@
+<section class="idx-hero">
+  <div class="shell idx-hero__inner">
+    <h1>Elements in the periodic table</h1>
+
+    <p class="idx-hero__lede">
+      All 118 elements, in order of atomic number. Search by name, symbol or number.
+    </p>
+
+    <form class="idx-search" action="/elements/" method="get" role="search" data-index-search>
+      <label class="visually-hidden" for="element-filter">Search the elements by name, symbol or atomic number</label>
+      <input class="idx-search__input" id="element-filter" name="q" type="search" placeholder="Name, symbol or atomic number" autocomplete="off" data-index-input>
+    </form>
+
+    <p class="idx-status" role="status" data-index-status>{{status}}</p>
+  </div>
+</section>
+
+<section class="idx-body">
+  <div class="shell">
+    <h2 class="visually-hidden">Every element as a card</h2>
+    <ul class="idx-grid" data-mode="group" data-index-grid>
+{{cards}}
+    </ul>
+  </div>
+</section>

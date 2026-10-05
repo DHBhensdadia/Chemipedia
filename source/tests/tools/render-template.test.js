@@ -4,7 +4,11 @@ import { readFile } from "node:fs/promises";
 
 import { fillTemplate, placeholderKeys } from "../../tools/render-template.js";
 import { elementPageValues } from "../../scripts/pages/element-detail.js";
+import { elementsIndexPageValues } from "../../scripts/pages/elements-index.js";
+import { configurationPageValues } from "../../scripts/pages/orbital-configuration.js";
+import { rankingPageValues } from "../../scripts/pages/ranking.js";
 import { buildContext } from "../../tools/build-context.js";
+import { routes } from "../../scripts/router/routes.js";
 
 const template = await readFile(new URL("../../pages/element-detail.html", import.meta.url), "utf8");
 const notFound = await readFile(new URL("../../pages/404.html", import.meta.url), "utf8");
@@ -65,6 +69,23 @@ test("a filled element page holds no placeholder and carries its blocks", () => 
   assert.match(page, /<section class="el-hero" data-key="non-metals">/);
   assert.match(page, /<h1 class="el-name" id="element-name">Hydrogen<\/h1>/);
   assert.match(page, /<nav class="shell el-pager"/);
+});
+
+test("every page family fills its template, block for block", async () => {
+  const families = [
+    ["elements-index", elementsIndexPageValues, () => ({ elements: context.elements, categories: context.categories, units: context.units })],
+    ["melting-point", rankingPageValues, () => ({ route: routes.find((r) => r.template === "melting-point"), elements: context.elements, units: context.units })],
+    ["boiling-point", rankingPageValues, () => ({ route: routes.find((r) => r.template === "boiling-point"), elements: context.elements, units: context.units })],
+    ["orbital-configuration", configurationPageValues, () => ({ elements: context.elements })],
+  ];
+
+  for (const [name, renderer, options] of families) {
+    const source = await readFile(new URL(`../../pages/${name}.html`, import.meta.url), "utf8");
+    const filled = fillTemplate(source, renderer(options()), { name: `pages/${name}.html` });
+
+    assert.deepEqual(placeholderKeys(filled), [], `${name} kept a placeholder`);
+    assert.ok(filled.trim().length > 0, `${name} filled to nothing`);
+  }
 });
 
 test("the not-found page is a document rather than a template, and fills to itself", () => {

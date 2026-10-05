@@ -1,0 +1,56 @@
+/* The elements index.
+
+   A hero with the heading, one line of context and the filter, then the cards. The hero keeps the
+   reference's own 270px so the grid starts where the reference's does, and the grid resolves to
+   four columns at the shell because its floor is the reference's 266px card — the same floor the
+   reference's grid has, which is what makes its three columns at 1024 and its two at 768 fall out
+   of one line here rather than out of three breakpoints.
+
+   Every measurement is a token. The page's own file owns the hero, the field and the grid; the card
+   itself, and everything inside it, belong to `element-card.css`. */
+
+.idx-hero {
+  min-height: var(--min-height-idx-hero);
+}
+
+.idx-hero__lede {
+  max-width: var(--measure-hero);
+  margin: var(--margin-page-lede);
+  color: var(--ink-soft);
+}
+
+/* The filter is the field the reference draws: a dotted ink rule, a square corner, white behind it.
+   It is full width on a phone and the reference's 420px on a desktop, where a wider field would be
+   a wider target for no gain. */
+.idx-search {
+  max-width: var(--width-idx-search);
+}
+
+.idx-search__input {
+  inline-size: 100%;
+  padding: var(--pad-idx-search);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.idx-status {
+  margin-block-start: var(--sp-3);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.idx-body {
+  margin-block-start: var(--margin-idx-body);
+}
+
+.idx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width-card), 1fr));
+  gap: var(--gap-card);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
