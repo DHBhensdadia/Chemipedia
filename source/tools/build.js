@@ -28,9 +28,12 @@ import { pathToFileURL } from "node:url";
 import { siteFooter } from "../scripts/components/site-footer.js";
 import { siteHeader } from "../scripts/components/site-header.js";
 import { submenu as submenuBand } from "../scripts/components/submenu.js";
-import { escapeHtml } from "../scripts/lib/html.js";
+import { attributes, escapeHtml } from "../scripts/lib/html.js";
+import { elementPageValues } from "../scripts/pages/element-detail.js";
 import { footerColumns, isCurrent, primaryNavigation, submenuForSection } from "../scripts/router/navigation.js";
-import { routes, templatePathFor } from "../scripts/router/routes.js";
+import { allRoutes, routes, templatePathFor } from "../scripts/router/routes.js";
+import { buildContext } from "./build-context.js";
+import { fillTemplate } from "./render-template.js";
 import { NOT_FOUND_FILE, distDir, outputFileForPath, projectRoot, sourceDir } from "./site-paths.js";
 
 /**
@@ -70,16 +73,61 @@ const NOT_FOUND_PAGE = {
 };
 
 /**
+ * The renderers of the generated page families, keyed by the template they fill.
+ *
+ * An authored page is its template; a family is a template plus a module that computes the blocks
+ * the template asks for. The key is the template's own name, so a route says which family it
+ * belongs to by naming a template, and this table says who renders that family. A family whose
+ * name is missing here renders as its raw template — which is why
+ * `tests/tools/render-template.test.js` holds the table, the templates and the modules to each
+ * other.
+ */
+const FAMILY_RENDERERS = {
+  "element-detail": elementPageValues,
+};
+
+/**
+ * The body of a route: its template, filled when a family renderer claims it.
+ *
+ * @param {object} route
+ * @param {{ elements: object[], categories: object[], units: object }} context
+ * @returns {Promise<string>}
+ */
+async function bodyFor(route, context) {
+  const template = await readTemplate(route);
+  const renderer = FAMILY_RENDERERS[route.template];
+
+  if (!renderer) {
+    return template;
+  }
+
+  const values = renderer({
+    element: route.element,
+    elements: context.elements,
+    categories: context.categories,
+    units: context.units,
+  });
+
+  return fillTemplate(template, values, { name: templatePathFor(route) });
+}
+
+/**
  * Wrap authored markup in the document skeleton every page shares.
  *
  * The favicon is the one asset linked from here on its own account. A browser asks for an icon on
  * every page load, so a document that declares none produces a failed request on every page;
  * declaring ours is what keeps the console and network log clean.
  *
+ * The body carries the name of the page's template as `data-page`, and every document links the
+ * one site-wide behaviour module. Both exist for the router: a client-side navigation replaces the
+ * body, and the module that survives it needs to know which page's behaviour to run — one lookup by
+ * name rather than a second set of rules about which URL means which page.
+ *
  * @param {{
  *   title: string,
  *   description: string,
  *   body: string,
+ *   page?: string,
  *   stylesheets?: string[],
  *   header?: string,
  *   submenu?: string,
@@ -91,6 +139,7 @@ export function renderDocument({
   title,
   description,
   body,
+  page = "",
   stylesheets = [],
   header = "",
   submenu = "",
@@ -110,7 +159,7 @@ export function renderDocument({
 <link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
 ${links}
 </head>
-<body>
+<body${attributes({ "data-page": page })}>
 <a class="skip-link" href="#main">Skip to content</a>
 ${header}
 ${submenu}
@@ -118,6 +167,7 @@ ${submenu}
 ${body.trim()}
 </main>
 ${footer}
+<script type="module" src="/scripts/app.js"></script>
 </body>
 </html>
 `;
@@ -151,16 +201,31 @@ export function stylesheetsFor(page) {
 /**
  * The chrome for a page: the masthead, the contextual submenu band, and the footer.
  *
+ * The navigation is taken from the whole manifest, generated routes included, because the one rule
+ * that decides membership is a route declaring a `nav` label — and a family that never declares one
+ * simply never appears.
+ *
  * @param {{ section?: string }} page
  * @param {string} currentPath
+ * @param {object[]} [manifest] the routes the navigation is read from
  * @returns {{ header: string, submenu: string, footer: string }}
  */
-export function shellFor(page, currentPath) {
+export function shellFor(page, currentPath, manifest = routes) {
   return {
-    header: siteHeader({ navigation: primaryNavigation(routes), currentPath, isCurrent }),
+    header: siteHeader({ navigation: primaryNavigation(manifest), currentPath, isCurrent }),
     submenu: submenuBand({ submenu: submenuForSection(page.section), currentPath, isCurrent }),
     footer: siteFooter({ columns: footerColumns }),
   };
+}
+
+/**
+ * The manifest the build renders: everything the site publishes, in one list.
+ *
+ * @param {{ elements: object[] }} context
+ * @returns {object[]}
+ */
+export function manifestFor(context) {
+  return allRoutes(context.elements);
 }
 
 /**
@@ -221,22 +286,25 @@ export async function build() {
   await mkdir(distDir, { recursive: true });
 
   const copied = await copyStaticDirectories();
+  const context = await buildContext();
+  const manifest = manifestFor(context);
   const built = [];
   const skipped = [];
 
-  for (const route of routes) {
+  for (const route of manifest) {
     if (!isReady(route)) {
       skipped.push(route.path);
       continue;
     }
 
-    const body = await readTemplate(route);
+    const body = await bodyFor(route, context);
     const file = outputFileForPath(route.path);
     const document = renderDocument({
       ...route,
       body,
+      page: route.template,
       stylesheets: stylesheetsFor(route),
-      ...shellFor(route, route.path),
+      ...shellFor(route, route.path, manifest),
     });
 
     await mkdir(path.dirname(file), { recursive: true });
@@ -247,8 +315,9 @@ export async function build() {
   const notFound = renderDocument({
     ...NOT_FOUND_PAGE,
     body: await readTemplate(NOT_FOUND_PAGE),
+    page: NOT_FOUND_PAGE.template,
     stylesheets: stylesheetsFor(NOT_FOUND_PAGE),
-    ...shellFor(NOT_FOUND_PAGE, NOT_FOUND_PAGE.currentPath),
+    ...shellFor(NOT_FOUND_PAGE, NOT_FOUND_PAGE.currentPath, manifest),
   });
 
   await writeFile(path.join(distDir, NOT_FOUND_FILE), notFound, "utf8");

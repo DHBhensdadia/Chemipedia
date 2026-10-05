@@ -199,3 +199,48 @@ export const routes = [
 export function templatePathFor(route) {
   return `pages/${route.template}.html`;
 }
+
+/**
+ * The element detail family: one route per element record.
+ *
+ * A hundred and eighteen pages, and not one of them is authored. Each route carries the record it
+ * is about, so the build has everything it needs to fill the family's template without looking
+ * anything up a second time: the URL, the title, the description and the data all come from the
+ * same place, which is the record.
+ *
+ * The path is the element's own slug, not its atomic number or its symbol. A reader who has the
+ * element's name has the URL, and a renamed element — aluminium, caesium, sulfur — keeps a slug
+ * that a person would spell rather than one a formula would.
+ *
+ * @param {object[]} elements every element record, as `elements.json` holds them
+ * @returns {object[]}
+ */
+export function elementRoutes(elements) {
+  return elements.map((element) => ({
+    path: `/elements/${element.slug}/`,
+    template: "element-detail",
+    title: `${element.name} (${element.symbol}) — atomic number ${element.atomicNumber}`,
+    description: element.summary,
+    styles: [
+      "styles/components/element-tile.css",
+      "styles/components/periodic-table.css",
+      "styles/components/property-list.css",
+      "styles/components/shell-diagram.css",
+      "styles/components/faq-block.css",
+    ],
+    element,
+  }));
+}
+
+/**
+ * Everything the site publishes: the authored routes and the generated families.
+ *
+ * One function rather than a spread at each call site, because the build and the tests must agree
+ * about what the site contains, and two spreads in two files is how they come to disagree.
+ *
+ * @param {object[]} elements
+ * @returns {object[]}
+ */
+export function allRoutes(elements) {
+  return [...routes, ...elementRoutes(elements)];
+}

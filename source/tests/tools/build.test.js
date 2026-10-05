@@ -72,6 +72,17 @@ test("a declared sheet that does not exist is skipped rather than linked and 404
   assert.equal(sheets.some((sheet) => sheet.includes("not-a-component")), false);
 });
 
+test("every document links the one app module, once, and names its page", () => {
+  const document = renderDocument({ ...page, page: "element-detail" });
+
+  assert.equal([...document.matchAll(/<script/g)].length, 1, "one script per document");
+  assert.ok(
+    document.includes('<script type="module" src="/scripts/app.js"></script>'),
+    "the app is what survives a client-side navigation and runs the new page's behaviour",
+  );
+  assert.ok(document.includes('<body data-page="element-detail">'), "the body names the page");
+});
+
 test("authored markup is placed inside the main landmark and left alone", () => {
   const document = renderDocument(page);
 

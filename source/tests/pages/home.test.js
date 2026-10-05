@@ -48,7 +48,14 @@ test("the template carries the hosts the page module fills", () => {
   assert.match(template, /id="home-search" data-home-search/);
   assert.match(template, /id="periods-diagram" data-periods-diagram/);
   assert.match(template, /id="groups-diagram" data-groups-diagram/);
-  assert.match(template, /<script type="module" src="\/scripts\/pages\/home\.js"><\/script>/);
+});
+
+test("the template carries no script, so the build links the single app module", () => {
+  assert.doesNotMatch(
+    template,
+    /<script/,
+    "a page script would boot beside the app and, after a client navigation, boot twice",
+  );
 });
 
 test("the explainer links each panel to a page this site publishes", () => {

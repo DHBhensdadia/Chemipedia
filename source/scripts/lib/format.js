@@ -126,3 +126,23 @@ export function formatList(values, format = String, separator = ", ") {
 
   return values.map(format).join(separator);
 }
+
+/**
+ * A phrase with its first letter capitalised, for a value the data stores in lower case.
+ *
+ * The records hold `solid`, `gas` and `hexagonal crystal system`; a sentence begins "Solid" and a
+ * row reads "Gas". Capitalising in the data instead would store one word two ways and leave the
+ * rule that connects them unrecorded, which is the duplication this library exists to prevent.
+ *
+ * @param {unknown} value
+ * @returns {string} the phrase, capitalised, or an empty string when there is nothing to say
+ */
+export function capitalise(value) {
+  const text = String(value ?? "").trim();
+
+  if (text === "") {
+    return "";
+  }
+
+  return text[0].toUpperCase() + text.slice(1);
+}

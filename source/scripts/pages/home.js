@@ -12,15 +12,16 @@
  * to where an element sits moves the diagrams with the table instead of leaving them behind.
  *
  * The template authors the sections and the hosts; this module fills them from the data layer when
- * the page loads. The boot below runs only in a browser, which is what lets the tests import the
- * diagram functions in Node.
+ * the page loads. It is started by `app.js`, which reads the page's name from the body the build
+ * wrote and calls `startHome` — the same call on a cold load and after a client-side navigation,
+ * so there is one way in rather than two that can drift.
  */
 
-import { createCategoriesRepository } from "../data/categories-repository.js";
-import { createElementsRepository } from "../data/elements-repository.js";
 import { attachElementSearch, elementSearch } from "../components/element-search.js";
 import { createPeriodicTable } from "../components/periodic-table.js";
 import { COLUMNS, createGrid } from "../lib/grid.js";
+import { createCategoriesRepository } from "../data/categories-repository.js";
+import { createElementsRepository } from "../data/elements-repository.js";
 
 /** The line under the legend: what the colours and the keyboard are for. */
 export const TABLE_HINT =
@@ -112,10 +113,4 @@ export async function startHome(root = document) {
   if (groups) {
     groups.innerHTML = tableDiagram(all, "group");
   }
-}
-
-if (typeof document !== "undefined" && document.querySelector("[data-home-table]")) {
-  startHome().catch((error) => {
-    console.error("The home page could not read its data", error);
-  });
 }
