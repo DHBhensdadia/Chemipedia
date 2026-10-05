@@ -21,7 +21,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 4 | Home page | `COMPLETE` | `7587a66`..`7837dce`, plus the close-out commit |
 | 5 | Routing and element detail pages | `COMPLETE` | `4763e89`..`2cd6460`, plus the close-out commit |
 | 6 | Elements index and attribute rankings | `COMPLETE` | `6cd3b14`..`44e3493`, plus the close-out commit |
-| 7 | Alternate periodic table views | `NOT_STARTED` | — |
+| 7 | Alternate periodic table views | `COMPLETE` | `a0b0df8`..`d1a4ad4`, plus the close-out commit |
 | 8 | Element group pages | `NOT_STARTED` | — |
 | 9 | Glossary | `NOT_STARTED` | — |
 | 10 | Calculators and secondary pages | `NOT_STARTED` | — |
@@ -776,13 +776,115 @@ The one substantive fix the captures drove: the first browser pass showed grey t
 
 ## Phase 7 — Alternate periodic table views
 
+**Goal:** the same table, answering four different questions.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 7.0 | The reference audit Phase 7 owed | `VERIFIED` | The four views measured live at 1280: the 240px hero (300px on evolution), the 33px band, the body's 32px, the four legends with their counts and every fill read off the tiles, and the discovery that the reference's note sits *under* its table. Appended to `docs/research/01-reference-site-audit.md` §3.5, which also corrects an earlier note that recorded the reference's own sentence as ours. |
+| 7.1 | The discovery era model | `COMPLETE` | `lib/discovery.js`: the century a recorded year falls in, one bucket for the records with no year, the declared order, the counts and the grouped members. `a0b0df8` |
+| 7.2 | The electronegativity derivation | `COMPLETE` | `lib/electronegativity.js`: the measured set, its two ends, the periods that rise at every step, the groups that never rise, and the unbroken tail of records with no value. `a0b0df8` |
+| 7.3 | The engine's fifth mode | `COMPLETE` | `discovery` joins the engine's modes and the stylesheet's key map, and `attachPeriodicTable` is exported so a table the build already wrote can be brought to life without re-rendering it. `a0b0df8` |
+| 7.4 | The era timeline | `COMPLETE` | `components/era-timeline.js` + `.css`: one card per era, its derived span, our sentence, and its elements as chips in the era's colour. `a0b0df8` |
+| 7.5 | The four views | `COMPLETE` | `pages/table-views.js`, the four templates, `styles/pages/table-views.css`, and the token section they read. Each view is a colour mode and its own note; two of them add a section below the table. `d1a4ad4` |
+| 7.6 | The route wiring | `COMPLETE` | Four routes gain the four stylesheets the views need — including the table's sheet, which is where a key becomes a colour — `FAMILY_RENDERERS` gains four entries, and `PAGE_BEHAVIOUR` four page names behind one module. `d1a4ad4` |
+
 **Exit criteria**
 
-- [ ] Four views render correct colour mappings and legend counts.
-- [ ] Continuous scales verified at both domain endpoints and for an out-of-range value.
-- [ ] Each view visually compared against its reference counterpart.
+- [x] Four views render correct colour mappings and legend counts.
+- [x] Continuous scales verified at both domain endpoints and for an out-of-range value.
+- [x] Each view visually compared against its reference counterpart.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+node --test source/tests ............................. tests 369 · pass 369 · fail 0
+node source/tools/build.js ........................... Built 127 routes and the not-found page into dist/
+                                                       6 declared routes still waiting on their templates
+                                                       (was 10; the four this phase built now render)
+node --check on every changed module ................. all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+MIND_MAP completeness over source/ ................... 131 files, 0 missing
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity: Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+
+Served by the dev server and exercised in a real browser (Playwright, system Chrome):
+  all four pages ....................................... 200 · 118 tiles each · no console messages, no
+                                                       failed requests, no 4xx on any asset
+  the legend, computed ................................. state: solid rgb(69,102,131) · liquid rgb(85,153,130)
+                                                       · gas rgb(229,120,96). block: s rgb(69,102,131) ·
+                                                       p rgb(85,153,130) · d rgb(249,170,98) · f rgb(212,115,162).
+                                                       discovery: undated rgb(21,64,61) · 18th rgb(69,102,131)
+                                                       · 19th rgb(85,153,130) · 20th rgb(151,192,170) ·
+                                                       21st rgb(229,120,96). electronegativity: a six-span
+                                                       ramp from rgb(220,233,240) to rgb(21,64,61) with
+                                                       rgb(232,226,220) for no value — the same six tokens
+                                                       and the same grey the reference renders
+  isolation ............................................ pressing a chip dims the grid (opacity 0.22) and
+                                                       leaves exactly that key's tiles bright: solid 104,
+                                                       s-block 14, undated 2; aria-pressed true; released on
+                                                       a second press
+  keyboard ............................................. one tile in the tab order; ArrowRight moves it and
+                                                       the roving tab stop stays single; the tab order runs
+                                                       skip link → wordmark → the five navigation items,
+                                                       every one with a 2px outline
+  no horizontal overflow ............................... at 1280 / 768 / 375 on all four pages; below 56rem
+                                                       the table scrolls and below 35rem the tile names drop
+  reduced motion ....................................... tile, chip and main transitions 1e-05s
+  accessibility bones .................................. one h1, five or six h2, six landmarks
+  the evolution timeline ................................ six cards, 2/20/47/31/5/13 elements, ranges
+                                                       1669–1670 · 1735–1798 · 1801–1899 · 1900–1998 ·
+                                                       2000–2010 · no recorded year
+
+Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
+  properties-and-states vs the reference's states ..... page 10.24% / 21.12% / 22.73%
+    table crop 8.94% / 12.06% / 7.26% · legend 17.66% (three chips against its four, and different counts)
+  orbitals ............................................. page 6.64% / 20.65% / 25.05%
+    table crop 4.16% / 6.86% / 5.72% · legend 13.38%
+  electronegativity .................................... page 3.52% / 18.05% / 19.22%
+    table crop 2.82% / 5.49% / 2.70% · the scale legend 1.8% — the same bar at the same size
+  evolution ............................................ page 15.64% / 28.45% / 20.46%
+    table crop 7.70% / 8.99% / 6.16% · timeline 9.23% / 12.52% / 15.09% · legend 54.06% (our six eras against
+    its six, with different boundaries and different labels)
+  alignment at 1280 .................................... our legend lands at y364, the reference's own y364;
+                                                       the grid within 2.1px of the reference's on three views
+                                                       and 23.8px above it on the evolution view
+  colour agreement, tile by tile ....................... states 104/118 · orbitals 114/118 ·
+                                                       electronegativity 113/118 · evolution 109/118
+                                                       (each view's residual differences are recorded below)
+
+Regression check on an earlier phase (the same harness, the same width):
+  the home page at 1280 ............................... viewport 4.87%, table crop 2.28%, hero 6.80% and
+                                                       finder 12.00% — Phase 4's own numbers exactly
+```
+
+**Appearance — captured and inspected**
+
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | Four pages that are the same picture in four colourings: a hero over a legend and the full table, then the note. The gas tiles coral and the solids slate where the reference has them, the two liquids sage; the s-block slate, p sage, d orange, f pink; the scale a single ramp from the palest blue to the deepest pine with fluorine the only tile at its end; and on the evolution view the same table in six century colours with a card per era beneath it. | Its legend sits at the same y as ours and its grid within 2.1px on three views. It has one more state chip than we do (it files 14 superheavies as unknown), two fewer s-block and two more d-block, five more records with an electronegativity, and its own era set. Its note is one line of its own words below the table, as ours is above none. |
+| 768 px | The same four pages with the table in a horizontal scroller that keeps its 65px tiles rather than shrinking them, and every page's content ~31px above the reference's. | The reference's masthead wraps its search field onto a second row at this width and ours does not — the Phase 2 deviation, unchanged, and the whole of the vertical difference. |
+| 375 px | One column, the table scrolling sideways with its edge fades, the tile names dropped, the evolution timeline's cards stacked, the electronegativity ends list a row per line. | Our table sits 123–169px lower because our headings are the routes' own longer titles at the site's display size, while the reference shrinks its own three-word view headings to 33.6px. Recorded below rather than chased. |
+
+What the captures drove: the first build put each view's note between the legend and the grid, which is where the home page's helper line lives. The reference puts its note *under* the table, and the paragraph's own height moved our grid 224px down the page and made the comparison meaningless. Moving the note below the table and giving the legend the reference's 24px gap brought our legend to the reference's own y and the grid to within 2px at 1280.
+
+The audit also corrected three colour facts and one attribution. The orbital block palette is four of the reference's own group colours (our p-block had been a fifth colour, and now points at the actinide sage the reference uses); the electronegativity ramp and its grey are the six tokens and the `--scale-none` our own scale legend already prints; and the era colours now take the colour the reference gives the same century, which took the evolution view's tile-by-tile agreement from 6/118 to 109/118. The earlier audit had recorded the reference's orbitals sentence as "our own wording" — it is the reference's, and ours had to be written afresh.
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **The eras are the centuries our own data's years fall in, not the reference's.** | The reference's first bucket is *Antiquity* — the seven metals its data lists with no discoverer — and its second is *Alchemical era*. We cannot derive that split: elements its dataset dates (carbon 1789, sulphur 1777, aluminium, calcium, arsenic 1250) carry no year in ours at all, so our undated bucket holds both the prehistoric metals and five elements a named chemist isolated in the eighteenth or nineteenth century. Calling all thirteen ancient would assert what the data does not say, so the bucket is named for what it is and placed last. |
+| **Centuries, not the plan's decades.** | The plan asked for a colour by decade of discovery. Our years run from 1669 to 2010 and fall in thirty-one decades; thirty-one legend chips is a chart, not a legend, and the reference groups its own evolution view into six eras for the same reason. |
+| **The reference's state counts are not ours.** | It prints Solid 90 · Liquid 2 · Gas 12 · Unknown 14. Our dataset holds a state for every one of the 118 (104 solid, 2 liquid, 12 gas), so our legend has no unknown chip — the same three-count legend, from the same records the tables are drawn from. |
+| **The reference's block counts are not ours either.** | It prints s 12 · p 38 · d 40 · f 28; our records file helium under s (its configuration ends in 1s) and lanthanum and actinium under f, giving 14 · 36 · 38 · 30. Both are internally consistent and both add up to 118; ours follows the record's own block field, which is what the page's note says. |
+| **Every view says what its legend does.** | The reference teaches the isolation on its evolution view only. Ours ends each note with one sentence — "Point at a state to pick its elements out of the table" — because a reader who arrives on a view page from the submenu has not seen the home page's helper line. |
+| **The views keep the tab's title as their heading.** | The reference's three short view headings are 51.2px at 1280 and 33.6px at 375, smaller than its own display size and shorter than ours. Ours is the route title at the site's one page-heading size, so a page has one name in the tab, in the navigation and on the page — at the cost of a taller hero on a phone. |
+| **A hero's band excludes the page's own top spacing.** | The reference's 240px hero band contains the 56px between its submenu and its first heading; ours is `main`'s, which every family pays. The views' token is the reference's band less that spacing, which is what puts the legend on the reference's own y rather than 48px below it. |
+
+**Commits:** `a0b0df8` (the era model, the electronegativity derivation, the fifth mode and the timeline), `d1a4ad4` (the four views and their wiring), plus the close-out commit.
 
 ---
 
