@@ -194,6 +194,10 @@ const REGIONS = [
   { name: "table", selectors: [".pt__grid", ".pt"] },
   { name: "hero", selectors: ["h1", ".intro__lede"] },
   { name: "finder", selectors: [".element-search", "section.find form", "form"] },
+  // The elements index: our grid of cards, the reference's own card grid.
+  { name: "cards", selectors: [".idx-grid", ".grid"] },
+  // A ranking: our list of bars, the reference's table.
+  { name: "ranks", selectors: [".rank-list", "main table"] },
   { name: "strip", selectors: [".el-strip", ".submenu"] },
   { name: "card", selectors: [".el-hero__card", ".card"] },
   { name: "mini", selectors: [".el-hero__table", ".pt--mini"] },

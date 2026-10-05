@@ -20,7 +20,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 3 | Periodic table engine | `COMPLETE` | `bf1d8e3`..`2f06018`, plus the close-out commit (`b7201a0`); visual criterion closed by `1db2fc7` |
 | 4 | Home page | `COMPLETE` | `7587a66`..`7837dce`, plus the close-out commit |
 | 5 | Routing and element detail pages | `COMPLETE` | `4763e89`..`2cd6460`, plus the close-out commit |
-| 6 | Elements index and attribute rankings | `NOT_STARTED` | — |
+| 6 | Elements index and attribute rankings | `COMPLETE` | `6cd3b14`..`44e3493`, plus the close-out commit |
 | 7 | Alternate periodic table views | `NOT_STARTED` | — |
 | 8 | Element group pages | `NOT_STARTED` | — |
 | 9 | Glossary | `NOT_STARTED` | — |
@@ -671,13 +671,106 @@ The router, in a real browser ................ cold links; next-next; Back; Forw
 
 ## Phase 6 — Elements index and attribute rankings
 
+**Goal:** the browse-and-compare surfaces: the index of 118 cards and the three attribute pages.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 6.0 | The reference audit Phase 6 owed | `VERIFIED` | The index's card anatomy and grid, and the three attribute pages' skeleton, measured live at six widths and appended to `docs/research/01-reference-site-audit.md` (the index's own section corrected to the measured four columns, and a new §3.9 for the rankings). |
+| 6.1 | The configuration lib | `COMPLETE` | `lib/electron-configuration.js`: the shorthand expanded through the noble gases' records, the Madelung prediction, and the subshells where the two differ. `6cd3b14` |
+| 6.2 | The card and the ranking row | `COMPLETE` | `components/element-card.js` + `.css`, `components/bar-ranking.js` + `.css`, and the token sections they read. `e93c31f` |
+| 6.3 | The elements index | `COMPLETE` | 118 cards written at build time, the filter over them, the status line, and the `?q=` the home finder submits. `44e3493` |
+| 6.4 | The two rankings | `COMPLETE` | One module behind both, the field carried by the route, the order taken from the repository's own comparison, and the bar's scale in the component. `44e3493` |
+| 6.5 | The configurations page | `COMPLETE` | The four blocks in the table's order, a sentence each, and the derived list of the nineteen elements that fill differently. `44e3493` |
+| 6.6 | The route wiring | `COMPLETE` | Four templates join the manifest's ready set; `FAMILY_RENDERERS` gains four entries; the index joins `PAGE_BEHAVIOUR`. |
+
 **Exit criteria**
 
-- [ ] Search filters on name, symbol and atomic number.
-- [ ] Rankings monotonic; unknown values sort last; extremes spot-checked.
-- [ ] All 118 cards render and link correctly.
+- [x] Search filters on name, symbol and atomic number.
+- [x] Rankings monotonic; unknown values sort last; extremes spot-checked.
+- [x] All 118 cards render and link correctly.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+node --test source/tests ............................. tests 320 · pass 320 · fail 0
+node source/tools/build.js ........................... Built 123 routes and the not-found page into dist/
+                                                       10 declared routes still waiting on their templates
+                                                       (was 14; the four this phase built now render)
+node --check on every changed module ................. all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+git worktree add /tmp/phase6-check <commit> .......... 6cd3b14: 284 pass · e93c31f: 298 pass · 44e3493: 320 pass
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity: Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+
+Served by the dev server and exercised in a real browser (Playwright, system Chrome):
+  /elements/ .......................................... 200 · 118 cards · no console messages, no failed requests
+    hero 270px · heading 54.88px · filter 420 × 54.14px — 1px dotted ink, 2px radius, 12px 16px,
+    17.6px type — which is the reference's own field to the pixel
+    grid: four 266px columns with 12px gaps at 1280; two 354px at 768; one 327px at 375. Matches the
+    reference at every width measured, out of one auto-fill line rather than three breakpoints
+    card: 266 × 97.64px (the reference's is 266 × 99.64) · tile 54px carrying the category fill
+    filter: "hyd" → 1 card · "79" → gold · "zzz" → none · cleared → 118 · the status line says which
+    /elements/?q=iron ................................... the field prefilled, one card left, status honest
+  /properties/melting-point/ .......................... 118 rows of 47px, monotonic, helium first at
+                                                       −272.2 °C and carbon last at 3549.85 °C, 15 unmeasured last
+  /properties/boiling-point/ .......................... 118 rows, helium first at −268.93 °C, rhenium last
+                                                       at 5595.85 °C, 25 unmeasured last
+  the bar ............................................. 2.0% of the track at the floor, 100% at the top
+  /properties/orbital-configuration/ .................. five sections — 14, 36, 38 and 30 elements, then the
+                                                       19 exceptions — 137 rows, every configuration printed
+  no horizontal overflow .............................. at 1280 / 768 / 375 on all four pages
+  tab order on the index ............................... 8 stops, every one with a 2px visible outline
+  in-app navigation .................................... index card → hydrogen (one script, data-page
+                                                       element-detail) · Back → 118 cards with the filter
+                                                       reattached and working · a ranking row → helium
+  reduced motion ....................................... card and bar transitions 0.16s → 1e-05s
+  accessibility bones .................................. one h1, ten h2, six landmarks, the filter labelled,
+                                                       role=status on the count, one current navigation item
+
+Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
+  /elements/ vs /elements ............................ viewport 9.27% / 5.26% / 9.18%
+    heading 54.88px against the reference's 54.4px, 11px lower — the site's own main padding
+    lede one line at 28.14px, the same as the reference's; filter identical in every measured property,
+    11.2px lower; card 266 × 97.64 against 266 × 99.64
+    crops: heading 9.9%, masthead search 7.19% (the Phase 1 reserved-underline decision), submenu 5.18%
+    document 4172px against the reference's 4354px — 30 rows two pixels shorter, plus its margins
+  /properties/melting-point/ vs /melting-point ...... viewport 5.3% / — / 8.38%
+    document 6447px against 6660px; rows the same 47px; the reference's sortable table is not reproduced
+    (the index and ranking captures are in workspace/screenshots/{elements-index,ranking-melting}/)
+
+Regression check on an earlier phase (the same harness, the same width):
+  the home page at 1280 .............................. viewport 4.87%, table crop 2.28%, hero 6.80% and
+                                                       finder 12.00% — Phase 4's own numbers exactly, so
+                                                       the new token sections, the repository's exported
+                                                       comparison and the build's renderer table took
+                                                       nothing away from it
+```
+
+**Appearance — captured and inspected**
+
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | The index's hero with one line of context and the filter, then four columns of cards, each a white panel with its tile on the left and three lines of words beside it; the ranking's 118 rows with a place, the element, a bar and the value; the configurations page's five sections with the notation in the mono face. | The reference's card is 2px taller; its heading 0.48px smaller and 11px higher; its masthead search 2.75px taller. Everything else measured matches. |
+| 375 px | The index's single column of full-width cards, the filter across the column; the ranking's rows as two lines, the bar running the full width under the element and its value. | The reference's ranking keeps a 520px table inside a horizontal scroller; ours stacks, which is a recorded decision. Its index keeps four columns' worth of card at 327px wide — the same single column as ours. |
+
+The one substantive fix the captures drove: the first browser pass showed grey tiles, because the key-to-colour map lives in `periodic-table.css` and the four new routes had not declared it. Declaring it on each route — the same sheet the element pages link for their hero and cards — restored the category colours, and the tile colours then measured as the four first elements' groups.
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **The rankings are rankings, not sortable tables.** | The reference publishes a sortable, filterable table for each attribute. The plan's deliverable for these pages is "elements ranked, with a bar visualisation of relative magnitude", so ours has one order per page, the bar it asks for, and no column controls. The index carries the site's element search instead. |
+| **The bar is an ordinal scale, not a length from zero.** | Most melting points in degrees Celsius are negative, so a bar drawn from zero would be a bar about a unit's origin rather than about the elements. The bar shows where a value sits between the page's own lowest and highest, the lowest keeps 2% of the track so it is visible, and the note above the list says so in a sentence. |
+| **An unmeasured element says "Unknown".** | The reference prints "Not measured". Ours is the project's one word for not knowing, the same word the property panel and the FAQ use. |
+| **The index's lede is one sentence.** | The reference's copy is its own. Ours is shorter — and shorter by measurement, not by accident: the longer version wrapped to two lines and pushed the filter 39px below the reference's, so the copy was cut to the one line the reference keeps. |
+| **The index has a status line.** | Neither page of the reference says how many of its cards are left after a filter. A filter that hides 106 of 118 without a word leaves a reader wondering whether the page broke. |
+| **The configurations are printed as the records hold them.** | The source lists iron as `[Ar]4s2 3d6` and chromium as `[Ar]3d5 4s1`. Normalising the term order would be a second opinion about notation that the data's own source does not share, so the page prints what the record says. |
+| **The configurations page names the exceptions.** | The reference's page is a table with a Block column and no narrative. Ours derives the nineteen elements whose configurations differ from the predicted filling order and lists them, which is what the route's own description promised the page would do. |
+
+**Commits:** `6cd3b14` (the configuration lib), `e93c31f` (the card and the bar), `44e3493` (the four pages and their wiring), plus the close-out commit.
 
 ---
 
@@ -781,6 +874,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-05 | 5 | Deviation | **The element page's hero is tinted by the element's own category colour**, which the earlier hydrogen-only measurement had recorded as one fixed blue wash. | Fixed in `2cd6460` after the iron capture measured the reference at all eleven categories: the wash is the category colour at 55% and 22%, mixed through `--fill`, the same key the table paints tiles from. Hydrogen 3.60%→3.57%, iron 11.94%→3.53% of the viewport. |
 | 2026-10-05 | 5 | Fixed | **The router did not carry the arriving page's name.** `swap()` replaced the body's children but left the live `<body data-page>` from the page we came from, so a client-side navigation to the home page would have arrived with its table and finder never started; replacing the children also took the running app module out of the document. | Both fixed in `4763e89` and covered by `tests/router/router.test.js`: the page's name travels with the swap, and the running scripts are carried across while the incoming ones are still refused. Verified in a browser: home boots its table after an in-page navigation, and the DOM still holds the one app module afterwards. |
 | 2026-10-05 | 5 | Deviation | **What still differs from the reference on an element page, and why it never will match exactly.** | Recorded rather than chased, each in the Phase 5 deviations table: the typeface and the copy (brand and provenance rules), two particle tiles instead of three and 27 property rows instead of 30 (both with reasons in the code), a visually hidden figure caption and a rule rather than a white fill on the current cell (accessibility and legibility), the masthead's reserved underline, and the reference's phone-only shift and square diagram asset. Every box that can be measured matches. |
+| 2026-10-05 | 6 | Data observation | **Two promises the data disagreed with.** The melting-point route's description said the ranking runs "from helium to tungsten", and the dataset's highest melting point is carbon's 3549.85 °C — tungsten's 3422 °C is second. Separately, the source orders its configuration terms by its own convention, so iron is `[Ar]4s2 3d6` and chromium `[Ar]3d5 4s1`. | The description was corrected to "from helium at the bottom of the scale to carbon at the top" in `44e3493`, and `tests/pages/ranking.test.js` now holds both rankings' extremes. The configuration strings are printed as the records hold them, recorded as a deviation above rather than normalised. |
+| 2026-10-05 | 6 | Fixed | **The new pages' tiles came out grey.** The key-to-colour map lives in `styles/components/periodic-table.css`, and the four routes this phase added declared their own sheets but not that one, so `--fill` resolved to nothing and every card's tile, every ranking chip and every configuration chip fell back to the sunken surface. | Fixed in `44e3493` by declaring the table's sheet on the four routes, as the element pages already do. Caught by measuring the computed background colour in a browser rather than by reading the markup, which is why the check is in the verification block. |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---
