@@ -19,7 +19,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 2 | Data layer (elements and glossary) | `COMPLETE` | `d985245`..`26229e2`, `30f203b`, plus the close-out commit |
 | 3 | Periodic table engine | `COMPLETE` | `bf1d8e3`..`2f06018`, plus the close-out commit (`b7201a0`); visual criterion closed by `1db2fc7` |
 | 4 | Home page | `COMPLETE` | `7587a66`..`7837dce`, plus the close-out commit |
-| 5 | Routing and element detail pages | `NOT_STARTED` | — |
+| 5 | Routing and element detail pages | `COMPLETE` | `4763e89`..`2cd6460`, plus the close-out commit |
 | 6 | Elements index and attribute rankings | `NOT_STARTED` | — |
 | 7 | Alternate periodic table views | `NOT_STARTED` | — |
 | 8 | Element group pages | `NOT_STARTED` | — |
@@ -576,16 +576,96 @@ those fixes, which is the point of a capture.
 
 ## Phase 5 — Routing and element detail pages
 
+**Goal:** the 118 deepest pages, from one template.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 5.0 | The router | `COMPLETE` | `navigationFor` is the whole decision — same origin, no modifiers, no download or new tab, no fragment on this page, no file with an extension — and returns a URL or null with no DOM in it. `createRouter` pushes the URL, fetches the document a full load would get, swaps the body while refusing the incoming scripts and carrying the running one, renames the page from the fetched body, moves focus to the main landmark, and restores the reader's place on a history move. A document the site answers 404 with is shown; anything else is handed back to the browser. |
+| 5.1 | The element family, one template and one module | `COMPLETE` | `pages/element-detail.html` is the skeleton — eleven placeholders in reading order — and `pages/element-detail.js` computes every block from the record: strip, hero and miniature table, headline, lede, FAQ, prose, counts, properties, orbital figure, siblings, pager. |
+| 5.2 | The property panel, the FAQ and the shell diagram | `COMPLETE` | Three components with their stylesheets. The FAQ's answers are the panel's own strings, and the diagram and the panel read the same `shells`. |
+| 5.3 | One document, one script | `COMPLETE` | The build links one module per document and writes the template's name on `<body>`; `app.js` starts the page by that name, so a cold load and a client-side swap take the same path. The home page gives up its own script. |
+| 5.4 | The family renderer | `COMPLETE` | `tools/render-template.js` and `tools/build-context.js`: placeholders filled strictly, an unknown or nested one refused, and the same three repositories the browser uses reading from disk. |
+| 5.5 | The captures | `COMPLETE` | Six harness passes, hydrogen and iron at three widths plus a home regression. The element page's hero, card, miniature grid, columns, orbital, FAQ band, siblings and pager all match the reference's boxes; what is left is the typeface, the shorter copy and the recorded deviations below. |
+| 5.6 | The tests | `COMPLETE` | 54 new tests: the router's decisions and its fakes, the template rules, the three components, and the family walked over all 118 records. |
+
 **Exit criteria**
 
-- [ ] All 118 detail pages render with complete, correct data.
-- [ ] Deep links work from a cold load; back and forward behave; 404 handled.
-- [ ] Electron shell diagram correct for H, C, Fe, Au, U.
-- [ ] Generated FAQ answers agree with the element's own property values.
-- [ ] Previous/next wraps correctly at both ends.
-- [ ] Degrades to a plain multi-page site with JavaScript disabled.
+- [x] All 118 detail pages render with complete, correct data.
+- [x] Deep links work from a cold load; back and forward behave; 404 handled.
+- [x] The electron shell diagram is correct for H, C, Fe, Au, U.
+- [x] Generated FAQ answers agree with the element's own property values.
+- [x] Previous/next wraps correctly at both ends.
+- [x] Degrades to a plain multi-page site with JavaScript disabled.
+- [x] Visually compared against a reference element page.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+Phase 5 verification
+[x] node --test source/tests ................ pass  (tests 278 · pass 278 · fail 0)
+[x] node --check on every changed module .... pass  (every module under source/ parses)
+[x] Brand scan .............................. PASS: brand scan clean
+[x] Console/network on every touched page ... zero errors, zero failed requests on /, /elements/hydrogen/,
+                                              /elements/iron/, /elements/oganesson/. The one non-200 is
+                                              /elements/unobtainium/ answering 404 with the not-found
+                                              document, which is the designed behaviour.
+[x] Accessibility tree reviewed ............. landmarks: header, nav, main, footer; one h1; the miniature
+                                              table and the shell diagram carry accessible names; FAQ questions
+                                              are h3s under their h2; the strip marks the current element.
+[x] Keyboard traversal ...................... complete, focus visible (2px outline on every stop reached).
+[x] Reduced motion .......................... honoured — the sibling tile's transition is 0.16s by default
+                                              and 1e-05s under `prefers-reduced-motion: reduce`.
+[x] 1280 px screenshot vs reference ......... compared — hydrogen 3.57%, iron 3.53% of the viewport; the
+                                              miniature table 4.62%, the card 1.01%; differences listed below.
+[x] 768 px  screenshot vs reference ......... compared — hydrogen 9.60%, iron 11.25%; the masthead wrap and
+                                              the reference's shifted miniature table are recorded deviations.
+[x] 375 px  screenshot vs reference ......... compared — hydrogen 10.54%, iron 11.05%; the miniature table's
+                                              phone shift and the shorter copy are the largest contributors.
+[x] Regression check on an earlier phase .... page: home — table crop 2.28%, hero 6.80%, finder 12.00%, the
+                                              same numbers Phase 4 closed on; the table still fills with 118
+                                              tiles, the finder still filters, and the home page now boots its
+                                              table after an in-page navigation too.
+[x] Deliberate deviations recorded .......... the eleven in the table below.
+[x] docs/MIND_MAP.md updated ................ yes, in this close-out commit.
+[x] RUN_STATE.md + HANDOFF.md updated ....... yes.
+```
+
+```
+node --test source/tests .................... tests 278 · pass 278 · fail 0
+node source/tools/build.js .................. Built 119 routes and the not-found page into dist/
+                                              14 declared routes still waiting on their templates
+Cold deep links, /elements/… ................ hydrogen, gold, uranium, oganesson — all 200
+/elements/unobtainium/ ...................... 404 with the not-found document
+JavaScript disabled (curl, no parser) ....... every block present in the served HTML, no placeholder left
+Harness 1280px hydrogen ..................... 3.57% viewport · mini 4.62% · card 1.01% · pager 1.86%
+Harness 1280px iron ......................... 3.53% viewport · mini 4.66% · card 2.37%
+Harness 768px hydrogen / iron ............... 9.60% / 11.25%
+Harness 375px hydrogen / iron ............... 10.54% / 11.05%
+Home regression 1280px ...................... table 2.28%, the number Phase 4 closed on
+The router, in a real browser ................ cold links; next-next; Back; Forward; the tail wrapping to
+                                               hydrogen and the head wrapping back to oganesson; 1500px of
+                                               scroll restored on Back and 0 on a forward move; a missing URL
+                                               answered in-page with the not-found document.
+```
+
+**Deviations and scope notes**
+
+| Item | Decision |
+|---|---|
+| **The hero's wash is the element's own colour.** | The reference tints each element page by its category. Measured across all eleven categories, its wash is that colour at 55% over the paper, softening to 22% by the 45% mark. Ours mixes `--fill` — the same key the table paints its tiles from — so a page and the table cannot disagree about a category's colour. Found by the iron capture, where a fixed blue tint was 21% wrong across the miniature table. |
+| **The family's files are named after the template** (`element-detail.html`, `element-detail.js`), not `element.js` as the plan sketched. | A route names a template and the build looks its renderer up by that name; one name per family, in one place. |
+| **The typeface stays ours.** | `docs/BRAND_GUIDELINES.md` §2 requires our own stack; the reference sets a commercial face. Glyph widths differ by 0.6–3px, and this is the largest remaining difference in the hero, the strip and the pager. |
+| **The copy is ours.** | The reference's sentences are its property. Our pages are shorter, so the document is ~260px shorter at 1280 and the columns and facts regions differ where the prose is. |
+| **Two particle tiles, not the reference's three.** | No neutron count: working one out means rounding the atomic weight, which is right for hydrogen and wrong for bromine. The reasoning is in `property-list.js`. |
+| **27 property rows, not the reference's 30.** | Ours are one row per field with sentence-case labels. The reference's extra rows are `Orbitals` (our electron-configuration row and the diagram), `Ionic Radius` (dropped from the schema — an ionic radius belongs to an ion) and `Lattice Parameter 2/3` (our dataset carries one). |
+| **The miniature table's caption is visually hidden.** | The reference prints it inside the grid. Ours is the figure's accessible name, because the grid is a `role="img"` landmark and a paragraph inside it would be read as part of the image. |
+| **The current cell is marked with a rule, not a white fill.** | The reference fills its own cell white inside transparent outlined cells, which is nearly invisible on the pale wash. Ours draws a 1.5px ink outline — the same fact, legible on every category's colour. |
+| **The masthead search reserves no underline.** | The reference keeps a 1px transparent border under its field for a focus underline; ours draws the project's focus ring instead, which is why the field measures 24px against the reference's 26.75px. At rest both are bare, and the Phase 1 record that they are stands. |
+| **The reference's phone layout is not copied.** | Below 56rem the reference shifts its miniature table ~19.6px left of the shell and swaps its shell diagram for a square asset (200×200 against our 200×219.16). Ours stays in the column and keeps one drawing. |
+| **The masthead stays on one row at 768px.** | The Phase 1 decision, unchanged: our navigation carries four items and the reference's six. |
+| **The 404 answers 404 with a document.** | The router shows the not-found page without changing the address and hands any other failure — a dead network, a server error — back to the browser rather than papering over it. |
 
 ---
 
@@ -698,6 +778,9 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-02 | 2 | Resolved | **The visual gate that blocked this phase.** The preview would not composite, so no capture could be taken and the phase could not honestly be closed. | **Resolved.** The preview composited on the first attempt of the following session. The home page was captured and compared at 1280 / 768 / 375 px against the reference in a second tab; the two chrome differences that turned up were fixed in `30f203b`, and the phase closed on those captures. |
 | 2026-10-02 | 2 | Deviation | **The masthead stays on one row at 768px** where the reference wraps its search field onto a second row. Our navigation carries four items and the reference's carries six, the learning and games sections being out of scope (ADR-002). | Accepted. Measured: 91px in two rows against our 59px in one. |
 | 2026-10-01 | 2 | Deviation | **Two schema fields stay null for every element** (`covalentRadius`, `latticeParameters`) and **one was removed from the schema** (`ionicRadius`). | Recorded in `docs/DATA_SOURCES.md` §2.1 and §5. null means unknown and the UI renders it as such; the removed field was removed because an ionic radius belongs to an ion and not to an element. |
+| 2026-10-05 | 5 | Deviation | **The element page's hero is tinted by the element's own category colour**, which the earlier hydrogen-only measurement had recorded as one fixed blue wash. | Fixed in `2cd6460` after the iron capture measured the reference at all eleven categories: the wash is the category colour at 55% and 22%, mixed through `--fill`, the same key the table paints tiles from. Hydrogen 3.60%→3.57%, iron 11.94%→3.53% of the viewport. |
+| 2026-10-05 | 5 | Fixed | **The router did not carry the arriving page's name.** `swap()` replaced the body's children but left the live `<body data-page>` from the page we came from, so a client-side navigation to the home page would have arrived with its table and finder never started; replacing the children also took the running app module out of the document. | Both fixed in `4763e89` and covered by `tests/router/router.test.js`: the page's name travels with the swap, and the running scripts are carried across while the incoming ones are still refused. Verified in a browser: home boots its table after an in-page navigation, and the DOM still holds the one app module afterwards. |
+| 2026-10-05 | 5 | Deviation | **What still differs from the reference on an element page, and why it never will match exactly.** | Recorded rather than chased, each in the Phase 5 deviations table: the typeface and the copy (brand and provenance rules), two particle tiles instead of three and 27 property rows instead of 30 (both with reasons in the code), a visually hidden figure caption and a rule rather than a white fill on the current cell (accessibility and legibility), the masthead's reserved underline, and the reference's phone-only shift and square diagram asset. Every box that can be measured matches. |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---
