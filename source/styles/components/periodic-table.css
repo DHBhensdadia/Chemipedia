@@ -27,7 +27,7 @@
 }
 
 /* -------------------------------------------------------------------------
-   The four colour modes.
+   The colour modes.
 
    Each mode paints a keyed element — a tile, a legend chip with the same key — by setting the two
    custom properties element-tile.css and legend-chips.css consume: --fill and --on-fill. The
@@ -36,7 +36,9 @@
 
    The keys are scoped by mode because "unknown" is both a category and a state, and an element
    painted slate-blue as an alkali metal must not turn yellow because a different view would have
-   filed it otherwise.
+   filed it otherwise. The discovery mode's keys are centuries, and a view that lists an era's
+   elements — the evolution view's timeline — declares the same mode on its own wrapper, so its
+   chips are painted by this map rather than by a second copy of it.
 
    The mode is a fact about a subtree, not about one component. A table declares its own with
    `data-mode` on the `.pt` wrapper; an element page declares one around its whole body, so its
@@ -200,6 +202,46 @@
 
 [data-mode="electronegativity"] [data-band="none"] {
   --fill: var(--scale-none);
+  --on-fill: var(--on-fill-dark);
+}
+
+/* The era keys: a stage of the table's filling rather than a measurement, so the ramp runs from the
+   deepest ink to the lightest coral as the years advance. Each century takes the colour the
+   reference's own evolution view gives that century, which is what makes the two tables comparable
+   tile by tile even though our eras are derived from our own years — the reference's data dates
+   eight elements we have no year for and calls its oldest bucket "Antiquity".
+
+   The records with no year take the deepest ink, which is the colour the reference gives its own
+   antiquity: eight of our thirteen undated elements are exactly that bucket, the metals worked
+   before anyone could call them elements. */
+
+[data-mode="discovery"] [data-key="undated"] {
+  --fill: var(--g-alkaline-earth-metals);
+  --on-fill: var(--on-fill-light);
+}
+
+[data-mode="discovery"] [data-key="before-1700"] {
+  --fill: var(--g-alkali-metals);
+  --on-fill: var(--on-fill-light);
+}
+
+[data-mode="discovery"] [data-key="18th-century"] {
+  --fill: var(--g-actinides);
+  --on-fill: var(--on-fill-dark);
+}
+
+[data-mode="discovery"] [data-key="19th-century"] {
+  --fill: var(--g-post-transition-metals);
+  --on-fill: var(--on-fill-dark);
+}
+
+[data-mode="discovery"] [data-key="20th-century"] {
+  --fill: var(--g-transition-metals);
+  --on-fill: var(--on-fill-dark);
+}
+
+[data-mode="discovery"] [data-key="21st-century"] {
+  --fill: var(--g-noble-gases);
   --on-fill: var(--on-fill-dark);
 }
 

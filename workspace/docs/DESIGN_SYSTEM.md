@@ -89,11 +89,15 @@ per group.
 ### 1.3 Block colours (alternate table view)
 
 ```css
---g-s-block: #456683;   /* slate blue */
---g-p-block: #97c0aa;   /* green      */
---g-d-block: #f9aa62;   /* orange     */
---g-f-block: #d473a2;   /* pink       */
+--g-s-block: var(--g-alkali-metals);        /* slate blue  */
+--g-p-block: var(--g-actinides);            /* sage green  */
+--g-d-block: var(--g-transition-metals);    /* orange      */
+--g-f-block: var(--g-lanthanides);          /* pink        */
 ```
+
+The four blocks point at four of the eleven group colours rather than repeating their values: the
+reference's orbitals view uses the same four, so a correction to a group colour moves both views at
+once.
 
 ### 1.4 Typography
 

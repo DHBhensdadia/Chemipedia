@@ -2,13 +2,14 @@
  * The periodic table.
  *
  * One component draws the whole table in every context it appears — the home page, the four table
- * views, a group page — and the context chooses only its colour mode. The mode is one of four, and
- * each answers a different question with the same 118 tiles:
+ * views, a group page — and the context chooses only its colour mode. Each mode answers a different
+ * question with the same 118 tiles:
  *
  *   group             which family an element belongs to (the default)
  *   block             which orbital block it fills
  *   state             whether it is a solid, a liquid or a gas at room temperature
  *   electronegativity how electronegative it is, banded into the scale in the legend
+ *   discovery         which century it was first recognised in, from `lib/discovery`
  *
  * The three keyed modes also carry isolation: pointing at or reaching a legend chip dims every
  * tile except that key's own, which is how a reader checks "where are the halogens" in one move.
@@ -24,6 +25,7 @@
  */
 
 import { bandFor } from "../lib/colour-scale.js";
+import { ERAS, eraKeyFor, yearOf } from "../lib/discovery.js";
 import { UNKNOWN, formatNumber } from "../lib/format.js";
 import { createGrid } from "../lib/grid.js";
 import { attributes, escapeHtml } from "../lib/html.js";
@@ -31,8 +33,8 @@ import { destinationFor } from "../lib/keyboard.js";
 import { elementTile } from "./element-tile.js";
 import { attachLegendChips, legendChips } from "./legend-chips.js";
 
-/** The four modes, in the order the table views introduce them. */
-export const MODES = ["group", "block", "state", "electronegativity"];
+/** The modes, in the order the table views introduce them. */
+export const MODES = ["group", "block", "state", "electronegativity", "discovery"];
 
 /** The numeric view's field, legend label and band count. Six bands, one per `--scale-N`. */
 export const ELECTRONEGATIVITY = {
@@ -46,6 +48,7 @@ const MODE_LABELS = {
   block: "Orbital block",
   state: "State at room temperature",
   electronegativity: ELECTRONEGATIVITY.label,
+  discovery: "Century of discovery",
 };
 
 const BLOCKS = [
@@ -66,7 +69,7 @@ const STATES = [
  * The key a tile is painted and isolated by, in a keyed mode.
  *
  * @param {object} element
- * @param {"group" | "block" | "state"} mode
+ * @param {"group" | "block" | "state" | "discovery"} mode
  * @returns {string}
  */
 function keyFor(element, mode) {
@@ -76,6 +79,10 @@ function keyFor(element, mode) {
 
   if (mode === "block") {
     return element.block;
+  }
+
+  if (mode === "discovery") {
+    return eraKeyFor(yearOf(element));
   }
 
   return element.state ?? "unknown";
@@ -123,6 +130,8 @@ function legendItems(mode, elements, categories) {
     keys = categories.map((category) => ({ key: category.slug, label: category.name }));
   } else if (mode === "block") {
     keys = BLOCKS;
+  } else if (mode === "discovery") {
+    keys = ERAS;
   } else {
     keys = STATES;
   }
@@ -222,6 +231,11 @@ ${tiles.join("\n")}
 /**
  * Bring a rendered table to life: roving focus, arrow-key navigation and isolation.
  *
+ * Exported because a build-time caller wants the behaviour without the markup: the table views are
+ * written into their documents by the build, and a browser attaches to what is already there. The
+ * model is the only thing the behaviour needs, and it is the same `lib/grid.js` layout the markup
+ * was drawn from — a second copy of the geometry would be a second answer to where a tile is.
+ *
  * One tile is in the tab order and the arrows move between tiles, so Tab leaves the table rather
  * than walking through 118 links. The move itself is decided by `lib/keyboard.js` against the grid
  * model — the same model the markup was drawn from, so focus and layout cannot disagree about
@@ -231,7 +245,7 @@ ${tiles.join("\n")}
  * @param {{ model: ReturnType<typeof createGrid> }} options
  * @returns {() => void} teardown
  */
-function attachPeriodicTable(root, { model }) {
+export function attachPeriodicTable(root, { model }) {
   const grid = root.querySelector("[data-pt-grid]");
 
   if (!grid) {

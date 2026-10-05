@@ -88,11 +88,17 @@
 
   /* -------------------------------------------------------------------------
      3. Orbital block colours — the alternate table view.
+
+     The reference's own orbitals view paints its four blocks in four of its eleven
+     group colours: the alkali slate for s, the actinide sage for p, the transition
+     orange for d and the lanthanide pink for f. Ours are the same four, pointed at
+     the same group tokens, so a correction to a group colour moves both views at
+     once instead of leaving this list behind.
      ------------------------------------------------------------------------- */
-  --g-s-block: #456683;
-  --g-p-block: #97c0aa;
-  --g-d-block: #f9aa62;
-  --g-f-block: #d473a2;
+  --g-s-block: var(--g-alkali-metals);
+  --g-p-block: var(--g-actinides);
+  --g-d-block: var(--g-transition-metals);
+  --g-f-block: var(--g-lanthanides);
 
   /* The two foregrounds a group fill may take. Which one a given fill uses is
      derived by scripts/lib/contrast.js, which reads the better of the two —
@@ -448,6 +454,34 @@
   --size-cfg-sym: 30px;
   --min-width-cfg-element: 9rem; /* the element column in a configuration row */
   --width-cfg-element: 22rem;
+
+  /* -------------------------------------------------------------------------
+     14. The four table views.
+
+     The reference's alternate views are its attribute pages' skeleton with a
+     table under it: a 240px hero, the legend, and the grid. Its evolution view
+     is the odd one out at 300px, because it carries a longer lede and a line
+     naming the span of the recorded years, so it gets its own floor.
+
+     The timeline below the evolution table is a grid of era cards whose column
+     floor is the wrapping rule — the same auto-fit idea as the index's cards —
+     and each chip is a 26px symbol with its year beside it. The ends of the
+     electronegativity scale are listed as 30px chips, the size every symbol
+     chip in the site is.
+     ------------------------------------------------------------------------- */
+  /* The reference's hero band is 240px tall and the space between its submenu and its first
+     heading is inside that band. Ours is owned by `main`, which every page family pays, so the band
+     this token sizes is the reference's less that space: without the subtraction the hero stands
+     48px taller than the reference's and every box below it moves down with it. */
+  --min-height-tv-hero: calc(240px - var(--sp-7));
+  --min-height-tv-hero-tall: calc(300px - var(--sp-7));
+  --margin-tv-body: var(--sp-6); /* between a view's hero and its table */
+  --margin-table-note: var(--sp-5); /* between a view's table and its note, measured */
+  --min-width-era: 20rem; /* a timeline card's floor; the grid wraps by itself */
+  --gap-era: var(--sp-5);
+  --gap-era-chip: var(--sp-3);
+  --size-era-sym: 26px;
+  --size-end-sym: 30px;
 }
 
 /* The element's name takes its larger step once the hero has room for the card and the

@@ -1,0 +1,80 @@
+/* The evolution view's timeline.
+
+   A grid of era cards, as wide as it needs to be and a column narrower when it does not: the same
+   `auto-fit` idea the index's card grid uses, so six cards sit two or three to a row on a desk and
+   one to a row on a phone without a breakpoint. Each card is ruled off at the top rather than boxed,
+   which keeps the page reading as one list of stretches of time.
+
+   A chip is a symbol in the era's own colour with the year beside it. The colour is not chosen
+   here: the component emits the era as `data-key` and the discovery slice of `periodic-table.css`
+   sets `--fill` and `--on-fill` from it, exactly as a tile or a legend chip is painted. */
+
+.eras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-width-era), 1fr));
+  gap: var(--gap-era);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.era {
+  border-block-start: var(--rule-solid);
+  padding-block-start: var(--sp-3);
+}
+
+.era__title {
+  font-size: var(--step-1);
+}
+
+.era__range {
+  margin-block-start: var(--sp-1);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+}
+
+.era__note {
+  margin-block: var(--sp-3) var(--sp-4);
+  color: var(--ink-soft);
+}
+
+.era__elements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-era-chip);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.era__element {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ink);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.era__sym {
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-era-sym);
+  block-size: var(--size-era-sym);
+  border-radius: var(--radius);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-inverse));
+  font-weight: var(--weight-bold);
+}
+
+.era__year {
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  text-underline-offset: var(--underline-offset);
+}
+
+.era__element:hover .era__year,
+.era__element:focus-visible .era__year {
+  text-decoration-line: underline;
+}

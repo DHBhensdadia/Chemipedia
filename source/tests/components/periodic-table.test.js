@@ -4,7 +4,8 @@ import { readFile } from "node:fs/promises";
 
 import { createCategoriesRepository } from "../../scripts/data/categories-repository.js";
 import { createElementsRepository } from "../../scripts/data/elements-repository.js";
-import { createPeriodicTable, renderPeriodicTable } from "../../scripts/components/periodic-table.js";
+import { MODES, createPeriodicTable, renderPeriodicTable } from "../../scripts/components/periodic-table.js";
+import { eraCounts } from "../../scripts/lib/discovery.js";
 import { contrastRatio, meetsAA, readableForeground } from "../../scripts/lib/contrast.js";
 
 /**
@@ -161,10 +162,27 @@ test("the page's own element is marked, and only it", () => {
 });
 
 test("each keyed mode paints every tile with the key of its own data", () => {
+  // The discovery key is re-derived here from the year rather than asked of the module that
+  // assigns it, so the test would notice the two disagreeing about which century a year is in.
+  const centuries = [
+    [2000, "21st-century"],
+    [1900, "20th-century"],
+    [1800, "19th-century"],
+    [1700, "18th-century"],
+  ];
   const keys = {
     group: (element) => element.category,
     block: (element) => element.block,
     state: (element) => element.state ?? "unknown",
+    discovery: (element) => {
+      const year = element.discovery?.year;
+
+      if (typeof year !== "number") {
+        return "undated";
+      }
+
+      return centuries.find(([from]) => year >= from)?.[1] ?? "before-1700";
+    },
   };
 
   for (const [mode, keyOf] of Object.entries(keys)) {
@@ -222,8 +240,29 @@ test("the state legend counts the states, and leaves out one no element is in", 
   assert.ok(!("unknown" in counts), "a chip with nothing behind it is noise");
 });
 
+test("the discovery legend counts the eras, and they add up to the table", () => {
+  const counts = chipCounts(
+    renderPeriodicTable({ elements: all, categories: categories.all(), mode: "discovery" }),
+  );
+  const declared = Object.fromEntries(eraCounts(all).map((era) => [era.key, era.count]));
+
+  assert.deepEqual(counts, declared, "the legend and the era model disagree");
+  assert.equal(
+    Object.values(counts).reduce((sum, count) => sum + count, 0),
+    all.length,
+    "an element belongs to no era",
+  );
+  assert.deepEqual(
+    Object.keys(counts),
+    eraCounts(all)
+      .filter((era) => era.count > 0)
+      .map((era) => era.key),
+    "the legend prints the eras in the order they are read",
+  );
+});
+
 test("every legend chip's key is a key some tile carries", () => {
-  for (const mode of ["group", "block", "state"]) {
+  for (const mode of ["group", "block", "state", "discovery"]) {
     const markup = renderPeriodicTable({ elements: all, categories: categories.all(), mode });
     const keysOnTiles = new Set(tiles(markup).map(({ attributes }) => attributes["data-key"]));
 
@@ -302,7 +341,8 @@ test("the hint is escaped like every other string", () => {
   assert.match(markup, /Pick a group &amp; &lt;scroll&gt; &quot;sideways&quot;/);
 });
 
-test("a mode that is not one of the four is refused", () => {
+test("a mode that is not one of the declared five is refused", () => {
+  assert.deepEqual(MODES, ["group", "block", "state", "electronegativity", "discovery"]);
   assert.throws(
     () => renderPeriodicTable({ elements: all, categories: categories.all(), mode: "colour" }),
     TypeError,
@@ -318,7 +358,7 @@ test("the created table and its rendered markup are the same table", () => {
 });
 
 test("no mode writes a colour into the markup", () => {
-  for (const mode of ["group", "block", "state", "electronegativity"]) {
+  for (const mode of MODES) {
     const markup = renderPeriodicTable({ elements: all, categories: categories.all(), mode });
 
     assert.doesNotMatch(markup, /#[0-9a-f]{6}/i, `${mode} painted a literal colour`);
@@ -333,7 +373,7 @@ test("every fill in every mode takes the foreground the contrast rule chooses", 
     ),
   ];
 
-  assert.equal(rules.length, 11 + 4 + 4 + 7, "a mode is missing a colour pairing");
+  assert.equal(rules.length, 11 + 4 + 4 + 7 + 6, "a mode is missing a colour pairing");
 
   for (const [, mode, kind, key, body] of rules) {
     const fill = resolveColour(body.match(/--fill:\s*([^;]+);/)[1], map);
@@ -397,4 +437,8 @@ test("the stylesheet covers every key the renderer can emit, and no others", () 
   assert.deepEqual([...keysByMode.get("block")].sort(), ["d", "f", "p", "s"]);
   assert.deepEqual([...keysByMode.get("state")].sort(), ["gas", "liquid", "solid", "unknown"]);
   assert.deepEqual([...keysByMode.get("electronegativity")].sort(), ["0", "1", "2", "3", "4", "5", "none"]);
+  assert.deepEqual(
+    [...keysByMode.get("discovery")].sort(),
+    eraCounts(all).map((era) => era.key).sort(),
+  );
 });
