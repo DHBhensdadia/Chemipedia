@@ -12,13 +12,23 @@
    does: one screen-width paragraph, wider than the prose measure. */
 .home-hero__lead {
   max-width: var(--measure-hero);
-  margin-block-start: var(--sp-5);
+  margin-block-start: var(--sp-3);
   color: var(--ink-soft);
   font-size: var(--step-1);
   line-height: var(--leading-body);
 }
 
-/* The table section. The engine brings its own legend, hint and grid; nothing to add. */
+/* The table section. The engine brings its own legend, hint and grid. The hero and the table are
+   one block in the reference — no separator between them, 24px apart — so the site's default
+   section rule is taken off this one boundary and nowhere else. */
+.home-hero {
+  padding-block-end: 0;
+}
+
+.home-table {
+  border-top: 0;
+  padding-block-start: var(--sp-5);
+}
 
 /* A card: the block that asks a question and offers the way on. */
 .home-card {

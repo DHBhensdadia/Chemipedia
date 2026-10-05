@@ -24,7 +24,7 @@ import { COLUMNS, createGrid } from "../lib/grid.js";
 
 /** The line under the legend: what the colours and the keyboard are for. */
 export const TABLE_HINT =
-  "Point at or focus a group to pick it out of the table. On a narrow screen the table scrolls sideways, and the arrow keys move through it.";
+  "Point at or focus a group to pick it out of the table; the arrow keys move through it.";
 
 /** How many periods the period diagram labels: the seven of the main body. */
 const PERIODS = 7;

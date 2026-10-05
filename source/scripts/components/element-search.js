@@ -82,7 +82,7 @@ export function elementSearch({
   id = "element-search",
   label = "Search for an element by name, symbol or atomic number",
   placeholder = "Name, symbol or number",
-  button = "Find element",
+  button = "Search",
 } = {}) {
   return `<form${attributes({
     class: "element-search",

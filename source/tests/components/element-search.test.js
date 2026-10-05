@@ -82,7 +82,7 @@ test("the search is a form that works without scripting", () => {
   assert.match(markup, /<label class="visually-hidden" for="element-search">/);
   assert.match(markup, /id="element-search" name="q" type="search"/);
   assert.match(markup, /aria-controls="element-search-results"/);
-  assert.match(markup, /<button class="element-search__button" type="submit">Find element<\/button>/);
+  assert.match(markup, /<button class="element-search__button" type="submit">Search<\/button>/);
   assert.match(
     markup,
     /<ul class="element-search__results" id="element-search-results" data-element-search-results aria-live="polite"><\/ul>/,

@@ -6,11 +6,14 @@
 
    The table is the one surface that is sized against itself: `container-type: inline-size` makes a
    `cqw` inside a tile mean one per cent of the table's width, which is what the tile type in
-   element-tile.css measures against. The table is also wider than the page's content column on
-   purpose — the reference's own measurements — so it is centred by pulling it out of whatever
-   column it sits in rather than by being constrained to it. */
+   element-tile.css measures against. The scroll container is also wider than the page's content
+   column on purpose — the reference's own measurements — so it is centred by pulling it out of
+   whatever column it sits in rather than by being constrained to it. */
 
-.pt {
+/* The wrapper is the shell's own width. The legend and the hint line above the table align with
+   the page's text column, exactly as the reference's do, and only the grid below bleeds wider. */
+
+.pt__scroller {
   container-type: inline-size;
   width: var(--width-table);
   margin-inline: var(--bleed-table);
@@ -252,12 +255,9 @@
    ------------------------------------------------------------------------- */
 
 @media (max-width: 56rem) {
-  .pt {
+  .pt__scroller {
     width: 100vw;
     margin-inline: calc(50% - 50vw);
-  }
-
-  .pt__scroller {
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scrollbar-width: thin;
@@ -280,11 +280,12 @@
   }
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 35rem) {
   .pt__grid {
     min-width: var(--width-table-min-narrow);
   }
 
+  /* 35rem is the reference's own 560px, where the names stop fitting and it drops them too. */
   .pt .tile__name {
     display: none;
   }

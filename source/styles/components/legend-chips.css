@@ -12,7 +12,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-legend);
-  margin: var(--margin-legend);
+  margin: var(--margin-legend-list);
   padding: 0;
   list-style: none;
 }
@@ -29,6 +29,7 @@
   font: inherit;
   font-size: var(--step--1);
   font-weight: var(--weight-bold);
+  line-height: var(--leading-chip);
   text-decoration: none;
   cursor: pointer;
   transition:

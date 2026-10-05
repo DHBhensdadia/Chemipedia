@@ -102,7 +102,7 @@
   --step-4: clamp(2.44rem, 2.08rem + 1.78vw, 3.43rem);
   --step-5: clamp(3.05rem, 2.45rem + 2.98vw, 4.58rem);
 
-  --leading-tight: 1.08; /* display headings */
+  --leading-tight: 1.1; /* display headings: the reference's own heading leading */
   --leading-ui: 1.2; /* navigation links, which carry their own padding */
   --leading-body: 1.6;
   --leading-prose: 1.7;
@@ -245,12 +245,15 @@
   --height-tile-gap: 0.6rem; /* row 8: the space between the body and the f block */
 
   --margin-hint: 0 0 var(--sp-4); /* the line under the legend that explains it */
+  --pad-tile-number: 0.15em; /* the atomic number's inset from the tile's corner */
   --pad-chip: 0.32em 0.6em 0.32em 0.75em;
   --pad-chip-count: 0 0.5em;
   --alpha-chip-count: 22%; /* the pill behind a chip's count, mixed from the
                               chip's own text colour so it works on any fill */
   --gap-legend: var(--sp-2);
-  --margin-legend: 0 0 var(--sp-5);
+  --leading-chip: 1.3; /* the pill's own leading, so a chip is 26.36px tall */
+  --margin-legend-list: 0 0 var(--sp-2); /* the chips sit close to what they explain */
+  --margin-legend: 0 0 var(--sp-5); /* the numeric scale keeps the section's rhythm */
 
   --height-scale-bar: 14px;
   --width-scale-bar: 220px;
@@ -285,7 +288,7 @@
      pairs a 300px text column with a schematic of the table's own shape, a card
      for the question that leads into the search, and the search itself.
      ------------------------------------------------------------------------- */
-  --measure-hero: 53rem; /* the hero paragraph runs wider than prose */
+  --measure-hero: 53.186rem; /* the hero paragraph's own measure, to the reference's pixel */
   --width-home-card: 26.25rem; /* the understanding card, measured */
   --pad-home-card: var(--sp-6) var(--sp-7);
   --width-explain-text: 18.75rem; /* the explainer's text column */

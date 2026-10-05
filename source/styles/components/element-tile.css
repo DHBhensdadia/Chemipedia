@@ -44,9 +44,8 @@
 
 .tile__z {
   place-self: start end;
-  padding-right: var(--pad-tile-inline);
+  padding-right: var(--pad-tile-number);
   font-size: var(--type-tile-z);
-  font-variant-numeric: tabular-nums;
   opacity: var(--opacity-tile-number);
 }
 

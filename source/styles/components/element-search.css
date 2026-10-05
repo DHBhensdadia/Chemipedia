@@ -7,12 +7,16 @@
 
 .element-search {
   display: flex;
-  flex-wrap: wrap;
+  /* The field and the button stay on one row: on a phone the field gives up width rather than
+     the pair breaking in two, which is what the reference does at 375px. */
+  flex-wrap: nowrap;
   gap: var(--gap-search-home);
 }
 
 .element-search__input {
   width: var(--width-search-home);
+  max-width: 100%;
+  min-width: 0;
   padding: var(--pad-search-input);
   border: var(--rule-width) solid var(--line-strong);
   border-radius: var(--radius);
