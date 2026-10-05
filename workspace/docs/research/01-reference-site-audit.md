@@ -355,27 +355,84 @@ from the one map that already owns the pairing, rather than from an eleventh dec
 | Index page | **does not exist** | `/element-groups/` — ours alone |
 | Members, siblings, facts, table | as measured above | reproduced, with the counts derived from our records |
 
-### 3.7 Glossary — `/terms`
+### 3.7 Glossary — `/terms` and `/glossary-of-terms/:slug`
 
-- Hero: `Glossary of Terms`, sub-paragraph `Get familiar with the vocabulary around the Periodic
-  Table and Chemistry`.
-- An **A–Z jump index** (`abcdefghijklmnopqrstuvwxyz`, capitals rendered as `A`).
-- A term list grouped by initial letter. **418 terms total.**
-- Term row anatomy (from live markup):
+**Measured 2026-10-06** (live, at 1280 / 768 / 375).
 
-```html
-<li>
-  <a href="/glossary-of-terms/absolute-zero">
-    <span class="term">Absolute Zero</span>
-    <span class="def">Absolute zero is the temperature measured in kelvin, …</span>
-    <span class="lvl lvl--beginner">Beginner</span>
-  </a>
-</li>
+**The index.** 418 term rows, 26 letter headings (one per letter A–Z), and a sticky rail of
+letters down the left edge.
+
+- **Hero**: `section.hero`, **230px tall at every width**, sitting directly under the 59px
+  masthead with no background of its own. Its `.shell` starts 68px below the hero's top and is
+  1100px wide, so the hero is 68px of padding above and below a 92.94px block.
+- The `<h1>` is `Glossary of Terms`, **48px/52.8px with −0.96px tracking**, in the ink; the
+  sub-paragraph is 17.6px/28.16px in the soft ink, 12px below it.
+- **The list breaks the shell.** A 34px rail of letters runs down the left edge — `display: grid`,
+  `gap: 2px`, `position: sticky`, `top: 58px` — each link 34×20, 11.52px/18.432px in the soft ink
+  at a 2px radius. The alphabet column then takes everything from the rail's right edge to the
+  viewport's right edge: **1246px at 1280** (34 + 1246 = 1280), not the shell's 1100.
+- **Letter headings** are `h2.letter__h`, one per letter, 17.6px/19.36px with −0.352px tracking
+  and `padding: 12px 0` — 44.34px tall, `margin: 0`, in the ink. They carry the jump index's
+  target ids (`#letter-A`), which the term pages link back to.
+- **A row** is an `<li>` with `border-bottom: 1px solid #e4ddd7` — our `--line` — 91.13px tall
+  including that rule. The anchor inside it is a **grid of `352px 670px 112px`** with a 24px gap
+  and `padding: 24px 32px`:
+  - `.term` — **30.976px/35.6224px**, which is our `--step-2`, in the ink.
+  - `.def` — 13.6px/21.08px, its own measure capped at 534.48px inside the 670px column.
+  - `.lvl` — the difficulty badge, below.
+- **The badge** is 11.52px/18.432px with `letter-spacing: 0.4608px`, `padding: 2.88px 8.064px`,
+  `border-radius: 2px` and a **1px dotted** border. The three levels, measured, with their counts
+  on the live index and their two colours:
+
+  | Level | Count | Text | Border |
+  |---|---|---|---|
+  | Beginner | 189 | `#1d4634` | `#97c0aa` |
+  | Novice | 129 | `#1d3d4d` | `#a6c6d5` |
+  | Expert | 99 | `#38246b` | `#6e58ac` |
+
+  The three border colours are **three of the eleven group tokens** already in `tokens.css` —
+  post-transition metal, non-metal and metalloid — so the badge spends those rather than taking
+  three more colours into the palette, as the block palette does.
+- **There is no filter on the index.** Filtering is a ChemiPedia addition, asked for by the plan.
+- Below 56rem the rail is dropped and a row becomes one column: **736px at 768** and **343px at
+  375**, both with 16px of padding, 140px and 156px tall.
+
+**A term page** at 1280, from the live DOM:
+
+```
+main
+  div.shell.back                     a → /terms#letter-A, "← Glossary · A"        45px tall
+  div.shell.cols                     two columns, 1100 wide, 284px tall
+    article.col-main                 776px
+      header.head                    h1 (51.2px/56.32px) + the badge, 16px to its right
+      div.underline                  768 × 5px
+      div.prose.def                  the definition
+    aside.col-side                   260px, 64px away
+      div.rail                       p.rail__k (13.6px) + ul
+      div.rail                       p.rail__k + ul
+  nav.shell.pager                    a.pager--next → "Next" + the next term's name
 ```
 
-- Each term carries a **difficulty level** badge: `Beginner`, `Novice` or `Expert` — the same
-  three-tier idea the reference uses for its (out-of-scope) learning tracks.
-- Detail pages live at `/glossary-of-terms/:slug`.
+- The back link carries the **letter anchor**, so a reader returns to the right place in the index.
+- The h1 is **51.2px/56.32px** — smaller than the index's 48px only in appearance, since the two
+  are the same `--step-3`-ish rung of the reference's own scale at these widths.
+- The term page's own body is **the definition and nothing else**. There is no expanded
+  explanation, no related elements and no related terms; the space a richer page would use is
+  taken by the aside's two rails, which link to the reference's Learn and Games sections — both
+  **out of our scope**.
+- Our term page therefore uses that column for what the plan asked for: the explanation, the
+  related elements and the related terms.
+
+**What we take, and what we deliberately change.**
+
+| | Reference | ChemiPedia |
+|---|---|---|
+| The index | 418 rows under 26 letter headings, a sticky 34px rail | the same arrangement, with a filter field above the list and a status line counting what is left |
+| The rail | letters, in the soft ink | the same, and it marks the letter the reader is at once the filter narrows the list |
+| A row | term · definition · badge in a `352px 670px 112px` grid | the same three columns, with the definition's own measure |
+| The badge | three levels on three group colours | the same three colours, spent from the group tokens |
+| The term page | the definition, and two rails into out-of-scope sections | the definition, an explanation, the related elements and the related terms |
+| The prose | theirs, 418 definitions | ours, 418 definitions |
 
 ### 3.8 Temperature calculators — `/temperature-calculators`
 
