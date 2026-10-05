@@ -42,6 +42,24 @@
  * the phases that introduce their data, each route carrying the values its template needs.
  */
 
+/**
+ * The stylesheets every one of the four table views needs, in cascade order.
+ *
+ * The tile sheet draws a tile and the legend sheet draws a chip, but neither decides a colour: they
+ * consume `--fill` and `--on-fill`, and the periodic table's sheet is the one map that turns an
+ * element's key into that pair. A view of 118 tiles that did not declare it is a view of 118 grey
+ * tiles — which is exactly what the elements index shipped before Phase 6's browser pass caught it.
+ *
+ * The four views are one arrangement rather than four, so the list is written once and the
+ * evolution view appends the timeline's own sheet to it.
+ */
+const TABLE_VIEW_STYLES = [
+  "styles/components/element-tile.css",
+  "styles/components/legend-chips.css",
+  "styles/components/periodic-table.css",
+  "styles/pages/table-views.css",
+];
+
 export const routes = [
   {
     path: "/",
@@ -80,6 +98,7 @@ export const routes = [
       "The periodic table coloured by state at room temperature, with the counts of solids, " +
       "liquids and gases and the elements that change state near it.",
     section: "table-views",
+    styles: TABLE_VIEW_STYLES,
   },
   {
     path: "/periodic-table/orbitals/",
@@ -89,24 +108,27 @@ export const routes = [
       "The periodic table coloured by orbital block, showing how the s, p, d and f blocks give " +
       "the table its shape.",
     section: "table-views",
+    styles: TABLE_VIEW_STYLES,
   },
   {
     path: "/periodic-table/electronegativity/",
     template: "electronegativity",
     title: "Electronegativity across the periodic table",
     description:
-      "The periodic table coloured by electronegativity, from fluorine to caesium, with the " +
-      "trend across periods and down groups explained.",
+      "The periodic table coloured by electronegativity, from francium at the weakest pull to " +
+      "fluorine at the strongest, with the trend across periods and down groups explained.",
     section: "table-views",
+    styles: TABLE_VIEW_STYLES,
   },
   {
     path: "/periodic-table/evolution/",
     template: "evolution",
     title: "The evolution of the periodic table",
     description:
-      "How the periodic table took its present shape, from the first groupings of the elements " +
-      "to the synthetic elements at the end of the last century.",
+      "How the periodic table took its present shape, from the metals worked before there was a " +
+      "chemistry to name them to the synthetic elements made one atom at a time.",
     section: "table-views",
+    styles: [...TABLE_VIEW_STYLES, "styles/components/era-timeline.css"],
   },
   {
     path: "/properties/melting-point/",

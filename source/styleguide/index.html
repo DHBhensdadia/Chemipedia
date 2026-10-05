@@ -155,7 +155,7 @@
   <section class="guide__section section">
     <h2 class="section__title">Periodic table</h2>
     <p>
-      The engine, rendered from the real data layer in all four colour modes. Point at or tab to a
+      The engine, rendered from the real data layer in every colour mode it has. Point at or tab to a
       legend chip to isolate its group; tab to a tile and use the arrow keys to move through the
       grid. One tile is in the tab order at a time.
     </p>
@@ -164,6 +164,7 @@
       <button class="guide__mode" type="button" data-table-mode="block" aria-pressed="false">Orbital block</button>
       <button class="guide__mode" type="button" data-table-mode="state" aria-pressed="false">State</button>
       <button class="guide__mode" type="button" data-table-mode="electronegativity" aria-pressed="false">Electronegativity</button>
+      <button class="guide__mode" type="button" data-table-mode="discovery" aria-pressed="false">Discovery</button>
     </div>
     <div class="table-demo" id="table-demo"></div>
   </section>
@@ -239,7 +240,7 @@
   document.querySelector("#chrome-footer").innerHTML = siteFooter({ columns: footerColumns });
   document.querySelector("#wordmark-demo").innerHTML = wordmark({ link: false }) + " " + wordmark({ link: false, small: true });
 
-  // The periodic table, rendered and attached by the real component in each of its four modes.
+  // The periodic table, rendered and attached by the real component in each of its modes.
   const elements = await createElementsRepository();
   const categories = await createCategoriesRepository();
   const tableHost = document.querySelector("#table-demo");

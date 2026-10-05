@@ -208,6 +208,10 @@ const REGIONS = [
   { name: "faqBlock", selectors: [".el-faq", ".faq"] },
   { name: "similar", selectors: [".el-similar", ".similar"] },
   { name: "pager", selectors: [".el-pager", ".pager"] },
+  // A table view: our legend of chips or scale, the reference's own key above its table.
+  { name: "legend", selectors: [".pt > .legend", ".legend", ".scale"] },
+  // The evolution view's timeline, which only that page has an equivalent of.
+  { name: "eras", selectors: [".eras", ".shell.body > section"] },
 ];
 
 /** Every measurement field the probe returns, so the report can compare them one by one. */

@@ -1,0 +1,122 @@
+/* The four table views.
+
+   One stylesheet for all four, declared by each of their routes, because the pages differ in the
+   question their table answers and in their copy and in nothing else: the hero, the table's host
+   and the rule before whatever follows are the same on all of them. That is the arrangement
+   `ranking.css` already uses for the two rankings, for the same reason.
+
+   A view's hero keeps the reference's 240px, and the evolution view's keeps its 300px, because it
+   carries a longer lede. The table below is the table component's own — nothing here sizes a tile.
+
+   The two sections that follow a table are ruled off from it rather than boxed: the trend under the
+   electronegativity scale, and the timeline under the evolution table. The ends of a scale are a
+   three-column row — what it is, which element, and the value — and the timeline's own row is in
+   `era-timeline.css`, beside the component that draws it. */
+
+.tv-hero {
+  min-height: var(--min-height-tv-hero);
+}
+
+.tv-hero--tall {
+  min-height: var(--min-height-tv-hero-tall);
+}
+
+.tv-hero__lede {
+  max-width: var(--measure-hero);
+  margin: var(--margin-page-lede);
+  color: var(--ink-soft);
+}
+
+.tv-body {
+  margin-block-start: var(--margin-tv-body);
+}
+
+/* The legend's gap to the table. On the home page a helper line explaining the legend sits between
+   the two, which is most of the space; a view has no helper line, so the legend takes the
+   reference's own 24px itself rather than leaving the table sitting against the chips. */
+.tv-body .legend {
+  margin-block-end: var(--sp-5);
+}
+
+/* The note under the table: what the colours are not saying. It sits below the grid rather than
+   between the legend and the tiles, which is where the reference keeps its own, and it keeps the
+   same rhythm the home page's line under the legend keeps. */
+.tv-note {
+  margin: var(--margin-table-note) 0 0;
+  max-width: var(--measure);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.tv-trend,
+.tv-eras {
+  margin-block-start: var(--sp-7);
+  padding-block-start: var(--sp-6);
+  border-block-start: var(--rule-dotted);
+}
+
+.tv-trend__title,
+.tv-eras__title {
+  font-size: var(--step-2);
+}
+
+.tv-trend p {
+  max-width: var(--measure);
+  margin-block-start: var(--sp-3);
+}
+
+/* The ends of the electronegativity scale: the two measured extremes and the values next to them. */
+.ends {
+  max-width: var(--measure);
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.end {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
+  align-items: center;
+  gap: var(--sp-4);
+  padding-block: var(--sp-2);
+}
+
+.end + .end {
+  border-block-start: var(--rule-faint);
+}
+
+.end__rank {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.end__element {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.end__sym {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-end-sym);
+  block-size: var(--size-end-sym);
+  border-radius: var(--radius);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-inverse));
+  font-weight: var(--weight-bold);
+}
+
+.end__name {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.end__value {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}

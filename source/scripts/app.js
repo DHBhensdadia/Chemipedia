@@ -24,12 +24,23 @@ import { createRouter } from "./router/router.js";
 /**
  * The pages with behaviour of their own, keyed by the template name the built body carries.
  *
+ * The four table views are one entry each because they are four templates, and one module between
+ * them because the behaviour is the same one: the table the build already wrote, brought to life.
+ *
  * @type {Record<string, (document: Document) => Promise<void>>}
  */
 export const PAGE_BEHAVIOUR = {
   home: (doc) => import("./pages/home.js").then((module) => module.startHome(doc)),
   "elements-index": (doc) =>
     import("./pages/elements-index.js").then((module) => module.startElementsIndex(doc)),
+  "properties-and-states": (doc) =>
+    import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
+  orbitals: (doc) =>
+    import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
+  electronegativity: (doc) =>
+    import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
+  evolution: (doc) =>
+    import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
 };
 
 /**

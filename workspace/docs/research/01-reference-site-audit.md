@@ -228,16 +228,56 @@ The richest page in the site. Order of sections:
 
 ### 3.5 Alternate table views — `/periodic-table/*`
 
-Same skeleton on all four: submenu → hero (heading + one-paragraph explainer) → legend chips →
-the table.
+**Measured 2026-10-06** (live, 1280px; the four pages all returned 200).
 
-- **Properties and states** — legend counts by state.
-- **Orbitals** — legend: `s-block 12` · `p-block 38` · `d-block 40` · `f-block 28`. Explainer:
-  *"The same table, coloured by the orbital block each element fills last. The shape of the table
-  is the shape of the blocks."* (Our own wording, same idea.) Colours here: s-block slate blue,
-  p-block green, d-block orange, f-block pink.
-- **Electronegativity** — continuous colour scale over the element tiles.
-- **Evolution** — coloured by period/decade of discovery.
+Same skeleton on all four, and the skeleton is the Phase 3 table with a hero over it:
+
+- **Submenu** band, 33px, above everything.
+- **Hero** section, 240px tall, starting directly under the band: heading 51.2px / 56.32px with
+  −1.024px tracking, then one paragraph of 17.6px lede. The **evolution** view is the exception on
+  both counts: its hero is 300px, its heading 54.4px / 59.84px (the same display size every other
+  page uses), and its lede is joined by a second line naming the span of the recorded years
+  (`Copper 9000 BC→Tennessine 2009`).
+- **Body**: a 1100px column with 32px of padding above its first child. The legend comes first,
+  then the table — which bleeds to 1228.8px, wider than the column it sits in.
+- **The note comes after the table**, not between the legend and the grid: 60px tall in the
+  reference's own words on the states page, one line (`Hover an era to pick it out of the table.`)
+  on the evolution page, which puts it above the table instead.
+- **Grid**: 18 columns of 65.375px at a 3.072px gap, tiles 65.36px square with a 3px radius — the
+  Phase 3 measurements, unchanged. 118 tiles on all four.
+
+**The four legends, exactly as the reference draws them** (label · count · measured fill):
+
+| View | Keys |
+|---|---|
+| Properties and states | Solid 90 `#456683` · Liquid 2 `#559982` · Gas 12 `#e57860` · Unknown 14 `#efce69` |
+| Orbitals | s-block 12 `#456683` · p-block 38 `#559982` · d-block 40 `#f9aa62` · f-block 28 `#d473a2` |
+| Electronegativity | a continuous bar, 220 × 14px, under the labels `0.7` and `3.98`, then a `no value` swatch `#e8e2dc` |
+| Evolution | Antiquity 7 `#15403d` · Alchemical era 2 `#456683` · 18th century 22 `#559982` · 19th century 51 `#97c0aa` · 20th century 31 `#f9aa62` · This century 5 `#e57860` |
+
+Three findings worth recording, because they shaped our four pages:
+
+1. **The orbital block colours are four of the eleven group colours** — the alkali slate, the
+   actinide sage, the transition orange and the lanthanide pink. Our block palette had been chosen
+   rather than measured, and its p-block was a fifth colour; it now points at the same four group
+   tokens the reference uses.
+2. **The electronegativity ramp is the scale `tokens.css` already holds** — six steps from
+   `#dce9f0` to `#15403d` over a domain of 0.7 to 3.98, with `#e8e2dc` for a record with no value.
+   Live, the reference's hydrogen tile is `rgb(111,159,181)` and ours is the same value.
+3. **A note between the legend and the grid costs the page its alignment.** The reference's note
+   sits *under* its table, and its legend sits directly above the grid with a 24px gap. Our first
+   build put the note in the curve between the two, which pushed the whole table down by the
+   paragraph's height — 224px at 1280 in the first capture. Moving the note below the table and
+   giving the legend the reference's own 24px took the table to within 2px of the reference's.
+
+**Evolution legend detail.** The reference's eras are its own: *Antiquity* holds the seven metals
+its data lists with no discoverer, and *Alchemical era* holds arsenic and phosphorus. The remaining
+four are centuries. Under the table it draws one card per era — `Antiquity` / `before 1 AD · 7
+elements` / a sentence / the era's elements as symbol-and-year chips — before any other content.
+
+**Correction.** An earlier version of this section recorded the orbitals explainer as *our own
+wording* with the same idea. It is the reference's sentence, transcribed: the audit must record the
+reference's copy as the reference's, and ours has to be written afresh.
 
 Note: this is a **content-tier** pattern worth copying structurally — one component, four
 colourings, each with its own explanatory paragraph and legend.
@@ -450,6 +490,9 @@ the information architecture — is reproduced deliberately.
 - [ ] Element group pages (`/element-groups/:slug`) — audit before Phase 8.
 - [x] Melting/boiling point pages — audited 2026-10-05; see §3.9, which also covers the orbital
   configurations page.
+- [x] The four alternate table views — audited 2026-10-06; see §3.5, which now carries their
+  measured skeleton, their four legends with the colours read off the tiles, and the evolution
+  view's timeline.
 - [ ] Glossary term detail page — audit before Phase 9.
 - [ ] Tablet and mobile layouts — capture breakpoints before Phase 1 signs off.
 - [x] Dark theme — resolved: the reference switches to it at runtime, but its `:root` palette is

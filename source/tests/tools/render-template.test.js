@@ -7,6 +7,7 @@ import { elementPageValues } from "../../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../../scripts/pages/elements-index.js";
 import { configurationPageValues } from "../../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../../scripts/pages/ranking.js";
+import { tableViewPageValues } from "../../scripts/pages/table-views.js";
 import { buildContext } from "../../tools/build-context.js";
 import { routes } from "../../scripts/router/routes.js";
 
@@ -77,6 +78,21 @@ test("every page family fills its template, block for block", async () => {
     ["melting-point", rankingPageValues, () => ({ route: routes.find((r) => r.template === "melting-point"), elements: context.elements, units: context.units })],
     ["boiling-point", rankingPageValues, () => ({ route: routes.find((r) => r.template === "boiling-point"), elements: context.elements, units: context.units })],
     ["orbital-configuration", configurationPageValues, () => ({ elements: context.elements })],
+    ...[
+      "properties-and-states",
+      "orbitals",
+      "electronegativity",
+      "evolution",
+    ].map((template) => [
+      template,
+      tableViewPageValues,
+      () => ({
+        route: routes.find((candidate) => candidate.template === template),
+        elements: context.elements,
+        categories: context.categories,
+        units: context.units,
+      }),
+    ]),
   ];
 
   for (const [name, renderer, options] of families) {

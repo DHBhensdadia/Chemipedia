@@ -33,6 +33,7 @@ import { elementPageValues } from "../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
 import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../scripts/pages/ranking.js";
+import { tableViewPageValues } from "../scripts/pages/table-views.js";
 import { footerColumns, isCurrent, primaryNavigation, submenuForSection } from "../scripts/router/navigation.js";
 import { allRoutes, routes, templatePathFor } from "../scripts/router/routes.js";
 import { buildContext } from "./build-context.js";
@@ -86,7 +87,9 @@ const NOT_FOUND_PAGE = {
  * other.
  *
  * The two rankings share one renderer because they are one page about two fields: the route
- * carries the field it ranks, so a second row here is a second ranking page.
+ * carries the field it ranks, so a second row here is a second ranking page. The four table views
+ * share theirs for the same reason — one table, four questions — and the renderer takes the view's
+ * mode from the template it is filling.
  */
 const FAMILY_RENDERERS = {
   "element-detail": elementPageValues,
@@ -94,6 +97,10 @@ const FAMILY_RENDERERS = {
   "melting-point": rankingPageValues,
   "boiling-point": rankingPageValues,
   "orbital-configuration": configurationPageValues,
+  "properties-and-states": tableViewPageValues,
+  orbitals: tableViewPageValues,
+  electronegativity: tableViewPageValues,
+  evolution: tableViewPageValues,
 };
 
 /**
