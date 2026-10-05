@@ -45,6 +45,27 @@ export const submenus = {
       { label: "Evolution", path: "/periodic-table/evolution/" },
     ],
   },
+  // The group pages' own band: the eleven families in the order a reader meets them reading the
+  // table, then the index. The reference's band on these pages lists six of the eleven and drops
+  // the current one; ours lists all eleven, because a reader who wants the noble gases should not
+  // have to know which page they are standing on to find them.
+  "element-groups": {
+    label: "Element groups:",
+    items: [
+      { label: "Alkali metal", path: "/element-groups/alkali-metals/" },
+      { label: "Alkaline earth metal", path: "/element-groups/alkaline-earth-metals/" },
+      { label: "Transition metal", path: "/element-groups/transition-metals/" },
+      { label: "Post-transition metal", path: "/element-groups/post-transition-metals/" },
+      { label: "Metalloid", path: "/element-groups/metalloids/" },
+      { label: "Non-metal", path: "/element-groups/non-metals/" },
+      { label: "Halogen", path: "/element-groups/halogens/" },
+      { label: "Noble gas", path: "/element-groups/noble-gases/" },
+      { label: "Lanthanide", path: "/element-groups/lanthanides/" },
+      { label: "Actinide", path: "/element-groups/actinides/" },
+      { label: "Unknown", path: "/element-groups/unknown/" },
+      { label: "All groups", path: "/element-groups/" },
+    ],
+  },
 };
 
 /**

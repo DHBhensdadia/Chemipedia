@@ -42,6 +42,8 @@
  * the phases that introduce their data, each route carrying the values its template needs.
  */
 
+import { plural } from "../lib/plural.js";
+
 /**
  * The stylesheets every one of the four table views needs, in cascade order.
  *
@@ -59,6 +61,26 @@ const TABLE_VIEW_STYLES = [
   "styles/components/periodic-table.css",
   "styles/pages/table-views.css",
 ];
+
+/**
+ * The stylesheets every group page needs, in cascade order.
+ *
+ * The three component sheets a group page draws the table with. Its own file is not listed: a
+ * family's main template is named after the family, so the build appends `styles/pages/group.css`
+ * for the group pages by itself, and naming it twice links the same sheet twice.
+ *
+ * The index page is the exception the other way round. Its cards are a category's colour on a
+ * tile, and the only sheet that knows what a category's colour is happens to be the table's, so it
+ * declares these three and adds the family's own file by hand.
+ */
+const GROUP_STYLES = [
+  "styles/components/element-tile.css",
+  "styles/components/legend-chips.css",
+  "styles/components/periodic-table.css",
+];
+
+/** The group pages' own sheet, which the index page has to ask for by name. */
+const GROUP_PAGE_SHEET = "styles/pages/group.css";
 
 export const routes = [
   {
@@ -206,7 +228,8 @@ export const routes = [
     description:
       "The eleven groups of the periodic table, from the alkali metals to the noble gases, and " +
       "what the elements in each one have in common.",
-    section: "reference",
+    section: "element-groups",
+    styles: [...GROUP_STYLES, GROUP_PAGE_SHEET],
   },
   {
     path: "/about/",
@@ -273,14 +296,44 @@ export function elementRoutes(elements) {
 }
 
 /**
+ * The element group family: one route per category.
+ *
+ * Eleven pages, and like the element pages not one of them is authored. Each route carries the
+ * category it is about, so the build has the slug, the display name and the count the page is
+ * asserted to have without looking anything up a second time.
+ *
+ * The path is the category's own slug, which is already the key the table paints a tile by: a URL,
+ * a legend key and a token's name are one string, so a reader who has one has all three.
+ *
+ * @param {object[]} categories the eleven category records, as `categories.json` holds them
+ * @returns {object[]}
+ */
+export function groupRoutes(categories) {
+  return categories.map((category) => ({
+    path: `/element-groups/${category.slug}/`,
+    template: "group",
+    title: `${category.name} \u2014 the ${category.count} elements of the group`,
+    description: `Where the ${category.count} ${plural(category.name)} sit in the periodic table, what they have in common, and every member of the group.`,
+    section: "element-groups",
+    styles: GROUP_STYLES,
+    category,
+  }));
+}
+
+/**
  * Everything the site publishes: the authored routes and the generated families.
  *
  * One function rather than a spread at each call site, because the build and the tests must agree
  * about what the site contains, and two spreads in two files is how they come to disagree.
  *
+ * Both families take their records explicitly rather than defaulting to an empty list: a caller
+ * that forgot one would otherwise publish a site that is quietly missing a hundred and eighteen
+ * pages, or eleven.
+ *
  * @param {object[]} elements
+ * @param {object[]} categories
  * @returns {object[]}
  */
-export function allRoutes(elements) {
-  return [...routes, ...elementRoutes(elements)];
+export function allRoutes(elements, categories) {
+  return [...routes, ...elementRoutes(elements), ...groupRoutes(categories)];
 }

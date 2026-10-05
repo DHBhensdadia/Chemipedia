@@ -41,6 +41,11 @@ export const PAGE_BEHAVIOUR = {
     import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
   evolution: (doc) =>
     import("./pages/table-views.js").then((module) => module.startTableViews(doc)),
+  // The eleven group pages are one entry, because they are one template: the differences between
+  // them are the data the route carries and the copy the module holds, and none of that changes
+  // what runs in the browser. The index has no entry — it is a page of cards and links, and the
+  // router alone is everything it needs.
+  group: (doc) => import("./pages/group.js").then((module) => module.startGroup(doc)),
 };
 
 /**

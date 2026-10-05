@@ -1,0 +1,292 @@
+/* The element group pages.
+
+   One stylesheet for the eleven group pages and their index, declared by every one of their routes,
+   for the same reason `table-views.css` is one sheet for four views: the pages differ in their data
+   and their copy and in nothing else.
+
+   The colour comes from the key on the markup, never from here. A hero carries its group's slug as
+   `data-key`, the table's own sheet turns that into `--fill` and `--fill-deep`, and this file spends
+   them: the hero's wash is the fill mixed into the paper, and the sentence under the title is written
+   in the deeper pair, which is the same value the reference writes its own lede in. Nothing here
+   names a colour, so a correction to the palette moves these pages with every other one.
+
+   The rhythm is the reference's: 48px below the facts, then each section 64px apart, with no rule
+   between them — a group page is one column of blocks rather than a set of ruled panels. */
+
+.grp-hero {
+  padding: var(--pad-grp-hero);
+  background-image: linear-gradient(
+    var(--angle-hero),
+    color-mix(in srgb, var(--fill, var(--bg)) var(--mix-grp-hero-soft), transparent) 0%,
+    transparent 100%
+  );
+  border-bottom: var(--rule-dotted);
+}
+
+/* The index has no group of its own, so its hero carries no key and the wash resolves to the paper
+   it is painted on — which is the plain hero the reference would have drawn anyway. */
+.grp-hero--index {
+  border-bottom: var(--rule-solid);
+}
+
+.grp-hero__eyebrow {
+  margin: var(--margin-grp-eyebrow);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.grp-hero__name {
+  font-family: var(--font-display);
+  font-size: var(--type-grp-name);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin-block: 0 var(--sp-3);
+}
+
+.grp-hero__lede {
+  max-width: var(--max-width-grp-hero);
+  margin-block: 0 var(--sp-5);
+  color: var(--fill-deep, var(--ink-soft));
+  font-size: var(--step-1);
+  line-height: var(--leading-grp-lede);
+}
+
+/* The facts: how many, which numbers, which block, which states. A row of label-over-value pairs,
+   which is the shape the reference gives them and the shape a definition list already has. */
+.grp-facts {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: var(--max-width-grp-hero);
+  gap: var(--gap-grp-facts);
+  margin: 0;
+}
+
+.grp-fact {
+  display: grid;
+  gap: var(--gap-grp-fact);
+}
+
+.grp-fact__k {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.grp-fact__v {
+  margin: 0;
+  font-size: var(--step-1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   The body of the page: the table, its note, the members, the explainer and the
+   other groups, each 64px under the one before it.
+   --------------------------------------------------------------------------- */
+
+.grp-body,
+.grp-members,
+.grp-about,
+.grp-siblings {
+  margin-block-start: var(--margin-grp-section);
+}
+
+.grp-title {
+  font-size: var(--step-2);
+  margin-block: 0 var(--sp-4);
+}
+
+/* The note sits under the table, as it does on a view: the line belongs to the picture the reader
+   has just looked at, and a paragraph of counts between the legend and the tiles pushes the table
+   down the page by its own height. */
+.grp-note {
+  margin: var(--sp-4) 0 0;
+  max-width: var(--measure);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* ---------------------------------------------------------------------------
+   The members: one card each, five to a row in the content column and as few
+   as one on a phone, decided by the column floor rather than by a breakpoint.
+   --------------------------------------------------------------------------- */
+
+.grp-members__list,
+.grp-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width-grp-member), 1fr));
+  gap: var(--gap-grp-member);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grp-members__item {
+  display: flex;
+}
+
+.grp-member {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-grp-member);
+  flex: 1;
+  padding: var(--pad-grp-member);
+  background: var(--surface);
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.grp-member:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.grp-member__tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-grp-member-tile);
+  block-size: var(--size-grp-member-tile);
+  border-radius: var(--radius);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-inverse));
+}
+
+.grp-member__z {
+  font-size: var(--size-grp-member-z);
+}
+
+.grp-member__sym {
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  line-height: var(--leading-tile-symbol);
+  letter-spacing: var(--tracking-tight);
+}
+
+.grp-member__meta {
+  display: grid;
+  gap: var(--gap-grp-member-meta);
+  min-width: 0;
+}
+
+.grp-member__name {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.grp-member__sub {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   The explainer: one column at the prose measure, the way every other page
+   writes its prose.
+   --------------------------------------------------------------------------- */
+
+.grp-prose {
+  max-width: var(--measure);
+  color: var(--ink-body);
+}
+
+.grp-prose > p + p {
+  margin-block-start: var(--sp-4);
+}
+
+/* ---------------------------------------------------------------------------
+   The other groups: a pill each, carrying its own group's colour on the dot.
+   --------------------------------------------------------------------------- */
+
+.grp-siblings__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-grp-sibling);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grp-sibling {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-grp-sibling);
+  padding: var(--pad-grp-sibling);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.grp-sibling:hover {
+  border-color: var(--line-strong);
+}
+
+.grp-sibling__dot {
+  flex: none;
+  inline-size: var(--size-grp-sibling-dot);
+  block-size: var(--size-grp-sibling-dot);
+  border-radius: var(--radius-pill);
+  background: var(--fill, var(--surface-sunk));
+}
+
+/* ---------------------------------------------------------------------------
+   The index: the same wash-less hero, and the eleven groups as cards.
+   --------------------------------------------------------------------------- */
+
+.grp-cards {
+  grid-template-columns: repeat(auto-fill, minmax(var(--min-width-grp-card), 1fr));
+}
+
+.grp-card {
+  display: flex;
+}
+
+.grp-card__link {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  flex: 1;
+  padding: var(--pad-grp-member);
+  background: var(--surface);
+  border: var(--rule-hairline);
+  border-radius: var(--radius);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.grp-card__link:hover {
+  border-color: var(--line-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.grp-card__tile {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-grp-member-tile);
+  block-size: var(--size-grp-member-tile);
+  border-radius: var(--radius);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-inverse));
+  font-family: var(--font-display);
+  font-size: var(--step-1);
+  font-variant-numeric: tabular-nums;
+}
+
+.grp-card__meta {
+  display: grid;
+  gap: var(--gap-grp-member-meta);
+  min-width: 0;
+}
+
+.grp-card__name {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.grp-card__lede {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}

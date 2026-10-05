@@ -1,0 +1,45 @@
+<div class="grp" data-mode="group">
+  <section class="grp-hero" data-key="{{key}}">
+    <div class="shell">
+      <p class="grp-hero__eyebrow">Element group</p>
+      <h1 class="grp-hero__name">{{name}}</h1>
+      <p class="grp-hero__lede">{{lede}}</p>
+{{facts}}
+    </div>
+  </section>
+
+  <section class="grp-body" data-group-table>
+    <div class="shell">
+      <h2 class="grp-title">Where they sit</h2>
+{{table}}
+{{note}}
+    </div>
+  </section>
+
+  <section class="grp-members">
+    <div class="shell">
+      <h2 class="grp-title">{{membersHeading}}</h2>
+      <ul class="grp-members__list" data-key="{{key}}">
+{{members}}
+      </ul>
+    </div>
+  </section>
+
+  <section class="grp-about">
+    <div class="shell">
+      <h2 class="grp-title">{{aboutHeading}}</h2>
+      <div class="grp-prose">
+{{about}}
+      </div>
+    </div>
+  </section>
+
+  <section class="grp-siblings">
+    <div class="shell">
+      <h2 class="grp-title">Other groups</h2>
+      <ul class="grp-siblings__list">
+{{siblings}}
+      </ul>
+    </div>
+  </section>
+</div>

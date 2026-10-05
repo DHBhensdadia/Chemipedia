@@ -31,6 +31,7 @@ import { submenu as submenuBand } from "../scripts/components/submenu.js";
 import { attributes, escapeHtml } from "../scripts/lib/html.js";
 import { elementPageValues } from "../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
+import { groupIndexValues, groupValues } from "../scripts/pages/group.js";
 import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../scripts/pages/ranking.js";
 import { tableViewPageValues } from "../scripts/pages/table-views.js";
@@ -89,7 +90,9 @@ const NOT_FOUND_PAGE = {
  * The two rankings share one renderer because they are one page about two fields: the route
  * carries the field it ranks, so a second row here is a second ranking page. The four table views
  * share theirs for the same reason — one table, four questions — and the renderer takes the view's
- * mode from the template it is filling.
+ * mode from the template it is filling. The eleven group pages share theirs for the last reason
+ * again: the route carries the category, so the twelfth row is a group page rather than a
+ * different page about groups.
  */
 const FAMILY_RENDERERS = {
   "element-detail": elementPageValues,
@@ -101,6 +104,8 @@ const FAMILY_RENDERERS = {
   orbitals: tableViewPageValues,
   electronegativity: tableViewPageValues,
   evolution: tableViewPageValues,
+  group: groupValues,
+  "element-groups-index": groupIndexValues,
 };
 
 /**
@@ -121,6 +126,7 @@ async function bodyFor(route, context) {
   const values = renderer({
     route,
     element: route.element,
+    category: route.category,
     elements: context.elements,
     categories: context.categories,
     units: context.units,
@@ -239,11 +245,11 @@ export function shellFor(page, currentPath, manifest = routes) {
 /**
  * The manifest the build renders: everything the site publishes, in one list.
  *
- * @param {{ elements: object[] }} context
+ * @param {{ elements: object[], categories: object[] }} context
  * @returns {object[]}
  */
 export function manifestFor(context) {
-  return allRoutes(context.elements);
+  return allRoutes(context.elements, context.categories);
 }
 
 /**

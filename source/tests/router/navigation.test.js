@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { routes } from "../../scripts/router/routes.js";
+import { allRoutes, routes } from "../../scripts/router/routes.js";
+import { buildContext } from "../../tools/build-context.js";
 import {
   currentItemPath,
   footerColumns,
@@ -14,7 +15,16 @@ import {
 /** The path part of a link, without any fragment or query. */
 const pagePart = (path) => path.split("#")[0].split("?")[0];
 
-const declared = new Set(routes.map((route) => route.path));
+/**
+ * Everything the site publishes, generated families included.
+ *
+ * The shell is checked against the whole manifest rather than the authored routes, because the band
+ * on a group page links to eleven pages that are generated: a check that only read `routes` would
+ * call every one of them undeclared.
+ */
+const context = await buildContext();
+const manifest = allRoutes(context.elements, context.categories);
+const declared = new Set(manifest.map((route) => route.path));
 
 test("the primary navigation comes from the manifest, in the order it asks for", () => {
   const navigation = primaryNavigation(routes);
@@ -30,7 +40,7 @@ test("the primary navigation comes from the manifest, in the order it asks for",
 });
 
 test("every path the shell links to is a declared route", () => {
-  for (const path of shellPaths(routes)) {
+  for (const path of shellPaths(manifest)) {
     assert.ok(
       declared.has(pagePart(path)),
       `the shell links to ${path}, which the manifest does not declare`,
@@ -62,7 +72,7 @@ test("no destination appears twice inside the navigation or inside one submenu",
 });
 
 test("every submenu belongs to a section that a page declares", () => {
-  const declaredSections = new Set(routes.map((route) => route.section).filter(Boolean));
+  const declaredSections = new Set(manifest.map((route) => route.section).filter(Boolean));
 
   for (const section of Object.keys(submenus)) {
     assert.ok(

@@ -482,6 +482,45 @@
   --gap-era-chip: var(--sp-3);
   --size-era-sym: 26px;
   --size-end-sym: 30px;
+
+  /* -------------------------------------------------------------------------
+     15. The element group pages.
+
+     Twelve pages — the eleven groups and their index — on the reference's own
+     skeleton: a hero over a table already isolated to the group, the member
+     list under it, the group's shared character written out, and the other ten
+     groups named at the foot.
+
+     The reference's hero keeps 48px above its eyebrow and 48px below its facts.
+     Ours is paid by `main`, which every page family pays, so the hero takes the
+     lower half only and the two together land where the reference's do. Its
+     heading is 57.6px — between our --step-4 and --step-5 — and takes --step-4,
+     which is the 2.7px the typeface we cannot ship accounts for.
+
+     The member list is a wrapping grid whose column floor is the reference's own
+     210px: five to a row in the content column, three at 768, one on a phone,
+     without a breakpoint. The siblings at the foot are pills in each group's
+     own colour, and the dot inside one is the reference's 9.5px.
+     ------------------------------------------------------------------------- */
+  --type-grp-name: var(--step-4); /* the reference's own 57.6px heading, one step down */
+  --max-width-grp-hero: 620px; /* the hero's text column, measured */
+  --pad-grp-hero: 0 0 var(--sp-7); /* 48px below the facts; `main` pays the half above */
+  --mix-grp-hero-soft: 16%; /* the hero's wash, quieter than an element page's */
+  --margin-grp-eyebrow: 0 0 var(--sp-4);
+  --leading-grp-lede: 1.4; /* 32.48px on the reference's 23.2px, measured */
+  --gap-grp-facts: var(--sp-5); /* 24px between the hero's facts, measured */
+  --gap-grp-fact: 2px;
+  --margin-grp-section: var(--sp-8); /* 64px between the page's own sections, measured */
+  --min-width-grp-member: 210px; /* the member grid's column floor, measured */
+  --gap-grp-member: var(--sp-3); /* 12px, measured */
+  --pad-grp-member: var(--sp-3); /* the card's own 12px, measured */
+  --size-grp-member-tile: 48px;
+  --size-grp-member-z: 0.6rem; /* 9.6px, measured */
+  --gap-grp-member-meta: 1px;
+  --min-width-grp-card: 18rem; /* an index card's floor; the grid wraps by itself */
+  --gap-grp-sibling: var(--sp-2); /* 8px between the pills, measured */
+  --pad-grp-sibling: var(--sp-2) var(--sp-4);
+  --size-grp-sibling-dot: 0.595rem; /* 9.52px, measured */
 }
 
 /* The element's name takes its larger step once the hero has room for the card and the
