@@ -27,6 +27,9 @@
 <link rel="stylesheet" href="/styles/components/site-header.css">
 <link rel="stylesheet" href="/styles/components/submenu.css">
 <link rel="stylesheet" href="/styles/components/site-footer.css">
+<link rel="stylesheet" href="/styles/components/element-tile.css">
+<link rel="stylesheet" href="/styles/components/legend-chips.css">
+<link rel="stylesheet" href="/styles/components/periodic-table.css">
 
 <style>
   /* Style-guide-only layout. Values still come from the token layer. */
@@ -48,6 +51,10 @@
   .demo { border: var(--rule-dotted); border-radius: var(--radius); overflow: hidden; margin-block-end: var(--sp-5); }
   .demo__label { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-faint); padding: var(--sp-2) var(--sp-3); border-bottom: var(--rule-hairline); }
   .guide__section { margin-block-start: var(--sp-7); }
+  .guide__modes { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-block: var(--sp-3); }
+  .guide__mode { padding: var(--sp-1) var(--sp-4); border: var(--rule-hairline); border-radius: var(--radius-pill); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--step--1); cursor: pointer; }
+  .guide__mode[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--ink-inverse); }
+  .table-demo { overflow-x: clip; }
 </style>
 </head>
 <body>
@@ -146,6 +153,22 @@
   </section>
 
   <section class="guide__section section">
+    <h2 class="section__title">Periodic table</h2>
+    <p>
+      The engine, rendered from the real data layer in all four colour modes. Point at or tab to a
+      legend chip to isolate its group; tab to a tile and use the arrow keys to move through the
+      grid. One tile is in the tab order at a time.
+    </p>
+    <div class="guide__modes" role="group" aria-label="Colour mode">
+      <button class="guide__mode" type="button" data-table-mode="group" aria-pressed="true">Group</button>
+      <button class="guide__mode" type="button" data-table-mode="block" aria-pressed="false">Orbital block</button>
+      <button class="guide__mode" type="button" data-table-mode="state" aria-pressed="false">State</button>
+      <button class="guide__mode" type="button" data-table-mode="electronegativity" aria-pressed="false">Electronegativity</button>
+    </div>
+    <div class="table-demo" id="table-demo"></div>
+  </section>
+
+  <section class="guide__section section">
     <h2 class="section__title">Motion</h2>
     <p>
       Short, decelerating, upward. Nothing runs longer than <span class="swatch__name">--dur-slow</span>,
@@ -156,6 +179,9 @@
 
 <script type="module">
   import { readableForeground, contrastRatio, meetsAA, AA_TEXT } from "/scripts/lib/contrast.js";
+  import { createCategoriesRepository } from "/scripts/data/categories-repository.js";
+  import { createElementsRepository } from "/scripts/data/elements-repository.js";
+  import { createPeriodicTable } from "/scripts/components/periodic-table.js";
   import { submenu as submenuBand } from "/scripts/components/submenu.js";
   import { siteFooter } from "/scripts/components/site-footer.js";
   import { siteHeader } from "/scripts/components/site-header.js";
@@ -212,6 +238,31 @@
 
   document.querySelector("#chrome-footer").innerHTML = siteFooter({ columns: footerColumns });
   document.querySelector("#wordmark-demo").innerHTML = wordmark({ link: false }) + " " + wordmark({ link: false, small: true });
+
+  // The periodic table, rendered and attached by the real component in each of its four modes.
+  const elements = await createElementsRepository();
+  const categories = await createCategoriesRepository();
+  const tableHost = document.querySelector("#table-demo");
+  let releaseTable = () => {};
+
+  function showTable(mode) {
+    releaseTable();
+
+    const table = createPeriodicTable({ elements: elements.all(), categories: categories.all(), mode });
+
+    tableHost.innerHTML = table.html;
+    releaseTable = table.attach(tableHost);
+
+    for (const button of document.querySelectorAll("[data-table-mode]")) {
+      button.setAttribute("aria-pressed", button.dataset.tableMode === mode ? "true" : "false");
+    }
+  }
+
+  for (const button of document.querySelectorAll("[data-table-mode]")) {
+    button.addEventListener("click", () => showTable(button.dataset.tableMode));
+  }
+
+  showTable("group");
 </script>
 </body>
 </html>

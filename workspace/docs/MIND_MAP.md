@@ -90,7 +90,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `source/README.md` | ✅ A short orientation note for the code root: what lives where, and where the real guide is. | 0 |
 | `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. A foundation placeholder until the home-page phase fills it in. | 0, 4 |
 | `source/pages/404.html` | ✅ The not-found markup, served with a 404 status for any URL that matches no route. | 0 |
-| `source/styleguide/index.html` | ✅ **The design system on one page**, development only: every token, the type and spacing scales, all eleven group colours with the foreground the site would choose for each and the contrast ratio it reaches, and the shell components rendered by the components themselves. Not a route, never built, never deployed; the development server maps `/styleguide/` onto the source tree so it can still be looked at. | 1 |
+| `source/styleguide/index.html` | ✅ **The design system on one page**, development only: every token, the type and spacing scales, all eleven group colours with the foreground the site would choose for each and the contrast ratio it reaches, the shell components rendered by the components themselves, and the periodic table engine with a switch for its four colour modes. Not a route, never built, never deployed; the development server maps `/styleguide/` onto the source tree so it can still be looked at. | 1, 3 |
 | `source/pages/*.html` | 🚧 The remaining authored templates: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `element-groups-index`, `group`, `properties-and-states`, `orbitals`, `electronegativity`, `evolution`, `melting-point`, `boiling-point`, `orbital-configuration`, `downloads`, `temperature-calculator`, `about`, `contact`. A family shares one template when the difference between its pages is data — the 118 element pages, the eleven group pages, the 418 glossary terms. Where the difference is written copy, each page has its own template. | 5–10 |
 
 ### 3.2 `source/scripts/` — JavaScript
@@ -106,10 +106,10 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/data/categories-repository.js` | ✅ The only reader of `categories.json`. The eleven categories, their display names, their palette tokens and the member counts the legend asserts. | 2 |
 | `scripts/data/units-repository.js` | ✅ The only reader of `units.json`. Turns a field name into the unit to print and the number of figures to print it to, which is what keeps the unit next to the value instead of inside the page. | 2 |
 | `scripts/data/glossary-repository.js` | ✅ The only reader of `glossary.json`, and the glossary's arrangement rather than its content: reading order, the A–Z letters that actually have terms under them, lookup by slug, and a search that matches the definition as well as the term, because a reader who wants a word often knows the idea and not the name. The 418 definitions arrive in the glossary phase; this knows only what shape they take. | 2, 9 |
-| `scripts/components/periodic-table.js` | 🚧 The centrepiece. The 18×10 grid, four colour modes, group isolation, keyboard navigation, tooltips. | 3 |
-| `scripts/components/element-tile.js` | 🚧 One tile: atomic number, symbol, name; compact and detailed variants. | 3 |
+| `scripts/components/periodic-table.js` | ✅ **The centrepiece.** The 18×10 grid drawn from the element records in four colour modes — group, block, state, and a banded electronegativity with its own scale legend — plus the legend, group isolation, and arrow-key navigation with a single roving tab stop. It emits colour keys and bands rather than colours; `periodic-table.css` maps them to tokens. `renderPeriodicTable` returns markup for a build-time caller; `createPeriodicTable` returns the markup, its grid model and the function that attaches the behaviour in a browser. | 3 |
+| `scripts/components/element-tile.js` | ✅ One tile: the atomic number, the symbol and, at most widths, the name, as the link to the element's page. It carries its grid cell, its colour key or band, and an accessible name that says all three facts. Compact and detailed variants. | 3 |
 | `scripts/components/element-card.js` | 🚧 The index card: tile plus name, group, weight and state. | 6 |
-| `scripts/components/legend-chips.js` | 🚧 One pill per colour key, with its count; emits the isolation event. | 3 |
+| `scripts/components/legend-chips.js` | ✅ One pill per colour key, with its counted data behind it: a button the table owns (press isolates) or a link to a page. It also binds the isolation behaviour, reporting the key under the pointer, the focus or the press — and `null` when there is nothing to isolate — to the table. | 3 |
 | `scripts/components/wordmark.js` | ✅ The two-line lockup, as a link in the masthead and as plain text in the footer. | 1 |
 | `scripts/components/search-field.js` | ✅ The masthead search: a form, not a script, so it works without JavaScript and needs no behaviour module. | 1 |
 | `scripts/components/site-header.js` | ✅ The masthead: lockup, primary navigation from the manifest, and the search field. Rendered into the HTML at build time, so the chrome exists before any script runs. | 1 |
@@ -151,6 +151,9 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `styles/components/site-header.css` | ✅ The masthead band, the wrapping row, and the navigation item's rule. | 1 |
 | `styles/components/submenu.css` | ✅ The contextual band and its dotted rule. | 1 |
 | `styles/components/site-footer.css` | ✅ The footer's two blocks and the five-column link grid. | 1 |
+| `styles/components/element-tile.css` | ✅ The tile's shape: the square, the three lines of type sized against the table's container, the hover/focus lift, and the current element's outline. It consumes `--fill` and `--on-fill`, which the table's modes set. | 3 |
+| `styles/components/legend-chips.css` | ✅ The pill, its count badge mixed from the chip's own text colour, and the hover/focus/pinned lift. Consumes the same two custom properties as the tile. | 3 |
+| `styles/components/periodic-table.css` | ✅ The eighteen-column grid and its rows, the four colour modes as key-to-token maps, isolation and the focused-tile exemption, the numeric scale legend, and the narrow-screen scroll container with its edge fade. | 3 |
 | `styles/components/*.css` | 🚧 The remaining one-stylesheet-per-component files, named to match their modules. Never styles anything else. | 3–10 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
@@ -209,6 +212,9 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/data/repositories.test.js` | ✅ The categories and units repositories, including that every palette token a category names is one the token layer actually declares. | 2 |
 | `tests/data/glossary.test.js` | ✅ The glossary's arrangement, against a six-term fixture: reading order, derived letters, lookup, and a search that finds a word that appears only in a definition. | 2 |
 | `tests/brand/brand.test.js` | ✅ Walks the whole of `source/` and fails the suite if the reference's name appears anywhere in it, so the phase log's scan cannot be the only thing standing between a slip and a commit. | 2 |
+| `tests/components/periodic-table.test.js` | ✅ The engine against the real data: 118 cells, every f-block placement, the four modes' keys and legend counts, the banding of every measurement, the aria structure, and the stylesheet held to the contrast rule — every fill's foreground is the one `lib/contrast.js` chooses. | 3 |
+| `tests/components/element-tile.test.js` | ✅ Tile markup: position, link, accessible name, colour key or band, the compact variant, the current element, escaping and the refusal of a cell-less element. | 3 |
+| `tests/components/legend-chips.test.js` | ✅ Buttons versus links, the count pill, the pressed state, the empty guard, and that a chip carries a key rather than a colour. | 3 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
 
 ---

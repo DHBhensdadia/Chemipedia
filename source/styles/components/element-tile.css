@@ -1,0 +1,68 @@
+/* One tile on the periodic table.
+
+   The square itself: an element's whole cell, a link to its page, painted by the --fill and
+   --on-fill custom properties its context sets. Those two properties are the tile's interface
+   with the four colour modes — the modes live in periodic-table.css, the shape lives here, and a
+   tile rendered outside a table still falls back to a neutral surface.
+
+   Every measurement is a token. An eighteen-column grid gives a tile 65px at a desktop and 45px
+   on a phone, so the type inside is sized against the container (cqw) rather than the viewport:
+   the symbol has to stay legible at both, and a viewport-based step cannot do that. */
+
+.tile {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: center;
+  justify-items: center;
+  aspect-ratio: 1 / 1;
+  padding: var(--pad-tile-block) var(--pad-tile-inline);
+  border-radius: var(--radius-tile);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
+  line-height: var(--leading-tile);
+  text-decoration: none;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* A tile rises towards the pointer, and towards the keyboard. The outline comes from base.css;
+   the shadow and the lift are what make one tile read as the one being looked at. */
+.tile:hover,
+.tile:focus-visible {
+  z-index: 2;
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lift-tile)) scale(var(--scale-tile));
+}
+
+/* The element the page is about, marked by aria-current rather than by a class to maintain. */
+.tile[aria-current="page"] {
+  z-index: 3;
+  outline: var(--outline-tile-current) solid var(--ink);
+  outline-offset: 1px;
+}
+
+.tile__z {
+  place-self: start end;
+  padding-right: var(--pad-tile-inline);
+  font-size: var(--type-tile-z);
+  font-variant-numeric: tabular-nums;
+  opacity: var(--opacity-tile-number);
+}
+
+.tile__sym {
+  font-family: var(--font-display);
+  font-size: var(--type-tile-symbol);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tile-symbol);
+}
+
+.tile__name {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--type-tile-name);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: var(--opacity-tile-name);
+}

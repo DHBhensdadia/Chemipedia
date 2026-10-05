@@ -1,0 +1,54 @@
+/* The legend chips.
+
+   One pill per colour key, named and counted, painted by the same --fill and --on-fill the mode
+   sets on the tiles, so a chip and the tiles it dims are visibly the same colour. The count sits
+   in a small translucent pill of its own, mixed from the chip's text colour rather than from a
+   second colour, so it works on every fill without a per-chip decision.
+
+   The chip is an <a> or a <button>, whichever the caller rendered; both are styled here, because
+   both are the same object to a reader. */
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-legend);
+  margin: var(--margin-legend);
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-legend);
+  padding: var(--pad-chip);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* Pointed at, reached by keyboard, or pinned by a press: the same small lift. The outline for
+   the keyboard case comes from base.css, so the ring is never replaced by the shadow. */
+.chip:hover,
+.chip:focus-visible,
+.chip.is-active {
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lift-tile-sm));
+}
+
+.chip__n {
+  padding: var(--pad-chip-count);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--on-fill, var(--ink-body)) var(--alpha-chip-count), transparent);
+  font-weight: var(--weight-body);
+  font-variant-numeric: tabular-nums;
+}

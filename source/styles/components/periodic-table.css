@@ -1,0 +1,283 @@
+/* The periodic table.
+
+   The container and the grid. Eighteen columns, seven periods, a spacer row, and the two detached
+   f-block rows below it — the shape is fixed by the data's own positions, and the grid only has to
+   provide the eighteen columns and the ten rows the tiles place themselves into.
+
+   The table is the one surface that is sized against itself: `container-type: inline-size` makes a
+   `cqw` inside a tile mean one per cent of the table's width, which is what the tile type in
+   element-tile.css measures against. The table is also wider than the page's content column on
+   purpose — the reference's own measurements — so it is centred by pulling it out of whatever
+   column it sits in rather than by being constrained to it. */
+
+.pt {
+  container-type: inline-size;
+  width: var(--width-table);
+  margin-inline: var(--bleed-table);
+}
+
+.pt__grid {
+  display: grid;
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  grid-template-rows: repeat(7, auto) var(--height-tile-gap) repeat(2, auto);
+  gap: var(--gap-tile);
+}
+
+/* -------------------------------------------------------------------------
+   The four colour modes.
+
+   Each mode paints a keyed tile — and the legend chip with the same key — by setting the two
+   custom properties element-tile.css and legend-chips.css consume: --fill and --on-fill. The
+   foreground of every pairing is the one scripts/lib/contrast.js selects for that fill, and
+   tests/components/periodic-table.test.js holds this file to that rule rather than trusting it.
+
+   The keys are scoped by mode because "unknown" is both a category and a state, and an element
+   painted slate-blue as an alkali metal must not turn yellow because a different view would have
+   filed it otherwise.
+   ------------------------------------------------------------------------- */
+
+.pt[data-mode="group"] [data-key="transition-metals"] {
+  --fill: var(--g-transition-metals);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="actinides"] {
+  --fill: var(--g-actinides);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="lanthanides"] {
+  --fill: var(--g-lanthanides);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="post-transition-metals"] {
+  --fill: var(--g-post-transition-metals);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="unknown"] {
+  --fill: var(--g-unknown);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="noble-gases"] {
+  --fill: var(--g-noble-gases);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="non-metals"] {
+  --fill: var(--g-non-metals);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="group"] [data-key="alkali-metals"] {
+  --fill: var(--g-alkali-metals);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="group"] [data-key="alkaline-earth-metals"] {
+  --fill: var(--g-alkaline-earth-metals);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="group"] [data-key="metalloids"] {
+  --fill: var(--g-metalloids);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="group"] [data-key="halogens"] {
+  --fill: var(--g-halogens);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="block"] [data-key="s"] {
+  --fill: var(--g-s-block);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="block"] [data-key="p"] {
+  --fill: var(--g-p-block);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="block"] [data-key="d"] {
+  --fill: var(--g-d-block);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="block"] [data-key="f"] {
+  --fill: var(--g-f-block);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="state"] [data-key="solid"] {
+  --fill: var(--state-solid);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="state"] [data-key="liquid"] {
+  --fill: var(--state-liquid);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="state"] [data-key="gas"] {
+  --fill: var(--state-gas);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="state"] [data-key="unknown"] {
+  --fill: var(--state-unknown);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="electronegativity"] [data-band="0"] {
+  --fill: var(--scale-1);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="electronegativity"] [data-band="1"] {
+  --fill: var(--scale-2);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="electronegativity"] [data-band="2"] {
+  --fill: var(--scale-3);
+  --on-fill: var(--on-fill-dark);
+}
+
+.pt[data-mode="electronegativity"] [data-band="3"] {
+  --fill: var(--scale-4);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="electronegativity"] [data-band="4"] {
+  --fill: var(--scale-5);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="electronegativity"] [data-band="5"] {
+  --fill: var(--scale-6);
+  --on-fill: var(--on-fill-light);
+}
+
+.pt[data-mode="electronegativity"] [data-band="none"] {
+  --fill: var(--scale-none);
+  --on-fill: var(--on-fill-dark);
+}
+
+/* -------------------------------------------------------------------------
+   Isolation.
+
+   Pointing at or reaching a legend chip dims every key but its own. The dimmed tiles keep their
+   text readable — 0.22 of a fill is still a fill — and the focused tile is exempt, because a
+   focus ring drawn at 22 per cent opacity is not a focus ring.
+   ------------------------------------------------------------------------- */
+
+.pt__grid[data-isolated] .tile {
+  opacity: var(--dim-tile);
+  filter: saturate(var(--drain-tile));
+}
+
+.pt__grid[data-isolated] .tile.is-match {
+  z-index: 2;
+  opacity: 1;
+  filter: none;
+}
+
+.pt__grid[data-isolated] .tile:focus-visible {
+  opacity: 1;
+  filter: none;
+}
+
+/* -------------------------------------------------------------------------
+   The numeric legend.
+
+   The domain's two ends, the six band colours, and the grey of a missing value. The bar's six
+   spans are the same `--scale-N` custom properties the tiles map their bands to, so the legend
+   and the tiles cannot drift apart. The swatch next to "Unknown" is the one colour that is not
+   on the ramp: the value the table does not have is not zero. */
+
+.scale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap-legend);
+  margin: var(--margin-legend);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.scale__k {
+  font-variant-numeric: tabular-nums;
+}
+
+.scale__bar {
+  display: flex;
+  width: var(--width-scale-bar);
+  height: var(--height-scale-bar);
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.scale__bar span {
+  flex: 1;
+}
+
+.scale__nd {
+  width: var(--size-scale-key);
+  height: var(--size-scale-key);
+  border-radius: var(--radius);
+}
+
+/* -------------------------------------------------------------------------
+   Narrow screens.
+
+   Below the first breakpoint the table stops shrinking and starts scrolling, because an
+   eighteen-column grid squeezed into a phone stops being a table: 45px tiles become unreadable
+   long before the columns run out. The scroll container bleeds the full viewport width and fades
+   both edges, so the first and last column are never cut in half — the fade sits over the
+   container's own padding, which is where the columns are not.
+
+   The black stop below is an alpha mask, not a colour: only its opacity matters, and it is the
+   "fully visible" end of the fade.
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 56rem) {
+  .pt {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .pt__scroller {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    padding-inline: var(--sp-4);
+    padding-block-end: var(--sp-3);
+    /* A tile brought into view by the keyboard lands at the padding edge, so focus stops
+       where the fade is fully opaque rather than under it. */
+    scroll-padding-inline: var(--sp-4);
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 var(--fade-table),
+      #000 calc(100% - var(--fade-table)),
+      transparent 100%
+    );
+  }
+
+  .pt__grid {
+    min-width: var(--width-table-min);
+  }
+}
+
+@media (max-width: 40rem) {
+  .pt__grid {
+    min-width: var(--width-table-min-narrow);
+  }
+
+  .pt .tile__name {
+    display: none;
+  }
+}

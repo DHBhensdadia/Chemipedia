@@ -197,4 +197,82 @@
   --focus-width: 2px;
   --focus-offset: 2px;
   --focus-color: var(--ink);
+
+  /* -------------------------------------------------------------------------
+     8. The periodic table.
+
+     The table is the one surface that scales with itself rather than with the
+     page: eighteen columns side by side, a tile square, and every measurement
+     inside a tile taken as a percentage of the container. That is why the type
+     here is in cqw units and not on the page's type scale — a tile is 65px wide
+     on a desktop and 45px on a phone, and its symbol has to be legible at both,
+     which a viewport-based step cannot do.
+
+     Measured from the reference's own table, at 1280px: an 18-column grid of
+     65.367px tiles, a 3.07199px gap (a quarter of one percent of the grid's
+     width, clamped), a 3px radius, four pixels and 2.4 of padding, and a spacer
+     row of 0.6rem between the body and the detached f block.
+     ------------------------------------------------------------------------- */
+  --width-table: min(96vw, 1520px); /* the table is wider than the shell on purpose */
+  --bleed-table: calc(50% - min(48vw, 760px)); /* pulls it back to the viewport's centre */
+  --width-table-min: 820px; /* what it scrolls at, below the scroll breakpoint */
+  --width-table-min-narrow: 700px;
+  --fade-table: var(--sp-4); /* matches the scroll container's padding, so the
+                                first and last column sit where the edge mask is
+                                fully opaque rather than half-faded */
+
+  --gap-tile: clamp(1px, 0.25cqw, 4px);
+  --radius-tile: 3px; /* the tile's own corner: squarer than a panel, rounder
+                         than the default --radius */
+  --pad-tile-block: 0.25rem;
+  --pad-tile-inline: 0.15rem;
+  --leading-tile: 1.05;
+  --leading-tile-symbol: 0.72;
+  --opacity-tile-number: 0.9;
+  --opacity-tile-name: 0.92;
+
+  --type-tile-z: clamp(0.55rem, 0.85cqw, 0.95rem);
+  --type-tile-symbol: clamp(1rem, 2.15cqw, 2.2rem);
+  --type-tile-name: clamp(0.5rem, 0.8cqw, 0.88rem);
+
+  --lift-tile: -2px; /* a tile rises towards the pointer */
+  --scale-tile: 1.04;
+  --lift-tile-sm: -1px;
+  --dim-tile: 0.22; /* what a tile keeps when its group is isolated */
+  --drain-tile: 0.35; /* and how far its colour is drained */
+  --outline-tile-current: 2.5px; /* the tile a page is about */
+
+  --height-tile-gap: 0.6rem; /* row 8: the space between the body and the f block */
+
+  --pad-chip: 0.32em 0.6em 0.32em 0.75em;
+  --pad-chip-count: 0 0.5em;
+  --alpha-chip-count: 22%; /* the pill behind a chip's count, mixed from the
+                              chip's own text colour so it works on any fill */
+  --gap-legend: var(--sp-2);
+  --margin-legend: 0 0 var(--sp-5);
+
+  --height-scale-bar: 14px;
+  --width-scale-bar: 220px;
+  --size-scale-key: 14px; /* the "no value" swatch beside the bar */
+
+  /* The numeric scale. Six bands from the lightest end of the domain to the
+     darkest, plus the grey a tile takes when the source has no value for the
+     field at all — the same distinction the data layer keeps between a
+     measurement and a missing one, in colour. Measured from the reference's
+     electronegativity view, whose legend prints the domain's two ends. */
+  --scale-1: #dce9f0;
+  --scale-2: #a6c6d5;
+  --scale-3: #6f9fb5;
+  --scale-4: #3f7488;
+  --scale-5: #22525a;
+  --scale-6: #15403d;
+  --scale-none: #e8e2dc;
+
+  /* The state key. Three of the palette's own colours and the unknown yellow,
+     given the names the state view needs so that no stylesheet spells a group
+     colour where it means a state. */
+  --state-solid: var(--g-alkali-metals);
+  --state-liquid: var(--g-actinides);
+  --state-gas: var(--g-noble-gases);
+  --state-unknown: var(--g-unknown);
 }
