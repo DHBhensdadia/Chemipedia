@@ -131,12 +131,12 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/pages/glossary-term.js` | 🚧 A single glossary term. | 9 |
 | `scripts/pages/ranking.js` | 🚧 The melting and boiling point rankings. | 6 |
 | `scripts/pages/calculators.js` | 🚧 The calculators. | 10 |
-| `scripts/lib/grid.js` | 🚧 Atomic number → row/column, including the detached f-block rows. Pure. | 3 |
-| `scripts/lib/colour-scale.js` | 🚧 Numeric domain → colour, with clamping. Pure. | 3 |
+| `scripts/lib/grid.js` | ✅ Where each element sits and which cell a keypress lands on next. It does not re-derive the layout — `position` on every record is the frozen answer — it lays the 118 records out as a grid and answers the two questions the engine asks: which element is in a cell, and which cell is one step away, skipping the table's holes. Pure, no DOM. | 3 |
+| `scripts/lib/colour-scale.js` | ✅ A number's position on a scale, the band of a legend it belongs to, and — for callers that hold colours — the interpolated colour, with the domain's ends exact and outliers clamped. The table uses the band alone, because the six colours are tokens in `tokens.css` rather than constants here. Pure. | 3 |
 | `scripts/lib/html.js` | ✅ Building HTML strings safely: escape text, build an attribute list, join class names. Every value that reaches markup goes through here, because a stray ampersand in an attribute ends the attribute early and the browser builds a different element than the one that was written. Pure and trivial on purpose. | 1 |
 | `scripts/lib/contrast.js` | ✅ Colour maths, pure: hex normalisation, relative luminance, the WCAG contrast ratio, and the rule that picks the foreground for a group fill — the better of the two dark and cream candidates, never merely the acceptable one. | 1 |
 | `scripts/lib/format.js` | ✅ Value and unit → the string a reader sees. An unknown is a word rather than an empty cell, and a measurement is formatted with its unit or not at all, because half of a value's meaning lives in the unit. The definitions that say which unit a field takes arrive as an argument, so this stays pure. | 2 |
-| `scripts/lib/keyboard.js` | 🚧 Roving focus and arrow-key grid navigation. | 3 |
+| `scripts/lib/keyboard.js` | ✅ What a keypress means: the four arrows plus Home and End, and the cell each one moves to — asked of `lib/grid.js` rather than computed here, which is what lets the rule be tested without a browser. The table component owns the DOM half: moving focus and the tab stop. Pure. | 3 |
 | `scripts/lib/slug.js` | ✅ Name → URL segment, and back. British spellings are applied before the slug is built rather than after, because a URL cannot be taken back. | 2 |
 
 ### 3.3 `source/styles/` — CSS
@@ -198,6 +198,9 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/lib/html.test.js` | ✅ The escaping rules: the five characters that end a text node or an attribute, absent attributes omitted, a true one written bare, and an attribute value that cannot break out of its quotes. | 1 |
 | `tests/lib/slug.test.js` | ✅ The three preferred spellings, punctuation dropped rather than turned into a separator, accent folding, and the honest inverse: a slug reads back as a label, not as the name it came from. | 2 |
 | `tests/lib/format.test.js` | ✅ Significant figures against decimals, trailing zeros, zero kept as a value, an unknown rendered as a word, and a measurement that never loses its unit. | 2 |
+| `tests/lib/grid.test.js` | ✅ The layout held to the real data: 118 cells, row eight empty, both detached rows contiguous from column three, every f-block element in its row, hole-skipping steps in all four directions, and refusals of a missing position, a shared cell and an unknown direction. | 3 |
+| `tests/lib/colour-scale.test.js` | ✅ Positions from 0 to 1 with clamping, bands including the domain's top end, exact endpoint colours, interpolation between stops, legend swatches with and without a stop per band, and the constructor's refusals. | 3 |
+| `tests/lib/keyboard.test.js` | ✅ The six keys, their destinations across a row's holes, Home and End against a row's ends, the edges where nothing moves, and the keys the table does not own. | 3 |
 | `tests/lib/contrast.test.js` | ✅ The colour rules, plus a walk over every group colour that the token stylesheet actually declares. | 1 |
 | `tests/lib/html.test.js` | ✅ The escaping rules: the five characters that end a text node or an attribute. | 1 |
 | `tests/tools/layout.test.js` | ✅ The table's shape held to account: no two elements in a cell, row eight empty, every main-table element in a real group, both detached rows contiguous from column three. | 2 |
