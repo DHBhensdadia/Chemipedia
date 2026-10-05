@@ -124,15 +124,22 @@ ${footer}
 }
 
 /**
- * The stylesheets a page links: the global layer, the shell, and the page's own if it has one.
+ * The stylesheets a page links: the global layer, the shell, the component sheets the route
+ * declares, and the page's own file — each only if it exists.
  *
- * @param {{ template: string }} page
+ * The route's `styles` list is what keeps a page that uses the periodic table from linking the
+ * shell's sheets and nothing else. Without a bundler there is nothing to discover a component's
+ * stylesheet, so the page says which ones it uses and this function puts them in cascade order,
+ * with the page's own sheet last so it can override them.
+ *
+ * @param {{ template: string, styles?: string[] }} page
  * @returns {string[]} URLs, in cascade order
  */
 export function stylesheetsFor(page) {
   const candidates = [
     ...GLOBAL_STYLESHEETS,
     ...SHELL_STYLESHEETS,
+    ...(page.styles ?? []),
     `styles/pages/${page.template}.css`,
   ];
 

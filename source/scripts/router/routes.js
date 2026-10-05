@@ -26,6 +26,10 @@
  *   section      Optional. Which contextual submenu the page carries, if any. The submenus
  *                themselves live in `navigation.js`, because they are an arrangement rather than a
  *                set of URLs.
+ *   styles       Optional. The component stylesheets this page uses, beyond the global layer, the
+ *                shell and the page's own file. Named rather than discovered, because the build
+ *                has no bundler to find them with, and listed here so a page's dependencies sit
+ *                beside its template instead of in a list inside the build.
  *
  * A page family shares one template when the difference between its pages is data — the 118
  * element pages are one template, and so are the eleven group pages. Where the difference is
@@ -46,6 +50,12 @@ export const routes = [
       "overviews and a chemistry glossary.",
     nav: { label: "Periodic Table", order: 1 },
     section: "periodic-table",
+    styles: [
+      "styles/components/element-tile.css",
+      "styles/components/legend-chips.css",
+      "styles/components/periodic-table.css",
+      "styles/components/element-search.css",
+    ],
   },
   {
     path: "/elements/",

@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { renderDocument } from "../../tools/build.js";
+import { renderDocument, stylesheetsFor } from "../../tools/build.js";
 
 const page = {
   title: "ChemiPedia — a title",
@@ -47,6 +47,29 @@ test("metadata is escaped before it reaches the markup", () => {
   assert.ok(document.includes("<title>A &lt;title&gt; &amp; a &quot;quote&quot;</title>"));
   assert.ok(document.includes('content="An &lt;em&gt;emphasis&lt;/em&gt; &amp; an ampersand"'));
   assert.equal(document.includes("<em>emphasis</em>"), false);
+});
+
+test("a page links its declared component sheets, and its own sheet last", () => {
+  const sheets = stylesheetsFor({
+    template: "home",
+    styles: ["styles/components/periodic-table.css"],
+  });
+
+  assert.ok(sheets.includes("/styles/components/periodic-table.css"), "the declared sheet is missing");
+  assert.equal(sheets.indexOf("/styles/components/periodic-table.css"), sheets.length - 2);
+  assert.equal(sheets.at(-1), "/styles/pages/home.css", "the page's own sheet comes last");
+});
+
+test("a page that declares no component sheets links none", () => {
+  const sheets = stylesheetsFor({ template: "home" });
+
+  assert.equal(sheets.some((sheet) => sheet.includes("periodic-table")), false);
+});
+
+test("a declared sheet that does not exist is skipped rather than linked and 404ing", () => {
+  const sheets = stylesheetsFor({ template: "home", styles: ["styles/components/not-a-component.css"] });
+
+  assert.equal(sheets.some((sheet) => sheet.includes("not-a-component")), false);
 });
 
 test("authored markup is placed inside the main landmark and left alone", () => {

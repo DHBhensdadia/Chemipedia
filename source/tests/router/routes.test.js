@@ -114,6 +114,22 @@ test("the home page is declared at the root path", () => {
   assert.equal(home[0].template, "home");
 });
 
+test("a route's extra stylesheets are real files under source/styles", () => {
+  for (const route of routes) {
+    for (const stylesheet of route.styles ?? []) {
+      assert.equal(typeof stylesheet, "string", `${route.path} declares a stylesheet that is not a path`);
+      assert.ok(
+        stylesheet.startsWith("styles/") && stylesheet.endsWith(".css"),
+        `${route.path} declares ${stylesheet}, which is not a stylesheet path`,
+      );
+      assert.ok(
+        existsSync(path.join(sourceDir, stylesheet)),
+        `${route.path} declares ${stylesheet}, which does not exist`,
+      );
+    }
+  }
+});
+
 test("a template path is relative to source and keeps the family name", () => {
   assert.equal(templatePathFor({ template: "home" }), "pages/home.html");
   assert.equal(templatePathFor({ template: "element-detail" }), "pages/element-detail.html");
