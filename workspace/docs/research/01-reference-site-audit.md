@@ -53,7 +53,10 @@ Extracted from the live DOM (170 distinct links).
 ### Element groups (11)
 `/element-groups/` + `alkali-metals`, `alkaline-earth-metals`, `transition-metals`,
 `post-transition-metals`, `metalloids`, `non-metals`, `halogens`, `noble-gases`, `lanthanides`,
-`actinides`, `unknown`
+`actinides`, `unknown`.
+
+**There is no group index.** `/element-groups/` and `/element-groups` both answer 404, and the group
+band's `All` link points at `/` — the table. Measured 2026-10-06.
 
 ### Elements
 `/elements/:slug` — 118 slugs, e.g. `/elements/hydrogen`, `/elements/oganesson`.
@@ -284,9 +287,73 @@ colourings, each with its own explanatory paragraph and legend.
 
 ### 3.6 Element group pages — `/element-groups/:slug`
 
-Not yet fully audited. To be captured when Phase 8 begins. Expected: hero in the group colour,
-member count, an explainer, and the member grid. **Action for Phase 8:** audit this family live
-before implementing it, and append findings here.
+**Measured 2026-10-06** (live, at 1280 / 768 / 375; halogens, alkali metals, transition metals and
+the unknowns fetched in full, all eleven counted).
+
+The skeleton, the same on all eleven:
+
+- **Band**: the contextual submenu, **33px** at 1280, on the paper colour: a 13.6px label
+  `Element groups:` and links. The links are **six of the eleven groups** — Actinide, Alkali metal,
+  Alkaline earth metal, Halogen, Lanthanide, Metalloid, Noble gas — with the page's own group
+  removed from that fixed list, plus `All` → `/`. The four groups outside the list
+  (Non-metal, Post-transition metal, Transition metal, Unknown) are reachable only from the foot of
+  the page.
+- **Hero**: `section.hero` → `div.shell.hero__inner`, a flex row with a 48px gap and `padding: 48px
+  0`, **with no background of its own**. Inside it, `div.hero__text` capped at 620px holds an eyebrow
+  `Element group` (13.6px, 16px below), the `<h1>` at **57.6px/63.36px with −1.152px tracking** in the
+  ink, one lede paragraph at **23.2px/32.48px in the group's own colour**, and a
+  `<dl class="facts">` of 13.6px labels over 23.2px values, 24px apart.
+- **The facts are derived per group**, not written: Elements · Atomic numbers · Block · States, with
+  the block stated only where every member shares one and the states listed in the order the members
+  are met in atomic-number order. Read live: halogens `5 · 9–85 · p-block · Gas, Liquid, Solid`;
+  alkali metals `6 · 3–87 · s-block · Solid`; transition metals `35 · 21–112 · d-block ·
+  Solid, Liquid, Unknown`; the unknowns `8 · 109–117 · (no block) · Unknown`.
+- **"Where they sit"** (an h2 at 30.976px — our `--step-2`): the Phase 3 table, whole, on the group
+  mode's colours — 18 columns of 65.375px at a 3.072px gap, 65.36px tiles — with the grid carrying
+  `pt__grid is-filtered` and **every non-member tile at `opacity: 0.22; filter: saturate(0.35)`**,
+  its own members at full colour. 118 cells on every page measured. The section is 713px tall at
+  1280.
+- **The note under the table**: `The 5 highlighted cells are the halogens.` — 13.6px, 16px below the
+  grid. The note is below the table here too, as it is on the four views.
+- **The members** (`section.members-sec`, an h2 reading `The halogens`, 64px under the note): a
+  wrapping grid of cards with a **210px column floor** — five columns of 210.4px at 1280, three of
+  232px at 768, one of 327px at 375 — at a 12px gap. Each card is a link to the element: a **48px
+tile in the group's colour** (`--fill`/`--on-fill` written inline on the link) carrying the atomic
+  number at 9.6px over the symbol at 23.2px, then the name (17.6px) over `18.998 · Gas` (13.6px).
+- **"About the …"**: an explainer in a 68ch column, ours to write.
+- **"Other groups"** (`section.siblings`): the other ten as pills — `padding: 8px 16px`,
+  `border-radius: 999px`, a **9.52px round dot in each group's own colour**, 13.6px labels, 8px
+  apart.
+- Every section carries `margin: 0 0 64px`. **There are no rules between the sections** — a group
+  page is one column of blocks rather than a set of ruled panels.
+
+**The eleven, counted live** (declared count · member list): alkali metals 6 · alkaline earth metals 6
+· transition metals 35 · post-transition metals 8 · metalloids 6 · non-metals 7 · halogens 5 · noble
+gases 7 · lanthanides 15 · actinides 15 · unknown 8 — 118 in total. Checked slug by slug against the
+live pages, their membership is **the same as our `category` field, member for member**: the same
+astatine under halogens, the same selenium under the non-metals, the same polonium under the
+post-transition metals, the same eight transactinides under unknown. The Phase 8 exit criterion
+"member counts match the reference exactly" is therefore satisfiable as written, and its own examples
+— transition metals 35, halogens 5, unknown 8 — are the reference's own numbers.
+
+**A finding that shaped the hero.** The reference's lede is written in the group's own colour,
+darkened where the colour is too light to read: `#4c575a` for the halogens (which is the halogen
+token itself), `#98683c` for the transition metals, `#a85846` for the noble gases, `#816f39` for the
+unknowns. Those eleven values are already the `--g-*-deep` tokens in `tokens.css`, transcribed in
+Phase 1 from the same site — so our hero's lede is written in `var(--fill-deep)` and takes its colour
+from the one map that already owns the pairing, rather than from an eleventh decision.
+
+**What we take, and what we deliberately change.**
+
+| | Reference | ChemiPedia |
+|---|---|---|
+| Band | six groups + `All` → `/`, the current one removed | all eleven groups in the order a reader meets them reading the table, plus `All groups` → our index |
+| Hero wash | none; the colour appears in the lede only | the group's colour mixed into the paper at 16% — the same device our element pages use |
+| Lede ink | the group's darkened colour | `--fill-deep`, the same value, from the token layer |
+| Explainer | their prose, thousands of words | ours, two paragraphs, free of counts |
+| Note | `The 5 highlighted cells are the halogens.` | ours, and it counts both the group and the rest of the table |
+| Index page | **does not exist** | `/element-groups/` — ours alone |
+| Members, siblings, facts, table | as measured above | reproduced, with the counts derived from our records |
 
 ### 3.7 Glossary — `/terms`
 
@@ -487,7 +554,9 @@ the information architecture — is reproduced deliberately.
 
 ## 6. Outstanding audit work
 
-- [ ] Element group pages (`/element-groups/:slug`) — audit before Phase 8.
+- [x] Element group pages (`/element-groups/:slug`) — audited 2026-10-06; see §3.6, which carries
+  the measured skeleton, the eleven live member lists held against our own taxonomy, the eleven deep
+  colours the hero's lede is written in, and the finding that the family has no index page at all.
 - [x] Melting/boiling point pages — audited 2026-10-05; see §3.9, which also covers the orbital
   configurations page.
 - [x] The four alternate table views — audited 2026-10-06; see §3.5, which now carries their
