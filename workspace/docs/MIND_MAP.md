@@ -88,7 +88,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it is | Phase |
 |---|---|---|
 | `source/README.md` | ✅ A short orientation note for the code root: what lives where, and where the real guide is. | 0 |
-| `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. A foundation placeholder until the home-page phase fills it in. | 0, 4 |
+| `source/pages/home.html` | ✅ The home page's authored markup, as a fragment: the build wraps it in the document skeleton. Its sections in reading order — the hero, the table's host, the card into the explainers, the period and group explainers with the hosts for their diagrams, three teasers into the rest of the site, and the question that leads into the search — plus the empty hosts `pages/home.js` fills at load. | 0, 4 |
 | `source/pages/404.html` | ✅ The not-found markup, served with a 404 status for any URL that matches no route. | 0 |
 | `source/styleguide/index.html` | ✅ **The design system on one page**, development only: every token, the type and spacing scales, all eleven group colours with the foreground the site would choose for each and the contrast ratio it reaches, the shell components rendered by the components themselves, and the periodic table engine with a switch for its four colour modes. Not a route, never built, never deployed; the development server maps `/styleguide/` onto the source tree so it can still be looked at. | 1, 3 |
 | `source/pages/*.html` | 🚧 The remaining authored templates: `elements-index`, `element-detail`, `glossary-index`, `glossary-term`, `element-groups-index`, `group`, `properties-and-states`, `orbitals`, `electronegativity`, `evolution`, `melting-point`, `boiling-point`, `orbital-configuration`, `downloads`, `temperature-calculator`, `about`, `contact`. A family shares one template when the difference between its pages is data — the 118 element pages, the eleven group pages, the 418 glossary terms. Where the difference is written copy, each page has its own template. | 5–10 |
@@ -122,7 +122,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/components/bar-ranking.js` | 🚧 Horizontal magnitude bars for the ranking pages. | 6 |
 | `scripts/components/converter-input.js` | 🚧 One synchronised numeric input in the temperature calculator. | 10 |
 | `scripts/components/filter-bar.js` | 🚧 Search input plus letter jump index. | 9 |
-| `scripts/pages/home.js` | 🚧 The home page family. | 4 |
+| `scripts/pages/home.js` | ✅ The home page's composition and its two diagrams. It fills the table's and the finder's hosts from the data layer and draws the period and group schematics from the same `lib/grid.js` model the table is laid out from, so a change to where an element sits moves the diagrams with it. Both diagrams are exported so Node can check them without a document; the boot at the foot runs only in a browser. | 4 |
 | `scripts/pages/elements-index.js` | 🚧 The elements index. | 6 |
 | `scripts/pages/element-detail.js` | 🚧 The element detail family — all 118 pages. | 5 |
 | `scripts/pages/table-views.js` | 🚧 The four alternate table views. | 7 |
@@ -156,6 +156,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `styles/components/legend-chips.css` | ✅ The pill, its count badge mixed from the chip's own text colour, and the hover/focus/pinned lift. Consumes the same two custom properties as the tile. | 3 |
 | `styles/components/periodic-table.css` | ✅ The eighteen-column grid and its rows, the four colour modes as key-to-token maps, isolation and the focused-tile exemption, the numeric scale legend, and the narrow-screen scroll container with its edge fade. | 3 |
 | `styles/components/*.css` | 🚧 The remaining one-stylesheet-per-component files, named to match their modules. Never styles anything else. | 3–10 |
+| `styles/pages/home.css` | ✅ The home page's own pieces: the hero paragraph wider than the prose measure, the explainer's text-and-diagram columns, the schematic's geometry — the table's rows and columns in miniature — the card, and the three teasers. Rhythm and separators come from the layout layer. | 4 |
 | `styles/pages/*.css` | 🚧 One stylesheet per page family, named to match its module. | 4–10 |
 
 ### 3.4 `source/data/` — the data
@@ -216,6 +217,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/components/periodic-table.test.js` | ✅ The engine against the real data: 118 cells, every f-block placement, the four modes' keys and legend counts, the banding of every measurement, the aria structure, and the stylesheet held to the contrast rule — every fill's foreground is the one `lib/contrast.js` chooses. | 3 |
 | `tests/components/element-tile.test.js` | ✅ Tile markup: position, link, accessible name, colour key or band, the compact variant, the current element, escaping and the refusal of a cell-less element. | 3 |
 | `tests/components/legend-chips.test.js` | ✅ Buttons versus links, the count pill, the pressed state, the empty guard, and that a chip carries a key rather than a colour. | 3 |
+| `tests/pages/home.test.js` | ✅ The home page against the real data: the sections in reading order, the one heading and the closing question, the hosts the module fills, each diagram drawing all 118 elements on the labelled axis, and the empty axis refused. | 4 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
 
 ---
@@ -240,6 +242,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | How the site finds an element by name, symbol or number | `source/scripts/components/element-search.js` |
 | The f-block grid placement | `source/scripts/lib/grid.js` |
 | The colour scale for a numeric view | `source/scripts/lib/colour-scale.js` |
+| The home page's sections and its two diagrams | `source/pages/home.html` + `source/scripts/pages/home.js` |
 | Which URLs the site publishes | `source/scripts/router/routes.js` |
 | How a URL becomes a file in `dist/` | `source/tools/site-paths.js` |
 | How the site is built, and what gets copied | `source/tools/build.js` |

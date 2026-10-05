@@ -1,35 +1,78 @@
-<div class="shell">
-  <article class="prose">
-    <h1>ChemiPedia</h1>
+<section class="shell section home-hero">
+  <h1>The periodic table of the elements</h1>
 
-    <p class="lead">
-      Every element, the table that arranges them, and the words for what they do.
+  <p class="home-hero__lead">
+    All 118 elements in one grid, in order of atomic number. Every tile opens a page of properties,
+    electron shells, uses and discovery.
+  </p>
+</section>
+
+<section class="shell section home-table">
+  <h2 class="visually-hidden">The periodic table</h2>
+  <div id="home-table" data-home-table></div>
+</section>
+
+<section class="shell section home-understand">
+  <div class="home-card">
+    <h2 class="home-card__title">Understanding the periodic table</h2>
+    <p class="home-card__note">
+      <a href="/periodic-table/evolution/">How the table came to this shape</a>
     </p>
+  </div>
+</section>
 
+<section class="shell section home-explain">
+  <div class="home-explain__text">
+    <h2>Periods</h2>
+    <p class="home-explain__chip">Left to right</p>
     <p>
-      The site is under construction, and this page is where its foundation is checked. The design
-      system is in place: the palette, the type scale, the spacing rhythm, and the shell you are
-      reading this inside &mdash; the masthead above, the contextual band, and the footer below.
+      A period is a row. Crossing one, each element adds a proton to its nucleus and an electron to
+      the same outer shell, so a row runs from a metal that gives electrons away to a gas that
+      would rather take one.
     </p>
+    <p><a href="/periodic-table/evolution/">Read how the periods filled</a></p>
+  </div>
+  <div class="dia-host" id="periods-diagram" data-periods-diagram></div>
+</section>
 
-    <section class="section">
-      <h2 class="section__title">What is already in place</h2>
-      <ul>
-        <li>a route manifest that the build, the tests and the shell all read from one place;</li>
-        <li>a dependency-free build that renders every declared route to a static HTML file;</li>
-        <li>a dependency-free development server that resolves directory-style URLs;</li>
-        <li>the design tokens, the base and layout layers, and the shell components;</li>
-        <li>a test suite that runs on the Node test runner, with nothing to install.</li>
-      </ul>
-    </section>
+<section class="shell section home-explain">
+  <div class="home-explain__text">
+    <h2>Groups</h2>
+    <p class="home-explain__chip">Top to bottom</p>
+    <p>
+      A group is a column. Its elements share the number of electrons in their outer shell, which is
+      why they behave alike: the halogens all want one more electron, and the noble gases already
+      have all they need.
+    </p>
+    <p><a href="/element-groups/">Meet the groups</a></p>
+  </div>
+  <div class="dia-host" id="groups-diagram" data-groups-diagram></div>
+</section>
 
-    <section class="section">
-      <h2 class="section__title">What comes next</h2>
-      <p>
-        The element data and the periodic table itself. The links above and below already point at
-        the pages that will carry them, so a page starts working the moment its template is
-        written.
-      </p>
-    </section>
-  </article>
-</div>
+<section class="shell section home-teasers">
+  <h2 class="visually-hidden">Elsewhere on ChemiPedia</h2>
+  <ul class="home-teasers__list">
+    <li class="home-teaser">
+      <h3>The glossary</h3>
+      <p>Every term the table assumes you know, defined in a sentence.</p>
+      <p><a href="/glossary/">Open the glossary</a></p>
+    </li>
+    <li class="home-teaser">
+      <h3>Temperature calculator</h3>
+      <p>Kelvin, Celsius and Fahrenheit, converted against each other as you type.</p>
+      <p><a href="/calculators/temperature/">Convert a temperature</a></p>
+    </li>
+    <li class="home-teaser">
+      <h3>The four table views</h3>
+      <p>The same 118 elements, coloured by state, by orbital block or by electronegativity.</p>
+      <p><a href="/periodic-table/properties-and-states/">See the views</a></p>
+    </li>
+  </ul>
+</section>
+
+<section class="shell section home-find">
+  <h2 class="home-find__title">Looking for an element?</h2>
+  <div id="home-search" data-home-search></div>
+</section>
+
+<script type="module" src="/scripts/pages/home.js"></script>

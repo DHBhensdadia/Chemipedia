@@ -1,0 +1,140 @@
+/* The home page.
+
+   The page is a composition of sections, so its stylesheet describes rhythm and two pieces of its
+   own: the explainer's two-column shape and the small diagram that fills its second column. Every
+   measurement comes from the token layer — the page section of it holds the ones measured from the
+   reference for this page alone.
+
+   Sections use the layout layer's `.section` rule, so the dotted separators and the vertical
+   rhythm are the site's, not this page's. What is here is what the page adds. */
+
+/* The hero. `main` already provides the gap above it, so the heading starts where the reference's
+   does: one screen-width paragraph, wider than the prose measure. */
+.home-hero__lead {
+  max-width: var(--measure-hero);
+  margin-block-start: var(--sp-5);
+  color: var(--ink-soft);
+  font-size: var(--step-1);
+  line-height: var(--leading-body);
+}
+
+/* The table section. The engine brings its own legend, hint and grid; nothing to add. */
+
+/* A card: the block that asks a question and offers the way on. */
+.home-card {
+  max-width: 100%;
+  width: var(--width-home-card);
+  padding: var(--pad-home-card);
+  border-radius: var(--radius);
+  background: var(--surface-sunk);
+}
+
+.home-card__title {
+  font-size: var(--step-2);
+}
+
+.home-card__note {
+  margin-block-start: var(--sp-2);
+  font-size: var(--step--1);
+}
+
+/* The explainer: a column of words and a labelled schematic of the table's own shape. */
+.home-explain {
+  display: grid;
+  grid-template-columns: var(--width-explain-text) minmax(0, 1fr);
+  gap: var(--gap-explain);
+  align-items: center;
+  padding: var(--pad-explain);
+}
+
+.home-explain__chip {
+  margin-block-start: var(--sp-2);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.home-explain__text p {
+  margin-block-start: var(--sp-4);
+}
+
+/* The diagram. The grid is the table's geometry — eighteen columns, seven periods, the gap row,
+   the two detached rows — with one axis labelled and every element drawn as a block. */
+.dia {
+  width: 100%;
+}
+
+.dia__grid {
+  display: grid;
+  gap: var(--gap-dia);
+}
+
+.dia__grid--period {
+  grid-template-columns: var(--width-dia-label) repeat(18, minmax(0, 1fr));
+  grid-template-rows: repeat(7, auto) var(--height-tile-gap) repeat(2, auto);
+}
+
+.dia__grid--group {
+  grid-template-columns: repeat(18, minmax(0, 1fr));
+  grid-template-rows: auto repeat(7, auto) var(--height-tile-gap) repeat(2, auto);
+}
+
+.dia__label {
+  display: grid;
+  place-items: center;
+  color: var(--ink-faint);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+}
+
+.dia__cell {
+  aspect-ratio: 1 / 1;
+  border-radius: var(--radius-tile);
+  background: var(--surface-sunk);
+}
+
+/* The teasers that replace the reference's article list: three cards across the shell. */
+.home-teasers__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--width-teaser), 1fr));
+  gap: var(--sp-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-teaser {
+  padding: var(--sp-5);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+}
+
+.home-teaser p {
+  margin-block-start: var(--sp-2);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* The search: centred, with the results under the field. */
+.home-find {
+  text-align: center;
+}
+
+.home-find__title {
+  margin-block-end: var(--sp-4);
+  font-size: var(--step-3);
+}
+
+.home-find .element-search {
+  justify-content: center;
+}
+
+.home-find .element-search__results {
+  justify-items: center;
+}
+
+/* Below the first breakpoint the explainer's two columns become one, words first. */
+@media (max-width: 56rem) {
+  .home-explain {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
