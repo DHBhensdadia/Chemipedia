@@ -1,0 +1,14 @@
+{
+  "name": "chempedia-visual",
+  "private": true,
+  "type": "module",
+  "description": "Development-only visual verification harness for ChemiPedia. Never shipped, never required to run the site.",
+  "scripts": {
+    "compare": "node compare.mjs"
+  },
+  "dependencies": {
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.63.0",
+    "pngjs": "^7.0.0"
+  }
+}
