@@ -6,7 +6,7 @@
 > **It is never sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-05 (the session that built the home page)
+**Last updated:** 2026-10-05 (the session that built the home page, then fixed the tooling that could not photograph it)
 
 ---
 
@@ -14,12 +14,12 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | Phase 4 — Home page — `VERIFIED`, with the project's standing capture gate open |
-| **Work item** | Phase 4 is closed; Phase 5 — routing and element detail pages — is next |
-| **Objective achieved** | The front door: the table engine mounted from the data layer, two explainer schematics drawn from the same grid model, three in-scope teasers, and an element finder that is a form before it is a script — plus the defect it exposed, the build not linking a page's component stylesheets |
-| **Status** | `VERIFIED`. 221 tests pass; every exit criterion verified by measurement in a browser, except that no visual capture could be taken — the same failure as Phase 3, so the phase is not `COMPLETE` |
-| **Current commit** | `74c168d`, plus the close-out commit that follows it |
-| **Next action** | One capture retry, then Phase 5. Reload the preview, `preview_resize {fill: true}`, capture the built home page at 1280 / 768 / 375 against the reference tab pinned to light. If it composites, capture the style guide's table too, tick both phases' criteria and close them. If it does not, leave both gates open and start Phase 5 — 118 element detail pages must not wait on a screenshot. |
+| **Phase** | Phase 4 — Home page — `COMPLETE`. Phase 3 — Periodic table engine — also closed, on the same captures |
+| **Work item** | Phases 3 and 4 are closed and their visual gates are satisfied. Phase 5 — routing and element detail pages — is next |
+| **Objective achieved** | The front door: the table engine mounted from the data layer, two explainer schematics drawn from the same grid model, three in-scope teasers, and an element finder that is a form before it is a script — plus the defect it exposed (the build not linking a page's component stylesheets) and, after that, a page whose every box matches the reference's |
+| **Status** | `COMPLETE`. 221 tests pass, the build is green, and the home page was captured, pixel-diffed and measured against the reference at 1280 / 768 / 375 / 560px in one headless browser: no box differs in size, the table's crop is 2.28% different at 1280px and what is left is the typeface the brand rules require us to choose |
+| **Current commit** | `1db2fc7` and `7837dce`, plus the close-out commit that follows |
+| **Next action** | Phase 5 — routing and element detail pages: 118 URLs behind one template and one module, plus `property-list.js`, `shell-diagram.js`, `faq-block.js` and the progressive-enhancement router. Before writing a page, run the harness on the nearest reference page (an element detail) so its boxes are measured first rather than fixed afterwards. |
 
 ## Files expected to change in the next work item
 
@@ -55,7 +55,9 @@ detail page prints — including `position`, `shells`, `valence` and the discove
 | 4.1 The finder and the engine's hint | `COMPLETE` | 23 tests: ranking against the real 118, the form's markup, the hint escaped and optional | `596fc15` |
 | 4.2 The page: sections and two diagrams | `COMPLETE` | 12 tests: section order, the hosts, both diagrams drawing all 118 from the grid model | `0eab574` |
 | 4.3 The finder's control height | `COMPLETE` | Field and button both 54.15px, the reference's own height | `74c168d` |
-| 4.4 The page against the reference at three widths | `VERIFIED` | Measured side by side in one session: h1, hero measure, table container, explainer columns, finder geometry, closing section, rhythm, and no horizontal overflow. **Not captured.** | `74c168d` |
+| 4.4 The page against the reference at three widths | `COMPLETE` | Captured and diffed at 1280 / 768 / 375 / 560px: no box differs in size; the differences are the typeface, the copy and one section fewer | `74c168d`, `7837dce` |
+| 4.5 A camera that works | `COMPLETE` | `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages; dev-only, and the site runs without it | `1db2fc7` |
+| 4.6 The differences the capture found | `COMPLETE` | Legend and hint moved into the shell, heading leading 1.1, hero measure 850.976px and margin 12px, legend margin 8px, chip 26.36px tall, proportional figures in the number, the finder shrinking rather than wrapping, names hidden at the reference's 560px | `7837dce` |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
@@ -75,7 +77,7 @@ All six ADRs stand; nothing is blocked on a decision. One new decision is worth 
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| The preview webview does not composite | The visual gate cannot be captured, and neither Phase 3 nor Phase 4 can honestly close | Retry once at the start of the session. This has happened in two consecutive sessions, so it now reads as environmental; if the third retry fails, raise it with the author. `preview_resize {fill: true}` is step zero of the recipe. Never present a measurement as a capture. |
+| The preview webview does not composite | The panel's own screenshot tool may still fail; it is no longer on the critical path | `workspace/tools/visual` captures, diffs and measures both pages in headless Chrome. Use the panel tool first because it is cheaper, and fall back to the harness the moment it reports no frames — do not spend a second session on it. |
 | The preview window has no operating-system focus | `focus`, `blur` and real key events are never delivered, so tab-order and hover behaviour cannot be exercised as a person would | Real clicks are delivered, and dispatching the event through the shipped listener exercises the same code path. Say which method was used. |
 | Generated routes multiply the build's surface | 118 element pages must be written, linked and tested without a bundler | The manifest already supports derived entries and the build reports what it skipped; the family shares one template and one module, so the 118 pages are data, not markup. |
 | The shell links destinations whose pages are not built yet | A reader clicking through arrives at the not-found page | Accepted construction state; the build reports the count on every run. Still 14. |
@@ -84,10 +86,9 @@ All six ADRs stand; nothing is blocked on a decision. One new decision is worth 
 
 ## Deliberately unfinished
 
-**The visual capture, for the second phase running.** Phase 3's criterion and Phase 4's appearance
-evidence are measurements, written out in full in the phase log; neither phase is `COMPLETE` until
-some session can take the pictures. Everything else in the tree is finished: the working tree is
-clean at the close-out commit.
+**Nothing.** Phases 3 and 4 both closed `COMPLETE` on captures taken with the harness, and the
+working tree is clean at the close-out commit. The remaining differences from the reference — the
+typeface and the copy — are recorded decisions, not open work.
 
 Deferred on purpose, as before:
 
@@ -105,5 +106,12 @@ node source/tools/build.js        # renders the ready routes into dist/
 node source/tools/serve.js --port 4180   # the site; /styleguide/ carries the table's four modes
 ```
 
-Then open `workspace/progress/PHASE_LOG.md` at Phase 4. The capture first, then Phase 5 — the
-element detail family, one template and one module behind 118 URLs.
+And when a page needs looking at:
+
+```bash
+cd workspace/tools/visual && npm install && \
+  node compare.mjs --ours http://127.0.0.1:4180/ --reference <reference url> --label <page> --widths 1280,768,375
+```
+
+Then open `workspace/progress/PHASE_LOG.md` at Phase 4. Phase 5 next: the element detail family, one
+template and one module behind 118 URLs.

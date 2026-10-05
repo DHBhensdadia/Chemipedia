@@ -122,3 +122,33 @@ across sessions, and it is what `RUN_STATE.md` means by "verification".
 - Playwright MCP overview and community usage reports for agentic UI verification (2026)
 - Reproducibility caveats for screenshot tests across environments — Stack Overflow, 2026
 - Visual regression testing guidance for AI-generated UIs (2026)
+
+---
+
+## 5. Addendum, 2026-10-05 — Track B was adopted, and it earned its place
+
+Track A failed first. Across two sessions `preview_screenshot` reported that the preview webview
+produced no frames — five attempts, with `preview_resize {fill: true}`, in a freshly opened tab, on
+three different pages — and two phases could not close their appearance gates as a result. The
+author's instruction was to fix the tooling rather than keep recording the gap, so Track B was
+built: `workspace/tools/visual/`.
+
+What it does: launches the **system Chrome** headlessly (`channel: "chrome"`, so no browser
+download), opens the reference and our build in the same session at the same width, colour scheme
+and reduced-motion setting, captures both, diffs them with `pixelmatch`, crops the table, the hero
+and the finder, and prints a row-by-row comparison of the measurements taken from both pages.
+
+What it found that measurement alone had not, on its first run against the home page:
+
+- the legend and the hint line sat inside the table's bleeding container, 64px left of the page's
+  own text column;
+- the heading was a pixel short of the reference's, from a leading of 1.08 against 1.1;
+- the hero's measure was 3px narrow and its margin twice the reference's;
+- the legend's own margin was three times the reference's, and the chips 4px taller;
+- on a phone the finder broke onto two rows where the reference's field shrinks and stays on one.
+
+Every one of those was a difference a person would see and a measurement table did not surface. All
+are fixed, and the phase log carries the before-and-after numbers.
+
+**The rule from §4 stands and is unchanged:** no visual check is complete without a captured image
+this session can be looked at. What changed is that the image no longer has to come from the panel.

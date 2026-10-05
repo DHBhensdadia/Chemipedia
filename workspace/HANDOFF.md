@@ -1,7 +1,7 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-05 · **By:** the session that built the home page · **After commit:** `74c168d`
-plus the close-out commit
+**Written:** 2026-10-05 · **By:** the session that built the home page and then made it verifiable ·
+**After commit:** `7837dce` plus the close-out commit
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -26,24 +26,29 @@ JavaScript and improves with it.
 - The built home page is at `/` when the dev server runs; `/styleguide/` still carries the table in
   all four modes.
 
-**Phase 3 and Phase 4 are both `VERIFIED`, not `COMPLETE`.** In each, every criterion was verified
-by measurement in a browser; what is missing is the screenshot. The preview webview produced no
-frames for any capture in two consecutive sessions — five attempts, one of them in a freshly opened
-tab and others with `preview_resize {fill: true}` — so neither phase closes on a measurement alone.
-Every number a retry needs is written into the phase log.
+**Phase 3 and Phase 4 are both `COMPLETE`.** The panel's screenshot tool never composited — five
+attempts across two sessions — so the author had the tooling fixed instead of the gap recorded:
+`workspace/tools/visual` drives the system Chrome headlessly, captures both pages at the same width
+and colour scheme, diffs them pixel by pixel and compares every measurement. On the home page no
+box differs in size from the reference's at 1280 / 768 / 375 / 560px; the table's crop is 2.28%
+different at 1280px, and what is left is the typeface and the copy, both recorded decisions.
+
+**Use it before you style anything.** Its first run found four differences that four phases of
+measured comparison had not: the legend and the hint sitting 64px left of the page's text column,
+a heading a pixel short, a measure 3px narrow, a finder breaking onto two rows on a phone. Measure
+the reference's boxes first, then write the CSS.
 
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. **Try the capture once.** Reload the preview, `preview_resize {fill: true}`, then capture the
-   built home page at 1280 / 768 / 375 with the reference open in a second tab and pinned to its
-   light colour scheme. The phase log lists the exact metrics to re-read. If it composites, capture
-   the style guide's table too, tick both phases' open criteria, and close them. If it does not,
-   leave both gates open and move on — three sessions on one screenshot is not a good use of one.
-3. Then **Phase 5 — routing and element detail pages**: 118 URLs, one template, one module, plus
+2. **Phase 5 — routing and element detail pages**: 118 URLs, one template, one module, plus
    `property-list.js`, `shell-diagram.js` and `faq-block.js`. Read its exit criteria in
    `progress/PHASE_LOG.md`. The data is already there: every record carries `position`, `shells`,
    `valence`, the discovery block and the prose, so the family is data rather than markup.
+3. **Run the harness on one element page before writing the CSS for it.**
+   `cd workspace/tools/visual && node compare.mjs --ours http://127.0.0.1:4180/ --reference <an
+   element page> --label element --widths 1280,768,375`. Every box it reports is a box the detail
+   page must match; every difference it reports is one to fix or record before the phase closes.
 
 ## What is fragile or easy to get wrong
 
@@ -51,7 +56,12 @@ Every number a retry needs is written into the phase log.
   composite, so no screenshot can be taken; and its window has no operating-system focus, so
   `focus`, `blur` and real key events are never delivered. Real clicks *are* delivered, and
   dispatching an event exercises exactly the listener the shipped code attaches — say which method
-  you used rather than implying a person's hands did it.
+  you used rather than implying a person's hands did it. When it cannot composite, go straight to
+  `workspace/tools/visual`; do not retry the panel tool a third time.
+- **The harness compares *boxes*, not tastes.** A crop that matches in size with a few per cent of
+differing pixels is a typeface or copy difference — read `fontFamily` and the two pages' text in
+`report.json` before changing any CSS. The reference sets a commercial typeface and `BRAND_GUIDELINES`
+§2 forbids us shipping one, so glyph widths will never be equal; every box, gap and colour can be.
 - **A page's component stylesheets must be declared on its route.** Adding a component to a page and
   forgetting its `styles` entry produces a page that looks broken in the browser and passes every
   test except the one that checks declared paths exist. Check it first when styling goes missing.
@@ -78,9 +88,8 @@ Every number a retry needs is written into the phase log.
 
 ## Anything deliberately left in a half state
 
-Nothing is half-done in the tree; the working tree is clean. One gate is open on purpose and now
-covers two phases: the visual capture, recorded in the phase log with the measurements that stand in
-for it until a compositing session can take the pictures.
+Nothing is half-done in the tree; the working tree is clean, and no gate is open for the first time
+in this project's history — Phases 3 and 4 both closed on captures taken by the harness.
 
 Two older deferrals stand: the 418 glossary definitions belong to Phase 9, and `covalentRadius` and
 `latticeParameters` are `null` because no acceptable source supplies them.

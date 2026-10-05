@@ -17,8 +17,8 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
 | 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
 | 2 | Data layer (elements and glossary) | `COMPLETE` | `d985245`..`26229e2`, `30f203b`, plus the close-out commit |
-| 3 | Periodic table engine | `VERIFIED` | `bf1d8e3`..`2f06018`, plus the close-out commit (`b7201a0`) |
-| 4 | Home page | `VERIFIED` | `7587a66`..`74c168d`, plus the close-out commit |
+| 3 | Periodic table engine | `COMPLETE` | `bf1d8e3`..`2f06018`, plus the close-out commit (`b7201a0`); visual criterion closed by `1db2fc7` |
+| 4 | Home page | `COMPLETE` | `7587a66`..`7837dce`, plus the close-out commit |
 | 5 | Routing and element detail pages | `NOT_STARTED` | — |
 | 6 | Elements index and attribute rankings | `NOT_STARTED` | — |
 | 7 | Alternate periodic table views | `NOT_STARTED` | — |
@@ -377,12 +377,13 @@ stylesheets and the table section of the token layer; logic and component tests;
   fade becomes opaque, and after a keyboard move to the last column the scroller is at its maximum
   and the final tile ends at the same 16px inset. At 768px the same holds with an 820px minimum,
   and the names are still shown.
-- [ ] Tile geometry and colour mapping visually compared against the reference. **Measured, but not
-  captured.** The preview webview produced no frames for any capture this session — `preview_resize
-  {fill: true}` and a freshly opened tab both failed — so the comparison was made by reading both
-  tables' computed styles with the reference open in a second tab of the same session. Every metric
-  matches (below), but on this project's own rule — a capture, not merely a measurement — the
-  criterion stays open. Phase 2 was held open on the same rule; so is this.
+- [x] Tile geometry and colour mapping visually compared against the reference. **Captured and
+  diffed**, twice over. Within the session that built the engine the preview would not composite,
+  so the criterion was left open on the measurements below; the next session built the harness in
+  `workspace/tools/visual` (Track B of `docs/research/02`), which put both tables in one headless
+  browser and compared them pixel by pixel. The table's crop is **2.28% different at 1280px, 4.22%
+  at 375px**, every box identical in size and position, and the residual is the typeface the brand
+  rules require us to choose for ourselves. See Phase 4's verification for the full method.
 
 **Verification**
 
@@ -469,10 +470,11 @@ linking them.
 
 **Exit criteria**
 
-- [x] Section order, rhythm and spacing match the reference at all three widths. **Measured** at
-  1280, 768 and 375px in the same browser session as the reference, section by section; the numbers
-  are below. Not captured: the standing visual gate for this phase is still open, and is recorded
-  under Deviations.
+- [x] Section order, rhythm and spacing match the reference at all three widths. **Measured,
+  captured and diffed** at 1280, 768, 375 and 560px: screenshots of both pages, a pixel diff and a
+  region-by-region comparison, all in one headless browser. Every box now matches — including the
+  four differences the capture found and the closing source commit fixed. What remains is
+  enumerated under Deviations, and it is typeface and copy rather than layout.
 - [x] Hovering a legend chip isolates that group. On the built page, pressing the "Transition metal
   35" chip left 35 tiles matched and the other 83 at `opacity: 0.22` with `saturate(0.35)`;
   pressing it again returned all 118 to full.
@@ -529,7 +531,8 @@ list named "Periodic table of the elements", and the finder's form labelled and 
 
 | Item | Decision |
 |---|---|
-| **No visual capture was possible, for the second session running.** | `preview_screenshot` reported that the webview was not compositing, in a fresh tab and with `preview_resize {fill: true}`, at the start of the session and again during this phase's verification. | The phase's appearance evidence is measurement — the full table above — and the capture of this page joins Phase 3's in the open gate. Phase 4 therefore records `VERIFIED`, not `COMPLETE`. Hand-write the retry's checklist from the numbers above, not from memory. |
+| **The preview's own screenshots never worked, so the harness was built.** | Two sessions of `preview_screenshot` failing to composite; Track B of `docs/research/02` had been written down and never taken. | `workspace/tools/visual` now drives the system Chrome headlessly, captures both pages at the same width and colour scheme, diffs them pixel by pixel and compares every measurement. Dev-only, under `workspace/`, imported by nothing in `source/`. Its first run found four real differences the measurements had missed (the legend 64px off the page's column, a heading a pixel short, a measure 3px narrow, a finder breaking onto two rows) — all fixed in `7837dce`. |
+| **What still differs from the reference, and why it never will match exactly** | The typeface: the reference sets a commercial face, and `docs/BRAND_GUIDELINES.md` §2 requires our own stack, so glyph widths differ by 0.6–3px and the table's crop stays 2.28% different. The copy: the hero, the legend labels and the hint line are our sentences, and the reference's own are its property. The content below the fold: its home carries an extra section and eleven article cards we do not publish (ADR-002). | Recorded rather than chased. Every box, gap, size, colour and breakpoint that is measurable matches; the differences left are the two the brand rules demand and one scope decision already on record. |
 | **The build was not linking a page's component stylesheets.** | The manifest declared routes; the build linked the global layer, the shell and the page's own sheet. The first real page arrived with the table unstyled and the search field drawn by the browser. | Fixed in `7587a66`: a route names the component sheets it uses, the build links them in cascade order, and a test holds every declared path to a real file. The style guide had hidden this by linking the three sheets by hand. |
 | The reference's Learn articles are not replicated | Its home carries article cards from a blog this project does not publish (ADR-002). | Three teasers into pages that exist: the glossary, the temperature calculator and the table views. A test holds the list to those three. |
 | Our explainers say "Periods" and "Groups" in our own words | The reference's explainers carry their own copy, and its article titles are its brand. | The structure is measured from the reference — the same two-column explainer, the same 300px text column, a schematic in the second — and the sentences are ours. |
@@ -537,7 +540,37 @@ list named "Periodic table of the elements", and the finder's form labelled and 
 
 **Commits:** `7587a66` link the component stylesheets a route declares · `596fc15` add the element
 finder and the table's hint line · `0eab574` build the home page around the table · `74c168d` match
-the finder's control height · plus this close-out commit
+the finder's control height · `1db2fc7` the visual harness · `7837dce` match the page to the
+reference's own measurements · plus this close-out commit
+
+**The capture pass that closed both phases.** `workspace/tools/visual/compare.mjs` opened
+`http://127.0.0.1:4180/` and the reference in the same headless Chrome, at 1280, 768, 375 and 560px,
+light colour scheme and reduced motion pinned on both sides:
+
+```
+                        ours                      reference                 pixels
+1280px  table crop      1228.8 × 625.52 at y422.39  1228.8 × 625.52 at y422.39   2.28%
+        hero crop      1100 × 60.36    at y140     1100 × 60.36    at y140      6.80%
+        finder crop    1100 × 54.14    at y2536    1100 × 54.14    at y3367     12.00%
+768px   table crop      820 × 420.61    at y439.19  820 × 420.61    at y469.81   8.86%
+        finder crop     720 × 52.8      at y2995    720 × 52.8      at y3521     6.97%
+375px   table crop      700 × 360.16    at y850.81  700 × 360.16    at y827.92   4.22%
+        finder crop     327 × 51.64     at y3306    327 × 51.64     at y3944     12.26%
+560px   table crop      700 × 360.31    at y585.77  700 × 360.31    at y637.81   5.32%
+
+whole viewport, the home page at 1280px ..................................... 4.87% different
+  (2.28 points of it is the table's glyphs; the rest is copy and one section fewer)
+
+boxes that differ in size: none at any width. Every gap, padding, radius, border, type size,
+line-height and colour that both pages have an element for is equal to the reference's.
+```
+
+Four differences were found by looking at the pictures rather than at the numbers, and each was
+read off the reference before it was changed: the legend and the hint sat inside the table's
+bleeding container and so started 64px left of the page's column; the hint wrapped to two lines
+where the reference's is one; the chips were 4px taller; and the finder broke onto two rows on a
+phone where the reference's field shrinks instead. The measurements underneath had matched before
+those fixes, which is the point of a capture.
 
 ---
 
@@ -665,7 +698,7 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-02 | 2 | Resolved | **The visual gate that blocked this phase.** The preview would not composite, so no capture could be taken and the phase could not honestly be closed. | **Resolved.** The preview composited on the first attempt of the following session. The home page was captured and compared at 1280 / 768 / 375 px against the reference in a second tab; the two chrome differences that turned up were fixed in `30f203b`, and the phase closed on those captures. |
 | 2026-10-02 | 2 | Deviation | **The masthead stays on one row at 768px** where the reference wraps its search field onto a second row. Our navigation carries four items and the reference's carries six, the learning and games sections being out of scope (ADR-002). | Accepted. Measured: 91px in two rows against our 59px in one. |
 | 2026-10-01 | 2 | Deviation | **Two schema fields stay null for every element** (`covalentRadius`, `latticeParameters`) and **one was removed from the schema** (`ionicRadius`). | Recorded in `docs/DATA_SOURCES.md` §2.1 and §5. null means unknown and the UI renders it as such; the removed field was removed because an ionic radius belongs to an ion and not to an element. |
-| 2026-10-05 | 3 | Blocker | **Screenshot capture failed for the second session running, and the known fix did not work again.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, and twice more at the start of the next one, with `preview_resize {fill: true}` and, in one attempt, a freshly opened tab. | **Open.** Both phases record their appearance evidence as measurement and stay `VERIFIED`, not `COMPLETE`. The failure now reads as environmental rather than page-specific: the same error, the same wording, whatever tab is being looked at. The next session should retry once — the recipe is `docs/TESTING_STRATEGY.md` §4 — and if it fails again, raise the gate with the author as a project risk rather than spending a third session on it. |
+| 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---
 

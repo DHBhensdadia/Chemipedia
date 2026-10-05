@@ -76,6 +76,23 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `guides/03-how-a-page-gets-built.md` | An end-to-end trace of one URL from JSON record to pixels, in nine steps, including the table's algorithmic content. The three ideas worth remembering. |
 | `guides/04-interview-quick-reference.md` | The thirty-second pitch, the architecture answer, a "Where is …?" table mapping questions to files and functions, the likely questions with honest answers, and four things to be able to demonstrate live. |
 
+### 2.5 `workspace/tools/visual/` — the visual verification harness
+
+> Track B of `docs/research/02-tooling-and-visual-verification.md`, adopted on 2026-10-05 after two
+> sessions in which the in-panel screenshot tool could not composite. **Development only:** nothing
+> in `source/` imports it, the site runs and the tests pass with its `node_modules` deleted, and it
+> is not build tooling. Its directory sits inside `workspace/` so it can be versioned without ever
+> being shipped.
+
+| File | What it is |
+|---|---|
+| `tools/visual/README.md` | How to run it, how to read its output, and what it must never become. |
+| `tools/visual/compare.mjs` | The harness: opens the reference and the build in the same headless Chrome at the same width and colour scheme, captures both, diffs them pixel by pixel, crops the table, the hero and the finder, and reports every measurement taken from both pages. |
+| `tools/visual/package.json` | Its three dev-only dependencies (`playwright`, `pixelmatch`, `pngjs`) and its one script. Separate from the repository's own dependency-free `package.json` on purpose. |
+| `tools/visual/package-lock.json` | The pinned install, so a later run compares against the same version. |
+| `tools/visual/node_modules/` | 📌 Installed, never committed (`.gitignore`). |
+| `screenshots/` | 📌 Where the captures and `report.json` are written. Gitignored: working evidence, not artefacts. |
+
 ---
 
 ## 3. `source/` — shipped code

@@ -160,3 +160,29 @@ Phase __ verification
 If any line cannot be honestly ticked, **the phase is not complete**. Say so in the log, record why,
 and leave the phase `IN_PROGRESS` with the blocker written into `RUN_STATE.md`. An honest incomplete
 phase is recoverable; a falsely-closed one corrupts every phase after it.
+
+
+---
+
+## Track B — the harness (adopted 2026-10-05)
+
+Recipe step 3 in §4 says to capture with the panel's `preview_screenshot`. When that tool cannot
+composite — as it could not for two sessions — the capture comes from `workspace/tools/visual`
+instead. The rest of the recipe is unchanged; only the camera moves.
+
+```bash
+node source/tools/serve.js --port 4180          # serve the build
+cd workspace/tools/visual && npm install        # dev-only; never required by the site
+node compare.mjs --ours http://127.0.0.1:4180/ \
+  --reference https://www.breakingatom.com/ --label home --widths 1280,768,375
+```
+
+It writes `workspace/screenshots/<label>/`: both pages' screenshots, a pixel diff, one crop per
+region (the table, the hero, the finder), each crop's diff, and `report.json` with every
+measurement from both pages. Read a crop that differs in **size** as a layout defect; read one that
+matches in size with a few per cent of differing pixels as typeface or copy — check `fontFamily`
+and the heading/label text before chasing it.
+
+**Two rules.** It is development-only: nothing in `source/` may import it, and deleting its
+`node_modules` must leave the site and the suite working. And it does not replace the recipe — it
+replaces one line of it.
