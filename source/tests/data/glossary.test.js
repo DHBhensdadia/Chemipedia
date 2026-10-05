@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 
 import {
+  LETTERS,
   LEVELS,
   createGlossaryRepository,
   GLOSSARY_FILE,
@@ -105,4 +107,51 @@ test("the data file must hold an array", async () => {
     () => createGlossaryRepository({ fetchImpl: () => serving({ terms: [] }) }),
     TypeError,
   );
+});
+
+/**
+ * The glossary the site actually ships, read from disk.
+ *
+ * The tests above hold the arrangement with six terms, which is where a rule is easy to see. These
+ * hold the content: that the file found its four hundred and eighteen, that every letter of the
+ * alphabet has something under it because the index offers only the letters that do, and that each
+ * definition is finished prose rather than a placeholder.
+ *
+ * @param {string} url
+ * @returns {Promise<Response>}
+ */
+async function shippedFromDisk(url) {
+  const name = url.split("/").pop();
+  const body = await readFile(new URL(`../../data/${name}`, import.meta.url), "utf8");
+
+  return new Response(body, { status: 200, headers: { "content-type": "application/json" } });
+}
+
+const shipped = await createGlossaryRepository({ fetchImpl: shippedFromDisk });
+
+test("the shipped glossary holds the four hundred and eighteen terms the site promises", () => {
+  assert.equal(shipped.count(), 418);
+});
+
+test("every letter of the alphabet has terms under it, so no jump leads nowhere", () => {
+  assert.deepEqual(shipped.letters(), LETTERS);
+});
+
+test("every shipped term is complete enough to publish", () => {
+  for (const entry of shipped.all()) {
+    assert.match(entry.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/, `${entry.term} has an unsafe slug`);
+    assert.ok(LEVELS.includes(entry.level), `${entry.term} has the level "${entry.level}"`);
+    assert.ok(entry.definition.trim().length >= 60, `${entry.term}'s definition is too short`);
+    assert.ok(entry.definition.length <= 400, `${entry.term}'s definition is too long`);
+    assert.match(entry.definition.trim(), /[.!?]$/, `${entry.term}'s definition is not finished`);
+  }
+});
+
+test("no two shipped terms share a slug or a name", () => {
+  const entries = shipped.all();
+  const slugs = new Set(entries.map((entry) => entry.slug));
+  const names = new Set(entries.map((entry) => entry.term.toLowerCase()));
+
+  assert.equal(slugs.size, entries.length);
+  assert.equal(names.size, entries.length);
 });

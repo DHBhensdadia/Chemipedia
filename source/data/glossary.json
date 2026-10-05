@@ -1,0 +1,2510 @@
+[
+  {
+    "term": "Absolute zero",
+    "slug": "absolute-zero",
+    "level": "Beginner",
+    "definition": "The lowest temperature the laws of thermodynamics allow, at which a substance holds the least energy it can. It sits at 0 K, which is −273.15 °C."
+  },
+  {
+    "term": "Absorbance",
+    "slug": "absorbance",
+    "level": "Novice",
+    "definition": "A measure of how much light a sample takes out of a beam passing through it. It rises with the concentration of whatever is absorbing and with the distance the light travels."
+  },
+  {
+    "term": "Absorption spectrum",
+    "slug": "absorption-spectrum",
+    "level": "Novice",
+    "definition": "The pattern of dark lines left in a continuous spectrum when light passes through a substance that has absorbed some of its wavelengths. Each substance absorbs a set that is its own, so the pattern identifies it."
+  },
+  {
+    "term": "Accuracy",
+    "slug": "accuracy",
+    "level": "Beginner",
+    "definition": "How close a measurement is to the true value. It is a different question from precision, which asks only how close repeated measurements are to each other."
+  },
+  {
+    "term": "Acid",
+    "slug": "acid",
+    "level": "Beginner",
+    "definition": "A substance that gives up a proton to another substance, or accepts a pair of electrons from one. In water an acid raises the concentration of hydrogen ions."
+  },
+  {
+    "term": "Acid dissociation constant",
+    "slug": "acid-dissociation-constant",
+    "level": "Expert",
+    "definition": "The equilibrium constant for an acid losing a proton in water, written Ka. A larger value means a stronger acid, and its negative logarithm is the pKa."
+  },
+  {
+    "term": "Actinide",
+    "slug": "actinide",
+    "level": "Novice",
+    "definition": "One of the fifteen elements from actinium to lawrencium, whose f subshell is being filled in the seventh period. All of them are radioactive, and only the first few occur in nature in more than trace amounts."
+  },
+  {
+    "term": "Activated complex",
+    "slug": "activated-complex",
+    "level": "Expert",
+    "definition": "The short-lived arrangement of atoms at the top of the energy barrier a reaction must cross. It is not a stable species that can be bottled, only the highest point along the way."
+  },
+  {
+    "term": "Activation energy",
+    "slug": "activation-energy",
+    "level": "Novice",
+    "definition": "The energy a collision must carry before the colliding particles can react. A reaction with a high barrier is slow at room temperature however favourable its overall change is."
+  },
+  {
+    "term": "Addition reaction",
+    "slug": "addition-reaction",
+    "level": "Novice",
+    "definition": "A reaction in which two substances combine into one product with no atom left over. It is the characteristic reaction of a double or triple bond, which opens to make room."
+  },
+  {
+    "term": "Adhesion",
+    "slug": "adhesion",
+    "level": "Novice",
+    "definition": "The attraction between molecules of different substances, which is what holds a drop to glass. It is the counterpart of cohesion, the attraction of a substance to itself."
+  },
+  {
+    "term": "Adsorption",
+    "slug": "adsorption",
+    "level": "Expert",
+    "definition": "The sticking of molecules to a surface rather than into the bulk of a material. It is how a catalyst holds reactants and how charcoal takes colour out of a liquid."
+  },
+  {
+    "term": "Alkali metal",
+    "slug": "alkali-metal",
+    "level": "Beginner",
+    "definition": "One of the six soft, silvery metals in the first group of the periodic table, from lithium to francium. Each has a single electron in its outer shell, which it loses readily, so all of them react vigorously with water."
+  },
+  {
+    "term": "Alkaline earth metal",
+    "slug": "alkaline-earth-metal",
+    "level": "Beginner",
+    "definition": "One of the six metals in the second group of the periodic table, from beryllium to radium. Each has two electrons in its outer shell, so they are harder and less reactive than the alkali metals."
+  },
+  {
+    "term": "Alkane",
+    "slug": "alkane",
+    "level": "Beginner",
+    "definition": "A hydrocarbon whose carbon atoms are joined by single bonds only, so it holds as much hydrogen as its skeleton allows. Alkanes are the saturated hydrocarbons, and methane is the simplest."
+  },
+  {
+    "term": "Alkene",
+    "slug": "alkene",
+    "level": "Beginner",
+    "definition": "A hydrocarbon containing at least one carbon-to-carbon double bond. That double bond makes an alkene more reactive than the matching alkane, and it is where addition reactions happen."
+  },
+  {
+    "term": "Alkyne",
+    "slug": "alkyne",
+    "level": "Novice",
+    "definition": "A hydrocarbon containing at least one carbon-to-carbon triple bond. The triple bond is short, strong and linear, and ethyne is the simplest example."
+  },
+  {
+    "term": "Allotrope",
+    "slug": "allotrope",
+    "level": "Novice",
+    "definition": "One of two or more forms of the same element in the same physical state, differing in how its atoms are arranged. Diamond and graphite are both allotropes of carbon."
+  },
+  {
+    "term": "Alloy",
+    "slug": "alloy",
+    "level": "Beginner",
+    "definition": "A mixture of a metal with one or more other elements, made to improve a property the pure metal lacks. Steel is iron with carbon; bronze is copper with tin."
+  },
+  {
+    "term": "Alpha particle",
+    "slug": "alpha-particle",
+    "level": "Novice",
+    "definition": "A particle of two protons and two neutrons, which is the nucleus of a helium atom. It is emitted by some heavy nuclei, and because it is bulky and charged it travels only a few centimetres in air."
+  },
+  {
+    "term": "Amorphous",
+    "slug": "amorphous",
+    "level": "Novice",
+    "definition": "Describing a solid whose atoms are not arranged in a repeating pattern. Glass is the everyday example, and an amorphous solid melts over a range of temperatures rather than at one."
+  },
+  {
+    "term": "Amphoteric",
+    "slug": "amphoteric",
+    "level": "Expert",
+    "definition": "Describing a substance that can behave as an acid or as a base depending on what it meets. Aluminium hydroxide dissolves in both strong acid and strong alkali for that reason."
+  },
+  {
+    "term": "Anion",
+    "slug": "anion",
+    "level": "Beginner",
+    "definition": "A negatively charged ion, formed when an atom gains one or more electrons. Its name comes from the fact that it travels towards the positive electrode."
+  },
+  {
+    "term": "Anode",
+    "slug": "anode",
+    "level": "Novice",
+    "definition": "The electrode at which oxidation happens. In a cell that releases energy it is the negative terminal, and in one driven by a supply it is the positive one, because the definition follows the chemistry rather than the sign."
+  },
+  {
+    "term": "Aromatic",
+    "slug": "aromatic",
+    "level": "Expert",
+    "definition": "Describing a ring of atoms whose electrons are shared around the whole ring rather than fixed between pairs. Benzene is the standard example, and the sharing is what makes an aromatic ring unusually stable."
+  },
+  {
+    "term": "Arrhenius equation",
+    "slug": "arrhenius-equation",
+    "level": "Expert",
+    "definition": "The relationship between a reaction's rate constant and temperature, which states that the rate rises exponentially as temperature rises. Its two parameters are the activation energy and a frequency factor."
+  },
+  {
+    "term": "Atom",
+    "slug": "atom",
+    "level": "Beginner",
+    "definition": "The smallest unit of an element that still has that element's identity. It is a nucleus of protons and neutrons with electrons around it, and the nucleus holds nearly all of its mass."
+  },
+  {
+    "term": "Atomic mass unit",
+    "slug": "atomic-mass-unit",
+    "level": "Novice",
+    "definition": "The unit in which atomic and molecular masses are quoted, defined as one twelfth of the mass of a carbon-12 atom. It is written u, and it is close to the mass of a single proton."
+  },
+  {
+    "term": "Atomic number",
+    "slug": "atomic-number",
+    "level": "Beginner",
+    "definition": "The number of protons in an atom's nucleus, which is what decides which element the atom is. It is written Z, and it orders the periodic table."
+  },
+  {
+    "term": "Atomic radius",
+    "slug": "atomic-radius",
+    "level": "Novice",
+    "definition": "A measure of an atom's size, taken from the distance between neighbouring atoms in a solid or between two atoms in a molecule. It falls across a period and rises down a group."
+  },
+  {
+    "term": "Aufbau principle",
+    "slug": "aufbau-principle",
+    "level": "Expert",
+    "definition": "The rule that electrons fill the lowest available orbital before any higher one. It predicts most configurations correctly, and the exceptions are the elements whose measured configurations show that the rule is a good guide rather than a law."
+  },
+  {
+    "term": "Avogadro constant",
+    "slug": "avogadro-constant",
+    "level": "Novice",
+    "definition": "The number of particles in one mole of a substance, 6.022 140 76 × 10²³. It is fixed by definition rather than measured, which is what makes the mole a defined unit."
+  },
+  {
+    "term": "Azeotrope",
+    "slug": "azeotrope",
+    "level": "Expert",
+    "definition": "A mixture whose vapour has the same composition as its liquid, so that boiling does not separate it. Distilling such a mixture any further leaves it unchanged, which is why azeotropes set a ceiling for purification by distillation."
+  },
+  {
+    "term": "Bar",
+    "slug": "bar",
+    "level": "Novice",
+    "definition": "A unit of pressure equal to 100 000 pascals, which is very close to ordinary atmospheric pressure at sea level. One bar is about 0.987 atmospheres."
+  },
+  {
+    "term": "Barometer",
+    "slug": "barometer",
+    "level": "Beginner",
+    "definition": "An instrument for measuring atmospheric pressure. The first ones balanced a column of mercury against the air, which is why pressure is still often quoted in millimetres of mercury."
+  },
+  {
+    "term": "Base",
+    "slug": "base",
+    "level": "Beginner",
+    "definition": "A substance that accepts a proton from another substance, or gives up a pair of electrons to one. In water a base raises the concentration of hydroxide ions."
+  },
+  {
+    "term": "Base dissociation constant",
+    "slug": "base-dissociation-constant",
+    "level": "Expert",
+    "definition": "The equilibrium constant for a base accepting a proton in water, written Kb. A larger value means a stronger base, and it is related to the acid dissociation constant of the base's partner by the dissociation of water."
+  },
+  {
+    "term": "Battery",
+    "slug": "battery",
+    "level": "Beginner",
+    "definition": "One or more electrochemical cells joined so that they drive a current through an external circuit. The chemistry inside is reversed when the battery is recharged, if its reaction allows that."
+  },
+  {
+    "term": "Becquerel",
+    "slug": "becquerel",
+    "level": "Novice",
+    "definition": "The unit of radioactivity, equal to one nuclear decay per second. It measures how often a source decays, not how much harm the radiation does, which depends on the kind of radiation and on the tissue it reaches."
+  },
+  {
+    "term": "Beta particle",
+    "slug": "beta-particle",
+    "level": "Novice",
+    "definition": "A fast electron or positron emitted by a nucleus as one of its neutrons or protons changes into the other. It is far lighter than an alpha particle and gets further through matter, though a few millimetres of metal will stop it."
+  },
+  {
+    "term": "Bidentate ligand",
+    "slug": "bidentate-ligand",
+    "level": "Expert",
+    "definition": "A ligand that grips a metal ion at two separate donor atoms, forming a ring with it. Because both grips must come off before the ligand leaves, a bidentate ligand holds on more firmly than two separate single-grip ligands would."
+  },
+  {
+    "term": "Bimolecular reaction",
+    "slug": "bimolecular-reaction",
+    "level": "Expert",
+    "definition": "An elementary step in which two particles collide and react. Its rate depends on the concentration of both, so it is second order overall."
+  },
+  {
+    "term": "Binary compound",
+    "slug": "binary-compound",
+    "level": "Beginner",
+    "definition": "A compound built from exactly two elements. Water and sodium chloride are both binary compounds, and their names are written from the two elements with a suffix on the second."
+  },
+  {
+    "term": "Binding energy",
+    "slug": "binding-energy",
+    "level": "Expert",
+    "definition": "The energy needed to pull a nucleus apart into its separate protons and neutrons. It is largest per nucleon around iron, which is why fusing lighter nuclei and splitting heavier ones both release energy."
+  },
+  {
+    "term": "Bohr model",
+    "slug": "bohr-model",
+    "level": "Novice",
+    "definition": "An early picture of the atom in which electrons travel in fixed circular orbits at set distances from the nucleus, and light is emitted only when an electron drops from one orbit to another. It explained the spectrum of hydrogen and was replaced by the quantum picture of orbitals."
+  },
+  {
+    "term": "Boiling point",
+    "slug": "boiling-point",
+    "level": "Beginner",
+    "definition": "The temperature at which a liquid's vapour pressure equals the pressure around it, so that bubbles of vapour can form inside the liquid. It therefore depends on the surrounding pressure, and water boils below 100 °C on a mountain."
+  },
+  {
+    "term": "Boiling point elevation",
+    "slug": "boiling-point-elevation",
+    "level": "Novice",
+    "definition": "The rise in a liquid's boiling point when a dissolved substance is added. The rise depends on how many particles the substance breaks into, not on what they are, which is what makes it a way of counting them."
+  },
+  {
+    "term": "Bond angle",
+    "slug": "bond-angle",
+    "level": "Novice",
+    "definition": "The angle between two bonds meeting at the same atom. It is decided by how many electron pairs surround that atom, which is why a water molecule is bent rather than straight."
+  },
+  {
+    "term": "Bond energy",
+    "slug": "bond-energy",
+    "level": "Novice",
+    "definition": "The energy needed to break one mole of a particular bond in the gas phase. Breaking bonds costs energy and forming them releases it, and the difference between the two is the energy a reaction gives out or takes in."
+  },
+  {
+    "term": "Bond length",
+    "slug": "bond-length",
+    "level": "Novice",
+    "definition": "The distance between the nuclei of two bonded atoms. It shortens as the bond order rises, so a triple bond is shorter than a double, which is shorter than a single."
+  },
+  {
+    "term": "Brønsted–Lowry acid",
+    "slug": "bronsted-lowry-acid",
+    "level": "Novice",
+    "definition": "An acid defined as a proton donor, with a base as the proton acceptor that pairs with it. The definition is wider than the older one that required water, so it covers reactions in other solvents and in the gas phase."
+  },
+  {
+    "term": "Buffer",
+    "slug": "buffer",
+    "level": "Novice",
+    "definition": "A solution that resists a change in pH when an acid or a base is added to it. It works by holding a pair of substances that can soak up either, and it is what keeps blood near pH 7.4."
+  },
+  {
+    "term": "Bulk property",
+    "slug": "bulk-property",
+    "level": "Expert",
+    "definition": "A property of a whole quantity of a material rather than of a single particle, such as density, conductivity or melting point. Its value is decided by the particles and by how they are arranged together."
+  },
+  {
+    "term": "Calorie",
+    "slug": "calorie",
+    "level": "Beginner",
+    "definition": "An older unit of energy, defined as the heat needed to raise one gram of water by one degree Celsius. One calorie is 4.184 joules, and the calorie on a food label is a kilocalorie."
+  },
+  {
+    "term": "Calorimeter",
+    "slug": "calorimeter",
+    "level": "Novice",
+    "definition": "An insulated vessel used to measure the heat a reaction gives out or takes in. It works by measuring the temperature change of a known quantity of water or of the vessel itself."
+  },
+  {
+    "term": "Calorimetry",
+    "slug": "calorimetry",
+    "level": "Novice",
+    "definition": "The measurement of heat changes in physical processes and reactions. It is the experimental side of thermochemistry, and its results are what tabulated enthalpies are built from."
+  },
+  {
+    "term": "Carbanion",
+    "slug": "carbanion",
+    "level": "Expert",
+    "definition": "A carbon atom carrying a negative charge and a lone pair. It is a strong base and a reactive intermediate, and it is stabilised by nearby groups that pull electron density away."
+  },
+  {
+    "term": "Carbocation",
+    "slug": "carbocation",
+    "level": "Expert",
+    "definition": "A carbon atom carrying a positive charge with only three bonds around it. It is a reactive intermediate in many organic reactions, and it is most stable when neighbouring groups can donate electron density to it."
+  },
+  {
+    "term": "Carbohydrate",
+    "slug": "carbohydrate",
+    "level": "Beginner",
+    "definition": "A compound of carbon, hydrogen and oxygen in which the hydrogen and oxygen appear in the proportion water has. Sugars, starches and cellulose are all carbohydrates."
+  },
+  {
+    "term": "Carbonyl group",
+    "slug": "carbonyl-group",
+    "level": "Novice",
+    "definition": "A carbon atom double-bonded to an oxygen atom. It appears in aldehydes, ketones, acids, esters and amides, and its polarity is what gives those families much of their chemistry."
+  },
+  {
+    "term": "Carboxylic acid",
+    "slug": "carboxylic-acid",
+    "level": "Novice",
+    "definition": "An organic acid built around a carbonyl group with a hydroxyl group attached to the same carbon. Ethanoic acid, the acid in vinegar, is the familiar example."
+  },
+  {
+    "term": "Catalyst",
+    "slug": "catalyst",
+    "level": "Beginner",
+    "definition": "A substance that speeds a reaction by offering it a route with a lower energy barrier, and is left unchanged at the end. It cannot make an unfavourable reaction favourable, only faster."
+  },
+  {
+    "term": "Cathode",
+    "slug": "cathode",
+    "level": "Novice",
+    "definition": "The electrode at which reduction happens. It is the positive terminal of a cell that releases energy and the negative terminal of one driven by a supply, again because the definition follows the chemistry rather than the sign."
+  },
+  {
+    "term": "Cathode ray",
+    "slug": "cathode-ray",
+    "level": "Novice",
+    "definition": "A beam of electrons travelling through a partly evacuated tube. Studying how these beams bent in electric and magnetic fields is how the electron was discovered and how its charge-to-mass ratio was measured."
+  },
+  {
+    "term": "Cation",
+    "slug": "cation",
+    "level": "Beginner",
+    "definition": "A positively charged ion, formed when an atom loses one or more electrons. Metals form cations readily, and the name records that it travels towards the negative electrode."
+  },
+  {
+    "term": "Celsius",
+    "slug": "celsius",
+    "level": "Beginner",
+    "definition": "The temperature scale that puts the freezing point of water at 0 degrees and its boiling point at 100 under ordinary pressure. A degree Celsius is the same size as a kelvin, so the two scales differ only in where they start."
+  },
+  {
+    "term": "Chain reaction",
+    "slug": "chain-reaction",
+    "level": "Novice",
+    "definition": "A reaction in which each step produces the particle that starts the next, so that it sustains itself. In a nuclear chain reaction the particle is a neutron, and controlling how many of them go on to split further nuclei is what a reactor does."
+  },
+  {
+    "term": "Chelate",
+    "slug": "chelate",
+    "level": "Expert",
+    "definition": "A complex in which a ligand grips the same metal ion at two or more points, forming a ring. The extra grips make the complex harder to break apart, which is why chelating agents are used to hold metal ions in solution."
+  },
+  {
+    "term": "Chemical bond",
+    "slug": "chemical-bond",
+    "level": "Beginner",
+    "definition": "The attraction that holds two atoms together in a compound. It comes in three main kinds: ionic, covalent and metallic."
+  },
+  {
+    "term": "Chemical equation",
+    "slug": "chemical-equation",
+    "level": "Beginner",
+    "definition": "A written statement of a reaction, with the starting substances on the left and the products on the right. The numbers in front of each formula are chosen so that every kind of atom balances."
+  },
+  {
+    "term": "Chemical equilibrium",
+    "slug": "chemical-equilibrium",
+    "level": "Novice",
+    "definition": "The state of a reversible reaction in which the forward and reverse reactions proceed at the same rate, so the amounts of everything present stop changing. Both reactions continue; only the net change stops."
+  },
+  {
+    "term": "Chemical formula",
+    "slug": "chemical-formula",
+    "level": "Beginner",
+    "definition": "The written shorthand for a substance that names each element in it and gives the number of atoms of each. Water is H₂O and glucose is C₆H₁₂O₆."
+  },
+  {
+    "term": "Chemical property",
+    "slug": "chemical-property",
+    "level": "Beginner",
+    "definition": "A property that describes how a substance behaves in a reaction, such as what it burns to or what it reacts with. It differs from a physical property, which can be observed without changing what the substance is."
+  },
+  {
+    "term": "Chemical reaction",
+    "slug": "chemical-reaction",
+    "level": "Beginner",
+    "definition": "A process in which substances are turned into different substances by the breaking and making of bonds. The atoms are rearranged rather than destroyed."
+  },
+  {
+    "term": "Chirality",
+    "slug": "chirality",
+    "level": "Expert",
+    "definition": "The property of a molecule that cannot be laid on top of its own mirror image, in the way a left hand cannot be laid on a right. The two forms are called enantiomers and often behave differently in living systems."
+  },
+  {
+    "term": "Chromatography",
+    "slug": "chromatography",
+    "level": "Novice",
+    "definition": "A method of separating the substances in a mixture by letting them travel at different speeds through a stationary material. Each substance divides between a moving phase and a still one, and how strongly it prefers each decides how far it gets."
+  },
+  {
+    "term": "Cis–trans isomerism",
+    "slug": "cis-trans-isomerism",
+    "level": "Expert",
+    "definition": "The difference between two molecules that have the same atoms joined in the same order but arranged on opposite sides of a double bond or a ring. The two isomers are not interconvertible without breaking the bond."
+  },
+  {
+    "term": "Closed system",
+    "slug": "closed-system",
+    "level": "Novice",
+    "definition": "A system that exchanges energy with its surroundings but not matter. A sealed flask that can be warmed or cooled is a closed system, and an insulated one that exchanges nothing at all is isolated."
+  },
+  {
+    "term": "Cohesion",
+    "slug": "cohesion",
+    "level": "Novice",
+    "definition": "The attraction between molecules of the same substance, which is what pulls a liquid into a drop. It is the counterpart of adhesion, the attraction between different substances."
+  },
+  {
+    "term": "Colligative property",
+    "slug": "colligative-property",
+    "level": "Expert",
+    "definition": "A property of a solution that depends on how many dissolved particles there are rather than on what they are. Vapour pressure lowering, boiling point elevation, freezing point depression and osmotic pressure are the four."
+  },
+  {
+    "term": "Collision theory",
+    "slug": "collision-theory",
+    "level": "Novice",
+    "definition": "The account of reaction rates in which particles must collide, with enough energy and in the right orientation, before they can react. It explains why raising the temperature or the concentration speeds a reaction up."
+  },
+  {
+    "term": "Colloid",
+    "slug": "colloid",
+    "level": "Novice",
+    "definition": "A mixture in which particles larger than molecules but small enough to stay suspended are spread through another substance. Milk and fog are colloids, and their particles do not settle out or pass through a fine membrane."
+  },
+  {
+    "term": "Combustion",
+    "slug": "combustion",
+    "level": "Beginner",
+    "definition": "A fast reaction with oxygen that gives out heat and light. Burning a hydrocarbon produces carbon dioxide and water when there is oxygen enough."
+  },
+  {
+    "term": "Complex ion",
+    "slug": "complex-ion",
+    "level": "Expert",
+    "definition": "An ion in which a central metal atom is surrounded by ligands joined to it by coordinate bonds. Its charge is the charge on the metal plus the charges on everything attached to it."
+  },
+  {
+    "term": "Compound",
+    "slug": "compound",
+    "level": "Beginner",
+    "definition": "A substance made of two or more elements joined in fixed proportions by chemical bonds. Its properties are usually quite unlike those of the elements it is made from."
+  },
+  {
+    "term": "Concentration",
+    "slug": "concentration",
+    "level": "Beginner",
+    "definition": "How much of a substance is present in a given amount of mixture. In chemistry it is usually quoted in moles per cubic decimetre, written mol/dm³."
+  },
+  {
+    "term": "Condensation",
+    "slug": "condensation",
+    "level": "Beginner",
+    "definition": "The change of a gas into a liquid as it is cooled or compressed. It is the reverse of evaporation and gives out the energy that evaporation took in."
+  },
+  {
+    "term": "Condensation reaction",
+    "slug": "condensation-reaction",
+    "level": "Novice",
+    "definition": "A reaction in which two molecules join and a small molecule, usually water, is given off. It is how amino acids link into proteins and how sugars link into starches."
+  },
+  {
+    "term": "Conductivity",
+    "slug": "conductivity",
+    "level": "Novice",
+    "definition": "A measure of how readily a material carries an electric current or heat. Metals conduct because their outer electrons are free to move, and a solution conducts when it holds ions."
+  },
+  {
+    "term": "Conjugate acid–base pair",
+    "slug": "conjugate-acid-base-pair",
+    "level": "Expert",
+    "definition": "Two substances that differ by a single proton, such as an acid and the base it becomes once it has given that proton up. Every proton transfer involves two such pairs, one on each side of the equation."
+  },
+  {
+    "term": "Conservation of energy",
+    "slug": "conservation-of-energy",
+    "level": "Beginner",
+    "definition": "The rule that energy can be transferred or changed in form but never created or destroyed. In a chemical reaction the energy given out by the system is exactly what the surroundings take in."
+  },
+  {
+    "term": "Conservation of mass",
+    "slug": "conservation-of-mass",
+    "level": "Beginner",
+    "definition": "The rule that the total mass of the substances taking part in a reaction does not change. It is why a chemical equation has to balance, and it fails only where mass itself is converted, as it is in a nuclear reaction."
+  },
+  {
+    "term": "Coordination number",
+    "slug": "coordination-number",
+    "level": "Expert",
+    "definition": "The number of donor atoms bonded to the central atom of a complex. Six and four are the commonest in metal complexes, and the number decides the shape the complex takes."
+  },
+  {
+    "term": "Corrosion",
+    "slug": "corrosion",
+    "level": "Novice",
+    "definition": "The gradual wearing away of a metal by chemical reaction with its surroundings. Iron rusting in damp air is the familiar case, and it needs both water and oxygen."
+  },
+  {
+    "term": "Coulomb",
+    "slug": "coulomb",
+    "level": "Novice",
+    "definition": "The unit of electric charge, equal to the charge carried by a current of one ampere in one second. One mole of electrons carries 96 485 coulombs, which is the Faraday constant."
+  },
+  {
+    "term": "Covalent bond",
+    "slug": "covalent-bond",
+    "level": "Beginner",
+    "definition": "A bond formed when two atoms share a pair of electrons. It is strongest when the two atoms pull on the pair about equally, and it becomes polar when one pulls harder than the other."
+  },
+  {
+    "term": "Critical point",
+    "slug": "critical-point",
+    "level": "Expert",
+    "definition": "The temperature and pressure above which a substance's liquid and gas phases become indistinguishable. Beyond it there is a single supercritical fluid, and no amount of pressure will liquefy it."
+  },
+  {
+    "term": "Crystal lattice",
+    "slug": "crystal-lattice",
+    "level": "Novice",
+    "definition": "The regular repeating arrangement of particles in a solid. It is the lattice that gives a crystal its flat faces and its fixed angles, and it is what melting breaks up."
+  },
+  {
+    "term": "Crystallisation",
+    "slug": "crystallisation",
+    "level": "Novice",
+    "definition": "The formation of a solid with an ordered lattice from a solution, a melt or a vapour. It is used to purify a substance, because the lattice takes in particles of one kind and leaves most impurities behind."
+  },
+  {
+    "term": "Curie",
+    "slug": "curie",
+    "level": "Expert",
+    "definition": "An older unit of radioactivity equal to 37 billion decays a second, roughly the activity of one gram of radium. It has been replaced by the becquerel, which counts one decay a second."
+  },
+  {
+    "term": "Cycloalkane",
+    "slug": "cycloalkane",
+    "level": "Novice",
+    "definition": "A saturated hydrocarbon whose carbon atoms form a ring rather than a chain. Cyclohexane is the common six-membered example, and its ring is puckered rather than flat."
+  },
+  {
+    "term": "Dalton",
+    "slug": "dalton",
+    "level": "Expert",
+    "definition": "The unit of atomic mass, equal to one twelfth of the mass of a carbon-12 atom and now identical to the unified atomic mass unit. It is written Da, and the mass of a protein is usually quoted in kilodaltons."
+  },
+  {
+    "term": "Dalton's atomic theory",
+    "slug": "daltons-atomic-theory",
+    "level": "Novice",
+    "definition": "The proposal that matter is made of indivisible atoms, that the atoms of one element are alike, and that compounds are atoms of different elements joined in fixed whole-number ratios. It was right about the ratios and wrong about the indivisibility."
+  },
+  {
+    "term": "Decay constant",
+    "slug": "decay-constant",
+    "level": "Expert",
+    "definition": "The probability that a given radioactive nucleus decays in a unit of time. It is the reciprocal of the mean lifetime, and it is related to half-life by a factor of the natural logarithm of two."
+  },
+  {
+    "term": "Decomposition reaction",
+    "slug": "decomposition-reaction",
+    "level": "Beginner",
+    "definition": "A reaction in which one substance breaks into two or more simpler ones. Heating limestone to make quicklime is a decomposition, and so is the splitting of water by a current."
+  },
+  {
+    "term": "Dehydration",
+    "slug": "dehydration",
+    "level": "Novice",
+    "definition": "The removal of water from a substance, either by heating or by a reagent that takes it up. In organic chemistry it often means removing the elements of water from one molecule to leave a double bond."
+  },
+  {
+    "term": "Delocalised",
+    "slug": "delocalised",
+    "level": "Expert",
+    "definition": "Describing electrons that are spread over several atoms rather than confined to a bond between two of them. It is what makes a metal conduct and what gives a benzene ring its extra stability."
+  },
+  {
+    "term": "Density",
+    "slug": "density",
+    "level": "Beginner",
+    "definition": "The mass of a substance divided by the volume it takes up. It is usually quoted in grams per cubic centimetre for solids and liquids, and it changes with temperature because volume does."
+  },
+  {
+    "term": "Deposition",
+    "slug": "deposition",
+    "level": "Novice",
+    "definition": "The change of a gas straight into a solid without passing through the liquid state. Frost forming on a cold window is deposition, and it is the reverse of sublimation."
+  },
+  {
+    "term": "Desalination",
+    "slug": "desalination",
+    "level": "Novice",
+    "definition": "The removal of dissolved salts from water to make it drinkable or usable in industry. Distillation and forcing the water through a membrane under pressure are the two common methods."
+  },
+  {
+    "term": "Desiccant",
+    "slug": "desiccant",
+    "level": "Novice",
+    "definition": "A substance that takes water vapour out of the air around it. Silica gel in a package and calcium chloride in a damp cupboard are both desiccants, and both work by forming a hydrate or a solution."
+  },
+  {
+    "term": "Deuterium",
+    "slug": "deuterium",
+    "level": "Novice",
+    "definition": "The hydrogen isotope whose nucleus holds one proton and one neutron, so its mass is about twice ordinary hydrogen's. Heavy water is water built from it."
+  },
+  {
+    "term": "Diagonal relationship",
+    "slug": "diagonal-relationship",
+    "level": "Expert",
+    "definition": "The similarity in chemistry between an element and the one diagonally below and to its right in the second and third periods, such as lithium and magnesium. The two trends that run across a period and down a group happen to cancel along that diagonal."
+  },
+  {
+    "term": "Diamagnetic",
+    "slug": "diamagnetic",
+    "level": "Expert",
+    "definition": "Describing a substance whose electrons are all paired, so it is very weakly repelled by a magnetic field. It is the opposite of paramagnetic, where unpaired electrons make a substance weakly attracted."
+  },
+  {
+    "term": "Diffusion",
+    "slug": "diffusion",
+    "level": "Beginner",
+    "definition": "The spreading of particles through a space because of their random motion, from where they are crowded to where they are not. It needs no stirring and it is faster at higher temperatures."
+  },
+  {
+    "term": "Dilution",
+    "slug": "dilution",
+    "level": "Beginner",
+    "definition": "Adding solvent to a solution so that its concentration falls while the amount of dissolved substance stays the same. The volumes and concentrations before and after multiply out to the same number."
+  },
+  {
+    "term": "Dimer",
+    "slug": "dimer",
+    "level": "Expert",
+    "definition": "A particle formed by two identical molecules joining together. Carboxylic acids pair up this way in the gas phase through a pair of hydrogen bonds."
+  },
+  {
+    "term": "Dipole",
+    "slug": "dipole",
+    "level": "Novice",
+    "definition": "A separation of positive and negative charge within a molecule or a bond, written with the partial charges at each end. A molecule with polar bonds can still have no overall dipole if its shape cancels them out."
+  },
+  {
+    "term": "Dipole–dipole forces",
+    "slug": "dipole-dipole-forces",
+    "level": "Novice",
+    "definition": "The attractions between the positive end of one polar molecule and the negative end of another. They are weaker than a covalent bond and are part of what decides a substance's boiling point."
+  },
+  {
+    "term": "Displacement reaction",
+    "slug": "displacement-reaction",
+    "level": "Novice",
+    "definition": "A reaction in which a more reactive element takes the place of a less reactive one in a compound. Putting a zinc strip into copper sulphate solution is the standard demonstration."
+  },
+  {
+    "term": "Disproportionation",
+    "slug": "disproportionation",
+    "level": "Expert",
+    "definition": "A reaction in which the same element is both oxidised and reduced, so one of its oxidation states becomes two others. Hydrogen peroxide breaking down into water and oxygen is an example."
+  },
+  {
+    "term": "Dissociation",
+    "slug": "dissociation",
+    "level": "Novice",
+    "definition": "The splitting of a substance into smaller particles, usually when it dissolves or is heated. An ionic solid dissociates into separate ions when it dissolves in water."
+  },
+  {
+    "term": "Dissolution",
+    "slug": "dissolution",
+    "level": "Novice",
+    "definition": "The process of a substance mixing into a solvent to form a solution. Its particles are pulled apart by the solvent's and spread through it, rather than reacting with it."
+  },
+  {
+    "term": "Distillation",
+    "slug": "distillation",
+    "level": "Beginner",
+    "definition": "The separation of a mixture by boiling it and condensing the vapour elsewhere. It works when the substances have different boiling points, and it is the standard way to get pure water from salt water."
+  },
+  {
+    "term": "Double bond",
+    "slug": "double-bond",
+    "level": "Beginner",
+    "definition": "A covalent bond in which two pairs of electrons are shared between the same two atoms. It is stronger and shorter than a single bond and it holds the atoms it joins in one plane."
+  },
+  {
+    "term": "Ductile",
+    "slug": "ductile",
+    "level": "Novice",
+    "definition": "Describing a material that can be drawn out into a wire without breaking. Metals are ductile because their atoms can slide past one another while the sea of shared electrons holds them together."
+  },
+  {
+    "term": "Dynamic equilibrium",
+    "slug": "dynamic-equilibrium",
+    "level": "Novice",
+    "definition": "A balance in which two opposing changes go on at equal rates, so nothing appears to change. It is dynamic because both processes are still running, and the word is used for chemical equilibria and for phase changes alike."
+  },
+  {
+    "term": "Effective nuclear charge",
+    "slug": "effective-nuclear-charge",
+    "level": "Expert",
+    "definition": "The pull an outer electron actually feels from the nucleus once the inner electrons' shielding is taken off. It rises across a period, which is why atoms shrink and hold their electrons more tightly to the right."
+  },
+  {
+    "term": "Efflorescence",
+    "slug": "efflorescence",
+    "level": "Expert",
+    "definition": "The loss of water from a hydrated salt to the air, leaving a powder behind. Washing soda left open loses its water this way, and the white crust on old brickwork is the same process."
+  },
+  {
+    "term": "Effusion",
+    "slug": "effusion",
+    "level": "Expert",
+    "definition": "The escape of a gas through a very small hole into a space at lower pressure. A lighter gas effuses faster, which is how the isotopes of uranium were first separated."
+  },
+  {
+    "term": "Electrochemistry",
+    "slug": "electrochemistry",
+    "level": "Novice",
+    "definition": "The study of the relationship between electricity and chemical change. It covers cells that make a current from a reaction and cells that use a current to drive one."
+  },
+  {
+    "term": "Electrode",
+    "slug": "electrode",
+    "level": "Beginner",
+    "definition": "A conductor through which a current enters or leaves a cell or a solution. The two in any cell are the anode, where oxidation happens, and the cathode, where reduction does."
+  },
+  {
+    "term": "Electrode potential",
+    "slug": "electrode-potential",
+    "level": "Expert",
+    "definition": "The voltage of an electrode measured against a standard hydrogen electrode under set conditions. Comparing two of them says which way a cell will drive a reaction and how much voltage it can supply."
+  },
+  {
+    "term": "Electrolysis",
+    "slug": "electrolysis",
+    "level": "Novice",
+    "definition": "Driving a reaction that would not happen on its own by passing a current through a liquid or a solution. It is how aluminium is extracted from its ore and how water is split into hydrogen and oxygen."
+  },
+  {
+    "term": "Electrolyte",
+    "slug": "electrolyte",
+    "level": "Novice",
+    "definition": "A substance that conducts electricity when dissolved or molten, because it separates into ions. Strong electrolytes separate completely and weak ones only partly."
+  },
+  {
+    "term": "Electromagnetic radiation",
+    "slug": "electromagnetic-radiation",
+    "level": "Novice",
+    "definition": "Energy travelling through space as oscillating electric and magnetic fields. Its wavelength decides whether it appears as radio, light, X-rays or something else."
+  },
+  {
+    "term": "Electromagnetic spectrum",
+    "slug": "electromagnetic-spectrum",
+    "level": "Beginner",
+    "definition": "The whole range of electromagnetic radiation, ordered by wavelength from radio waves through visible light to gamma rays. Visible light occupies only a narrow band of it."
+  },
+  {
+    "term": "Electron",
+    "slug": "electron",
+    "level": "Beginner",
+    "definition": "The negatively charged particle found around every nucleus, about 1800 times lighter than a proton. Its arrangement is what decides how an element behaves chemically."
+  },
+  {
+    "term": "Electron affinity",
+    "slug": "electron-affinity",
+    "level": "Expert",
+    "definition": "The energy change when a gaseous atom gains an electron. A negative value means the atom releases energy and holds the new electron willingly, which is what the halogens do."
+  },
+  {
+    "term": "Electron configuration",
+    "slug": "electron-configuration",
+    "level": "Novice",
+    "definition": "The arrangement of an atom's electrons among its shells and subshells, written as a list such as 1s² 2s² 2p⁶. It is what the periodic table is organised by."
+  },
+  {
+    "term": "Electron shell",
+    "slug": "electron-shell",
+    "level": "Beginner",
+    "definition": "A group of orbitals of the same principal quantum number, at roughly the same distance from the nucleus. The outermost occupied shell is the one that matters for bonding."
+  },
+  {
+    "term": "Electronegativity",
+    "slug": "electronegativity",
+    "level": "Novice",
+    "definition": "A measure of how strongly an atom in a bond pulls the shared electrons towards itself. Fluorine is the highest and caesium among the lowest, and the difference between two atoms decides how polar their bond is."
+  },
+  {
+    "term": "Electronic transition",
+    "slug": "electronic-transition",
+    "level": "Expert",
+    "definition": "The jump of an electron from one energy level to another. A jump upwards takes in a photon of a particular energy and one downwards gives one out, which is why spectra are made of lines."
+  },
+  {
+    "term": "Electrophile",
+    "slug": "electrophile",
+    "level": "Expert",
+    "definition": "A species that is short of electrons and attacks a region where electrons are plentiful. It is attracted to a negative centre or to a double bond, and it is the counterpart of a nucleophile."
+  },
+  {
+    "term": "Electroplating",
+    "slug": "electroplating",
+    "level": "Novice",
+    "definition": "Coating an object with a metal by making it the cathode in a cell containing that metal's ions. The coating's thickness is set by how long the current runs and how large it is."
+  },
+  {
+    "term": "Element",
+    "slug": "element",
+    "level": "Beginner",
+    "definition": "A substance made of atoms that all have the same number of protons. The 118 known elements are the alphabet the rest of chemistry is written in."
+  },
+  {
+    "term": "Elementary step",
+    "slug": "elementary-step",
+    "level": "Expert",
+    "definition": "One collision or one molecular event in a reaction mechanism, as opposed to the overall change. A mechanism is a sequence of elementary steps, and the slowest of them sets the rate."
+  },
+  {
+    "term": "Emission spectrum",
+    "slug": "emission-spectrum",
+    "level": "Novice",
+    "definition": "The set of bright lines a substance gives out when its excited atoms fall back to lower energy levels. Each element has its own set, which is how the composition of distant stars can be read."
+  },
+  {
+    "term": "Emulsifier",
+    "slug": "emulsifier",
+    "level": "Novice",
+    "definition": "A substance that keeps droplets of one liquid spread through another instead of letting them merge. Its molecules have one end that prefers water and one that prefers oil, so they settle at the boundary between them."
+  },
+  {
+    "term": "Enantiomer",
+    "slug": "enantiomer",
+    "level": "Expert",
+    "definition": "One of the two mirror-image forms of a molecule that cannot be laid on top of the other. The two often smell and behave differently in the body, because the receptors they meet are themselves handed."
+  },
+  {
+    "term": "End point",
+    "slug": "end-point",
+    "level": "Novice",
+    "definition": "The moment in a titration when the indicator changes colour. It is what the experimenter sees, and it is meant to sit as close as possible to the equivalence point, which is what the chemistry says."
+  },
+  {
+    "term": "Endothermic",
+    "slug": "endothermic",
+    "level": "Beginner",
+    "definition": "Describing a change that takes energy in from its surroundings, so the surroundings cool. Melting ice and photosynthesis are both endothermic."
+  },
+  {
+    "term": "Energy level",
+    "slug": "energy-level",
+    "level": "Novice",
+    "definition": "One of the fixed amounts of energy an electron in an atom may have. Electrons move between levels by absorbing or giving out exactly the difference between them."
+  },
+  {
+    "term": "Enthalpy",
+    "slug": "enthalpy",
+    "level": "Expert",
+    "definition": "The heat content of a system at constant pressure, written H. Only changes in it can be measured, and a negative change means the reaction gave heat out."
+  },
+  {
+    "term": "Entropy",
+    "slug": "entropy",
+    "level": "Expert",
+    "definition": "A measure of how many ways a system's energy can be arranged, and so of how disordered it is. It always rises overall in a spontaneous change, which is why a gas spreads to fill its container."
+  },
+  {
+    "term": "Enzyme",
+    "slug": "enzyme",
+    "level": "Novice",
+    "definition": "A protein that acts as a catalyst in a living thing. It holds its reactant in a pocket shaped to fit it, which is why each enzyme works on very few substances."
+  },
+  {
+    "term": "Equilibrium constant",
+    "slug": "equilibrium-constant",
+    "level": "Expert",
+    "definition": "The number obtained by multiplying the equilibrium concentrations of the products and dividing by those of the reactants, each raised to its coefficient. Its size says whether the products or the reactants are favoured, and it is written K."
+  },
+  {
+    "term": "Equivalence point",
+    "slug": "equivalence-point",
+    "level": "Expert",
+    "definition": "The point in a titration at which the two reactants are present in exactly the proportions the equation calls for. It is a property of the amounts used, unlike the end point, which is a property of what can be seen."
+  },
+  {
+    "term": "Ester",
+    "slug": "ester",
+    "level": "Novice",
+    "definition": "A compound formed when an acid joins an alcohol and water is given off. Esters are responsible for many of the smells of fruit and are used as solvents and flavourings."
+  },
+  {
+    "term": "Ether",
+    "slug": "ether",
+    "level": "Novice",
+    "definition": "A compound in which an oxygen atom is joined to two carbon groups. Ethers are unreactive compared with alcohols and were once used as anaesthetics."
+  },
+  {
+    "term": "Evaporation",
+    "slug": "evaporation",
+    "level": "Beginner",
+    "definition": "The escape of molecules from the surface of a liquid into the gas above it. It happens below the boiling point, because some molecules always carry more energy than the average, and it takes heat in as it goes."
+  },
+  {
+    "term": "Excess reagent",
+    "slug": "excess-reagent",
+    "level": "Novice",
+    "definition": "A reactant supplied in more than the equation requires, so that it is left over when the reaction stops. The one that runs out first is the limiting reagent and decides how much product can form."
+  },
+  {
+    "term": "Excited state",
+    "slug": "excited-state",
+    "level": "Novice",
+    "definition": "An atom or molecule in which an electron sits above its lowest available level. It is unstable and falls back, giving out the extra energy as light."
+  },
+  {
+    "term": "Exothermic",
+    "slug": "exothermic",
+    "level": "Beginner",
+    "definition": "Describing a change that gives energy out to its surroundings, so the surroundings warm. Burning and neutralising an acid with an alkali are both exothermic."
+  },
+  {
+    "term": "Extensive property",
+    "slug": "extensive-property",
+    "level": "Expert",
+    "definition": "A property whose value depends on how much of the substance there is, such as mass or volume. An intensive property, such as density or temperature, does not."
+  },
+  {
+    "term": "Faraday constant",
+    "slug": "faraday-constant",
+    "level": "Expert",
+    "definition": "The charge carried by one mole of electrons, 96 485 coulombs. It is the bridge between the current passed through a cell and the amount of substance the current converts."
+  },
+  {
+    "term": "Filtration",
+    "slug": "filtration",
+    "level": "Beginner",
+    "definition": "Separating a solid from a liquid by pouring the mixture through a material the liquid passes and the solid does not. It works on an insoluble solid, and it is the first step of many purifications."
+  },
+  {
+    "term": "First law of thermodynamics",
+    "slug": "first-law-of-thermodynamics",
+    "level": "Expert",
+    "definition": "The statement that the energy a system gains is the heat it takes in plus the work done on it. It is conservation of energy written for a system that can exchange both."
+  },
+  {
+    "term": "Fission",
+    "slug": "fission",
+    "level": "Novice",
+    "definition": "The splitting of a heavy nucleus into lighter ones, which releases energy because the fragments are more tightly bound. It happens when a nucleus is struck, and one struck nucleus can start a chain."
+  },
+  {
+    "term": "Flame test",
+    "slug": "flame-test",
+    "level": "Beginner",
+    "definition": "Identifying a metal ion by the colour it gives a flame. Sodium burns yellow, potassium lilac, calcium brick red, because each element's electrons fall back through its own set of energy levels."
+  },
+  {
+    "term": "Flash point",
+    "slug": "flash-point",
+    "level": "Novice",
+    "definition": "The lowest temperature at which a liquid gives off enough vapour to catch fire briefly when a flame is passed over it. It is a safety measure, and a liquid with a low flash point must be handled cold."
+  },
+  {
+    "term": "Fluorescence",
+    "slug": "fluorescence",
+    "level": "Novice",
+    "definition": "The giving out of light by a substance that has been struck by light of a shorter wavelength, with the light stopping as soon as the source does. The glow of a fluorescent dye is this process."
+  },
+  {
+    "term": "Formal charge",
+    "slug": "formal-charge",
+    "level": "Expert",
+    "definition": "A bookkeeping charge given to an atom in a Lewis structure by counting shared electrons as split evenly. It is used to judge which of several possible structures is the likelier one."
+  },
+  {
+    "term": "Formula unit",
+    "slug": "formula-unit",
+    "level": "Expert",
+    "definition": "The smallest whole-number ratio of ions in an ionic compound, which is what its formula shows. An ionic solid has no separate molecules, so its formula describes a proportion rather than a particle."
+  },
+  {
+    "term": "Fractional distillation",
+    "slug": "fractional-distillation",
+    "level": "Novice",
+    "definition": "Distilling a mixture of liquids with different boiling points through a column so that they come off one after another. It is how crude oil is separated into its useful parts."
+  },
+  {
+    "term": "Free energy",
+    "slug": "free-energy",
+    "level": "Expert",
+    "definition": "The combination of enthalpy and entropy that decides whether a change will go of its own accord, written G. A change releases free energy when the products are more stable than the reactants."
+  },
+  {
+    "term": "Free radical",
+    "slug": "free-radical",
+    "level": "Expert",
+    "definition": "A species with an unpaired electron, which makes it very reactive and usually short-lived. Radicals carry chain reactions such as the one that turns oils rancid and the one in a flame."
+  },
+  {
+    "term": "Freezing point depression",
+    "slug": "freezing-point-depression",
+    "level": "Novice",
+    "definition": "The fall in a liquid's freezing point when something is dissolved in it. It depends only on how many particles the solute provides, and it is the reason salt clears a road in winter."
+  },
+  {
+    "term": "Fuel cell",
+    "slug": "fuel-cell",
+    "level": "Expert",
+    "definition": "A cell that makes electricity from a fuel and an oxidant supplied continuously, rather than from material stored inside it. A hydrogen fuel cell's only product is water, which is why it is attractive for vehicles."
+  },
+  {
+    "term": "Fusion",
+    "slug": "fusion",
+    "level": "Novice",
+    "definition": "The joining of two light nuclei into a heavier one, which releases energy because the product is more tightly bound than its parts. It is the reaction that powers the Sun, and it needs temperatures far above any everyday furnace."
+  },
+  {
+    "term": "Galvanic cell",
+    "slug": "galvanic-cell",
+    "level": "Novice",
+    "definition": "A cell in which a spontaneous reaction is arranged so that its electrons travel through an outside circuit instead of meeting directly. It turns chemical energy into electrical energy, and a battery is one or more of them."
+  },
+  {
+    "term": "Gas",
+    "slug": "gas",
+    "level": "Beginner",
+    "definition": "A state of matter in which the particles are far apart, move freely and fill whatever container they are in. A gas has no fixed shape or volume, and it can be compressed far more than a liquid."
+  },
+  {
+    "term": "Gas constant",
+    "slug": "gas-constant",
+    "level": "Expert",
+    "definition": "The constant in the ideal gas equation, 8.314 joules per mole per kelvin, written R. It converts between the energy of a mole of particles and temperature."
+  },
+  {
+    "term": "Gas laws",
+    "slug": "gas-laws",
+    "level": "Novice",
+    "definition": "The relationships describing how a gas's pressure, volume and temperature depend on one another. Boyle's law covers pressure and volume, Charles's law volume and temperature, and together they give the ideal gas equation."
+  },
+  {
+    "term": "Gay-Lussac's law",
+    "slug": "gay-lussacs-law",
+    "level": "Novice",
+    "definition": "The rule that a fixed amount of gas at constant volume has a pressure proportional to its absolute temperature. It is why a sealed container left in the sun becomes dangerous."
+  },
+  {
+    "term": "Graham's law",
+    "slug": "grahams-law",
+    "level": "Expert",
+    "definition": "The rule that a gas's rate of effusion is inversely proportional to the square root of its molar mass. A gas four times as heavy escapes half as fast."
+  },
+  {
+    "term": "Gram",
+    "slug": "gram",
+    "level": "Beginner",
+    "definition": "The unit of mass in the metric system, one thousandth of a kilogram. A mole of a substance weighs its molar mass in grams."
+  },
+  {
+    "term": "Gravimetric analysis",
+    "slug": "gravimetric-analysis",
+    "level": "Expert",
+    "definition": "Finding how much of a substance a sample holds by turning it into something that can be weighed. It is slow but exact, and it is still the method against which faster ones are checked."
+  },
+  {
+    "term": "Greenhouse gas",
+    "slug": "greenhouse-gas",
+    "level": "Beginner",
+    "definition": "A gas that absorbs infrared radiation leaving a planet and re-emits some of it back down. Carbon dioxide, methane and water vapour are the ones that matter most for the Earth."
+  },
+  {
+    "term": "Ground state",
+    "slug": "ground-state",
+    "level": "Novice",
+    "definition": "The lowest-energy arrangement of an atom's or molecule's electrons. Anything else is an excited state, and a system left alone returns to the ground state."
+  },
+  {
+    "term": "Group",
+    "slug": "group",
+    "level": "Beginner",
+    "definition": "A vertical column of the periodic table. Elements in a group share the number of electrons in their outer shell, which is why they behave alike."
+  },
+  {
+    "term": "Half-life",
+    "slug": "half-life",
+    "level": "Novice",
+    "definition": "The time it takes for half of a radioactive sample to decay. It is fixed for each isotope and does not change with temperature, which is what makes it useful for dating."
+  },
+  {
+    "term": "Halide",
+    "slug": "halide",
+    "level": "Novice",
+    "definition": "A compound of a halogen with another element or group, or the negative ion a halogen forms when it gains an electron. Sodium chloride is the ordinary example."
+  },
+  {
+    "term": "Halogen",
+    "slug": "halogen",
+    "level": "Beginner",
+    "definition": "One of the five elements in the seventeenth group of the periodic table, from fluorine to astatine. Each is one electron short of a full outer shell, so they are the most reactive non-metals."
+  },
+  {
+    "term": "Heat",
+    "slug": "heat",
+    "level": "Beginner",
+    "definition": "Energy on the move from a warmer body to a cooler one. Heat is a transfer rather than something a body holds, which is why a body's own energy is called internal energy instead."
+  },
+  {
+    "term": "Heat capacity",
+    "slug": "heat-capacity",
+    "level": "Novice",
+    "definition": "The heat needed to raise the temperature of a body by one degree. The specific heat capacity is the same quantity for one gram of a substance, and water's is unusually large."
+  },
+  {
+    "term": "Heat of fusion",
+    "slug": "heat-of-fusion",
+    "level": "Novice",
+    "definition": "The heat needed to melt one mole of a solid at its melting point. It is the energy that must go in to break the lattice up without raising the temperature at all."
+  },
+  {
+    "term": "Heat of vaporisation",
+    "slug": "heat-of-vaporisation",
+    "level": "Novice",
+    "definition": "The heat needed to turn one mole of a liquid into a gas at its boiling point. It is always larger than the heat of fusion, because a gas's particles must be pulled completely apart."
+  },
+  {
+    "term": "Heisenberg uncertainty principle",
+    "slug": "heisenberg-uncertainty-principle",
+    "level": "Expert",
+    "definition": "The rule that an electron's position and its momentum cannot both be known precisely at once. The better one is pinned down the less is known of the other, which is why electrons are described by probabilities rather than orbits."
+  },
+  {
+    "term": "Henderson–Hasselbalch equation",
+    "slug": "henderson-hasselbalch-equation",
+    "level": "Expert",
+    "definition": "A rearrangement of the acid dissociation constant that gives a buffer's pH from the acid's pKa and the ratio of the acid to its conjugate base. It is the working equation for choosing a buffer."
+  },
+  {
+    "term": "Henry's law",
+    "slug": "henrys-law",
+    "level": "Expert",
+    "definition": "The rule that the amount of a gas that dissolves in a liquid is proportional to the gas's pressure above it. It is why a fizzy drink goes flat when the cap comes off."
+  },
+  {
+    "term": "Hess's law",
+    "slug": "hess-law",
+    "level": "Expert",
+    "definition": "The rule that the enthalpy change of a reaction is the same however many steps it is carried out in. It lets an unmeasurable change be found by adding up ones that can be measured."
+  },
+  {
+    "term": "Heterogeneous",
+    "slug": "heterogeneous",
+    "level": "Novice",
+    "definition": "Describing a mixture or a reaction in which the substances are present in more than one state, so the boundary between them matters. A catalyst in a different phase from its reactants is a heterogeneous catalyst."
+  },
+  {
+    "term": "Heterolytic fission",
+    "slug": "heterolytic-fission",
+    "level": "Expert",
+    "definition": "The breaking of a bond in which both electrons go to the same atom, producing a positive and a negative ion. It is the commoner way a polar bond breaks."
+  },
+  {
+    "term": "Homogeneous",
+    "slug": "homogeneous",
+    "level": "Novice",
+    "definition": "Describing a mixture in which the substances are spread evenly and there is no boundary between them. A solution of salt in water is homogeneous, and so is an alloy."
+  },
+  {
+    "term": "Homolytic fission",
+    "slug": "homolytic-fission",
+    "level": "Expert",
+    "definition": "The breaking of a bond in which each atom keeps one of the two shared electrons, producing two radicals. It is favoured by heat and by light, and it is how a chain reaction starts."
+  },
+  {
+    "term": "Hund's rule",
+    "slug": "hund-rule",
+    "level": "Expert",
+    "definition": "The rule that electrons entering orbitals of equal energy occupy them singly, with their spins parallel, before any of them takes a second. It is the reason a nitrogen atom has three unpaired electrons."
+  },
+  {
+    "term": "Hybridisation",
+    "slug": "hybridisation",
+    "level": "Expert",
+    "definition": "A way of describing the orbitals of an atom in a molecule as mixtures of its atomic orbitals, chosen to match the shape the molecule actually has. A carbon with four single bonds is described as having four equivalent hybrid orbitals."
+  },
+  {
+    "term": "Hydrate",
+    "slug": "hydrate",
+    "level": "Novice",
+    "definition": "A compound with water molecules held in fixed proportions inside its crystal lattice. Copper sulphate pentahydrate is blue and turns white when the water is driven off."
+  },
+  {
+    "term": "Hydrocarbon",
+    "slug": "hydrocarbon",
+    "level": "Beginner",
+    "definition": "A compound of hydrogen and carbon only. Petroleum, natural gas and the alkanes are hydrocarbons, and burning them gives out a great deal of energy."
+  },
+  {
+    "term": "Hydrogen bond",
+    "slug": "hydrogen-bond",
+    "level": "Novice",
+    "definition": "A strong attraction between a hydrogen atom that is already bonded to nitrogen, oxygen or fluorine and a lone pair on another such atom. It is much weaker than a covalent bond and much stronger than an ordinary dipole attraction, and it is why water has the properties it does."
+  },
+  {
+    "term": "Hydrogenation",
+    "slug": "hydrogenation",
+    "level": "Novice",
+    "definition": "Adding hydrogen across a carbon-to-carbon double bond, usually with a metal catalyst. It turns an unsaturated oil into a more solid fat, and it is why margarine exists."
+  },
+  {
+    "term": "Hydrolysis",
+    "slug": "hydrolysis",
+    "level": "Novice",
+    "definition": "A reaction in which water breaks a bond in another substance, usually with the water's two parts attaching to the two fragments. It is the reverse of a condensation reaction."
+  },
+  {
+    "term": "Hydronium ion",
+    "slug": "hydronium-ion",
+    "level": "Novice",
+    "definition": "The positive ion formed when a proton attaches itself to a water molecule, written H₃O⁺. It is what an acid actually produces in water, and the simpler H⁺ is a shorthand for it."
+  },
+  {
+    "term": "Hygroscopic",
+    "slug": "hygroscopic",
+    "level": "Novice",
+    "definition": "Describing a substance that takes water vapour from the air and holds it. A hygroscopic solid becomes damp rather than dissolving in the water it has taken up."
+  },
+  {
+    "term": "Ideal gas",
+    "slug": "ideal-gas",
+    "level": "Novice",
+    "definition": "A gas imagined as point particles that never attract one another, used as a first model of real behaviour. Real gases approach it when they are hot and at low pressure and depart from it when they are not."
+  },
+  {
+    "term": "Ideal gas law",
+    "slug": "ideal-gas-law",
+    "level": "Novice",
+    "definition": "The equation pV = nRT, which relates a gas's pressure, volume, amount and temperature. It combines the older gas laws into one statement."
+  },
+  {
+    "term": "Indicator",
+    "slug": "indicator",
+    "level": "Beginner",
+    "definition": "A substance that changes colour over a narrow range of pH, used to show when a titration has gone far enough. Litmus and phenolphthalein are the familiar ones."
+  },
+  {
+    "term": "Induced dipole",
+    "slug": "induced-dipole",
+    "level": "Expert",
+    "definition": "A temporary separation of charge produced in a molecule by the approach of a polar or momentary dipole nearby. It is the whole of the attraction between two non-polar molecules, which is why they can still condense."
+  },
+  {
+    "term": "Inert pair effect",
+    "slug": "inert-pair-effect",
+    "level": "Expert",
+    "definition": "The tendency of the heaviest elements of a group to use two fewer electrons than their group number suggests, because the pair in the outer s subshell resists being used. It is why lead forms a two-plus rather than a four-plus ion so readily."
+  },
+  {
+    "term": "Infrared spectroscopy",
+    "slug": "infrared-spectroscopy",
+    "level": "Expert",
+    "definition": "The identification of bonds in a molecule by the wavelengths of infrared light they absorb, each bond stretching or bending at a frequency of its own. It is a quick way to tell which groups a compound contains."
+  },
+  {
+    "term": "Inhibitor",
+    "slug": "inhibitor",
+    "level": "Novice",
+    "definition": "A substance that slows a reaction, usually by blocking the species that carries it on. An inhibitor differs from a catalyst only in the direction of its effect."
+  },
+  {
+    "term": "Inorganic chemistry",
+    "slug": "inorganic-chemistry",
+    "level": "Beginner",
+    "definition": "The branch of chemistry concerned with compounds that are not built round chains of carbon, including metals, salts and minerals. The boundary with organic chemistry is not a sharp one."
+  },
+  {
+    "term": "Insoluble",
+    "slug": "insoluble",
+    "level": "Beginner",
+    "definition": "Describing a substance that does not dissolve appreciably in a given liquid. Insolubility is a matter of degree, and a salt called insoluble still dissolves a very little."
+  },
+  {
+    "term": "Intensive property",
+    "slug": "intensive-property",
+    "level": "Expert",
+    "definition": "A property whose value does not depend on how much of the substance there is, such as density or melting point. Its counterpart, an extensive property, does."
+  },
+  {
+    "term": "Intermolecular forces",
+    "slug": "intermolecular-forces",
+    "level": "Novice",
+    "definition": "The attractions between separate molecules, as opposed to the bonds inside them. They are much weaker than covalent bonds, and they decide whether a substance is a gas, a liquid or a solid at room temperature."
+  },
+  {
+    "term": "Internal energy",
+    "slug": "internal-energy",
+    "level": "Expert",
+    "definition": "The total energy of a system's particles, counting their motion and the forces between them. A change in it is the heat taken in plus the work done on the system."
+  },
+  {
+    "term": "Ion",
+    "slug": "ion",
+    "level": "Beginner",
+    "definition": "An atom or group of atoms carrying an electric charge because it has gained or lost electrons. A positive ion is a cation and a negative one an anion."
+  },
+  {
+    "term": "Ion product of water",
+    "slug": "ion-product-of-water",
+    "level": "Expert",
+    "definition": "The product of the hydrogen ion and hydroxide ion concentrations in water, which is 1 × 10⁻¹⁴ at 25 °C whatever else is dissolved. It is what ties an acid's strength to its conjugate base's."
+  },
+  {
+    "term": "Ionic bond",
+    "slug": "ionic-bond",
+    "level": "Beginner",
+    "definition": "The attraction between a positive and a negative ion that holds an ionic solid together. It comes of one atom giving electrons away and another taking them."
+  },
+  {
+    "term": "Ionic radius",
+    "slug": "ionic-radius",
+    "level": "Expert",
+    "definition": "The effective size of an ion in a crystal. A cation is always smaller than the atom it came from, because losing electrons leaves the nucleus pulling on fewer of them."
+  },
+  {
+    "term": "Ionisation energy",
+    "slug": "ionisation-energy",
+    "level": "Novice",
+    "definition": "The energy needed to remove one electron from a gaseous atom. It rises across a period and falls down a group, and the jumps in it are evidence that electrons are arranged in shells."
+  },
+  {
+    "term": "Isoelectronic",
+    "slug": "isoelectronic",
+    "level": "Expert",
+    "definition": "Describing two species that have the same number and arrangement of electrons, such as a sodium ion and a neon atom. Their sizes differ because their nuclei do not have the same charge."
+  },
+  {
+    "term": "Isomer",
+    "slug": "isomer",
+    "level": "Novice",
+    "definition": "One of two or more compounds with the same molecular formula but a different arrangement of atoms. Because the arrangement differs, so do the properties."
+  },
+  {
+    "term": "Isotope",
+    "slug": "isotope",
+    "level": "Beginner",
+    "definition": "One of two or more forms of the same element whose atoms have different numbers of neutrons and so different masses. Isotopes of an element are chemically almost identical."
+  },
+  {
+    "term": "Jahn–Teller effect",
+    "slug": "jahn-teller-effect",
+    "level": "Expert",
+    "definition": "The distortion of a complex in which the arrangement of electrons is not spread evenly over its orbitals. The distortion removes the imbalance, and it explains why some copper compounds have four short bonds and two long ones."
+  },
+  {
+    "term": "Joule",
+    "slug": "joule",
+    "level": "Beginner",
+    "definition": "The unit of energy, equal to the work done when a force of one newton moves its point of application one metre. It is the unit in which every energy change in chemistry is quoted."
+  },
+  {
+    "term": "Joule–Thomson effect",
+    "slug": "joule-thomson-effect",
+    "level": "Expert",
+    "definition": "The change in temperature when a gas is allowed to expand through a valve without doing outside work. Most gases cool, which is how refrigeration and gas liquefaction work."
+  },
+  {
+    "term": "Kelvin",
+    "slug": "kelvin",
+    "level": "Beginner",
+    "definition": "The SI unit of temperature and the scale that starts at absolute zero. A kelvin is the same size as a degree Celsius, so 0 °C is 273.15 K."
+  },
+  {
+    "term": "Ketone",
+    "slug": "ketone",
+    "level": "Novice",
+    "definition": "A compound with a carbonyl group joined to two carbon groups, one on each side. Propanone is the commonest, and ketones are used widely as solvents."
+  },
+  {
+    "term": "Kinetic energy",
+    "slug": "kinetic-energy",
+    "level": "Beginner",
+    "definition": "The energy a body has because it is moving, given by half its mass times the square of its speed. Temperature is a measure of the average kinetic energy of a substance's particles."
+  },
+  {
+    "term": "Kinetic isotope effect",
+    "slug": "kinetic-isotope-effect",
+    "level": "Expert",
+    "definition": "The slowing of a reaction when an atom taking part is replaced by a heavier isotope of itself. Its size shows whether the bond to that atom is broken in the step that sets the rate."
+  },
+  {
+    "term": "Kinetics",
+    "slug": "kinetics",
+    "level": "Expert",
+    "definition": "The study of how fast reactions go and by what steps, rather than how far they go. Its questions are the rate, the order and the mechanism, and its answers come from measuring concentration against time."
+  },
+  {
+    "term": "Lanthanide",
+    "slug": "lanthanide",
+    "level": "Novice",
+    "definition": "One of the fifteen elements from lanthanum to lutetium, whose f subshell is being filled in the sixth period. They are so alike chemically that separating them was one of the hardest problems in nineteenth-century chemistry."
+  },
+  {
+    "term": "Lattice energy",
+    "slug": "lattice-energy",
+    "level": "Expert",
+    "definition": "The energy released when one mole of an ionic solid is built from its separate gaseous ions. Its size depends on the charges and on how closely the ions can pack, and it is the reason magnesium oxide melts far hotter than sodium chloride."
+  },
+  {
+    "term": "Law of mass action",
+    "slug": "law-of-mass-action",
+    "level": "Expert",
+    "definition": "The rule that a reaction's rate is proportional to the concentrations of the substances taking part, each raised to the number of particles of it in the equation. It is where equilibrium constants come from."
+  },
+  {
+    "term": "Le Chatelier's principle",
+    "slug": "le-chateliers-principle",
+    "level": "Novice",
+    "definition": "The rule that a system at equilibrium shifts to oppose whatever change is made to it. Adding a reactant drives the reaction forward, and raising the temperature favours whichever direction takes heat in."
+  },
+  {
+    "term": "Lewis acid",
+    "slug": "lewis-acid",
+    "level": "Expert",
+    "definition": "A species that accepts a pair of electrons from another. The definition is wider than the proton one, which is why boron trifluoride counts as an acid although it holds no hydrogen."
+  },
+  {
+    "term": "Lewis structure",
+    "slug": "lewis-structure",
+    "level": "Novice",
+    "definition": "A drawing of a molecule in which every atom is shown with its bonds as lines and its unshared electrons as dots. It shows which atoms are joined and how, though not the shape the molecule takes in space."
+  },
+  {
+    "term": "Ligand",
+    "slug": "ligand",
+    "level": "Expert",
+    "definition": "An ion or molecule joined to a central metal atom in a complex, contributing a pair of electrons to the bond. Water, ammonia and chloride are all common ligands."
+  },
+  {
+    "term": "Limiting reagent",
+    "slug": "limiting-reagent",
+    "level": "Novice",
+    "definition": "The reactant that runs out first and so decides how much product can form. Everything else is in excess, and the calculation is done from the limiting reagent's amount."
+  },
+  {
+    "term": "Liquid",
+    "slug": "liquid",
+    "level": "Beginner",
+    "definition": "A state of matter whose particles are close together but free to move past one another. A liquid has a fixed volume but takes the shape of its container."
+  },
+  {
+    "term": "Litmus",
+    "slug": "litmus",
+    "level": "Beginner",
+    "definition": "A dye mixture, obtained from lichens, that turns red in acid and blue in alkali. It gives a quick yes-or-no answer about whether a solution is acidic, but no measure of how strongly."
+  },
+  {
+    "term": "London dispersion forces",
+    "slug": "london-dispersion-forces",
+    "level": "Expert",
+    "definition": "The weak attractions between any two molecules, caused by momentary unevenness in their electron clouds. They grow with the size of the electron cloud, which is why the heaviest noble gas boils at the highest temperature."
+  },
+  {
+    "term": "Lone pair",
+    "slug": "lone-pair",
+    "level": "Novice",
+    "definition": "A pair of electrons in an atom's outer shell that is not shared in a bond. Lone pairs take up room, which is why a water molecule is bent and why ammonia can accept a proton."
+  },
+  {
+    "term": "Macromolecule",
+    "slug": "macromolecule",
+    "level": "Novice",
+    "definition": "A molecule built from many smaller units joined into one very large structure. Proteins, plastics and cellulose are all macromolecules."
+  },
+  {
+    "term": "Main-group element",
+    "slug": "main-group-element",
+    "level": "Novice",
+    "definition": "An element whose outer electrons are in an s or a p subshell, as opposed to a transition metal. The main-group elements are the ones in the first two columns and the last six."
+  },
+  {
+    "term": "Mass number",
+    "slug": "mass-number",
+    "level": "Novice",
+    "definition": "The total number of protons and neutrons in one atom's nucleus, written A. It is a whole number and differs between the isotopes of an element."
+  },
+  {
+    "term": "Mass spectrometry",
+    "slug": "mass-spectrometry",
+    "level": "Expert",
+    "definition": "A technique that sorts the particles of a sample by their mass and records how many of each arrive. It identifies what a substance is, what isotopes it holds and what fragments it breaks into."
+  },
+  {
+    "term": "Matter",
+    "slug": "matter",
+    "level": "Beginner",
+    "definition": "Anything that has mass and takes up space. Chemistry is the study of what matter is made of and how it changes."
+  },
+  {
+    "term": "Melting point",
+    "slug": "melting-point",
+    "level": "Beginner",
+    "definition": "The temperature at which a solid turns to a liquid at ordinary pressure. A pure substance melts at a single temperature, so a range is evidence that it is impure."
+  },
+  {
+    "term": "Meniscus",
+    "slug": "meniscus",
+    "level": "Novice",
+    "definition": "The curved surface of a liquid in a narrow tube. Its shape comes from the liquid's cohesion and its adhesion to the glass, and in a burette the reading is taken at the bottom of the curve."
+  },
+  {
+    "term": "Metallic bond",
+    "slug": "metallic-bond",
+    "level": "Novice",
+    "definition": "The attraction that holds a metal together, in which the outer electrons belong to the whole piece rather than to any one atom. That sea of electrons is why metals conduct and bend."
+  },
+  {
+    "term": "Metalloid",
+    "slug": "metalloid",
+    "level": "Beginner",
+    "definition": "An element whose properties fall between those of a metal and a non-metal, such as boron, silicon or arsenic. They usually conduct electricity partly, and silicon is the basis of the electronics industry."
+  },
+  {
+    "term": "Miscible",
+    "slug": "miscible",
+    "level": "Novice",
+    "definition": "Describing two liquids that mix in any proportion to give a single layer. Ethanol and water are miscible, and oil and water are not."
+  },
+  {
+    "term": "Mixture",
+    "slug": "mixture",
+    "level": "Beginner",
+    "definition": "Two or more substances together but not joined chemically, in proportions that can vary. Its parts keep their own properties and can be separated by physical means."
+  },
+  {
+    "term": "Molality",
+    "slug": "molality",
+    "level": "Expert",
+    "definition": "Moles of dissolved substance per kilogram of solvent. Unlike molarity it does not change with temperature, because it is measured against a mass rather than a volume."
+  },
+  {
+    "term": "Molar mass",
+    "slug": "molar-mass",
+    "level": "Novice",
+    "definition": "The mass of one mole of a substance, in grams per mole. Numerically it is the substance's formula mass, so working it out is a matter of adding up atomic masses."
+  },
+  {
+    "term": "Molarity",
+    "slug": "molarity",
+    "level": "Novice",
+    "definition": "Moles of dissolved substance per cubic decimetre of solution, written mol/dm³ and often called molar. It is the commonest way of quoting a concentration."
+  },
+  {
+    "term": "Mole",
+    "slug": "mole",
+    "level": "Beginner",
+    "definition": "The amount of a substance that holds 6.022 140 76 × 10²³ particles, which is Avogadro's number. It is the chemist's way of counting particles by weighing them."
+  },
+  {
+    "term": "Molecular formula",
+    "slug": "molecular-formula",
+    "level": "Novice",
+    "definition": "The formula that gives the actual number of each kind of atom in one molecule, rather than the simplest ratio. Benzene's molecular formula is C₆H₆ and its simplest ratio is CH."
+  },
+  {
+    "term": "Molecule",
+    "slug": "molecule",
+    "level": "Beginner",
+    "definition": "Two or more atoms joined by covalent bonds into one particle. It is the smallest unit of a molecular substance that keeps that substance's properties."
+  },
+  {
+    "term": "Monomer",
+    "slug": "monomer",
+    "level": "Novice",
+    "definition": "A small molecule that can be joined to others of its kind to make a polymer. Ethene is the monomer of polythene."
+  },
+  {
+    "term": "Nanoparticle",
+    "slug": "nanoparticle",
+    "level": "Expert",
+    "definition": "A particle a few billionths of a metre across, small enough that a large share of its atoms sit on its surface. That surface share is why a nanoparticle's colour, melting point and reactivity can differ from the bulk material's."
+  },
+  {
+    "term": "Nernst equation",
+    "slug": "nernst-equation",
+    "level": "Expert",
+    "definition": "The relationship that gives a cell's voltage at concentrations other than the standard ones. It shows how the voltage falls as a cell's reaction runs down."
+  },
+  {
+    "term": "Net ionic equation",
+    "slug": "net-ionic-equation",
+    "level": "Novice",
+    "definition": "A chemical equation written with only the ions that actually change, leaving out the ones that are the same on both sides. It shows what the reaction really is rather than what was poured into the beaker."
+  },
+  {
+    "term": "Neutralisation",
+    "slug": "neutralisation",
+    "level": "Beginner",
+    "definition": "The reaction of an acid with a base to give a salt and water. It always releases heat, and it is the basis of antacid tablets and of treating soil with lime."
+  },
+  {
+    "term": "Neutron",
+    "slug": "neutron",
+    "level": "Beginner",
+    "definition": "The uncharged particle in an atom's nucleus, slightly heavier than a proton. The number of them decides which isotope of an element an atom is."
+  },
+  {
+    "term": "Noble gas",
+    "slug": "noble-gas",
+    "level": "Beginner",
+    "definition": "One of the seven elements in the eighteenth group of the periodic table, from helium to oganesson. Each has a full outer shell, so they are the least reactive of all the elements."
+  },
+  {
+    "term": "Noble gas configuration",
+    "slug": "noble-gas-configuration",
+    "level": "Expert",
+    "definition": "The electron arrangement of an atom written as a noble gas core plus the outer electrons, such as [Ar] 4s² 3d⁶ for iron. It is a shorthand that keeps the uninteresting inner electrons out of the way."
+  },
+  {
+    "term": "Non-metal",
+    "slug": "non-metal",
+    "level": "Beginner",
+    "definition": "An element that does not conduct electricity or heat well and tends to gain electrons rather than lose them. The non-metals sit to the right of the periodic table and include carbon, oxygen and sulphur."
+  },
+  {
+    "term": "Non-polar",
+    "slug": "non-polar",
+    "level": "Novice",
+    "definition": "Describing a bond or molecule in which the electric charge is spread evenly, with no positive or negative end. A molecule of non-polar bonds is always non-polar, but a molecule can also be non-polar when its polar bonds cancel out, as carbon dioxide's do."
+  },
+  {
+    "term": "Nucleon",
+    "slug": "nucleon",
+    "level": "Expert",
+    "definition": "A proton or a neutron, counted together when a nucleus's mass number is given. The binding energy per nucleon is the measure of how tightly a nucleus is held together."
+  },
+  {
+    "term": "Nucleophile",
+    "slug": "nucleophile",
+    "level": "Expert",
+    "definition": "A species that is rich in electrons and attacks a region where electrons are scarce. It is the counterpart of an electrophile, and water and ammonia are both common ones."
+  },
+  {
+    "term": "Nucleus",
+    "slug": "nucleus",
+    "level": "Beginner",
+    "definition": "The small, dense centre of an atom, holding its protons and neutrons. It carries almost all of the atom's mass and all of its positive charge."
+  },
+  {
+    "term": "Nuclide",
+    "slug": "nuclide",
+    "level": "Expert",
+    "definition": "One particular kind of atomic nucleus, named by its element and its mass number, such as carbon-14. Two nuclides of the same element are isotopes of each other."
+  },
+  {
+    "term": "Octet rule",
+    "slug": "octet-rule",
+    "level": "Novice",
+    "definition": "The observation that atoms tend to gain, lose or share electrons until eight are in their outer shell. It explains a great deal of bonding, and the exceptions are numerous enough to make it a rule of thumb rather than a law."
+  },
+  {
+    "term": "Open system",
+    "slug": "open-system",
+    "level": "Novice",
+    "definition": "A system that exchanges both matter and energy with its surroundings. A beaker on a bench is open; a sealed flask is closed, and a well-insulated one is isolated."
+  },
+  {
+    "term": "Optical isomerism",
+    "slug": "optical-isomerism",
+    "level": "Expert",
+    "definition": "The existence of two mirror-image forms of a molecule that rotate the plane of polarised light in opposite directions. It is the same property as chirality, named for how it is detected."
+  },
+  {
+    "term": "Orbital",
+    "slug": "orbital",
+    "level": "Novice",
+    "definition": "A region around a nucleus where an electron of a particular energy is most likely to be found. An orbital can hold at most two electrons, and its shape depends on the subshell it belongs to."
+  },
+  {
+    "term": "Organic chemistry",
+    "slug": "organic-chemistry",
+    "level": "Beginner",
+    "definition": "The branch of chemistry concerned with carbon compounds, which are the basis of living things and of fuels, plastics and medicines. Carbon's readiness to form four bonds and to bond to itself is what gives the branch its size."
+  },
+  {
+    "term": "Osmosis",
+    "slug": "osmosis",
+    "level": "Novice",
+    "definition": "The movement of a solvent through a partly permeable membrane from the more dilute solution to the more concentrated one. It needs no energy input and it stops when the two sides are balanced or the pressure against it is large enough."
+  },
+  {
+    "term": "Osmotic pressure",
+    "slug": "osmotic-pressure",
+    "level": "Expert",
+    "definition": "The pressure that must be applied to stop osmosis across a membrane. It depends on how many dissolved particles there are, which makes it a way of measuring molar mass."
+  },
+  {
+    "term": "Oxidation",
+    "slug": "oxidation",
+    "level": "Beginner",
+    "definition": "The loss of electrons by a substance, which usually means it gains oxygen or loses hydrogen. It always happens together with a reduction, because electrons are not destroyed."
+  },
+  {
+    "term": "Oxidation state",
+    "slug": "oxidation-state",
+    "level": "Novice",
+    "definition": "A number given to an atom in a compound showing how many electrons it has effectively lost or gained, by the bookkeeping rules for the elements it is joined to. It is written as a Roman numeral or with a sign, as in iron(III) or Fe³⁺."
+  },
+  {
+    "term": "Oxide",
+    "slug": "oxide",
+    "level": "Beginner",
+    "definition": "A compound of oxygen with one other element. Metal oxides are usually basic and non-metal oxides acidic, which is why carbon dioxide turns limewater milky and rust is an oxide of iron."
+  },
+  {
+    "term": "Oxidising agent",
+    "slug": "oxidising-agent",
+    "level": "Novice",
+    "definition": "The substance in a reaction that takes electrons from another, and so is itself reduced. Oxygen, chlorine and permanganate are all common ones."
+  },
+  {
+    "term": "Oxyacid",
+    "slug": "oxyacid",
+    "level": "Expert",
+    "definition": "An acid in which the hydrogen that comes off is attached to an oxygen atom rather than to the element at the centre. Sulphuric and nitric acid are oxyacids, and they are usually stronger than the acids of the same elements that lack the oxygen."
+  },
+  {
+    "term": "Ozone",
+    "slug": "ozone",
+    "level": "Novice",
+    "definition": "A form of oxygen whose molecules hold three atoms rather than two. It is a far stronger oxidising agent than ordinary oxygen, useful as a disinfectant and harmful to lungs, and high in the atmosphere it screens out ultraviolet light."
+  },
+  {
+    "term": "Partial pressure",
+    "slug": "partial-pressure",
+    "level": "Expert",
+    "definition": "The pressure one gas in a mixture would exert if it were alone in the same volume. The parts add up to the total pressure, and it is the partial pressure of oxygen that decides how well blood takes it up."
+  },
+  {
+    "term": "Particle",
+    "slug": "particle",
+    "level": "Beginner",
+    "definition": "A single atom, molecule or ion, treated as one unit. The particle model explains the states of matter by how the particles are arranged and how freely they move."
+  },
+  {
+    "term": "Pascal",
+    "slug": "pascal",
+    "level": "Novice",
+    "definition": "The SI unit of pressure, equal to one newton per square metre. It is a small unit, so ordinary pressures are quoted in kilopascals or bars."
+  },
+  {
+    "term": "Pauli exclusion principle",
+    "slug": "pauli-exclusion-principle",
+    "level": "Expert",
+    "definition": "The rule that no two electrons in an atom may share the same four quantum numbers, which comes down to saying an orbital holds at most two electrons and only if their spins are opposite. It is why matter does not collapse in on itself."
+  },
+  {
+    "term": "Peptide bond",
+    "slug": "peptide-bond",
+    "level": "Expert",
+    "definition": "The link formed between the acid group of one amino acid and the amine group of another, giving off water. Chains of these bonds are what a protein is."
+  },
+  {
+    "term": "Period",
+    "slug": "period",
+    "level": "Beginner",
+    "definition": "A horizontal row of the periodic table. The elements in one period have the same number of electron shells, and the row ends when that shell is full."
+  },
+  {
+    "term": "Periodic table",
+    "slug": "periodic-table",
+    "level": "Beginner",
+    "definition": "The arrangement of the elements in order of atomic number, set out in rows and columns so that elements with similar chemistry fall together. Its shape follows the order in which electron shells and subshells fill."
+  },
+  {
+    "term": "Periodicity",
+    "slug": "periodicity",
+    "level": "Novice",
+    "definition": "The repeating pattern of properties that appears as the elements are taken in order of atomic number. It is the pattern the periodic table was built to display."
+  },
+  {
+    "term": "pH",
+    "slug": "ph",
+    "level": "Beginner",
+    "definition": "A scale from 0 to 14 measuring how acidic or alkaline a solution is, defined as the negative logarithm of the hydrogen ion concentration. A change of one unit means a tenfold change in that concentration."
+  },
+  {
+    "term": "Phase diagram",
+    "slug": "phase-diagram",
+    "level": "Expert",
+    "definition": "A graph showing which state a substance is in at each combination of temperature and pressure. Its lines mark the conditions at which two states coexist, and the three meet at the triple point."
+  },
+  {
+    "term": "Photon",
+    "slug": "photon",
+    "level": "Novice",
+    "definition": "A single packet of electromagnetic energy. Its energy is fixed by its frequency, which is why only light of certain colours can drive a given electronic transition."
+  },
+  {
+    "term": "Physical change",
+    "slug": "physical-change",
+    "level": "Beginner",
+    "definition": "A change in which a substance's form or state alters but its identity does not. Melting, dissolving and crushing are physical changes, and they can usually be undone."
+  },
+  {
+    "term": "Physical property",
+    "slug": "physical-property",
+    "level": "Beginner",
+    "definition": "A property that can be observed or measured without changing what the substance is, such as density, colour or melting point. Its counterpart is a chemical property."
+  },
+  {
+    "term": "pKa",
+    "slug": "pka",
+    "level": "Expert",
+    "definition": "The negative logarithm of an acid's dissociation constant, which puts the strength of acids on a friendly scale. A lower value means a stronger acid, and the value is also the pH at which the acid is half dissociated."
+  },
+  {
+    "term": "Planck constant",
+    "slug": "planck-constant",
+    "level": "Expert",
+    "definition": "The constant relating a photon's energy to its frequency, 6.626 070 15 × 10⁻³⁴ joule seconds, written h. It is the number that makes energy come in packets rather than a smooth flow."
+  },
+  {
+    "term": "Polar",
+    "slug": "polar",
+    "level": "Novice",
+    "definition": "Describing a bond or molecule with a positive end and a negative end, because one atom pulls the shared electrons harder than the other. Polar substances dissolve other polar substances, which is why water and oil do not mix."
+  },
+  {
+    "term": "Polymer",
+    "slug": "polymer",
+    "level": "Novice",
+    "definition": "A very large molecule built by joining many small ones into a chain or a network. Plastics, proteins and starches are all polymers, and their properties come as much from the chain's length as from its chemistry."
+  },
+  {
+    "term": "Polyprotic acid",
+    "slug": "polyprotic-acid",
+    "level": "Expert",
+    "definition": "An acid that can give up more than one proton, one at a time. Sulphuric acid is diprotic, and each successive proton is harder to remove than the last."
+  },
+  {
+    "term": "Precipitate",
+    "slug": "precipitate",
+    "level": "Novice",
+    "definition": "A solid that appears in a solution because a reaction has made something insoluble. Its appearance is one of the standard signs that a reaction has taken place."
+  },
+  {
+    "term": "Precision",
+    "slug": "precision",
+    "level": "Beginner",
+    "definition": "How closely repeated measurements of the same quantity agree with each other. A precise set can still be inaccurate if the instrument is wrongly calibrated."
+  },
+  {
+    "term": "Pressure",
+    "slug": "pressure",
+    "level": "Beginner",
+    "definition": "The force exerted on a surface divided by the area of that surface. In a gas it comes from the particles striking the walls of their container."
+  },
+  {
+    "term": "Product",
+    "slug": "product",
+    "level": "Beginner",
+    "definition": "A substance formed by a chemical reaction. Products are written on the right of an equation, and their amounts are worked out from the limiting reagent."
+  },
+  {
+    "term": "Proton",
+    "slug": "proton",
+    "level": "Beginner",
+    "definition": "The positively charged particle in an atom's nucleus. The number of protons is the atomic number, and it is what makes one element different from another."
+  },
+  {
+    "term": "Pure substance",
+    "slug": "pure-substance",
+    "level": "Beginner",
+    "definition": "A material made of a single element or compound, with nothing else mixed in. A pure substance melts and boils at fixed temperatures, which is how purity is judged."
+  },
+  {
+    "term": "Qualitative analysis",
+    "slug": "qualitative-analysis",
+    "level": "Novice",
+    "definition": "Finding out what a sample contains, without measuring how much. Flame tests and precipitation tests are classical qualitative methods."
+  },
+  {
+    "term": "Quantitative analysis",
+    "slug": "quantitative-analysis",
+    "level": "Novice",
+    "definition": "Measuring how much of a substance a sample contains. Titration and gravimetric analysis are the two classical approaches to it."
+  },
+  {
+    "term": "Quantum number",
+    "slug": "quantum-number",
+    "level": "Expert",
+    "definition": "One of the numbers that describes an electron's state in an atom, saying which shell, which subshell, which orbital and which spin. No two electrons in an atom may agree on all four."
+  },
+  {
+    "term": "Radiation",
+    "slug": "radiation",
+    "level": "Beginner",
+    "definition": "Energy travelling through space or through a material, either as electromagnetic waves or as fast particles. High-energy radiation can knock electrons out of atoms, which is what makes it a hazard."
+  },
+  {
+    "term": "Radioactivity",
+    "slug": "radioactivity",
+    "level": "Beginner",
+    "definition": "The spontaneous decay of an unstable nucleus, giving out particles or energy as it changes into a more stable one. It is unaffected by temperature, pressure or chemistry."
+  },
+  {
+    "term": "Radioisotope",
+    "slug": "radioisotope",
+    "level": "Novice",
+    "definition": "A radioactive isotope of an element, which may be one that occurs naturally or one made in a reactor. Their decay is used for dating, for tracing and for medical imaging."
+  },
+  {
+    "term": "Raoult's law",
+    "slug": "raoults-law",
+    "level": "Expert",
+    "definition": "The rule that a solvent's vapour pressure above a solution is its pure vapour pressure multiplied by its mole fraction. It is the starting point for explaining why dissolving something raises a boiling point."
+  },
+  {
+    "term": "Rate constant",
+    "slug": "rate-constant",
+    "level": "Expert",
+    "definition": "The proportionality constant in a rate law, written k. It changes with temperature but not with concentration, and for a first-order reaction it is the fraction of the reactant that disappears each second."
+  },
+  {
+    "term": "Rate law",
+    "slug": "rate-law",
+    "level": "Expert",
+    "definition": "The equation giving a reaction's rate in terms of the concentrations that affect it. Its powers are found by experiment, and they need not match the equation's coefficients."
+  },
+  {
+    "term": "Reactant",
+    "slug": "reactant",
+    "level": "Beginner",
+    "definition": "A substance that is used up in a chemical reaction. Reactants are written on the left of an equation."
+  },
+  {
+    "term": "Reaction mechanism",
+    "slug": "reaction-mechanism",
+    "level": "Expert",
+    "definition": "The sequence of elementary steps by which a reaction actually proceeds. It is proposed from rate evidence rather than observed directly, and it must add up to the overall equation."
+  },
+  {
+    "term": "Reaction order",
+    "slug": "reaction-order",
+    "level": "Expert",
+    "definition": "The power to which a substance's concentration is raised in a rate law, and the sum of those powers overall. Order is found by experiment, unlike the stoichiometric coefficients."
+  },
+  {
+    "term": "Redox",
+    "slug": "redox",
+    "level": "Novice",
+    "definition": "A reaction in which one substance is oxidised and another reduced, so electrons are transferred. Oxidation and reduction always come as a pair for that reason."
+  },
+  {
+    "term": "Reducing agent",
+    "slug": "reducing-agent",
+    "level": "Novice",
+    "definition": "The substance that gives electrons to another in a reaction, and so is itself oxidised. Hydrogen and carbon are common ones in industry."
+  },
+  {
+    "term": "Reduction",
+    "slug": "reduction",
+    "level": "Beginner",
+    "definition": "The gain of electrons by a substance, which usually means it loses oxygen or gains hydrogen. It always happens together with an oxidation."
+  },
+  {
+    "term": "Reflux",
+    "slug": "reflux",
+    "level": "Expert",
+    "definition": "Boiling a reaction mixture with a condenser above it so that the vapour returns instead of escaping. It lets a reaction run hot for hours without the solvent boiling away."
+  },
+  {
+    "term": "Relative atomic mass",
+    "slug": "relative-atomic-mass",
+    "level": "Novice",
+    "definition": "The average mass of an element's atoms compared with one twelfth of a carbon-12 atom, weighted by how common each isotope is. It is the number printed under the symbol in the periodic table."
+  },
+  {
+    "term": "Resonance",
+    "slug": "resonance",
+    "level": "Expert",
+    "definition": "A way of describing a molecule whose electrons could be drawn in more than one valid Lewis structure, by treating the real molecule as a blend of them all. The blend is more stable than any single drawing."
+  },
+  {
+    "term": "Salt",
+    "slug": "salt",
+    "level": "Beginner",
+    "definition": "A compound formed when the hydrogen of an acid is replaced by a metal or another positive ion. Sodium chloride is the familiar one, and the word covers the whole family, not just table salt."
+  },
+  {
+    "term": "Saponification",
+    "slug": "saponification",
+    "level": "Expert",
+    "definition": "The hydrolysis of a fat or an oil with an alkali, which splits it into glycerol and the salts of its fatty acids. Those salts are soap, which is where the name comes from."
+  },
+  {
+    "term": "Saturated solution",
+    "slug": "saturated-solution",
+    "level": "Novice",
+    "definition": "A solution holding as much of a dissolved substance as it can at that temperature. Adding more leaves it undissolved, and cooling a saturated solution is one way to grow crystals."
+  },
+  {
+    "term": "Schrödinger equation",
+    "slug": "schrodinger-equation",
+    "level": "Expert",
+    "definition": "The equation whose solution gives the probability of finding an electron at each point around a nucleus. Its solutions are what atomic orbitals are: the shapes they take come out of the mathematics rather than being assumed."
+  },
+  {
+    "term": "Second law of thermodynamics",
+    "slug": "second-law-of-thermodynamics",
+    "level": "Expert",
+    "definition": "The statement that the total entropy of an isolated system never falls. It is what gives time its direction and what forbids a machine from turning heat completely into work."
+  },
+  {
+    "term": "Semi-permeable membrane",
+    "slug": "semi-permeable-membrane",
+    "level": "Novice",
+    "definition": "A barrier that lets a solvent through but holds back the particles dissolved in it. It is what makes osmosis possible, and it is how a living cell keeps its contents in."
+  },
+  {
+    "term": "Sigma bond",
+    "slug": "sigma-bond",
+    "level": "Expert",
+    "definition": "A covalent bond formed by orbitals overlapping end to end, with the electron density concentrated on the line between the nuclei. It allows rotation about the bond, unlike a pi bond."
+  },
+  {
+    "term": "Significant figures",
+    "slug": "significant-figures",
+    "level": "Novice",
+    "definition": "The digits in a measurement that carry information about how precisely it was made. A result cannot be more precise than the least precise measurement that went into it."
+  },
+  {
+    "term": "Single bond",
+    "slug": "single-bond",
+    "level": "Beginner",
+    "definition": "A covalent bond in which one pair of electrons is shared between two atoms. It is the longest and weakest kind of covalent bond between a given pair of atoms."
+  },
+  {
+    "term": "Skeletal formula",
+    "slug": "skeletal-formula",
+    "level": "Expert",
+    "definition": "A drawing of an organic molecule in which each line is a bond and each corner or end is a carbon, with the hydrogen atoms left out. It is the standard shorthand for large molecules, because writing every carbon out would make them unreadable."
+  },
+  {
+    "term": "Solubility",
+    "slug": "solubility",
+    "level": "Novice",
+    "definition": "How much of a substance dissolves in a given amount of solvent at a given temperature. It is usually quoted in grams per hundred grams of solvent."
+  },
+  {
+    "term": "Solubility product",
+    "slug": "solubility-product",
+    "level": "Expert",
+    "definition": "The equilibrium constant for a sparingly soluble salt dissolving, written Ksp. Comparing it with the product of the ion concentrations shows whether a precipitate will form."
+  },
+  {
+    "term": "Solute",
+    "slug": "solute",
+    "level": "Beginner",
+    "definition": "The substance that is dissolved in a solution, as opposed to the solvent it is dissolved in. In salt water the salt is the solute."
+  },
+  {
+    "term": "Solution",
+    "slug": "solution",
+    "level": "Beginner",
+    "definition": "A homogeneous mixture in which one substance is spread evenly through another. Its parts cannot be told apart by looking, and they cannot be separated by filtering."
+  },
+  {
+    "term": "Solvation",
+    "slug": "solvation",
+    "level": "Expert",
+    "definition": "The surrounding of a dissolved particle by solvent molecules, which is what keeps it in solution. The energy it releases is part of why some substances dissolve readily and others do not."
+  },
+  {
+    "term": "Solvent",
+    "slug": "solvent",
+    "level": "Beginner",
+    "definition": "The substance present in greater amount in a solution, the one that does the dissolving. Water is called the universal solvent because it dissolves so many things."
+  },
+  {
+    "term": "Specific heat capacity",
+    "slug": "specific-heat-capacity",
+    "level": "Novice",
+    "definition": "The heat needed to raise the temperature of one gram of a substance by one degree Celsius. Water's value, 4.18 joules per gram per degree, is unusually high, which is why the sea moderates the climate."
+  },
+  {
+    "term": "Spectator ion",
+    "slug": "spectator-ion",
+    "level": "Novice",
+    "definition": "An ion present in a reaction that takes no part in it and is unchanged on both sides. Leaving spectator ions out is what turns an equation into its net ionic form."
+  },
+  {
+    "term": "Spectroscopy",
+    "slug": "spectroscopy",
+    "level": "Novice",
+    "definition": "The study of how matter absorbs and gives out light, used to find out what a sample contains and how its atoms are arranged. Each technique works in a different part of the spectrum."
+  },
+  {
+    "term": "Standard solution",
+    "slug": "standard-solution",
+    "level": "Expert",
+    "definition": "A solution whose concentration is known precisely, made by weighing a pure substance and dissolving it to a measured volume. A titration is only as good as the standard it is checked against."
+  },
+  {
+    "term": "Standard temperature and pressure",
+    "slug": "standard-temperature-and-pressure",
+    "level": "Novice",
+    "definition": "The reference conditions used when comparing gas volumes, now taken as 273.15 K and 100 kilopascals. One mole of an ideal gas occupies 22.7 cubic decimetres at them."
+  },
+  {
+    "term": "Stereochemistry",
+    "slug": "stereochemistry",
+    "level": "Expert",
+    "definition": "The branch of chemistry concerned with how atoms are arranged in three dimensions and what that arrangement does to a substance's behaviour. Two molecules with the same bonds can still be different substances for this reason."
+  },
+  {
+    "term": "Stoichiometry",
+    "slug": "stoichiometry",
+    "level": "Novice",
+    "definition": "The arithmetic of chemical equations: working out how much of one substance reacts with or produces how much of another. Everything in it comes from the balanced equation and the mole."
+  },
+  {
+    "term": "Sublimation",
+    "slug": "sublimation",
+    "level": "Novice",
+    "definition": "The change of a solid straight into a gas without passing through the liquid state. Iodine and dry ice both do it, and it is used to purify substances that would decompose on melting."
+  },
+  {
+    "term": "Subshell",
+    "slug": "subshell",
+    "level": "Expert",
+    "definition": "A group of orbitals within a shell that all have the same shape, named s, p, d or f. A shell holds one s subshell, three p orbitals, five d orbitals and seven f orbitals."
+  },
+  {
+    "term": "Surface tension",
+    "slug": "surface-tension",
+    "level": "Novice",
+    "definition": "The tendency of a liquid's surface to behave like a stretched skin, caused by molecules at the surface being pulled inwards only. It is why a drop is round and why some insects can walk on water."
+  },
+  {
+    "term": "Suspension",
+    "slug": "suspension",
+    "level": "Novice",
+    "definition": "A mixture in which solid particles are held in a liquid but are large enough to settle out on standing. Unlike a solution it is cloudy, and it can be separated by filtering."
+  },
+  {
+    "term": "Synthesis",
+    "slug": "synthesis",
+    "level": "Beginner",
+    "definition": "A reaction in which two or more substances combine to make a single, more complex product. It is the opposite of a decomposition."
+  },
+  {
+    "term": "Temperature",
+    "slug": "temperature",
+    "level": "Beginner",
+    "definition": "A measure of the average kinetic energy of the particles in a substance. It is not the same as heat, which is energy on the move, though the two are easy to confuse."
+  },
+  {
+    "term": "Theoretical yield",
+    "slug": "theoretical-yield",
+    "level": "Novice",
+    "definition": "The greatest amount of product a reaction could give, worked out from the limiting reagent. Real yields fall short of it for many reasons, and the shortfall is quoted as a percentage."
+  },
+  {
+    "term": "Thermal conductivity",
+    "slug": "thermal-conductivity",
+    "level": "Novice",
+    "definition": "How readily a material carries heat through itself. Metals are high because their free electrons carry energy as well as charge, which is why a metal spoon in soup gets hot."
+  },
+  {
+    "term": "Thermal decomposition",
+    "slug": "thermal-decomposition",
+    "level": "Novice",
+    "definition": "The breaking down of a compound by heat alone. Heating limestone to make quicklime and heating copper carbonate to make copper oxide are both examples."
+  },
+  {
+    "term": "Thermal expansion",
+    "slug": "thermal-expansion",
+    "level": "Novice",
+    "definition": "The increase in a material's size as its temperature rises, because its particles move further apart. It is why gaps are left between railway rails and why a thermometer works."
+  },
+  {
+    "term": "Thermochemistry",
+    "slug": "thermochemistry",
+    "level": "Expert",
+    "definition": "The study of the heat given out or taken in by chemical reactions. Its central tool is the enthalpy change, and its central rule is Hess's law."
+  },
+  {
+    "term": "Thermodynamics",
+    "slug": "thermodynamics",
+    "level": "Expert",
+    "definition": "The study of energy and its transformations, including whether a change can happen at all. Chemistry borrows its three laws to decide which reactions are possible and which are only imaginable."
+  },
+  {
+    "term": "Thermometer",
+    "slug": "thermometer",
+    "level": "Beginner",
+    "definition": "An instrument for measuring temperature, working from some property that changes with it, such as the volume of a liquid or the resistance of a wire. A clinical thermometer and a laboratory one differ mainly in the range and precision they offer."
+  },
+  {
+    "term": "Thiol",
+    "slug": "thiol",
+    "level": "Expert",
+    "definition": "An organic compound holding a sulphur-hydrogen group, the sulphur counterpart of an alcohol. Thiols are the source of the smell of garlic and of skunk, and the smell is detectable at extremely low concentrations."
+  },
+  {
+    "term": "Titration",
+    "slug": "titration",
+    "level": "Novice",
+    "definition": "Finding the concentration of a solution by adding another of known concentration until the reaction between them is just complete. The volume added is read off a burette and used with the equation to work out the unknown."
+  },
+  {
+    "term": "Titre",
+    "slug": "titre",
+    "level": "Expert",
+    "definition": "The volume of solution delivered from a burette in a titration, read from the difference between the starting and finishing marks. Readings are taken at the bottom of the meniscus."
+  },
+  {
+    "term": "Transition metal",
+    "slug": "transition-metal",
+    "level": "Beginner",
+    "definition": "One of the elements in the middle of the periodic table whose d subshell is being filled. They are hard, dense and good conductors, and their compounds are often coloured because electrons can move between their d orbitals."
+  },
+  {
+    "term": "Transition state",
+    "slug": "transition-state",
+    "level": "Expert",
+    "definition": "The arrangement of atoms at the top of the energy barrier in a reaction, which cannot be isolated because it falls apart as soon as it forms. Its energy sets the activation energy."
+  },
+  {
+    "term": "Transmutation",
+    "slug": "transmutation",
+    "level": "Expert",
+    "definition": "The changing of one element into another by a nuclear reaction, as happens when a nucleus gives out an alpha or a beta particle. It is what the alchemists hoped to do by chemistry and could not."
+  },
+  {
+    "term": "Triple bond",
+    "slug": "triple-bond",
+    "level": "Novice",
+    "definition": "A covalent bond in which three pairs of electrons are shared between two atoms. It is the shortest and strongest of the covalent bonds, and it holds the atoms it joins in a straight line."
+  },
+  {
+    "term": "Triple point",
+    "slug": "triple-point",
+    "level": "Expert",
+    "definition": "The single temperature and pressure at which a substance's solid, liquid and gas are all in equilibrium together. It is fixed for each substance, which is why it is used to define temperature scales."
+  },
+  {
+    "term": "Tyndall effect",
+    "slug": "tyndall-effect",
+    "level": "Expert",
+    "definition": "The scattering of light by the particles in a colloid or a suspension, which makes the beam visible from the side. A solution does not show it, which is one way to tell a colloid from a solution."
+  },
+  {
+    "term": "Uncertainty",
+    "slug": "uncertainty",
+    "level": "Expert",
+    "definition": "The range within which a measured value is believed to lie, quoted alongside the value itself. A reading without one is a claim to a precision nobody can make."
+  },
+  {
+    "term": "Unit cell",
+    "slug": "unit-cell",
+    "level": "Expert",
+    "definition": "The smallest block of a crystal lattice that repeats in three dimensions to build the whole crystal. Its shape and the particles in it decide everything about the solid's structure."
+  },
+  {
+    "term": "Universal indicator",
+    "slug": "universal-indicator",
+    "level": "Beginner",
+    "definition": "A mixture of indicators that changes through a range of colours, so that a solution's approximate pH can be read from its colour. It is less exact than a pH meter but needs no apparatus."
+  },
+  {
+    "term": "Unpaired electron",
+    "slug": "unpaired-electron",
+    "level": "Expert",
+    "definition": "An electron in an orbital on its own, contributing a net magnetic moment to the atom or molecule holding it. It is what makes a substance paramagnetic and what makes a radical reactive."
+  },
+  {
+    "term": "Unsaturated compound",
+    "slug": "unsaturated-compound",
+    "level": "Novice",
+    "definition": "An organic compound containing at least one double or triple bond, so that it holds less hydrogen than it could. An unsaturated fat is one with such bonds in its chains."
+  },
+  {
+    "term": "Unsaturated solution",
+    "slug": "unsaturated-solution",
+    "level": "Novice",
+    "definition": "A solution that could still dissolve more of the substance at that temperature, so nothing settles out. It is the ordinary state of most solutions before they are pushed further."
+  },
+  {
+    "term": "UV–visible spectroscopy",
+    "slug": "uv-visible-spectroscopy",
+    "level": "Expert",
+    "definition": "A technique that measures how much ultraviolet or visible light a sample absorbs at each wavelength. The wavelength of the strongest absorption says what the molecule's electronic structure is."
+  },
+  {
+    "term": "Valence electron",
+    "slug": "valence-electron",
+    "level": "Novice",
+    "definition": "An electron in the outermost shell of an atom, which is the one available for bonding. The number of them is what makes the elements of a group behave alike."
+  },
+  {
+    "term": "Valence shell",
+    "slug": "valence-shell",
+    "level": "Novice",
+    "definition": "The outermost occupied shell of an atom's electrons. Atoms gain, lose or share electrons so as to reach a full valence shell, which is the driving force behind most chemistry."
+  },
+  {
+    "term": "Van der Waals forces",
+    "slug": "van-der-waals-forces",
+    "level": "Expert",
+    "definition": "The whole family of weak attractions between molecules, including the dispersion forces present in every substance and the dipole attractions in polar ones. They are much weaker than chemical bonds but decide boiling points and the shapes of large molecules."
+  },
+  {
+    "term": "Vapour pressure",
+    "slug": "vapour-pressure",
+    "level": "Expert",
+    "definition": "The pressure exerted by a vapour in equilibrium with its own liquid or solid. It rises with temperature, and it reaches the surrounding pressure at the boiling point."
+  },
+  {
+    "term": "Viscosity",
+    "slug": "viscosity",
+    "level": "Novice",
+    "definition": "A liquid's resistance to flowing, coming from the friction between its layers as they slide past one another. It falls as a liquid warms and rises with the strength of the attractions between its molecules."
+  },
+  {
+    "term": "Volatile",
+    "slug": "volatile",
+    "level": "Novice",
+    "definition": "Describing a liquid that evaporates readily at ordinary temperatures because its molecules are held weakly. Petrol is volatile and is handled accordingly."
+  },
+  {
+    "term": "Volumetric flask",
+    "slug": "volumetric-flask",
+    "level": "Novice",
+    "definition": "A flask with a long neck and a single graduation, used to make up a solution of exactly known concentration. It is filled to the mark at a stated temperature, because a liquid's volume changes with heat."
+  },
+  {
+    "term": "VSEPR theory",
+    "slug": "vsepr-theory",
+    "level": "Expert",
+    "definition": "The rule that the shape of a molecule is decided by the way its electron pairs arrange themselves as far apart as they can. Lone pairs take up more room than bonding pairs, which is why ammonia's angle is smaller than methane's."
+  },
+  {
+    "term": "Water of crystallisation",
+    "slug": "water-of-crystallisation",
+    "level": "Novice",
+    "definition": "Water held in fixed proportion within a crystal lattice, written after a dot in the formula. Heating it off is what turns blue copper sulphate white."
+  },
+  {
+    "term": "Wavelength",
+    "slug": "wavelength",
+    "level": "Beginner",
+    "definition": "The distance between one crest of a wave and the next. It decides the colour of light and the energy of a photon: shorter wavelength means higher energy."
+  },
+  {
+    "term": "Weak acid",
+    "slug": "weak-acid",
+    "level": "Novice",
+    "definition": "An acid that gives up only a small fraction of its protons in water, so the solution holds plenty of the undissociated acid as well as the ions. Ethanoic acid is a familiar one."
+  },
+  {
+    "term": "Weak base",
+    "slug": "weak-base",
+    "level": "Novice",
+    "definition": "A base that takes up only a small fraction of the protons it could from water. Ammonia is the standard example, and a weak base with its conjugate acid makes a good buffer."
+  },
+  {
+    "term": "X-ray crystallography",
+    "slug": "x-ray-crystallography",
+    "level": "Expert",
+    "definition": "Working out the positions of atoms in a crystal by the way it scatters X-rays, whose wavelength is comparable with the spaces between atoms. It is how the double helix and the structures of proteins were found."
+  },
+  {
+    "term": "X-ray diffraction",
+    "slug": "x-ray-diffraction",
+    "level": "Expert",
+    "definition": "The scattering of X-rays by the regular planes of atoms in a crystal into a pattern of spots. The pattern's geometry gives the spacing between planes and so the crystal's structure."
+  },
+  {
+    "term": "X-ray fluorescence",
+    "slug": "x-ray-fluorescence",
+    "level": "Expert",
+    "definition": "A method of finding which elements a sample contains by hitting it with X-rays and reading the X-rays it gives back, each element answering at its own wavelengths. It needs little preparation and can be used on an object without damaging it."
+  },
+  {
+    "term": "Yield",
+    "slug": "yield",
+    "level": "Novice",
+    "definition": "The amount of product a reaction actually gives, usually quoted as a percentage of the theoretical yield. It is less than the theoretical figure because of side reactions, incomplete reaction and losses in separating the product."
+  },
+  {
+    "term": "Ylide",
+    "slug": "ylide",
+    "level": "Expert",
+    "definition": "A molecule carrying opposite charges on neighbouring atoms, one of them a carbanion. Ylides are useful because the carbanion is a strong nucleophile held next to a positive centre."
+  },
+  {
+    "term": "Ytterby",
+    "slug": "ytterby",
+    "level": "Expert",
+    "definition": "A Swedish village whose quarry yielded four elements named after it or after nearby places: yttrium, terbium, erbium and ytterbium. No other place on Earth has given its name to so many elements."
+  },
+  {
+    "term": "Zeolite",
+    "slug": "zeolite",
+    "level": "Expert",
+    "definition": "An aluminosilicate whose structure holds channels and cages of a fixed size, so that molecules small enough to enter are held and larger ones are not. They are used as molecular sieves, as water softeners and as catalysts in oil refining."
+  },
+  {
+    "term": "Zero order reaction",
+    "slug": "zero-order-reaction",
+    "level": "Expert",
+    "definition": "A reaction whose rate does not depend on the concentration of what is reacting, so it proceeds at a steady pace until it stops. It usually means a surface or an enzyme is already saturated."
+  },
+  {
+    "term": "Zero-point energy",
+    "slug": "zero-point-energy",
+    "level": "Expert",
+    "definition": "The energy a system keeps at absolute zero, which it cannot give up because doing so would break the uncertainty principle. Its existence is why helium stays liquid however far it is cooled at ordinary pressure."
+  },
+  {
+    "term": "Zeta potential",
+    "slug": "zeta-potential",
+    "level": "Expert",
+    "definition": "The electric potential at the boundary between a suspended particle and the liquid around it. Particles with a large zeta potential repel one another and stay suspended, which is what keeps paint and milk from separating."
+  },
+  {
+    "term": "Zincblende",
+    "slug": "zincblende",
+    "level": "Expert",
+    "definition": "A crystal structure in which each atom of one kind is surrounded tetrahedrally by four of another, as in zinc sulphide. Many semiconductors, including gallium arsenide, take this structure."
+  },
+  {
+    "term": "Zone refining",
+    "slug": "zone-refining",
+    "level": "Expert",
+    "definition": "Purifying a solid by passing a narrow molten zone slowly along it, so that impurities are carried to one end. It is how silicon is made pure enough for electronics."
+  },
+  {
+    "term": "Zwitterion",
+    "slug": "zwitterion",
+    "level": "Expert",
+    "definition": "A molecule carrying a positive and a negative charge at different places at once, with no net charge overall. Amino acids take this form in neutral solution, which is why they are soluble and why they have no neutral form in water."
+  }
+]
