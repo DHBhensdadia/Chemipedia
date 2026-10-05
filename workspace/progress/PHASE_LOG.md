@@ -17,8 +17,8 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 0 | Foundation, tooling and working system | `COMPLETE` | `81bf871`..`a16d35e` |
 | 1 | Design system and global shell | `COMPLETE` | `2ba459d`..`cc2151f`, plus the close-out commit |
 | 2 | Data layer (elements and glossary) | `COMPLETE` | `d985245`..`26229e2`, `30f203b`, plus the close-out commit |
-| 3 | Periodic table engine | `VERIFIED` | `bf1d8e3`..`2f06018`, plus the close-out commit |
-| 4 | Home page | `NOT_STARTED` | — |
+| 3 | Periodic table engine | `VERIFIED` | `bf1d8e3`..`2f06018`, plus the close-out commit (`b7201a0`) |
+| 4 | Home page | `VERIFIED` | `7587a66`..`74c168d`, plus the close-out commit |
 | 5 | Routing and element detail pages | `NOT_STARTED` | — |
 | 6 | Elements index and attribute rankings | `NOT_STARTED` | — |
 | 7 | Alternate periodic table views | `NOT_STARTED` | — |
@@ -444,7 +444,7 @@ Ours puts one tile in the tab order and moves it with the arrows.
 
 | Item | Decision |
 |---|---|
-| **The visual capture could not be taken.** | The preview webview produced no frames for any capture, and neither `preview_resize {fill: true}` nor a freshly opened tab changed that. | Recorded as an **open gate**, not as a passed check, exactly as Phase 2's was: the phase section above leaves the criterion unticked and this phase is `VERIFIED`, not `COMPLETE`. The measured comparison is written down above the table so the retry starts from evidence rather than from nothing. |
+| **The visual capture could not be taken.** | The preview webview produced no frames for any capture, and neither `preview_resize {fill: true}` nor a freshly opened tab changed that. | Recorded as an **open gate**, not as a passed check, exactly as Phase 2's was: the criterion above stays unticked and the phase is `VERIFIED`, not `COMPLETE`. The measured comparison is written down above the table so the retry starts from evidence rather than from nothing. The retry at the start of the next session failed the same way — see the log at the foot of this file. |
 | The state legend shows three chips, not four | Our dataset records a state for every element, so the unknown state has nothing behind it. | A chip with a zero beside it is noise, so the legend omits keys with no members. The `--state-unknown` token stays, because the taxonomy is four states even when the data fills three. |
 | The scroll and hide-names breakpoints are 56rem and 40rem | The reference scrolls at 900px and hides names at 560px. | Our breakpoint scale is the project's own and is recorded in the token layer; 896px and 640px are the same two decisions expressed in the units the rest of the site uses. |
 | The electronegativity band counts differ from the reference's | The reference bands 100 measured values; ours has 95 measured and 23 unknown. | The domain is computed from our own data rather than written down, so the legend and the tiles cannot disagree; the counts follow from the dataset, not from the reference's. |
@@ -458,15 +458,86 @@ render the periodic table in four colour modes · plus this close-out commit
 
 ## Phase 4 — Home page
 
+**Goal:** the front door — the table itself, the two ideas it assumes (periods and groups), the ways
+deeper into the site, and a way to find one element.
+
+**Deliverables:** `pages/home.html` rewritten from the placeholder; `scripts/pages/home.js`;
+`styles/pages/home.css`; `scripts/components/element-search.js` and its stylesheet; the engine's
+optional hint line; the home page section of the token layer; and — found by this phase's first
+measurement — the route manifest carrying the component stylesheets a page uses, with the build
+linking them.
+
 **Exit criteria**
 
-- [ ] Section order, rhythm and spacing match the reference at all three widths.
-- [ ] Hovering a legend chip isolates that group.
-- [ ] Element search returns correct results and navigates correctly.
-- [ ] Replaces the reference's Learn block with in-scope teasers.
-- [ ] Zero console errors.
+- [x] Section order, rhythm and spacing match the reference at all three widths. **Measured** at
+  1280, 768 and 375px in the same browser session as the reference, section by section; the numbers
+  are below. Not captured: the standing visual gate for this phase is still open, and is recorded
+  under Deviations.
+- [x] Hovering a legend chip isolates that group. On the built page, pressing the "Transition metal
+  35" chip left 35 tiles matched and the other 83 at `opacity: 0.22` with `saturate(0.35)`;
+  pressing it again returned all 118 to full.
+- [x] Element search returns correct results and navigates correctly. "gold" offers one result — Au
+  · Gold · 79 — linking `/elements/gold/`; "6" offers carbon by atomic number; "zzz" and
+  "unobtainium" offer nothing; and Enter goes to the first match, proven by real navigation earlier
+  in the session, the link it follows being the same destination.
+- [x] Replaces the reference's Learn block with in-scope teasers. Three, each a page this site
+  publishes — the glossary, the temperature calculator and the table views — and a test holds the
+  list to those three.
+- [x] Zero console errors. With error and unhandled-rejection listeners installed, six search
+  queries, four chip presses and six keyboard moves produced 0 errors and 0 rejections over 28
+  resources, none of which failed. The preview's own console capture recorded nothing for the
+  second session running, so the instrumented listeners are the evidence.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+node --test source/tests ..................... tests 221 · pass 221 · fail 0
+node source/tools/build.js .................. 1 route + the not-found page; 14 awaiting templates
+node --check over the changed modules ........ all modules parse
+Brand scan over source/, as a test ........... pass
+
+One browser session, the built page and the reference measured side by side at 1280px
+(ours / the reference):
+  h1 .......................... 54.88px over 1100px / 54.88px over 1100px
+  hero paragraph .............. 848px wide at 23.2px / 851px wide at 23.2px
+  table container ............. 1228.8px / 1228.8px
+  gap · tile · symbol ......... 3.07199 · 65.36 · 26.4191px / 3.07199 · 65.37 · 26.4191px
+  explainer columns ........... 300px + 688px, padded 48px 32px / 300px + 686px, same padding
+  finder field ................ 260px, padding 12px 16px, type 17.6px, radius 2px,
+                                1px solid #cfc5bc — the reference's, to the number, and 54.15px
+                                tall in both after the closing commit; before it, 46.5
+  finder button ............... 12px 24px on #15403d with #fdfbfa / identical
+  closing section ............. "Looking for an element?" above the field / "Looking to find an
+                                element?" above its own, near the foot of the page in both
+  vertical rhythm ............. 32px above and below each dotted separator, 48px around the
+                                explainers / a 64px rule block between sections, 48px inside
+                                its explainers
+  horizontal overflow ......... none at 1280 · 768 · 375
+
+At 768px: the table goes full-bleed with an 820px grid minimum and its first column at the 16px
+inset where the edge fade turns opaque; the explainer collapses to one 656px column; the teasers
+sit two across; nothing overflows.
+At 375px: grid minimum 700px, names hidden, the first column still at the 16px mark, the
+explainer one 263px column, the finder wrapped to field above button, teasers one across, nothing
+overflows.
+
+The built page's structure: one h1, one main, headings in reading order, 118 list items inside a
+list named "Periodic table of the elements", and the finder's form labelled and keyboard-reachable.
+```
+
+**Deviations and scope notes**
+
+| Item | Decision |
+|---|---|
+| **No visual capture was possible, for the second session running.** | `preview_screenshot` reported that the webview was not compositing, in a fresh tab and with `preview_resize {fill: true}`, at the start of the session and again during this phase's verification. | The phase's appearance evidence is measurement — the full table above — and the capture of this page joins Phase 3's in the open gate. Phase 4 therefore records `VERIFIED`, not `COMPLETE`. Hand-write the retry's checklist from the numbers above, not from memory. |
+| **The build was not linking a page's component stylesheets.** | The manifest declared routes; the build linked the global layer, the shell and the page's own sheet. The first real page arrived with the table unstyled and the search field drawn by the browser. | Fixed in `7587a66`: a route names the component sheets it uses, the build links them in cascade order, and a test holds every declared path to a real file. The style guide had hidden this by linking the three sheets by hand. |
+| The reference's Learn articles are not replicated | Its home carries article cards from a blog this project does not publish (ADR-002). | Three teasers into pages that exist: the glossary, the temperature calculator and the table views. A test holds the list to those three. |
+| Our explainers say "Periods" and "Groups" in our own words | The reference's explainers carry their own copy, and its article titles are its brand. | The structure is measured from the reference — the same two-column explainer, the same 300px text column, a schematic in the second — and the sentences are ours. |
+| The finder's field is the one search with a visible box | The masthead search stays bare, as the reference's is. | The finder is a destination rather than a shortcut, so it is drawn as a control: bordered in the stronger hairline, with the ink button beside it. |
+
+**Commits:** `7587a66` link the component stylesheets a route declares · `596fc15` add the element
+finder and the table's hint line · `0eab574` build the home page around the table · `74c168d` match
+the finder's control height · plus this close-out commit
 
 ---
 
@@ -594,6 +665,7 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-02 | 2 | Resolved | **The visual gate that blocked this phase.** The preview would not composite, so no capture could be taken and the phase could not honestly be closed. | **Resolved.** The preview composited on the first attempt of the following session. The home page was captured and compared at 1280 / 768 / 375 px against the reference in a second tab; the two chrome differences that turned up were fixed in `30f203b`, and the phase closed on those captures. |
 | 2026-10-02 | 2 | Deviation | **The masthead stays on one row at 768px** where the reference wraps its search field onto a second row. Our navigation carries four items and the reference's carries six, the learning and games sections being out of scope (ADR-002). | Accepted. Measured: 91px in two rows against our 59px in one. |
 | 2026-10-01 | 2 | Deviation | **Two schema fields stay null for every element** (`covalentRadius`, `latticeParameters`) and **one was removed from the schema** (`ionicRadius`). | Recorded in `docs/DATA_SOURCES.md` §2.1 and §5. null means unknown and the UI renders it as such; the removed field was removed because an ionic radius belongs to an ion and not to an element. |
+| 2026-10-05 | 3 | Blocker | **Screenshot capture failed for the second session running, and the known fix did not work again.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, and twice more at the start of the next one, with `preview_resize {fill: true}` and, in one attempt, a freshly opened tab. | **Open.** Both phases record their appearance evidence as measurement and stay `VERIFIED`, not `COMPLETE`. The failure now reads as environmental rather than page-specific: the same error, the same wording, whatever tab is being looked at. The next session should retry once — the recipe is `docs/TESTING_STRATEGY.md` §4 — and if it fails again, raise the gate with the author as a project risk rather than spending a third session on it. |
 
 ---
 

@@ -217,6 +217,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `tests/components/periodic-table.test.js` | ✅ The engine against the real data: 118 cells, every f-block placement, the four modes' keys and legend counts, the banding of every measurement, the aria structure, and the stylesheet held to the contrast rule — every fill's foreground is the one `lib/contrast.js` chooses. | 3 |
 | `tests/components/element-tile.test.js` | ✅ Tile markup: position, link, accessible name, colour key or band, the compact variant, the current element, escaping and the refusal of a cell-less element. | 3 |
 | `tests/components/legend-chips.test.js` | ✅ Buttons versus links, the count pill, the pressed state, the empty guard, and that a chip carries a key rather than a colour. | 3 |
+| `tests/components/element-search.test.js` | ✅ The ranking rules against the real 118 — exact matches first, prefixes before substrings, atomic order inside a rank, the cap — and the form's markup: its action, its hidden label, its live region and the options a caller can replace. | 4 |
 | `tests/pages/home.test.js` | ✅ The home page against the real data: the sections in reading order, the one heading and the closing question, the hosts the module fills, each diagram drawing all 118 elements on the labelled axis, and the empty axis refused. | 4 |
 | `tests/pages/*.test.js` | 🚧 FAQ generation, shell diagram geometry, ranking order, search filtering, conversions. | 5–10 |
 
