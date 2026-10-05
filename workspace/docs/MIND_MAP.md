@@ -115,7 +115,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | `scripts/components/site-header.js` | ✅ The masthead: lockup, primary navigation from the manifest, and the search field. Rendered into the HTML at build time, so the chrome exists before any script runs. | 1 |
 | `scripts/components/site-footer.js` | ✅ The five link columns, the identity block, the provenance note and the copyright. | 1 |
 | `scripts/components/submenu.js` | ✅ The contextual band, with the site's dotted rule across its full width. Returns nothing for a section that has no submenu. | 1 |
-| `scripts/components/element-search.js` | 🚧 Live filtering and quick-jump to an element. | 4 |
+| `scripts/components/element-search.js` | ✅ The finder: a form first, so it submits the query to the elements index by the browser's own means and works with no script, and live filtering with Enter-goes-to-the-first-match when the module is attached. The ranking is its own function — exact symbol and atomic number first, then names that begin with the query, then symbols, then names that contain it — with atomic order deciding inside a rank. | 4 |
 | `scripts/components/property-list.js` | 🚧 The ~40-row labelled property table, with unknown-value handling. | 5 |
 | `scripts/components/faq-block.js` | 🚧 Generates question/answer pairs from an element's own record. | 5 |
 | `scripts/components/shell-diagram.js` | 🚧 Draws the electron shell diagram as generated SVG from the shell data. | 5 |
@@ -143,11 +143,12 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 
 | File | What it owns | Phase |
 |---|---|---|
-| `styles/tokens.css` | ✅ **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. Surfaces and ink, the eleven group colours and the four block colours, the fluid type scale, spacing, shape, motion, and the handful of measurements the shell needs. One theme only: the light palette at the root (ADR-006). | 1 |
+| `styles/tokens.css` | ✅ **Every design value in the project.** No literal colour, size, radius, duration or easing exists outside this file. Surfaces and ink, the eleven group colours and the four block colours, the fluid type scale, spacing, shape, motion, the measurements the shell needs, the periodic table's geometry, its colour scales, and the home page's measured sections. One theme only: the light palette at the root (ADR-006). | 1 |
 | `styles/base.css` | ✅ The reset and the element defaults: typography, links, the focus ring, selection, the skip link, and the mandatory reduced-motion block. | 1 |
 | `styles/layout.css` | ✅ The shell, the page's vertical rhythm, the dotted-rule section and separator, prose measurement, and the shared page-heading block. | 1 |
 | `styles/components/wordmark.css` | ✅ The stacked lockup. | 1 |
 | `styles/components/search-field.css` | ✅ The masthead search: bare by design, findable by its focus ring. | 1 |
+| `styles/components/element-search.css` | ✅ The home page's finder: the measured field and button on one line, the results list under it, and the empty state in the soft ink. | 4 |
 | `styles/components/site-header.css` | ✅ The masthead band, the wrapping row, and the navigation item's rule. | 1 |
 | `styles/components/submenu.css` | ✅ The contextual band and its dotted rule. | 1 |
 | `styles/components/site-footer.css` | ✅ The footer's two blocks and the five-column link grid. | 1 |
@@ -236,6 +237,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | The description, uses or sources paragraph for an element | `source/data/element-notes.json` |
 | How to regenerate the element data | `node source/tools/build-data.js` |
 | The periodic table's appearance or behaviour | `source/scripts/components/periodic-table.js` + `source/styles/components/periodic-table.css` |
+| How the site finds an element by name, symbol or number | `source/scripts/components/element-search.js` |
 | The f-block grid placement | `source/scripts/lib/grid.js` |
 | The colour scale for a numeric view | `source/scripts/lib/colour-scale.js` |
 | Which URLs the site publishes | `source/scripts/router/routes.js` |

@@ -244,6 +244,7 @@
 
   --height-tile-gap: 0.6rem; /* row 8: the space between the body and the f block */
 
+  --margin-hint: 0 0 var(--sp-4); /* the line under the legend that explains it */
   --pad-chip: 0.32em 0.6em 0.32em 0.75em;
   --pad-chip-count: 0 0.5em;
   --alpha-chip-count: 22%; /* the pill behind a chip's count, mixed from the
@@ -275,4 +276,26 @@
   --state-liquid: var(--g-actinides);
   --state-gas: var(--g-noble-gases);
   --state-unknown: var(--g-unknown);
+
+  /* -------------------------------------------------------------------------
+     9. The home page.
+
+     The one page whose layout is measured against the reference section by
+     section: a hero paragraph wider than the prose measure, an explainer that
+     pairs a 300px text column with a schematic of the table's own shape, a card
+     for the question that leads into the search, and the search itself.
+     ------------------------------------------------------------------------- */
+  --measure-hero: 53rem; /* the hero paragraph runs wider than prose */
+  --width-home-card: 26.25rem; /* the understanding card, measured */
+  --pad-home-card: var(--sp-6) var(--sp-7);
+  --width-explain-text: 18.75rem; /* the explainer's text column */
+  --gap-explain: var(--sp-7);
+  --pad-explain: var(--sp-7) var(--sp-6);
+  --gap-dia: 1.5px; /* the schematic's cells almost touch */
+  --width-dia-label: 1.5rem;
+  --width-teaser: 16rem; /* one teaser card's floor, three across at the shell */
+  --width-search-home: 16.25rem; /* the home search input, measured */
+  --gap-search-home: var(--sp-2);
+  --pad-search-input: var(--sp-3) var(--sp-4);
+  --pad-search-button: var(--sp-3) var(--sp-5);
 }

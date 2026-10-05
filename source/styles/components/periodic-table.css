@@ -190,6 +190,14 @@
   filter: none;
 }
 
+/* The line under the legend, when a page asks for one: what the colours and the
+   keyboard actually do. It is quieter than the chips above it. */
+.pt__hint {
+  margin: var(--margin-hint);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
 /* -------------------------------------------------------------------------
    The numeric legend.
 

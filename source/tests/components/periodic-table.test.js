@@ -278,6 +278,30 @@ test("the numeric legend prints the domain's ends, the six bands and the unknown
   assert.deepEqual([...bands].sort(), ["0", "1", "2", "3", "4", "5", "none"]);
 });
 
+test("a hint is printed between the legend and the table, and only when one is asked for", () => {
+  const withHint = renderPeriodicTable({
+    elements: all,
+    categories: categories.all(),
+    hint: "Point at a group to pick it out of the table.",
+  });
+
+  assert.match(
+    withHint,
+    /<\/ul>\n<p class="pt__hint">Point at a group to pick it out of the table\.<\/p>\n<div class="pt__scroller">/,
+  );
+  assert.doesNotMatch(renderPeriodicTable({ elements: all, categories: categories.all() }), /pt__hint/);
+});
+
+test("the hint is escaped like every other string", () => {
+  const markup = renderPeriodicTable({
+    elements: all,
+    categories: categories.all(),
+    hint: 'Pick a group & <scroll> "sideways"',
+  });
+
+  assert.match(markup, /Pick a group &amp; &lt;scroll&gt; &quot;sideways&quot;/);
+});
+
 test("a mode that is not one of the four is refused", () => {
   assert.throws(
     () => renderPeriodicTable({ elements: all, categories: categories.all(), mode: "colour" }),

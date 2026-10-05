@@ -173,11 +173,12 @@ function scaleLegend({ domain, bands, label }) {
  *   categories: { slug: string, name: string }[],
  *   mode: string,
  *   current: number | null,
- *   compact: boolean
+ *   compact: boolean,
+ *   hint: string
  * }} options
  * @returns {string}
  */
-function markup({ model, elements, categories, mode, current, compact }) {
+function markup({ model, elements, categories, mode, current, compact, hint }) {
   const numeric = mode === "electronegativity";
   const scale = numeric
     ? { domain: domainOf(elements, ELECTRONEGATIVITY.field), bands: ELECTRONEGATIVITY.bands, label: ELECTRONEGATIVITY.label }
@@ -201,8 +202,10 @@ function markup({ model, elements, categories, mode, current, compact }) {
         label: `${MODE_LABELS[mode]} colour key`,
       });
 
+  const note = hint ? `\n<p class="pt__hint">${escapeHtml(hint)}</p>` : "";
+
   return `<div${attributes({ class: "pt", "data-mode": mode })}>
-${legend}
+${legend}${note}
 <div class="pt__scroller">
 <div${attributes({
     class: "pt__grid",
@@ -333,7 +336,8 @@ export function renderPeriodicTable(options) {
  *   categories?: { slug: string, name: string }[],
  *   mode?: "group" | "block" | "state" | "electronegativity",
  *   current?: number | null,
- *   compact?: boolean
+ *   compact?: boolean,
+ *   hint?: string
  * }} options
  * @returns {{ model: ReturnType<typeof createGrid>, html: string, attach: (root: ParentNode) => () => void }}
  * @throws {TypeError} when the mode is not one of the four
@@ -344,6 +348,7 @@ export function createPeriodicTable({
   mode = "group",
   current = null,
   compact = false,
+  hint = "",
 }) {
   if (!MODES.includes(mode)) {
     throw new TypeError(`Not a table mode: ${mode}`);
@@ -353,7 +358,7 @@ export function createPeriodicTable({
 
   return {
     model,
-    html: markup({ model, elements, categories, mode, current, compact }),
+    html: markup({ model, elements, categories, mode, current, compact, hint }),
     attach: (root) => attachPeriodicTable(root, { model }),
   };
 }
