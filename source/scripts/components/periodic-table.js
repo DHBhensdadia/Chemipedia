@@ -22,6 +22,14 @@
  * Rendering is a string, behaviour is an attachment. `renderPeriodicTable` is what a build-time
  * caller wants; `createPeriodicTable` returns that markup plus the model it was built from and the
  * function that brings it to life in a browser — arrow-key navigation, roving focus and isolation.
+ *
+ * Two options exist for the page whose subject is a single key rather than the whole table. One is
+ * `isolate`: the table is written already isolated to that key, so the group page arrives with its
+ * own elements picked out and needs no script to look right. The other is `legendLinks`: the chips
+ * become links to a key's own page instead of buttons that isolate, which is how the legend doubles
+ * as the way from one group to the next. A table written with an isolation keeps it when a reader
+ * points at a chip and moves away again, which is what makes the chips a preview rather than a
+ * one-way door.
  */
 
 import { bandFor } from "../lib/colour-scale.js";
@@ -183,31 +191,49 @@ function scaleLegend({ domain, bands, label }) {
  *   mode: string,
  *   current: number | null,
  *   compact: boolean,
- *   hint: string
+ *   hint: string,
+ *   isolate: string | null,
+ *   legendLinks: ((key: string) => string) | null
  * }} options
  * @returns {string}
  */
-function markup({ model, elements, categories, mode, current, compact, hint }) {
+function markup({
+  model,
+  elements,
+  categories,
+  mode,
+  current,
+  compact,
+  hint,
+  isolate,
+  legendLinks,
+}) {
   const numeric = mode === "electronegativity";
   const scale = numeric
     ? { domain: domainOf(elements, ELECTRONEGATIVITY.field), bands: ELECTRONEGATIVITY.bands, label: ELECTRONEGATIVITY.label }
     : null;
 
-  const tiles = model.cells.map((cell, index) =>
-    elementTile({
+  const tiles = model.cells.map((cell, index) => {
+    const key = numeric ? null : keyFor(cell.element, mode);
+
+    return elementTile({
       element: cell.element,
-      key: numeric ? null : keyFor(cell.element, mode),
+      key,
       band: scale ? (bandFor(cell.element[ELECTRONEGATIVITY.field], scale) ?? "none") : null,
       tabbable: index === 0,
       compact,
       current: current !== null && cell.element.atomicNumber === current,
-    }),
-  );
+      match: isolate !== null && key === isolate,
+    });
+  });
 
   const legend = scale
     ? scaleLegend(scale)
     : legendChips({
-        items: legendItems(mode, elements, categories),
+        items: legendItems(mode, elements, categories).map((item) => ({
+          ...item,
+          href: legendLinks ? legendLinks(item.key) : undefined,
+        })),
         label: `${MODE_LABELS[mode]} colour key`,
       });
 
@@ -221,6 +247,7 @@ ${legend}${note}
     role: "list",
     "aria-label": "Periodic table of the elements",
     "data-pt-grid": true,
+    "data-isolated": isolate,
   })}>
 ${tiles.join("\n")}
 </div>
@@ -242,15 +269,22 @@ ${tiles.join("\n")}
  * where a tile is.
  *
  * @param {ParentNode} root the element the table was rendered into
- * @param {{ model: ReturnType<typeof createGrid> }} options
+ * @param {{ model: ReturnType<typeof createGrid>, staticIsolate?: string | null }} options
+ *   `staticIsolate` overrides the key the page rests on, which by default is the table's own
+ *   `data-isolated`: a page whose subject is one key is written already isolated to it, so a chip
+ *   that is pointed at previews its own key and moving away restores the page's rather than
+ *   clearing the table. A table that was not written isolated has nothing to rest on, so leaving a
+ *   chip restores the whole table — which is what the home page and the four views want.
  * @returns {() => void} teardown
  */
-export function attachPeriodicTable(root, { model }) {
+export function attachPeriodicTable(root, { model, staticIsolate } = {}) {
   const grid = root.querySelector("[data-pt-grid]");
 
   if (!grid) {
     return () => {};
   }
+
+  const restsOn = staticIsolate ?? grid.dataset.isolated ?? null;
 
   const tiles = [...grid.querySelectorAll(".tile")];
   const byCell = new Map(
@@ -301,9 +335,11 @@ export function attachPeriodicTable(root, { model }) {
     }
   }
 
-  /** Dim every tile but the isolated key's own, or restore the whole table. */
+  /** Dim every tile but the isolated key's own, or restore what the page rests on. */
   function isolate(key) {
-    if (key === null) {
+    const target = key ?? restsOn;
+
+    if (target === null) {
       grid.removeAttribute("data-isolated");
 
       for (const tile of tiles) {
@@ -313,10 +349,10 @@ export function attachPeriodicTable(root, { model }) {
       return;
     }
 
-    grid.dataset.isolated = key;
+    grid.dataset.isolated = target;
 
     for (const tile of tiles) {
-      tile.classList.toggle("is-match", tile.dataset.key === key);
+      tile.classList.toggle("is-match", tile.dataset.key === target);
     }
   }
 
@@ -348,13 +384,15 @@ export function renderPeriodicTable(options) {
  * @param {{
  *   elements: object[],
  *   categories?: { slug: string, name: string }[],
- *   mode?: "group" | "block" | "state" | "electronegativity",
+ *   mode?: "group" | "block" | "state" | "electronegativity" | "discovery",
  *   current?: number | null,
  *   compact?: boolean,
- *   hint?: string
+ *   hint?: string,
+ *   isolate?: string | null,
+ *   legendLinks?: ((key: string) => string) | null
  * }} options
  * @returns {{ model: ReturnType<typeof createGrid>, html: string, attach: (root: ParentNode) => () => void }}
- * @throws {TypeError} when the mode is not one of the four
+ * @throws {TypeError} when the mode is not one of the five
  */
 export function createPeriodicTable({
   elements,
@@ -363,6 +401,8 @@ export function createPeriodicTable({
   current = null,
   compact = false,
   hint = "",
+  isolate = null,
+  legendLinks = null,
 }) {
   if (!MODES.includes(mode)) {
     throw new TypeError(`Not a table mode: ${mode}`);
@@ -372,7 +412,7 @@ export function createPeriodicTable({
 
   return {
     model,
-    html: markup({ model, elements, categories, mode, current, compact, hint }),
+    html: markup({ model, elements, categories, mode, current, compact, hint, isolate, legendLinks }),
     attach: (root) => attachPeriodicTable(root, { model }),
   };
 }

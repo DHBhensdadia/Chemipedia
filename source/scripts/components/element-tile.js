@@ -14,6 +14,12 @@
  *
  * Two variants exist because two tables exist: the full table, where the name is the third line,
  * and a compact one — an overview, a legend, a preview — where the symbol is enough.
+ *
+ * A tile can also arrive already picked out: `match` marks the tile a table is isolating, so a page
+ * whose whole subject is one group can be written with that group at full colour and the rest of
+ * the table dimmed, without a script having to run to get there. The mark is a class, and the
+ * stylesheet that reads it is the table's — a tile that decides its own dimming would be a second
+ * answer to what an isolation looks like.
  */
 
 import { attributes, classNames, escapeHtml } from "../lib/html.js";
@@ -26,7 +32,8 @@ import { attributes, classNames, escapeHtml } from "../lib/html.js";
  *   band?: number | null,     the colour band in a numeric mode
  *   tabbable?: boolean,       whether this is the tile the tab key lands on
  *   compact?: boolean,        symbol and number only
- *   current?: boolean         whether this is the page's own element
+ *   current?: boolean,        whether this is the page's own element
+ *   match?: boolean           whether the table is isolating this tile's key
  * }} options
  * @returns {string}
  * @throws {TypeError} when the element has no position, caught in one place rather than silently
@@ -40,6 +47,7 @@ export function elementTile({
   tabbable = false,
   compact = false,
   current = false,
+  match = false,
 }) {
   const { row, column } = element.position ?? {};
 
@@ -52,7 +60,7 @@ export function elementTile({
     : `\n<span class="tile__name">${escapeHtml(element.name)}</span>`;
 
   return `<a${attributes({
-    class: classNames("tile", compact && "tile--compact"),
+    class: classNames("tile", compact && "tile--compact", match && "is-match"),
     href,
     "data-key": key,
     "data-band": band === null ? null : String(band),
