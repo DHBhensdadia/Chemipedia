@@ -1,0 +1,86 @@
+/* One card on the elements index.
+
+   The card is a raised white surface with the element's tile on the left and its words on the
+   right, which is the reference's own arrangement at its measured sizes: a 54px tile, a 266px
+   column, 12px of padding and 12px between the tile and the words.
+
+   The tile consumes `--fill` and `--on-fill`, so the card is painted by the same category key the
+   table paints its tiles with — nothing here names a colour. The card's own stylesheet decides
+   shape and type only; how wide a card is belongs to the grid that holds it, and how the cards
+   filter is the page's business. */
+
+.card[hidden] {
+  display: none;
+}
+
+.card__link {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-card);
+  height: 100%;
+  padding: var(--pad-card);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-body);
+  text-decoration: none;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+/* A card lifts towards the pointer and the keyboard, the way a tile does. The outline comes from
+   base.css, so a focused card is marked twice over rather than not at all. */
+.card__link:hover,
+.card__link:focus-visible {
+  box-shadow: var(--shadow-md);
+  transform: translateY(var(--lift-tile-sm));
+}
+
+.card__tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-card-tile);
+  block-size: var(--size-card-tile);
+  border-radius: var(--radius);
+  background: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
+}
+
+.card__z {
+  position: absolute;
+  inset-block-start: var(--inset-card-z-block);
+  inset-inline-end: var(--inset-card-z-inline);
+  font-size: var(--type-card-z);
+  opacity: var(--opacity-card-z);
+}
+
+.card__sym {
+  font-family: var(--font-display);
+  font-size: var(--type-card-symbol);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tile-symbol);
+}
+
+.card__meta {
+  display: grid;
+  gap: var(--gap-card-line);
+}
+
+.card__name {
+  color: var(--ink);
+}
+
+.card__group,
+.card__facts {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* The weight and the state are one line, so the number is set in figures of one width: a column of
+   cards reads as a list rather than as a ragged edge. */
+.card__facts {
+  font-variant-numeric: tabular-nums;
+}

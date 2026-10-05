@@ -31,6 +31,40 @@ function isKnown(value) {
 }
 
 /**
+ * The comparison the repository sorts by, as a function of its own.
+ *
+ * It is exported because a page that ranks a list it already holds — the melting-point and
+ * boiling-point pages are handed the records by the build — must sort them by this rule rather
+ * than by a second one. Unknowns last in both directions, ties in atomic order.
+ *
+ * @param {string} field
+ * @param {{ direction?: "ascending" | "descending" }} [options]
+ * @returns {(one: object, other: object) => number}
+ */
+export function compareByField(field, { direction = "ascending" } = {}) {
+  const sign = direction === "descending" ? -1 : 1;
+
+  return (one, other) => {
+    const first = one[field];
+    const second = other[field];
+
+    if (!isKnown(first) && !isKnown(second)) {
+      return one.atomicNumber - other.atomicNumber;
+    }
+
+    if (!isKnown(first)) {
+      return 1;
+    }
+
+    if (!isKnown(second)) {
+      return -1;
+    }
+
+    return sign * (first - second) || one.atomicNumber - other.atomicNumber;
+  };
+}
+
+/**
  * Read the element data and return its queries.
  *
  * @param {{ fetchImpl?: typeof fetch, base?: string }} [options] injected so tests need no network
@@ -135,26 +169,7 @@ export async function createElementsRepository({ fetchImpl = fetch, base } = {})
      * @returns {object[]}
      */
     sortedBy(field, { direction = "ascending" } = {}) {
-      const sign = direction === "descending" ? -1 : 1;
-
-      return [...elements].sort((one, other) => {
-        const first = one[field];
-        const second = other[field];
-
-        if (!isKnown(first) && !isKnown(second)) {
-          return one.atomicNumber - other.atomicNumber;
-        }
-
-        if (!isKnown(first)) {
-          return 1;
-        }
-
-        if (!isKnown(second)) {
-          return -1;
-        }
-
-        return sign * (first - second) || one.atomicNumber - other.atomicNumber;
-      });
+      return [...elements].sort(compareByField(field, { direction }));
     },
   };
 }

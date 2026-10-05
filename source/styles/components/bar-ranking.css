@@ -1,0 +1,134 @@
+/* The ranked rows of a ranking page.
+
+   One row per element: its place, the element, a bar, and the value the bar encodes. The row keeps
+   the reference's 47px rhythm and its 30px symbol chip, and is separated from the next by a
+   hairline rather than by whitespace, which is how the reference's own table divides its rows.
+
+   The bar's length is the only number that comes from the data. The component writes a ratio
+   between 0 and 1 into `--ratio`; the token layer decides how much track that spans between its
+   floor and its full width. Nothing here spells a colour either: the chip and the bar are painted
+   by the two custom properties the category key sets. */
+
+.rank {
+  display: grid;
+  grid-template-columns:
+    var(--width-rank-place)
+    minmax(var(--min-width-rank-name), 1fr)
+    minmax(var(--min-width-rank-bar), 1fr)
+    var(--width-rank-value);
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: var(--height-rank-row);
+}
+
+.rank + .rank {
+  border-block-start: var(--rule-hairline);
+}
+
+.rank__place {
+  color: var(--ink-faint);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.rank__element {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.rank__sym {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--size-rank-sym);
+  block-size: var(--size-rank-sym);
+  border-radius: var(--radius);
+  background: var(--fill-deep, var(--surface-sunk));
+  color: var(--on-fill-deep, var(--ink-inverse));
+  font-weight: var(--weight-bold);
+}
+
+.rank__name {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.rank__element:hover .rank__name,
+.rank__element:focus-visible .rank__name {
+  text-decoration-line: none;
+}
+
+.rank__z {
+  color: var(--ink-faint);
+  font-size: var(--step--1);
+}
+
+/* The track is the surface the bar runs along: full width, so an empty bar still reads as a scale
+   with this element at the bottom of it rather than as a missing element. */
+.rank__bar {
+  display: block;
+  block-size: var(--height-rank-bar);
+  border-radius: var(--radius-rank-bar);
+  background: var(--surface-sunk);
+}
+
+.rank__fill {
+  display: block;
+  block-size: 100%;
+  border-radius: inherit;
+  background: var(--fill, var(--ink-soft));
+  /* The floor keeps a visible length on the lowest value: an element at the bottom of the scale is
+     still an element on it. */
+  inline-size: calc(var(--floor-bar) + var(--ratio, 0) * (100% - var(--floor-bar)));
+}
+
+.rank__value {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* An element the source has no measurement for keeps its row and says so, and its bar stays empty
+   rather than being drawn at the bottom of a scale it is not on. */
+.rank--unknown .rank__value {
+  color: var(--ink-soft);
+}
+
+.rank--unknown .rank__sym {
+  background: var(--surface-sunk);
+  color: var(--ink-soft);
+}
+
+/* Below this width four columns leave the element's name and its value too little room, so a row
+   becomes two lines: the element and its value, with the bar running the full width under both. */
+@media (max-width: 40rem) {
+  .rank {
+    grid-template-columns: var(--width-rank-place) minmax(0, 1fr) auto;
+    grid-template-areas:
+      "place element value"
+      "bar bar bar";
+    row-gap: var(--sp-2);
+    padding-block: var(--sp-2);
+    align-items: center;
+  }
+
+  .rank__place {
+    grid-area: place;
+  }
+
+  .rank__element {
+    grid-area: element;
+  }
+
+  .rank__bar {
+    grid-area: bar;
+  }
+
+  .rank__value {
+    grid-area: value;
+  }
+}

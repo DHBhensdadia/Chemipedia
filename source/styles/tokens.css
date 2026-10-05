@@ -394,6 +394,60 @@
   /* The diagram's box in the reference is its image's own 200 x 219.16, and the figure's height
      follows from it. Ours is drawn square and centres inside the same box. */
   --ratio-diagram: 200 / 219.16;
+
+  /* -------------------------------------------------------------------------
+     12. The elements index.
+
+     Measured from the reference's own /elements page at 1280: a hero 270px tall
+     holding the heading, one line of context and a 420px search field, then a
+     grid of cards four across the shell. The card's own numbers are the
+     reference's too: a 54px tile, a 23.2px symbol, a 9.6px atomic number inset
+     3px and 5px into its corner, and a single pixel between the lines of the
+     words beside the tile.
+     ------------------------------------------------------------------------- */
+  --min-height-idx-hero: 270px;
+  --width-idx-search: 420px;
+  --pad-idx-search: var(--sp-3) var(--sp-4); /* 12px 16px, measured */
+  --margin-page-lede: var(--sp-3) 0 var(--sp-4); /* 12px 0 16px: the index's and the rankings' */
+  --margin-idx-body: var(--sp-6); /* 32px between the hero and the grid */
+  --min-width-card: 16.625rem; /* 266px: the four-across column the reference's grid resolves to */
+  --gap-card: 12px; /* measured */
+  --pad-card: 12px; /* measured */
+  --size-card-tile: 54px;
+  --type-card-symbol: 1.45rem; /* 23.2px, measured */
+  --type-card-z: 0.6rem; /* 9.6px, measured */
+  --inset-card-z-block: 3px;
+  --inset-card-z-inline: 5px;
+  --opacity-card-z: 0.85;
+  --gap-card-line: 1px; /* between the three lines of a card's words, measured */
+
+  /* -------------------------------------------------------------------------
+     13. The ranking and configuration pages.
+
+     The reference's attribute pages are one 1100px table of 47px rows with a 30px
+     symbol chip under a 240px hero. Ours is a ranking rather than a sortable
+     table, so the row keeps the reference's rhythm and adds the scale: a bar
+     whose length is where a value sits between the page's own lowest and
+     highest. The floor is what keeps the lowest bar visible rather than absent,
+     and the note above the list says in a sentence what the bar measures.
+     ------------------------------------------------------------------------- */
+  --min-height-rank-hero: 240px;
+  --height-rank-row: 47px;
+  --size-rank-sym: 30px;
+  --width-rank-place: 2.5rem;
+  --width-rank-value: 6rem;
+  --min-width-rank-name: 8rem;
+  --min-width-rank-bar: 6rem;
+  --height-rank-bar: 10px;
+  --floor-bar: 2%; /* how much of the track the lowest value keeps */
+  --radius-rank-bar: var(--radius-pill);
+
+  /* The configuration rows: the same rhythm again, with the notation set in the mono face and given
+     the room the longest of them needs — a superheavy element's string runs to six subshells. */
+  --min-height-cfg-row: 40px;
+  --size-cfg-sym: 30px;
+  --min-width-cfg-element: 9rem; /* the element column in a configuration row */
+  --width-cfg-element: 22rem;
 }
 
 /* The element's name takes its larger step once the hero has room for the card and the
