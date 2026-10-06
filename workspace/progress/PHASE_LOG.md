@@ -27,6 +27,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 10 | Calculators and secondary pages | `COMPLETE` | `df4d60e`..`b9999d3`, plus the close-out commit |
 | 11 | Quality, accessibility, performance, delivery | `COMPLETE` | `f1cef8e`..`ec80c43`, plus the close-out commit; tagged `v1.0.0` |
 | Publish | The push, and the deployment it corrected | `COMPLETE` | `e035c6f` pushed as the release, then `bd338dd` (the fix), plus the close-out commits; tagged `v1.0.1` |
+| 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
 
 ---
 
@@ -1472,6 +1473,89 @@ went live first), `bd338dd` (the deployment fix), plus the close-out commits car
 run-state checkpoint, the handoff note and the README's status.
 
 **Tag:** `v1.0.1`, annotated, on `bd338dd`.
+
+---
+
+## Phase 12 — The renderer: WebGL2 without a library
+
+**Goal:** the project's one piece of 3D, isolated in a layer of its own and proved on the
+development-only style-guide page before any page depends on it. No library (ADR-004), so the
+mathematics, the meshes, the GLSL and the loop are all ours.
+
+This phase runs on `feature/atom-3d`, cut from `main` at `a22c0d2`, and nothing is merged or pushed.
+It is the first of the atom viewer's four phases; no page uses any of it yet.
+
+**What was built, and the one thing it had to be:** the layer owns the context, the programs, the
+meshes, the light and one frame, and owns no opinion about the atom. How many protons carbon has,
+where a nucleon sits and how fast an electron moves are the model's business, which is the next phase.
+Everything the scene needs — the deep pine stage, the three particle colours, the orbit radii, the
+camera, the light, the ratio cap — is in section 21 of `tokens.css`, because the renderer is the one
+component whose palette cannot arrive through a stylesheet. The mathematical half (`matrix4`,
+`orbit-camera`, `primitive-geometry`, `frame-loop`) has no DOM in it at all and is tested in Node.
+
+**Two amendments the line ceiling forced, recorded in the plan in the same commit.** `atom-view.js`
+was 597 lines with the vertices and the frame loop inside it; `atom-meshes.js` now owns the meshes and
+buffers (one unit sphere uploaded once and drawn per instance, one tube per ring radius cached by its
+geometry, and the only place a buffer is created or deleted), and `frame-loop.js` owns when a frame is
+drawn at all — including the clamp on a frame that arrives after the tab was backgrounded and the skip
+while the page is hidden, both now testable without a canvas. The plan named two files for this phase
+and ships four.
+
+**What measuring in a browser found, that no unit test could.** The first full run drew the orbits and
+**no particles at all**. The particle draw used a vertex array that carried the per-particle buffers
+and not the sphere's own `aPosition`/`aNormal`, so every sphere collapsed to a point at its own centre:
+the call was issued exactly as designed and painted nothing. Four other corrections came out of writing
+the tests — the rings are now blended and do not write depth, a resize that changes nothing no longer
+touches the canvas (assigning to its width clears it), grown capacity replaces its buffers and its
+vertex array rather than leaving them behind, and a program that will not compile makes the viewer
+unavailable instead of throwing, which is what its own header promised and what the page's fallback
+needs.
+
+**Phase 12 verification**
+
+```
+[✓] node --test source/tests ................ pass  577 pass, 0 fail (46 new)
+[✓] node --check on every changed module .... pass  every module under source/, checked individually
+[✓] Brand scan .............................. PASS: brand scan clean (neither reference's brand in source/)
+[✓] Console/network on every touched page ... zero errors, zero failed requests — asserted, not observed:
+                                              tools/visual/audit-atom-renderer.mjs exits non-zero on any
+                                              console message or failed request, and the recorded run is exit 0
+[—] Accessibility tree reviewed ............. not applicable: this phase adds no page. The layer's canvas is
+                                              given role="img" with a name on the style guide; the page's own
+                                              tree is Phase 14's
+[✓] Keyboard traversal ...................... the style guide's controls are native buttons and take focus
+[—] Reduced motion .......................... not applicable yet: the pause path is proved (a stopped loop is
+                                              byte-identical frame to frame) and the page's reduced-motion
+                                              behaviour, one still frame and no loop, is Phase 14's
+[—] 1280 / 768 / 375 px screenshot vs reference  not applicable: the layer is not a page and this phase
+                                              replicates no page. The surface rule is measured instead, at all
+                                              three widths (the box at the capped ratio of two, against a device
+                                              ratio of three), and the appearance gate for the feature is Phase 15's
+[✓] Regression check on an earlier phase .... page: /styleguide/, /, /elements/hydrogen/, 19 pages in all
+                                              result: a11y 0 defects / 27 informational; responsive 76 of 76
+[✓] Deliberate deviations recorded .......... three, below
+[✓] docs/MIND_MAP.md updated ................ yes — every new file, in the same commit as the file
+[ ] RUN_STATE.md + HANDOFF.md updated ....... in this commit
+```
+
+**Verification of the numbers the plan asked to be recorded**: `docs/research/05-atom-renderer-measurements.md`
+holds the whole run and the card it ran on — 43 particles and 3 orbits in **4 draw calls** at 0.10 ms in
+the layer, 125 and 7 in **8 draw calls** at 0.20 ms, against a browser cadence of 16.70 ms a frame on an
+Apple M4 through ANGLE, with the surface held at the capped ratio at three widths and the no-WebGL2
+path checked by a page whose canvas refuses a context.
+
+**Deviations, all recorded where they will be found again:**
+
+| What | Why | Where |
+|---|---|---|
+| The plan's `sphere-geometry.js` is `primitive-geometry.js`, and an orbit is a **tube** rather than a flat band | A flat annulus vanishes when the camera looks along an orbit's plane, and this camera orbits: an orbit visible from the front and invisible from the side would make the shells appear and disappear as the reader turns the atom | `IMPLEMENTATION_PLAN.md` §3, amended in `f557ea3` |
+| Two files the phase did not name: `atom-meshes.js` and `frame-loop.js` | `atom-view.js` was 597 lines against a 400-line ceiling with the vertices and the loop inside it; both splits are along real seams, and both made a behaviour testable that was not | `IMPLEMENTATION_PLAN.md` §3, amended in `adcbbe5` |
+| Section 21 of `tokens.css` arrives in this phase rather than the next | The renderer reads its palette from the token layer at runtime, so the colours had to exist before the layer could be seen at all; Phase 14 adds the bar's glass to the same section | `tokens.css`, `MIND_MAP.md` |
+
+**Commits:** `e748de5` (the arithmetic), `19bc719` (the camera), `f557ea3` (the meshes),
+`adcbbe5` (the layer), `cb570b3` (the browser proof and the recorded numbers).
+
+---
 
 ---
 

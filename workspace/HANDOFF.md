@@ -1,8 +1,8 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-07 · **By:** the session that planned the atom viewer on `feature/atom-3d`,
-after publishing the site and fixing the defect the live address exposed · **After commit:** the
-two plan commits on `feature/atom-3d`
+**Written:** 2026-10-07 · **By:** the session that built and proved the atom viewer's renderer on
+`feature/atom-3d` — Phase 12 of the feature, and the first browser evidence of it · **After commit:**
+`cb570b3` on `feature/atom-3d`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -12,10 +12,16 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 ## What exists right now
 
 **The plan is delivered and the site is live** at <https://dhbhensdadia.github.io/Chemipedia/>, and
-**a new feature is planned and not yet built**: the atom viewer, as Phases 12–15 on the branch
-`feature/atom-3d` (cut from `main` at `a22c0d2`). Nothing of it is merged or pushed.
+**a new feature is under way**: the atom viewer, as Phases 12–15 on the branch `feature/atom-3d` (cut
+from `main` at `a22c0d2`). **Phase 12 — the renderer — is complete and proved in a browser**; phases
+13–15 (the atom model, the page and its bar, the delivery) are not started. Nothing is merged or pushed.
 
-- `node --test source/tests` → **497 passing, 0 failing**, with nothing installed.
+- The renderer exists and draws: `source/scripts/components/atom-view.js` and the three modules under
+  it, driven on `/styleguide/` by `source/styleguide/atom-demo.js`, with its measured numbers recorded
+  in `docs/research/05-atom-renderer-measurements.md` — 4 draw calls for 43 particles and 3 orbits,
+  8 for 125 and 7, at 0.10–0.20 ms in the layer against a 16.70 ms vsync-bound frame.
+- No page uses any of it yet: there is no `/atoms/` route, template, sheet or behaviour.
+- `node --test source/tests` → **577 passing, 0 failing**, with nothing installed.
 - `node source/tools/build.js` → **562 routes** plus the not-found page, **0 waiting**.
 - Every page is rendered at build time; the browser only attaches behaviour to markup it finds.
 - Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD; the
@@ -34,9 +40,11 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. **You are on `feature/atom-3d` unless someone has merged it.** Read Phase 12 in
-   `docs/IMPLEMENTATION_PLAN.md` §3 and the measurements in `docs/research/04`, then start at
-   `source/scripts/lib/matrix4.js` with its tests. The work item boundaries are the commits.
+2. **You are on `feature/atom-3d` unless someone has merged it.** Phase 12 is closed (see its entry in
+   `progress/PHASE_LOG.md` and the numbers in `docs/research/05`). Start **Phase 13** in
+   `docs/IMPLEMENTATION_PLAN.md` §3: `scripts/lib/point-sphere.js`, its tests, then
+   `scripts/lib/atom-model.js`, then `scripts/components/atom-scene.js`. The work item boundaries are
+   the commits.
 3. Anything about the feature that the plan does not settle is a decision for the author — the
    stage's look, the bar's contents and the page's copy were all asked about once already and are
    recorded; do not re-open them silently.
@@ -60,9 +68,16 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
   change how a colour is applied, check the sweep still models it.
 - **The atom viewer adds the project's only WebGL, and it is written by hand (ADR-004).** Almost all
   of it is arithmetic under `source/scripts/lib/` — matrices, the camera, the sphere's buffers, the
-  point distribution, the atom model — and that is deliberate: those modules are testable in Node and
-  are where the feature's tests live. Only the drawing calls need a browser, and they are proved on
-  `/styleguide/` before `/atoms/` exists.
+  frame loop, and, next, the point distribution and the atom model — and that is deliberate: those
+  modules are testable in Node and are where the feature's tests live. Only the drawing calls need a
+  browser, and they are proved on `/styleguide/` before `/atoms/` exists.
+- **A draw call that succeeds can paint nothing, and a transcript cannot see it.** This happened here:
+  the particle draw used a vertex array that carried the per-particle buffers and not the sphere's own
+  `aPosition`/`aNormal`, so every sphere collapsed to a point at its centre while the call was issued
+  exactly as designed. Every unit test passed. What caught it was reading the drawing buffer in a
+  browser and classifying its pixels against the token colours (`tools/visual/atom-pixels.mjs`).
+  **When you add to the scene, ask what the pixels say, not what the calls say** — and keep the
+  regression test that now holds each draw to one vertex array carrying everything it reads.
 - **The scene's palette comes from `tokens.css` at runtime.** The renderer reads its colours through
   `getComputedStyle` rather than carrying hex literals, because the one law that has held since
   Phase 1 is that a literal design value exists in exactly one file. A dark stage inside a paper-light
@@ -129,10 +144,12 @@ Nothing is half-done in the tree, and the site is published. `v1.0.0` stays on `
 release whose publication exposed the subpath defect — and `v1.0.1` is on `bd338dd`, which fixes it;
 neither tag was moved, because a pushed tag is a statement the history has already made.
 
-The atom viewer is planned but unbuilt: on `feature/atom-3d`, the plan and the reference audit are
-committed and no `source/` file of the feature exists yet. The feature closes with a merge to `main`
-(`--no-ff`), a green Pages run, the live page checked in a browser, and `v1.1.0` — none of which has
-happened.
+The atom viewer is built at the renderer and nothing above it: on `feature/atom-3d`, the plan, the
+reference audit and Phase 12 are committed — the whole drawing layer, its tests, the style-guide
+demonstration and the recorded measurements — and no page uses it. Phases 13–15 remain: the atom
+model and the live scene, the page with its bottom bar and its navigation entry, then the sweeps,
+the documentation and the delivery. The feature closes with a merge to `main` (`--no-ff`), a green
+Pages run, the live page checked in a browser, and `v1.1.0` — none of which has happened.
 
 Two things are deliberately left, and both are recorded rather than forgotten: the Pages runs print
 Node 20 deprecation notices for five actions that GitHub is already forcing onto Node 24 (cosmetic,
