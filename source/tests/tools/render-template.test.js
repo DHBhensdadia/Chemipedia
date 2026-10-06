@@ -5,12 +5,14 @@ import { readFile } from "node:fs/promises";
 import { fillTemplate, placeholderKeys } from "../../tools/render-template.js";
 import { elementPageValues } from "../../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../../scripts/pages/elements-index.js";
+import { glossaryIndexValues } from "../../scripts/pages/glossary.js";
+import { glossaryTermValues } from "../../scripts/pages/glossary-term.js";
 import { groupIndexValues, groupValues } from "../../scripts/pages/group.js";
 import { configurationPageValues } from "../../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../../scripts/pages/ranking.js";
 import { tableViewPageValues } from "../../scripts/pages/table-views.js";
 import { buildContext } from "../../tools/build-context.js";
-import { groupRoutes, routes } from "../../scripts/router/routes.js";
+import { glossaryRoutes, groupRoutes, routes } from "../../scripts/router/routes.js";
 
 const template = await readFile(new URL("../../pages/element-detail.html", import.meta.url), "utf8");
 const notFound = await readFile(new URL("../../pages/404.html", import.meta.url), "utf8");
@@ -105,6 +107,18 @@ test("every page family fills its template, block for block", async () => {
         elements: context.elements,
         categories: context.categories,
         units: context.units,
+      }),
+    ],
+    ["glossary-index", glossaryIndexValues, () => ({ glossary: context.glossary })],
+    [
+      "glossary-term",
+      glossaryTermValues,
+      () => ({
+        route: glossaryRoutes(context.glossary.all()).find(
+          (candidate) => candidate.term.slug === "absolute-zero",
+        ),
+        glossary: context.glossary,
+        elements: context.elements,
       }),
     ],
   ];
