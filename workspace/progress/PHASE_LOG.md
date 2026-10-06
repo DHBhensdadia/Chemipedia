@@ -23,7 +23,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 6 | Elements index and attribute rankings | `COMPLETE` | `6cd3b14`..`44e3493`, plus the close-out commit |
 | 7 | Alternate periodic table views | `COMPLETE` | `a0b0df8`..`d1a4ad4`, plus the close-out commit |
 | 8 | Element group pages | `COMPLETE` | `a49dd6d`..`54832b4`, plus the close-out commit |
-| 9 | Glossary | `NOT_STARTED` | — |
+| 9 | Glossary | `COMPLETE` | `5a05a1f`..`73fbb47`, plus the close-out commit |
 | 10 | Calculators and secondary pages | `NOT_STARTED` | — |
 | 11 | Quality, accessibility, performance, delivery | `NOT_STARTED` | — |
 
@@ -996,14 +996,114 @@ Harness against the reference (workspace/tools/visual, 1280 / 768 / 375; the ref
 
 ## Phase 9 — Glossary
 
+**Goal:** the site's vocabulary layer, and the internal-link backbone — `/glossary/` with the A–Z
+index, the live filter and all 418 terms, a page per term, and the cross-links between a term and
+the elements whose entries mention it.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 9.0 | The reference's own glossary, audited live | `COMPLETE` | The index is `/terms`, not `/glossary-of-terms`, which 404s; a term is `/glossary-of-terms/:slug`. Measured at 1280 / 768 / 375: the 230px hero with its 48px heading, the rail of letters down the left edge, the alphabet taking everything to its right, the 26 letter headings, the row's 352px/670px/112px grid and its 91.13px height, the definition's own 534px measure, and the badge's three ink and border colours — which are three of the eleven group colours. Written into `docs/research/01-reference-site-audit.md` §3.7 with the comparison table of what we take and what we add. `5a05a1f` |
+| 9.1 | The 418 definitions | `COMPLETE` | `data/glossary.json`, written here: 418 records of `term`, `slug`, `level` and a definition of one to three sentences, in reading order, with every one of the 26 letters holding at least one term. `tests/data/glossary.test.js` grew a second half that reads the **shipped** file from disk: the count, the letters, no two terms sharing a slug or a name, and every definition finished prose of a publishable length rather than a placeholder. 387 tests at this commit. `39abcef` |
+| 9.2 | The index family module | `COMPLETE` | `pages/glossary.js`: `termMatches` searches the term and the definition, `glossaryStatus` counts what is left and names the query, `levelBadge` refuses a level that is not one of the three rather than drawing an unstyled badge, `termRow`/`letterBlocks`/`jumpRail` write the 418 rows and the 26 letters at build time, and `startGlossaryIndex` is the filter — it hides what does not match, folds up a letter left with nothing under it, dims that letter's rail link, keeps the status line honest and honours a `?q=` the page arrived with. It asks the repository which letters exist rather than deciding. `be7a3d5` |
+| 9.3 | The term family module | `COMPLETE` | `pages/glossary-term.js`: the definition, the badge, the way back to the term's letter, the terms it sits near (derived from the words two names share, with the words every name shares left out), the elements whose prose mentions it, and a pager that stops at both ends of the reading order. A route carrying no term, or one the glossary does not hold, is refused rather than half-drawn. `be7a3d5` |
+| 9.4 | The two templates and the sheet | `COMPLETE` | `pages/glossary-index.html`, one template for the index, and `pages/glossary-term.html` behind all 418 term pages. `styles/pages/glossary.css` plus the glossary's section of `tokens.css`: the ledger as a grid whose first column is the rail — the one page in the project that leaves the shell on purpose — the row's three columns, and badges whose rules spend the three `--level-*` aliases of the group palette rather than naming a colour, which is why the family declares no component sheets. `be7a3d5` |
+| 9.5 | The route wiring, the manifest and the behaviour | `COMPLETE` | `build-context.js` loads the glossary as a repository, because its pages ask it questions a copy of the array could not answer; `FAMILY_RENDERERS` gains the two families and `bodyFor` threads the repository through; `glossaryRoutes(terms)` derives 418 routes from the records and `allRoutes` takes all three families; the index earns a behaviour entry and a term page deliberately has none. The three tests that count the manifest were widened to the whole site. 558 routes built. `63f73d0` |
+| 9.6 | The tests | `COMPLETE` | `tests/pages/glossary.test.js`: the 418 routes and their titles, descriptions and sheet; every term filed under its letter exactly once with the rail's 26 links landing on headings that exist; a row's term, definition and badge; the three levels accepted and any other refused; the filter's rule over both the term and the definition; the status line's four shapes; the filter driven through its own field, with a letter folded up and its rail link dimmed, the count kept, an arriving `?q=` honoured and a page with nothing to filter given a teardown; a term page's back link, badge, definition and pager; the derived relations; and every link the index and all 418 pages write held to the manifest. `tests/tools/render-template.test.js` widened to both glossary templates. 406 tests at that commit. `2d7b019` |
+| 9.7 | The browser pass, and the defect it found | `COMPLETE` | The index, a term page and an element page at 1280 / 768 / 375: the ledger and its badges are the reference's measurements to the decimal, and both glossary headings wrapped to two lines on a phone because the reference steps its own down below the shell — fixed in `tokens.css` and `glossary.css`. The pass also caught a defect in the router, older than this phase and invisible until now: a browser fires `popstate` for a fragment move, and the handler could not tell one from a history move between pages, so every in-page anchor fetched the page it was already on and settled the reader at the top of it. The jump rail moved the address and nothing else with the script on, and worked perfectly with it off. `6787b6c`, `b9cafba` |
+| 9.8 | The other end of the cross-linking | `COMPLETE` | The plan asks for a term mentioned in an element's entry to link to its definition, and only one end existed: a term page listed its elements. Both ends are now one rule in `lib/glossary-links.js` — one field list of the prose a reader sees, one whole-word match — so the two pages cannot disagree about which words are in an entry. An element page carries "Terms in this entry" as pills into the glossary; 17 of the 118 mention none and carry no section rather than a heading over an empty list. `73fbb47` |
+
 **Exit criteria**
 
-- [ ] 418 terms render; A–Z grouping and jump index correct and complete.
-- [ ] Filtering works on term and definition text.
-- [ ] Every term page resolves; no dead cross-links.
-- [ ] Cross-links between glossary terms and element properties resolve.
+- [x] 418 terms render; A–Z grouping and jump index correct and complete.
+- [x] Filtering works on term and definition text.
+- [x] Every term page resolves; no dead cross-links.
+- [x] Cross-links between glossary terms and element properties resolve.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+node --test source/tests ............................. tests 413 · pass 413 · fail 0
+                                                       (was 383 at Phase 8's close; the glossary adds 30)
+node source/tools/build.js ........................... Built 558 routes and the not-found page into dist/
+                                                       4 declared routes still waiting on their templates
+                                                       (was 139 built and 5 waiting; the family adds the index
+                                                       and 418 term pages)
+node --check on every module under source/ ........... all modules parse
+Brand scan over source/ .............................. PASS: brand scan clean
+MIND_MAP completeness over source/ ................... 146 files, 0 missing (150 counting the four
+                                                       .DS_Store files, which are not source)
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity: Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+```
+
+Served by the dev server and exercised in a real browser (Playwright, system Chrome):
+
+```
+  three URLs × three widths ............................ 0 console messages, 0 failed requests, no horizontal
+                                                       overflow: /glossary/, /glossary/absolute-zero/ and
+                                                       /elements/hydrogen/ at 1280 / 768 / 375
+  the index ............................................ 418 rows, 26 letter blocks, 26 rail links, every one
+                                                       of the 26 landing on a heading that exists
+  the ledger at 1280 ................................... the rail 34px, sticky at 58px, 2px apart; the alphabet
+                                                       1246px beside it (34 + 1246 = 1280); a row 91.13px
+                                                       tall on a 352px/670px/112px grid with 24px gaps and
+                                                       24px 32px padding; the term 30.976px; the definition
+                                                       13.6px/21.08px capped at 534px — the reference's own
+                                                       measurements, and the reference's own grid: its ledger
+                                                       measures 34px 1246px too
+  the letter headings .................................. 17.6px/19.36px, −0.352px tracking, 12px above and
+                                                       below, 43.34px tall
+  the badges ........................................... 11.52px on a 1px dotted rule, ink #1d4634 / #1d3d4d /
+                                                       #38246b on #97c0aa / #a6c6d5 / #6e58ac — the
+                                                       reference's three, and our own group tokens
+  the filter ........................................... "zwitterion" 1 row with the count named, 25 letters
+                                                       folded and 25 rail links dimmed; "gas" 33 rows;
+                                                       nothing from "nothing matchezzz" and the line that says
+                                                       so; cleared, 418 rows back and every letter unfolded
+  the jump rail ........................................ clicking P scrolls to the heading at 59.56px under the
+                                                       masthead, from 32,775px down the page
+  a term page at 1280 .................................. "← Glossary · A" → /glossary/#letter-A; the 5px rule;
+                                                       columns 776 and 260, 64px apart; the pager 48px below
+                                                       with the next term; 6 cross-links, all 200
+  the round trip ....................................... /elements/hydrogen/ → its seven term pills →
+                                                       /glossary/electron/ → whose aside lists Hydrogen
+  the router, re-checked after the fix ................. a row click, a pager click and two backs each land on
+                                                       the right page with the right behaviour started, and the
+                                                       index's filter still works after a swap back
+
+Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
+  the index against /terms .............................. page 4.66% / 4.53% / 5.55%; the h1 box the same size
+                                                       at 1280 (1100×52.8) and identical at 375 (327×36.95)
+  a term page against /glossary-of-terms/absolute-zero ... page 3.60% / 3.84% / 5.11%; the h1 56.31px tall at
+                                                       1280 and 38.72px at 768 and 375 — the reference's own
+                                                       heights, at all three widths
+```
+
+**Appearance — captured and inspected**
+
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | The heading and our lede, then the filter and its count, then the rail of 26 letters down the left edge with the alphabet beside it — 418 ruled rows, each its term, two lines of definition and a dotted badge, filed under 26 headings. A term page is the heading with its badge, a 5px rule, the definition, and an aside of pills. | The one arrangement taken whole: the rail, the alphabet, the row, the row's own three columns and the badge are the reference's measurements. Ours starts 129px lower because the hero carries a filter the reference has none of, and the list is 8% taller because our definitions are longer than its one-liners. |
+| 768 px | The rail dropped, a row one column at 16px, the badge under the definition. | The row is 154.3px against its 140, and the alphabet begins higher because our masthead is still one row where the reference's has two. |
+| 375 px | The same single column, and both glossary headings on one line. | The h1 box is identical in size to the reference's (327×36.95). The row is 170.03px against its 156. |
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **The index carries a filter and a status line; the reference's carries neither.** | The plan asks for live filtering, which the reference simply does not have. The hero's content is 232.97px against the reference's 92.94px — the field, its margin and the status line are the whole of that difference — and with our own 24px and 68px of padding the section is 324.97px against its flat 230, so the list starts 129px lower. Its own text block is still the reference's 92.94px to the decimal. |
+| **A term page carries the definition and no expanded explanation.** | The plan's deliverables list an expanded explanation on a term page; the reference's own body is the definition and nothing else, and this is the phase's one deliverable not delivered. Two hundred and more words per term would be 418 further paragraphs with no source to audit them against, and the phase's exit criteria do not ask for them. The aside carries what the page can honestly derive — the terms the term sits near, and the elements that mention it. |
+| **The difficulty levels are our own judgement, so the counts differ.** | Measured live, the reference splits 189 Beginner / 129 Novice / 99 Expert; ours is 107 / 168 / 143. A level describes how much the definition before it assumes the reader knows, so it is a judgement about a sentence only this project wrote; copying another site's distribution would be a claim about our prose that we have not checked. The badge's three colours, its dotted rule and its radius are the reference's. |
+| **The term page's aside is ours, and the reference's is not portable.** | Its two rails link into its Learn and Games sections — pages this site does not build — so copying the arrangement would mean publishing two columns of links to nowhere. Ours spends the same column on the relations the records can prove. |
+| **Our rows are taller at 768 and 375.** | 154.3px and 170.03px against the reference's 140 and 156. The arrangement is the same one column at 16px; the difference is that our definitions run to three and four lines where the reference's are one-liners, and the definition is the one place the two sites deliberately disagree. |
+| **The index is 8% taller than the reference's.** | 46,287px against 42,755px at 1280, from the same cause: our definitions are sentences where the reference's are phrases. Nothing about the row's rhythm differs. |
+| **The page's own heading sits 3.47px lower, and a term's 33px higher, than the reference's.** | Ours is at y131 against its y127.53 because `main` pays 48px above a hero where the reference pays 44.53; a term page's heading is at y151.14 against its y184.14 because the reference's back-link block is taller than ours. Both are the shell's and the back link's height, not the ledger's. |
+| **The element pages gained a block this phase did not originally plan.** | "Terms in this entry" is the other end of the plan's cross-linking deliverable, which had only been built in one direction. It is derived, so it adds no prose, and 17 of the 118 entries mention no term and carry no section. |
+
+**Commits:** `5a05a1f` (the reference's glossary in the audit), `39abcef` (the 418 definitions and the data tests), `be7a3d5` (the two family modules, the two templates and the sheet), `63f73d0` (the manifest, the build context and the behaviour), `2d7b019` (the family's tests), `6787b6c` (the headings step down below the shell), `b9cafba` (the router's fragment handling), `73fbb47` (the element side of the cross-linking), plus the close-out commit.
 
 ---
 
