@@ -1,0 +1,227 @@
+/* About and Contact.
+
+   Two pages of prose about the site, and one sheet between them: they share their shape — a hero,
+   then headings with paragraphs under them — and the parts that differ are the record About keeps
+   and the report Contact describes. The prefixes differ (`abt-` and `con-`) because the two pages'
+   markup differs, and one file holding both is the honest way to say that they are one family.
+
+   The About route does not declare this file: its template is named `about`, so the build appends
+   the sheet by itself. The Contact route declares it, because its template is named `contact` and
+   the build would otherwise look for a sheet nobody wrote.
+
+   The record is a definition list — the datasets and their licences — and its rows put a label in
+   a fixed column and the value beside it, which is the same arrangement the element pages' property
+   list uses and the reason there is no second one here. */
+
+/* ---------------------------------------------------------------------------
+   The hero, shared by the two pages.
+   --------------------------------------------------------------------------- */
+
+.abt-hero,
+.con-hero {
+  padding: var(--pad-abt-hero);
+}
+
+.abt-hero__name,
+.con-hero__name {
+  margin: 0;
+  font-size: var(--type-abt-name);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.abt-hero__lede,
+.con-hero__lede {
+  max-width: var(--max-width-abt-hero);
+  margin: var(--gap-abt-lede) 0 0;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------------------
+   About: the sections and the record.
+   --------------------------------------------------------------------------- */
+
+.abt-section {
+  margin-block-start: var(--margin-abt-section);
+  padding: var(--pad-abt-section);
+  border-top: var(--rule-dotted);
+}
+
+.abt-section:first-child {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-top: 0;
+}
+
+.abt-section__title {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: var(--leading-tight);
+}
+
+.abt-section__text {
+  max-width: var(--max-width-abt-text);
+  margin: var(--gap-abt-text) 0 0;
+  color: var(--ink-body);
+}
+
+.abt-sources {
+  display: grid;
+  gap: var(--gap-abt-source);
+  max-width: var(--max-width-abt-text);
+  margin-block-start: var(--margin-abt-sources);
+}
+
+.abt-source {
+  padding-block-start: var(--pad-abt-source);
+  border-top: var(--rule-hairline);
+}
+
+.abt-source__name {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: var(--leading-tight);
+}
+
+.abt-source__part,
+.abt-source__covers {
+  margin: var(--sp-2) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* A row: the label in its own column, the value beside it. The label column is fixed so that four
+   rows read as one table rather than as four sentences. */
+.abt-source__facts {
+  display: grid;
+  grid-template-columns: var(--width-abt-key) minmax(0, 1fr);
+  column-gap: var(--gap-abt-source-row);
+  margin: var(--sp-3) 0 0;
+  font-size: var(--step--1);
+}
+
+.abt-source__k {
+  padding-block: var(--pad-abt-source-row);
+  color: var(--ink-soft);
+  border-bottom: var(--rule-hairline);
+}
+
+.abt-source__v {
+  margin: 0;
+  padding-block: var(--pad-abt-source-row);
+  border-bottom: var(--rule-hairline);
+}
+
+.abt-source__code {
+  font-family: var(--font-mono);
+}
+
+/* ---------------------------------------------------------------------------
+   Contact: the parts of a report, then where each kind goes.
+   --------------------------------------------------------------------------- */
+
+.con-section {
+  margin-block-start: var(--margin-abt-section);
+  padding: var(--pad-abt-section);
+  border-top: var(--rule-dotted);
+}
+
+.con-section:first-child {
+  margin-block-start: 0;
+  padding-block-start: 0;
+  border-top: 0;
+}
+
+.con-section__title {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: var(--leading-tight);
+}
+
+.con-section__text {
+  max-width: var(--max-width-abt-text);
+  margin: var(--gap-abt-text) 0 0;
+  color: var(--ink-body);
+}
+
+/* The four parts are an ordered list, and the order is the reason for it: the fourth is the one
+   that makes the other three actionable. The numbers are drawn by the list's counter so that a
+   reader copying a part's text does not copy its number. */
+.con-parts {
+  display: grid;
+  gap: var(--gap-abt-source);
+  max-width: var(--max-width-abt-text);
+  margin: var(--margin-abt-sources) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: con-part;
+}
+
+.con-part {
+  display: grid;
+  grid-template-columns: var(--size-con-part-no) minmax(0, 1fr);
+  column-gap: var(--sp-4);
+  row-gap: var(--pad-abt-source-row);
+  align-items: start;
+  padding-block-start: var(--pad-abt-source);
+  border-top: var(--rule-hairline);
+  counter-increment: con-part;
+}
+
+.con-part::before {
+  content: counter(con-part);
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-con-part-no);
+  block-size: var(--size-con-part-no);
+  border: var(--rule-dotted);
+  border-radius: var(--radius-con-part-no);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.con-part__name {
+  margin: 0;
+  font-size: var(--step-0);
+}
+
+.con-part__note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.con-where {
+  display: grid;
+  gap: var(--gap-abt-source);
+  max-width: var(--max-width-abt-text);
+  margin-block-start: var(--margin-abt-sources);
+}
+
+.con-goes {
+  padding-block-start: var(--pad-abt-source);
+  border-top: var(--rule-hairline);
+}
+
+.con-goes__name {
+  margin: 0;
+  font-size: var(--step-0);
+}
+
+.con-goes__note {
+  margin: var(--pad-abt-source-row) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.con-address {
+  margin: var(--margin-abt-sources) 0 0;
+  font-size: var(--step-1);
+}
+
+.con-address__link {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}

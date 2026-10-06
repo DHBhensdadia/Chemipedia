@@ -257,6 +257,10 @@ export const routes = [
     title: "Contact ChemiPedia",
     description: "How to get in touch about ChemiPedia, including corrections to the data.",
     section: "about",
+    // The two secondary pages share one sheet. The about route does not declare it: its template is
+    // named `about`, so the build appends `styles/pages/about.css` by itself, and declaring it
+    // again would link the same sheet twice.
+    styles: ["styles/pages/about.css"],
   },
 ];
 

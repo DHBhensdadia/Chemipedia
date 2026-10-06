@@ -639,6 +639,32 @@
   --pad-dl-step: var(--sp-4) var(--sp-5);
   --size-dl-step-no: 1.75rem; /* the step's number, in its own square */
   --radius-dl-step-no: var(--radius-pill);
+
+  /* --------------------------------------------------------------------------
+     20. About and Contact.
+
+     Two pages of prose about the site, sharing one sheet because they share
+     their shape: a hero, then headings with paragraphs under them. About adds a
+     record — the datasets and their licences — and a record is a label-and-value
+     list, so it reuses the property list's arrangement rather than inventing a
+     second one.
+     -------------------------------------------------------------------------- */
+  --type-abt-name: 3rem; /* the heading, at the index's own step */
+  --max-width-abt-hero: 620px;
+  --pad-abt-hero: var(--sp-5) 0 4.25rem; /* `main` has already paid the other 48px */
+  --gap-abt-lede: var(--sp-3);
+  --max-width-abt-text: var(--measure); /* the page's prose measure, as everywhere else */
+  --margin-abt-section: var(--sp-7); /* between one section and the next */
+  --pad-abt-section: var(--sp-6) 0 0; /* its own rule and the space under it */
+  --gap-abt-text: var(--sp-4); /* between a section's paragraphs */
+  --margin-abt-sources: var(--sp-5);
+  --gap-abt-source: var(--sp-5);
+  --pad-abt-source: var(--sp-4) 0 0;
+  --width-abt-key: 7rem; /* the record's label column, as a property row's */
+  --gap-abt-source-row: var(--sp-4);
+  --pad-abt-source-row: var(--sp-2) 0;
+  --size-con-part-no: 1.75rem; /* a report part's number, in its own square */
+  --radius-con-part-no: var(--radius-pill);
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at
