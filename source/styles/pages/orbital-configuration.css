@@ -104,3 +104,15 @@
   font-size: var(--step--1);
   color: var(--ink);
 }
+
+/* Below the first breakpoint the two columns cannot both have room: the element column takes its
+   full 22rem and the notation is left at zero width, so `[He]2s1` spills out of the page. The row
+   stacks instead — the same admission the index and the ranking pages make — and the notation gets
+   the whole width, which is what it needs to be read. */
+@media (max-width: 40rem) {
+  .cfg__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-2);
+    padding-block: var(--sp-3);
+  }
+}
