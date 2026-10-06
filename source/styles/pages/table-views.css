@@ -120,3 +120,47 @@
   color: var(--ink-soft);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------------------------------------------------------------------------
+   The sheet.
+
+   A view prints as its table, on the same terms as the home page's: the
+   orientation is named rather than the paper, the heading stays as the sheet's
+   title, and the sections that read the table aloud to someone who is scrolling
+   — the trend's prose, the list of the scale's ends and the timeline — are not
+   on the sheet. The legend and the scale stay, because they are the key to the
+   colours the table is printed in.
+   --------------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: var(--sheet-print-table);
+    margin: var(--pad-print-margin);
+  }
+
+  .tv-note,
+  .tv-trend,
+  .tv-eras,
+  .ends {
+    display: none;
+  }
+
+  /* A view's hero is a screen's way of introducing a table: it reserves 240 or 300px so that the
+     four views' tables start at the same height whichever one the reader arrives at. On paper that
+     reservation is 130px of a 642px sheet, so it goes, the sub-paragraph goes with it for the same
+     reason the home page's does, and the heading stays as the sheet's title. Measured: 787px of
+     sheet before, 512px after, against the 642px one A4 landscape page holds. */
+  .tv-hero,
+  .tv-hero--tall {
+    min-height: 0;
+    padding-block: 0;
+  }
+
+  .tv-hero h1 {
+    font-size: var(--type-print-title);
+    line-height: var(--leading-tight);
+  }
+
+  .tv-hero__lede {
+    display: none;
+  }
+}

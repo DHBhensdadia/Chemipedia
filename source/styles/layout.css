@@ -115,3 +115,41 @@ main {
   margin-block-start: var(--sp-3);
   color: var(--ink-soft);
 }
+
+/* ---------------------------------------------------------------------------
+   Paper.
+
+   Printing is a page's second reader, and the differences are small and worth
+   saying once rather than per family: the site's chrome is a way of moving
+   around on a screen, and paper is not a place to move around, so the masthead,
+   its band, the footer and the skip link are gone; `main`'s screen padding goes
+   with them, because a sheet already has its own margin.
+
+   What is left on the sheet is the page's own decision, and the two pages that
+   print as something are the two the downloads page offers: the table, whose
+   rules are in `components/periodic-table.css`, and an element, whose are in
+   `pages/element-detail.css`.
+   --------------------------------------------------------------------------- */
+@media print {
+  .masthead,
+  .submenu,
+  .footer,
+  .skip-link {
+    display: none;
+  }
+
+  main {
+    padding-block: 0;
+  }
+
+  /* A tile's colour is the table's argument, not decoration, and a browser drops
+     background colour on paper unless it is asked not to. Asked once here, for
+     every surface whose colour carries meaning. */
+  .tile,
+  .chip,
+  .el-card,
+  .legend {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

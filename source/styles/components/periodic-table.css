@@ -420,3 +420,32 @@
     display: none;
   }
 }
+
+/* -------------------------------------------------------------------------
+   The table on paper.
+
+   The scroll container exists because a screen can be narrower than eighteen
+   columns; a sheet of paper is measured in millimetres and is not, so the width
+   goes back to the page box and the bleed that centres it goes with it. The grid
+   then does what it does at any width: the columns are fractions of it. The
+   tiles keep their colours — the page's own rule asks the browser for them —
+   because a printable table without its group colours is a table with its
+   argument left out.
+   ------------------------------------------------------------------------- */
+@media print {
+  .pt__scroller {
+    width: 100%;
+    margin-inline: 0;
+    mask-image: none;
+  }
+
+  .pt__grid {
+    min-width: 0;
+  }
+
+  /* The hint is a sentence about scrolling, and there is nothing to scroll on
+     paper. The legend stays: it is the key to the colours. */
+  .pt__hint {
+    display: none;
+  }
+}

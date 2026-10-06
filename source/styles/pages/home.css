@@ -148,3 +148,54 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The sheet.
+
+   Printing this page prints the table, which is what a reader who wants a
+   periodic table on paper is asking for: the heading stays as the sheet's title
+   and the four sections that explain the table to someone who is scrolling —
+   the card, both explainers and the element search — are not on the sheet at
+   all, because there is nothing to scroll and nothing to search on paper.
+
+   The orientation is named rather than the paper: `landscape` asks each printer
+   for its own sheet turned on its side, so the same rule is one A4 page and one
+   Letter page. The margin is the token layer's, like every other measurement.
+   --------------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: var(--sheet-print-table);
+    margin: var(--pad-print-margin);
+  }
+
+  .home-understand,
+  .home-explain,
+  .home-teasers,
+  .home-find {
+    display: none;
+  }
+
+  /* The title is kept and shrunk to a label, and the paragraph under it goes: on a screen it is
+     the page's introduction, and on a sheet that carries eighteen columns and a legend, a
+     sentence about what a periodic table is costs a reader the seventh of the sheet that decides
+     whether the table fits on it. Measured: the sheet is 861px tall with both and 669px without. */
+  .home-hero {
+    padding-block: 0;
+  }
+
+  .home-hero h1 {
+    font-size: var(--type-print-title);
+    line-height: var(--leading-tight);
+  }
+
+  .home-hero__lead {
+    display: none;
+  }
+
+  /* The table's own section gives up the rule and the 32px above and below it: the sheet's margin
+     is already the space around the table, and the legend and the grid are one block. */
+  .home-table {
+    padding: 0;
+    border-top: 0;
+  }
+}

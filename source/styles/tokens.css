@@ -605,6 +605,40 @@
   --width-calc-value: 7rem;
   --margin-calc-table: var(--sp-5);
   --pad-calc-cell: var(--sp-2) var(--sp-4);
+
+  /* -------------------------------------------------------------------------
+     18. Paper.
+
+     What a printed sheet needs. `--sheet-print` names an orientation rather than
+     a paper size, which is what lets the same rule fit A4 and Letter: each
+     reader's printer supplies the sheet and the table fits inside it either way.
+     ------------------------------------------------------------------------- */
+  --sheet-print-table: landscape; /* 18 columns are wider than they are tall */
+  --pad-print-margin: 10mm;
+  --type-print-title: var(--step-1); /* a printed sheet's title is a label, not a banner */
+
+  /* --------------------------------------------------------------------------
+     19. Downloads and the pages after it.
+
+     Three cards across the shell while there is room for three, then the four
+     steps of printing as an ordered list, because the order is the whole point
+     of the steps. A card is a panel with the site's dotted rule at its head and
+     one link at its foot.
+     -------------------------------------------------------------------------- */
+  --type-dl-name: 3rem; /* the heading, at the index's own step */
+  --max-width-dl-hero: 620px;
+  --pad-dl-hero: var(--sp-5) 0 4.25rem; /* `main` has already paid the other 48px */
+  --gap-dl-lede: var(--sp-3);
+  --gap-dl-cards: var(--sp-5);
+  --min-width-dl-card: 16rem; /* a card's floor; the row wraps by itself */
+  --pad-dl-card: var(--sp-5);
+  --gap-dl-parts: var(--sp-2); /* between a card's name, its note and its link */
+  --margin-dl-print: var(--sp-8);
+  --pad-dl-print: var(--sp-6) 0 0;
+  --gap-dl-steps: var(--sp-4);
+  --pad-dl-step: var(--sp-4) var(--sp-5);
+  --size-dl-step-no: 1.75rem; /* the step's number, in its own square */
+  --radius-dl-step-no: var(--radius-pill);
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

@@ -29,6 +29,7 @@ import { siteFooter } from "../scripts/components/site-footer.js";
 import { siteHeader } from "../scripts/components/site-header.js";
 import { submenu as submenuBand } from "../scripts/components/submenu.js";
 import { attributes, escapeHtml } from "../scripts/lib/html.js";
+import { downloadsPageValues } from "../scripts/pages/downloads.js";
 import { elementPageValues } from "../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
 import { glossaryIndexValues } from "../scripts/pages/glossary.js";
@@ -117,6 +118,7 @@ const FAMILY_RENDERERS = {
   "glossary-index": glossaryIndexValues,
   "glossary-term": glossaryTermValues,
   "temperature-calculator": calculatorPageValues,
+  downloads: downloadsPageValues,
 };
 
 /**

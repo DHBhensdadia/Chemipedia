@@ -404,3 +404,97 @@ main {
     width: 100%;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   The card.
+
+   An element page is a long read: the article, the questions it answers, the
+   terms its prose mentions, its neighbours and the way to the next element. A
+   card is not — it is what a reader wants in their hand while they are looking at
+   something else — so the sheet keeps the page's identity and its facts and
+   leaves the reading behind: the strip of neighbours, the questions, the article,
+   the terms, the similar elements and the pager all go.
+
+   What is left is the hero, the summary under it, and the panel: the element's
+   name and symbol, what it is, and the 27 properties, its electron shells and
+   where it was discovered. The sheet is portrait, because a card is taller than
+   it is wide, and the paper is the reader's own.
+   --------------------------------------------------------------------------- */
+@media print {
+  @page {
+    size: portrait;
+    margin: var(--pad-print-margin);
+  }
+
+  .el-strip,
+  .el-hero__table,
+  .faq,
+  .el-section,
+  .el-terms,
+  .el-similar,
+  .el-pager {
+    display: none;
+  }
+
+  /* The shell diagram is a picture of what the property list already says in words — the
+     configuration and the count of electrons per shell are both rows in it — and it is the
+     tallest thing in the panel. A card that carries it is two sheets; without it, one. */
+  .el-orbital {
+    display: none;
+  }
+
+  /* Every gap on this page is a gap a sheet has to pay for, and a sheet pays for it in pages. The
+     hero's own padding, the space above the facts and the height of the property list are worth
+     93px between them, measured — which is what turns "just over two sheets" into one. */
+  .el-hero {
+    padding: 0;
+  }
+
+  .el-body {
+    padding-block-start: var(--sp-4);
+  }
+
+  /* The symbol in this list's heading is the same symbol the card above already carries at four
+     times the size, with its label. */
+  .properties__head {
+    display: none;
+  }
+
+  /* The page box is narrower than any screen this page was designed for, so the shell's own
+     "below 56rem" rules fold the card's two columns into one 1500px stack. Paper wants something
+     else again: one column, and the 27 property rows printed in three at the sheet's own width —
+     wide enough that a label and its value still share a line, which is what makes the rows short
+     enough to be counted in the sheet rather than in the ream. Measured at A4's own page box: the
+     stack is 1354px, the three columns 892px, against 979px of Letter inside its margins. */
+  .el-cols {
+    display: block;
+  }
+
+  .el-panel {
+    width: 100%;
+    margin-block-start: var(--sp-4);
+  }
+
+  .properties__rows {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--sp-5);
+  }
+
+  /* The protons and the electrons are the atomic number, which the card above them already says in
+     its own corner, and on paper they are 83px of a sheet that is trying to hold an element, its
+     summary and its 27 properties inside 979px. */
+  .particles {
+    display: none;
+  }
+
+  /* The list gives up its own padding and the 8px a row keeps above and below its label. Rows are
+     separated by their hairline either way, and a card is a dense thing to begin with. */
+  .properties {
+    padding: 0;
+  }
+
+  .properties__row {
+    padding-block: 0;
+  }
+}

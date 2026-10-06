@@ -1,0 +1,133 @@
+/* Downloads and printables.
+
+   Three cards across the shell while there is room for three, then the four steps of printing as an
+   ordered list. A card is a panel headed by the site's dotted rule with one link at its foot, which
+   is the same shape the group index's cards and the home page's teasers use — the site has one way
+   of offering a destination and this is it.
+
+   The steps are an `<ol>` and not a list of divs, because their order is the instruction: a reader
+   who picks the wrong one gets four pages out of their printer. The numbers are drawn in their own
+   square by the list's counter rather than by a character in the text, so that the number is not
+   read aloud as part of the step, and the order survives a stylesheet that never loads. */
+
+.dl-hero {
+  padding: var(--pad-dl-hero);
+}
+
+.dl-hero__name {
+  margin: 0;
+  font-size: var(--type-dl-name);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.dl-hero__lede {
+  max-width: var(--max-width-dl-hero);
+  margin: var(--gap-dl-lede) 0 0;
+  color: var(--ink-soft);
+}
+
+.dl-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-width-dl-card), 1fr));
+  gap: var(--gap-dl-cards);
+}
+
+.dl-card {
+  display: grid;
+  align-content: start;
+  gap: var(--gap-dl-parts);
+  padding: var(--pad-dl-card);
+  border-top: var(--rule-dotted);
+}
+
+.dl-card__name {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: var(--leading-tight);
+}
+
+.dl-card__note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.dl-card__links {
+  margin: var(--gap-dl-parts) 0 0;
+}
+
+.dl-card__action {
+  font-weight: var(--weight-bold);
+}
+
+/* The one target that is a file says so: it is the only link on the site that saves something
+   rather than going somewhere, and a reader should not have to guess which. */
+.dl-card[data-download-kind="file"] .dl-card__action::after {
+  content: " ↓";
+}
+
+.dl-card__more {
+  display: inline-block;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.dl-print {
+  margin-block-start: var(--margin-dl-print);
+  padding: var(--pad-dl-print);
+  border-top: var(--rule-dotted);
+}
+
+.dl-print__title {
+  margin: 0;
+  font-size: var(--step-2);
+  line-height: var(--leading-tight);
+}
+
+.dl-steps {
+  display: grid;
+  gap: var(--gap-dl-steps);
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: dl-step;
+}
+
+.dl-step {
+  display: grid;
+  grid-template-columns: var(--size-dl-step-no) minmax(0, 1fr);
+  column-gap: var(--sp-4);
+  row-gap: var(--gap-dl-parts);
+  align-items: start;
+  padding: var(--pad-dl-step);
+  border-block-start: var(--rule-hairline);
+  counter-increment: dl-step;
+}
+
+/* The number is drawn, not typed: it belongs to the list rather than to the step, and a reader who
+   copies the step's text should not carry the number with it. It spans both rows of the step so the
+   name and the note line up beside it. */
+.dl-step::before {
+  content: counter(dl-step);
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  inline-size: var(--size-dl-step-no);
+  block-size: var(--size-dl-step-no);
+  border: var(--rule-dotted);
+  border-radius: var(--radius-dl-step-no);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.dl-step__name {
+  margin: 0;
+  font-size: var(--step-0);
+}
+
+.dl-step__note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
