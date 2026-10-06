@@ -50,6 +50,13 @@ export const PAGE_BEHAVIOUR = {
   // its definition and the links out of it, and the router alone is everything it needs.
   "glossary-index": (doc) =>
     import("./pages/glossary.js").then((module) => module.startGlossaryIndex(doc)),
+  // The calculator's three fields are the whole page, and none of them can do anything without the
+  // script: the build writes the page's opening state into the markup, so what the script adds is
+  // the conversion as the reader types, not the page.
+  "temperature-calculator": (doc) =>
+    import("./pages/temperature-calculator.js").then((module) =>
+      module.startTemperatureCalculator(doc),
+    ),
 };
 
 /**

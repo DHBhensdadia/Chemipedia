@@ -1,0 +1,33 @@
+<section class="calc-hero">
+  <div class="shell">
+    <h1 class="calc-hero__name">Temperature calculator</h1>
+    <p class="calc-hero__lede">{{lede}}</p>
+  </div>
+</section>
+
+<div class="shell calc-body">
+  <div class="calc-fields">
+{{fields}}
+  </div>
+
+  <p class="calc-warn" role="status" aria-live="polite" data-calc-warn></p>
+
+  <section class="calc-points">
+    <h2 class="calc-points__h">Notable temperatures</h2>
+
+    <table class="calc-table">
+      <caption class="visually-hidden">Notable temperatures in Celsius, Fahrenheit and Kelvin</caption>
+      <thead>
+        <tr>
+          <th scope="col">Temperature</th>
+          <th scope="col">Celsius</th>
+          <th scope="col">Fahrenheit</th>
+          <th scope="col">Kelvin</th>
+        </tr>
+      </thead>
+      <tbody>
+{{points}}
+      </tbody>
+    </table>
+  </section>
+</div>

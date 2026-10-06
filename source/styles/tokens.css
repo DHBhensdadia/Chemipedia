@@ -579,6 +579,32 @@
   --level-beginner-ink: #1d4634;
   --level-novice-ink: #1d3d4d;
   --level-expert-ink: #38246b;
+
+  /* -------------------------------------------------------------------------
+     17. The calculator and the pages around it.
+
+     Three fields on one row, each opening on the same temperature in its own
+     scale, above a table of notable temperatures. The field is the index
+     filter's box — the same dotted rule and the same 2px radius — because it is
+     the same act, a reader typing a number in. The table is the project's first
+     real one, so its measurements live here rather than in a component: a name
+     column and three numeric ones, in tabular figures so the columns line up
+     down the page. The output's 30.976px is the reference's own, measured.
+     ------------------------------------------------------------------------- */
+  --type-calc-name: 3rem; /* the heading, at the glossary index's own step */
+  --max-width-calc-hero: 620px;
+  --pad-calc-hero: var(--sp-5) 0 4.25rem; /* `main` has already paid the other 48px */
+  --gap-calc-lede: var(--sp-3);
+  --gap-calc-fields: var(--sp-4);
+  --gap-calc-body: var(--sp-6); /* between the fields, the note and the table */
+  --min-width-calc-field: 13rem; /* a field's floor; the row wraps below 40rem */
+  --pad-calc-input: var(--sp-3) var(--sp-4); /* 12px 16px, the index filter's */
+  --type-calc-input: var(--step-2); /* the value is the point of the page: 30.976px at the shell */
+  --type-calc-unit: var(--step--1);
+  --height-calc-row: 44px;
+  --width-calc-value: 7rem;
+  --margin-calc-table: var(--sp-5);
+  --pad-calc-cell: var(--sp-2) var(--sp-4);
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

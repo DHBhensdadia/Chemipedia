@@ -1,0 +1,145 @@
+/* The temperature calculator.
+
+   Three fields on one row, each opening on the same temperature in its own scale, above a table of
+   notable temperatures. The field is the index filter's box — the same dotted rule, the same 2px
+   radius, the same 12px 16px of padding — because it is the same act: a reader typing a number in.
+   What differs is the size of the number in it, which is the point of the page.
+
+   The warning line keeps its height whether or not it says anything, so that the table does not
+   jump down the page the moment a reader reaches for a temperature colder than cold. A field that
+   holds an impossible value takes the sunken surface rather than a second colour: the palette has
+   no alarm colour, and adding one for a single line would be a colour earning its keep nowhere.
+
+   The table is the project's first: a name column and three numeric ones, set in tabular figures so
+   that a column of temperatures lines up on its digits rather than on its words. */
+
+.calc-hero {
+  padding: var(--pad-calc-hero);
+}
+
+.calc-hero__name {
+  margin: 0;
+  font-size: var(--type-calc-name);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.calc-hero__lede {
+  max-width: var(--max-width-calc-hero);
+  margin: var(--gap-calc-lede) 0 0;
+  color: var(--ink-soft);
+}
+
+.calc-body {
+  display: grid;
+  gap: var(--gap-calc-body);
+}
+
+/* The three fields share the row while there is room for three, and wrap into a column when there
+   is not. The floor is what decides, not a breakpoint: a field narrower than this has no room for a
+   temperature and its unit. */
+.calc-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--min-width-calc-field), 1fr));
+  gap: var(--gap-calc-fields);
+}
+
+.calc-field {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.calc-field__label {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.calc-field__unit {
+  color: var(--ink-faint);
+}
+
+.calc-field__input {
+  inline-size: 100%;
+  padding: var(--pad-calc-input);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--type-calc-input);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+}
+
+.calc-field__input:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.calc-field__input[aria-invalid="true"] {
+  background: var(--surface-sunk);
+}
+
+/* The line is a live region rather than an alert: the reader is already looking at the field they
+   typed in, and a value below absolute zero is worth saying once, not worth interrupting them for. */
+.calc-warn {
+  min-block-size: var(--sp-5);
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: var(--step-0);
+}
+
+.calc-warn:not(:empty) {
+  color: var(--ink);
+}
+
+.calc-points__h {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: var(--leading-tight);
+}
+
+.calc-table {
+  inline-size: 100%;
+  max-inline-size: var(--measure);
+  margin-block-start: var(--margin-calc-table);
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.calc-table th,
+.calc-table td {
+  padding: var(--pad-calc-cell);
+  border-block-end: var(--rule-hairline);
+  text-align: start;
+  vertical-align: baseline;
+}
+
+.calc-table thead th {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-weight: var(--weight-bold);
+  border-block-end: var(--rule-solid);
+}
+
+.calc-row {
+  block-size: var(--height-calc-row);
+}
+
+.calc-row__name {
+  font-weight: var(--weight-bold);
+}
+
+.calc-row__value {
+  inline-size: var(--width-calc-value);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Below the first breakpoint the three numeric columns are the whole width gone if the name column
+   keeps its room, so the table scrolls rather than crushing six characters into a column of three. */
+@media (max-width: 40rem) {
+  .calc-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

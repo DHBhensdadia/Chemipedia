@@ -37,6 +37,7 @@ import { groupIndexValues, groupValues } from "../scripts/pages/group.js";
 import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../scripts/pages/ranking.js";
 import { tableViewPageValues } from "../scripts/pages/table-views.js";
+import { calculatorPageValues } from "../scripts/pages/temperature-calculator.js";
 import { footerColumns, isCurrent, primaryNavigation, submenuForSection } from "../scripts/router/navigation.js";
 import { allRoutes, routes, templatePathFor } from "../scripts/router/routes.js";
 import { buildContext } from "./build-context.js";
@@ -115,6 +116,7 @@ const FAMILY_RENDERERS = {
   "element-groups-index": groupIndexValues,
   "glossary-index": glossaryIndexValues,
   "glossary-term": glossaryTermValues,
+  "temperature-calculator": calculatorPageValues,
 };
 
 /**
