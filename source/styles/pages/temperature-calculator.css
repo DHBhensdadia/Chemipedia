@@ -30,8 +30,14 @@
   color: var(--ink-soft);
 }
 
+/* The body's track is `minmax(0, 1fr)` rather than the default: a grid track's minimum is its
+   items' min-content, and the four-column table's min-content is wider than a phone. Left at the
+   default it stretches every sibling with it — the three fields included — and the page scrolls
+   sideways at 375px. With the floor at zero the table scrolls inside its own box instead, which is
+   what the print-width rule below intends. */
 .calc-body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--gap-calc-body);
 }
 
