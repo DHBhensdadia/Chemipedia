@@ -6,7 +6,9 @@ frame-time numbers are recorded**. This is the record. It is one run of one scri
 it says so: a frame time is a fact about a graphics card, not about the code.
 
 **Where the numbers come from.** `tools/visual/audit-atom-renderer.mjs`, run against the
-development-only stage on `/styleguide/` (`BASE=http://127.0.0.1:4188 node audit-atom-renderer.mjs`).
+development-only stage on `/styleguide/` (`BASE=http://127.0.0.1:4188 node audit-atom-renderer.mjs`),
+with its pixel reading in `tools/visual/atom-pixels.mjs` — shared, because the atom page's own audit
+will ask the same question of the same layer.
 The script asks its own questions and exits non-zero on any that fail, on any console message at all,
 and on any failed request — so the recorded run passing is the page being clean, not a filter over it.
 
@@ -31,14 +33,18 @@ that is Phase 13's, with counts from an element record. What is measured here is
 | Draw calls a frame | **4** | **8** |
 | The layer's own work, last frame | 0.10 ms | 0.20 ms |
 | The layer's own work, averaged over 60 frames | 0.11–0.12 ms | 0.12–0.19 ms |
-| Lit pixels of the stage | 0.87 % (2 963 sampled of 341 322) | 2.3 % (7 898 sampled) |
-| Proton / neutron / electron pixels found | 1 074 / 1 543 / 44 | — |
+| Lit pixels of the stage | 0.87 % (2 953 sampled of 341 322) | 2.3 % (7 848 sampled) |
+| Proton / neutron / electron pixels found | 1 125 / 1 690 / 43 | — |
+
+The draw calls and the frame times are stable from run to run; the pixel counts move a little,
+because the scene is turning and a sphere one frame further round covers a slightly different
+number of pixels. They are quoted from the one recorded run below rather than averaged over runs.
 
 **Draw calls scale as designed.** One instanced call carries every particle, whatever the atom is made
 of; each orbit is one small mesh. 43 particles and 3 orbits are 4 calls; 125 and 7 are 8. There is no
 per-particle call to grow, so the cost of a heavier atom is the same shape as a light one.
 
-**The browser's own frame cadence over the same run:** median **16.70 ms**, mean 16.59 ms, worst
+**The browser's own frame cadence over the same run:** median **16.70 ms**, mean 16.55 ms, worst
 16.80 ms over 90 frames — i.e. vsync-bound at 60 frames a second with the layer using about 0.7 % of a
 frame's budget. The layer is nowhere near being the constraint at this size, which is what makes the
 instanced design a decision rather than a hope.
@@ -83,7 +89,7 @@ A drawn stage
   ok   the canvas is on the page
   ok   two frames a quarter of a second apart differ: the scene is moving
 
-  43 particles and 3 orbits · 4 draw calls · 0.10 ms in the layer, 0.11 ms averaged
+  43 particles and 3 orbits · 4 draw calls · 0.10 ms in the layer, 0.12 ms averaged
   readout: {"particles":"43","orbits":"3","calls":"4","frameMs":"0.100","averageMs":"0.115"}
 
   ok   the frame issues at least one call for the particles and one per orbit
@@ -91,15 +97,15 @@ A drawn stage
   ok   a frame's own work costs less than one sixtieth of a second
 The stage has an atom on it
 
-  0.87% of the stage is something other than its own colour (2963 of 341322 sampled pixels)
-  classified: 1074 proton, 1543 neutron, 44 electron pixels
+  0.87% of the stage is something other than its own colour (2953 of 341322 sampled pixels)
+  classified: 1125 proton, 1690 neutron, 43 electron pixels
 
   ok   the frame holds a drawn picture rather than an empty stage
   ok   the proton colour from the token layer is on the stage
   ok   the neutron colour from the token layer is on the stage
   ok   the electron colour from the token layer is on the stage
 
-  browser frames: median 16.70 ms, mean 16.59 ms, worst 16.80 ms over 90 frames
+  browser frames: median 16.70 ms, mean 16.55 ms, worst 16.80 ms over 90 frames
 
 Every control changes the render
 
@@ -108,9 +114,9 @@ Every control changes the render
   ok   a heavier atom is a different picture
   ok   and it is still one call for the particles and one per orbit
 
-  125 particles and 7 orbits · 8 draw calls · 0.20 ms in the layer, 0.19 ms averaged
+  125 particles and 7 orbits · 8 draw calls · 0.20 ms in the layer, 0.15 ms averaged
 
-  ok   three times the particles paint more of the stage (7898 lit pixels against 2963)
+  ok   three times the particles paint more of the stage (7848 lit pixels against 2953)
   ok   the wheel brings the camera closer
   ok   a drag swings the camera
 
