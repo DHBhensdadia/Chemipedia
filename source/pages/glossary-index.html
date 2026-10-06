@@ -1,0 +1,20 @@
+<section class="gls-hero">
+  <div class="shell">
+    <h1 class="gls-hero__name">Glossary of Terms</h1>
+    <p class="gls-hero__lede">{{lede}}</p>
+
+    <form class="gls-search" action="/glossary/" method="get" role="search" data-glossary-search>
+      <label class="visually-hidden" for="glossary-filter">Filter the glossary by term or definition</label>
+      <input class="gls-search__input" id="glossary-filter" name="q" type="search" placeholder="Filter by term or definition" autocomplete="off" data-glossary-input>
+    </form>
+
+    <p class="gls-status" role="status" data-glossary-status>{{status}}</p>
+  </div>
+</section>
+
+<div class="gls-ledger">
+{{jump}}
+  <div class="gls-alphabet">
+{{sections}}
+  </div>
+</div>

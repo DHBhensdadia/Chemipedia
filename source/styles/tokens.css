@@ -521,6 +521,64 @@
   --gap-grp-sibling: var(--sp-2); /* 8px between the pills, measured */
   --pad-grp-sibling: var(--sp-2) var(--sp-4);
   --size-grp-sibling-dot: 0.595rem; /* 9.52px, measured */
+
+  /* -------------------------------------------------------------------------
+     16. The glossary.
+
+     Its index is the one page in the project that leaves the shell on purpose. A
+     rail of letters sticks down the left edge, and the alphabet takes everything
+     to the right of it, which is why the alphabet's width is not a number here:
+     it is whatever is left. The rows inside it are a three-column grid, measured
+     at the reference's own 352px, 670px and 112px, with the definition given its
+     own shorter measure inside the middle column.
+     ------------------------------------------------------------------------- */
+  --type-gls-name: 3rem; /* the index's heading: the reference's own 48px, measured */
+  --type-gls-term-head: 3.2rem; /* and a term's: its own 51.2px, measured */
+  --type-gls-lede: 1.1rem; /* the hero's sub-paragraph, 17.6px measured */
+  --leading-gls-lede: 1.6; /* 28.16px on 17.6px, measured */
+  --max-width-gls-hero: 620px; /* the hero's text column, as every other hero's */
+  --pad-gls-hero: var(--sp-5) 0 4.25rem; /* `main` has already paid the reference's other 48px */
+  --width-gls-search: 420px; /* the filter, as wide as the elements index's */
+  --pad-gls-search: var(--sp-3) var(--sp-4); /* 12px 16px, as that one's is */
+  --gap-gls-lede: var(--sp-3); /* 12px between the heading and the sub-paragraph, measured */
+  --type-gls-letter: 1.1rem; /* a letter heading: 17.6px, measured */
+  --width-gls-rail: 34px; /* the letter rail, measured */
+  --gap-gls-rail: 2px; /* measured */
+  --radius-gls-rail-item: var(--radius); /* 2px, measured */
+  --type-gls-rail: 0.72rem; /* 11.52px, measured */
+  --pad-gls-rail-item: 0 var(--sp-1);
+  --min-height-gls-rail-item: 20px; /* measured */
+  --sticky-gls-rail: var(--height-masthead); /* the rail stops under the masthead */
+  --opacity-gls-dim: 0.35; /* a rail letter with nothing left under it while filtering */
+  --pad-gls-letter: var(--sp-3) 0; /* 12px above and below a letter, measured */
+  --width-gls-term: 22rem; /* 352px: the row's first column, measured */
+  --width-gls-level: 7rem; /* 112px: the row's third column, measured */
+  --gap-gls-row: var(--sp-5); /* 24px between the row's columns, measured */
+  --pad-gls-row: var(--sp-5) var(--sp-6); /* 24px 32px, measured */
+  --pad-gls-row-narrow: var(--sp-4); /* 16px once a row is one column, measured */
+  --measure-gls-def: 534px; /* the definition's own measure inside its 670px column, measured */
+  --type-gls-term: var(--step-2); /* 30.976px at the shell, measured */
+  --type-gls-def: var(--step--1); /* 13.6px at the shell, measured */
+  --leading-gls-def: 1.55; /* 21.08px on 13.6px, measured */
+  --type-gls-badge: 0.72rem; /* 11.52px, measured */
+  --pad-gls-badge: 0.18rem 0.504rem; /* 2.88px 8.064px, measured */
+  --tracking-gls-badge: 0.04em; /* 0.4608px at 11.52px, measured */
+  --height-gls-underline: 5px; /* the rule under a term's heading, measured */
+  --gap-gls-cols: var(--sp-8); /* 64px between the article and the aside, measured */
+  --width-gls-side: 16.25rem; /* 260px: the term page's aside, measured */
+  --gap-gls-related: var(--sp-2);
+  --pad-gls-pill: var(--sp-2) var(--sp-4); /* the aside's pills, the same as a group sibling's */
+
+  /* The three difficulty levels. The badge's rule is one of the eleven group colours each —
+     the reference's own choice, and spending them here keeps three more values out of the
+     palette. The ink is the reference's, transcribed: it has to read on paper, and on a
+     1px dotted rule rather than on a fill. */
+  --level-beginner: var(--g-post-transition-metals);
+  --level-novice: var(--g-non-metals);
+  --level-expert: var(--g-metalloids);
+  --level-beginner-ink: #1d4634;
+  --level-novice-ink: #1d3d4d;
+  --level-expert-ink: #38246b;
 }
 
 /* The element's name takes its larger step once the hero has room for the card and the

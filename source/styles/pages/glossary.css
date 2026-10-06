@@ -1,0 +1,329 @@
+/* The glossary: the index and the four hundred and eighteen term pages.
+
+   The index is the one page in the project that leaves the shell on purpose. A rail of letters
+   sticks down the left edge and the alphabet takes everything to its right, so the alphabet's width
+   is never a number in this file — it is whatever is left once the rail has its 34px. That
+   arrangement is the reference's, measured at 1280, and it is why `.gls-ledger` is a grid whose
+   first column is the rail. Below 56rem the rail is dropped and the alphabet takes the whole width,
+   which is what the reference does there too.
+
+   A row is a three-column grid — the term, its definition, its badge — and the definition is given
+   a shorter measure of its own inside the middle column, because a definition allowed to run the
+   full 670px would set two words to a line. Both numbers are the reference's own.
+
+   The badge's rule is a group colour, so this file names none: it spends `--level-*`, and those
+   three are aliases of the group palette in `tokens.css`. That is also why the glossary's routes do
+   not declare the periodic table's sheet — they need the colour itself, not the key that maps an
+   element to one.
+
+   A term page is the index's article: the same arrangement of heading, rule and prose, and the same
+   64px between the article and its aside. */
+
+.gls-hero {
+  padding: var(--pad-gls-hero);
+}
+
+.gls-hero__name {
+  font-size: var(--type-gls-name);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  margin: 0;
+}
+
+.gls-hero__lede {
+  max-width: var(--max-width-gls-hero);
+  margin: var(--gap-gls-lede) 0 0;
+  color: var(--ink-soft);
+  font-size: var(--type-gls-lede);
+  line-height: var(--leading-gls-lede);
+}
+
+/* The filter is the elements index's field, because it is the same act: a reader who wants one word
+   rather than four hundred rows. It is our addition — the reference publishes no filter at all —
+   and it is the reason this hero is taller than the reference's own 230px. */
+.gls-search {
+  max-width: var(--width-gls-search);
+  margin-block-start: var(--sp-5);
+}
+
+.gls-search__input {
+  inline-size: 100%;
+  padding: var(--pad-gls-search);
+  border: var(--rule-dotted);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.gls-status {
+  margin-block-start: var(--sp-3);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+/* ---------------------------------------------------------------------------
+   The ledger: the rail down the left edge, the alphabet beside it.
+   --------------------------------------------------------------------------- */
+
+.gls-ledger {
+  display: grid;
+  grid-template-columns: var(--width-gls-rail) minmax(0, 1fr);
+}
+
+.gls-rail {
+  position: sticky;
+  top: var(--sticky-gls-rail);
+  align-self: start;
+  display: grid;
+  gap: var(--gap-gls-rail);
+}
+
+.gls-rail__item {
+  display: grid;
+  place-items: center;
+  min-block-size: var(--min-height-gls-rail-item);
+  padding: var(--pad-gls-rail-item);
+  border-radius: var(--radius-gls-rail-item);
+  color: var(--ink-soft);
+  font-size: var(--type-gls-rail);
+  line-height: var(--leading-body);
+  text-decoration: none;
+}
+
+.gls-rail__item:hover {
+  background: var(--surface-sunk);
+  color: var(--ink);
+}
+
+/* A letter the filter has emptied keeps its place in the rail, so the alphabet does not reflow under
+   the reader's hands, but it stops looking like something to press. */
+.gls-rail__item.is-empty {
+  opacity: var(--opacity-gls-dim);
+  pointer-events: none;
+}
+
+.gls-letter {
+  scroll-margin-block-start: var(--sticky-gls-rail);
+}
+
+.gls-letter__h {
+  padding: var(--pad-gls-letter);
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--type-gls-letter);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.gls-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gls-row {
+  border-bottom: var(--rule-hairline);
+}
+
+.gls-row__link {
+  display: grid;
+  grid-template-columns: var(--width-gls-term) minmax(0, 1fr) var(--width-gls-level);
+  gap: var(--gap-gls-row);
+  align-items: start;
+  padding: var(--pad-gls-row);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.gls-row__link:hover .gls-row__term {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.gls-row__term {
+  font-size: var(--type-gls-term);
+  line-height: var(--leading-tight);
+}
+
+.gls-row__def {
+  max-width: var(--measure-gls-def);
+  color: var(--ink-body);
+  font-size: var(--type-gls-def);
+  line-height: var(--leading-gls-def);
+}
+
+.gls-lvl {
+  justify-self: start;
+  padding: var(--pad-gls-badge);
+  border: var(--rule-width) dotted var(--level-beginner);
+  border-radius: var(--radius);
+  color: var(--level-beginner-ink);
+  font-size: var(--type-gls-badge);
+  letter-spacing: var(--tracking-gls-badge);
+  line-height: var(--leading-body);
+  white-space: nowrap;
+}
+
+.gls-lvl--beginner {
+  border-color: var(--level-beginner);
+  color: var(--level-beginner-ink);
+}
+
+.gls-lvl--novice {
+  border-color: var(--level-novice);
+  color: var(--level-novice-ink);
+}
+
+.gls-lvl--expert {
+  border-color: var(--level-expert);
+  color: var(--level-expert-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   A term's own page: the way back, the definition, and what the term sits near.
+   --------------------------------------------------------------------------- */
+
+.gls-back {
+  padding-block-end: var(--sp-4);
+}
+
+.gls-back__link {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.gls-back__link:hover {
+  color: var(--ink);
+}
+
+.gls-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--width-gls-side);
+  gap: var(--gap-gls-cols);
+  align-items: start;
+}
+
+.gls-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-4);
+}
+
+.gls-head__name {
+  margin: 0;
+  font-size: var(--type-gls-term-head);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.gls-underline {
+  block-size: var(--height-gls-underline);
+  margin-block: var(--sp-4) var(--sp-5);
+  background: var(--ink);
+}
+
+.gls-prose {
+  max-width: var(--measure);
+  color: var(--ink-body);
+}
+
+.gls-prose > p {
+  margin: 0;
+  font-size: var(--step-1);
+  line-height: var(--leading-prose);
+}
+
+.gls-side {
+  display: grid;
+  gap: var(--sp-6);
+}
+
+.gls-side__k {
+  margin: 0 0 var(--sp-3);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  font-weight: inherit;
+}
+
+.gls-related__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-gls-related);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gls-related__link {
+  display: inline-block;
+  padding: var(--pad-gls-pill);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.gls-related__link:hover {
+  border-color: var(--line-strong);
+}
+
+.gls-pager {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-8);
+}
+
+.gls-pager__link {
+  display: grid;
+  gap: var(--sp-1);
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.gls-pager__link--next {
+  margin-inline-start: auto;
+  text-align: right;
+}
+
+.gls-pager__link:hover .gls-pager__n {
+  text-decoration-line: underline;
+  text-decoration-thickness: from-font;
+  text-underline-offset: var(--underline-offset);
+}
+
+.gls-pager__k {
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.gls-pager__n {
+  font-size: var(--step-1);
+}
+
+/* Below the shell's own breakpoint the rail is dropped and a row is one column, as the reference's
+   is there: the term, then its definition, then the badge, each on its own line and 16px in. */
+@media (max-width: 56rem) {
+  .gls-ledger {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gls-rail {
+    display: none;
+  }
+
+  .gls-row__link {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-3);
+    padding: var(--pad-gls-row-narrow);
+  }
+
+  .gls-cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--sp-6);
+  }
+}
