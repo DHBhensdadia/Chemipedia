@@ -472,11 +472,15 @@ development-only styleguide page before any page depends on it.
 - `scripts/lib/orbit-camera.js` — the camera as pure state: distance, azimuth and polar angle,
   damping from the current value toward its target, zoom and swing limits, and the view matrix. No
   DOM, so the whole of the camera's behaviour is testable in Node.
-- `scripts/lib/sphere-geometry.js` — vertices, normals and indices for a UV sphere at a given segment
-  count, generated rather than loaded, with the seam and the poles counted correctly.
+- `scripts/lib/primitive-geometry.js` — vertices, normals and indices for the two shapes the viewer
+  draws, generated rather than loaded: a sphere for every particle, as a latitude/longitude sheet
+  whose seam and poles are counted correctly, and a ring for every orbit. *Amended while building it:*
+  the plan first called this file `sphere-geometry.js` and the ring a flat band; a flat band vanishes
+  when the camera looks along an orbit's plane and this camera orbits, so the ring is a tube — a
+  torus — and the file is named for the pair of shapes it owns rather than for one of them.
 - `scripts/components/atom-shaders.js` — the GLSL and the program handling: a lit sphere for
-  nucleons and electrons, a flat translucent ring for an orbit, and a backdrop that gives the stage
-  its depth.
+  nucleons and electrons, a translucent tube for an orbit, and a backdrop that gives the stage its
+  depth.
 - `scripts/components/atom-view.js` — the WebGL2 layer around them: context acquisition, canvas
   sizing with a device-pixel-ratio cap, instanced draws so that a kind of particle costs one draw
   call, the frame loop, pause when the document is hidden or the canvas is out of view, and a
