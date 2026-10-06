@@ -35,10 +35,21 @@ caption on every table, every text colour against the surface it is actually pai
 composites the translucent layers and every `color-mix()` between the text and the page), one roving
 tab stop in the table with the arrow keys moving it, and nothing animating under
 `prefers-reduced-motion`. It exits non-zero on a defect, so a phase can gate on it; the HTTP status,
-the live regions a page declares and the table's stop count are printed but do not fail the run.**The responsive sweep.** `node audit-responsive.mjs` does the same for layout at 375, 768, 1024 and
+the live regions a page declares and the table's stop count are printed but do not fail the run.
+
+**The responsive sweep.** `node audit-responsive.mjs` does the same for layout at 375, 768, 1024 and
 1440: it reports a page that scrolls sideways and names the elements that leave the viewport. The
 periodic table is excluded on purpose — its eighteen columns are the recorded exception, and it
 scrolls inside its own box rather than moving the page. It exits non-zero on an overflow.
+
+**The performance sweep.** `node audit-performance.mjs` measures six pages — home, the elements
+index, an element, a table view, the glossary and the calculator — in a fresh context each and on a
+cold cache, and reports what the browser saw rather than what a file size suggests: response, first
+paint, DOMContentLoaded and load, the bytes transferred by initiator, the element and tile counts,
+cumulative layout shift after paint, and every long task the main thread ran. Shift is the number
+that found the home page's defect — 118 tiles arriving after paint moved the page by 0.315 of a
+viewport — and that proved the fix at 0. It exits non-zero on a page that shifts more than 0.1 or
+loads slower than two seconds; long tasks are printed and do not fail the run.
 
 **What it writes.**
 
