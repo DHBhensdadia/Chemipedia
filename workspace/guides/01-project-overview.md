@@ -59,7 +59,7 @@ design, and the reason is recorded in `workspace/docs/IMPLEMENTATION_PLAN.md` §
 | No runtime dependencies | No `node_modules` in the built site. Even the dev server is plain Node. |
 | Data-driven | 118 element pages and 418 glossary pages come from one template each, not from 536 hand-written files. |
 | Must survive interruption | Work is committed in small units, and `workspace/RUN_STATE.md` records exactly where a session stopped. |
-| Must look right, not just work | Every phase ends with a screenshot comparison against the reference at three widths. |
+| Must look right, not just work | Four browser sweeps measure every page: accessibility, responsive at four widths, performance in a real browser, and Lighthouse — each exiting non-zero on the defect it owns. |
 
 ## What "done" looks like
 
@@ -70,3 +70,9 @@ a laptop, with a keyboard only, and with reduced motion enabled.
 
 Every one of those journeys is checked before the project closes. The checklist is in
 `workspace/docs/TESTING_STRATEGY.md` §7.
+
+**It is delivered.** `v1.0.0` closes all twelve phases: 562 pages built, 482 tests passing with
+nothing installed, and four gates green — 0 accessibility defects across 19 pages, 76 of 76
+page-and-width combinations fitting their viewport, a worst layout shift of 0, and Lighthouse at 100
+for accessibility, best-practices and SEO. The evidence behind every number is in
+`workspace/progress/PHASE_LOG.md`; `workspace/RUN_STATE.md` is where to resume.

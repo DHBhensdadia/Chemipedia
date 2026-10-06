@@ -82,7 +82,7 @@ and the site builds and its suite passes with the directory deleted.
 |---|---|
 | `guides/README.md` | The index: what to read in what order, a five-minute path, and which document answers which kind of question. |
 | `guides/01-project-overview.md` | The product in plain language, why it exists, the design brief stated honestly, the two deliberately missing sections, the constraints and what each one changed in the code, and what "done" looks like. |
-| `guides/02-tour-of-the-codebase.md` | The folder-by-folder tour: the one rule that decides placement, the four layers and why they exist, the full intended `source/` tree, naming rules, and a "how to find things" lookup table. |
+| `guides/02-tour-of-the-codebase.md` | The folder-by-folder tour: the one rule that decides placement, the four layers and why they exist, the full `source/` tree as it ships, naming rules, and a "how to find things" lookup table. |
 | `guides/03-how-a-page-gets-built.md` | An end-to-end trace of one URL from JSON record to pixels, in nine steps, including the table's algorithmic content. The three ideas worth remembering. |
 | `guides/04-interview-quick-reference.md` | The thirty-second pitch, the architecture answer, a "Where is …?" table mapping questions to files and functions, the likely questions with honest answers, and four things to be able to demonstrate live. |
 

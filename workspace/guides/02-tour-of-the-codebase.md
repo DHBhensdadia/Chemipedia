@@ -1,9 +1,8 @@
 # Guide 2 — Tour of the codebase
 
-> **Status note.** This guide describes the structure the project is building toward, which follows
-> **ADR-001 Option A** in `workspace/docs/ARCHITECTURE.md`. If ADR-001 is accepted as a different
-> option, the folder names below change and this guide is corrected in the same commit. Everything
-> else — the layering rules, the naming rules — holds regardless of which option is chosen.
+> **This describes the repository as it ships.** ADR-001 settled on the zero-dependency Node static
+> site generator, every folder below exists, and `v1.0.0` closed the last phase. Where a name here and
+> the code disagree, the code is right and this guide is a defect — fix it in the same commit.
 
 ## The one rule that decides everything
 
@@ -43,18 +42,20 @@ layer, and nothing reaches sideways.
                  formatters, keyboard handling. No DOM, no data, no side effects.
 ```
 
-**Why the layers exist, concretely.** The periodic table appears on five different page families,
-in four different colour modes. If the table were written inside the home page, it would be
-duplicated five times, and the fifth copy would drift. Layering means the table engine is written
-once, in Phase 3, and every later phase that needs a table is cheap.
+**Why the layers exist, concretely.** The periodic table appears on three different page families, in
+five different colour modes. If the table were written inside the home page, it would be duplicated
+wherever else it was needed, and the last copy would drift. Layering means the table engine was
+written once, in Phase 3, and every later phase that needed a table was cheap — and the same engine
+is what the build calls to write the home page's table into the HTML.
 
 **The three rules that keep the layers honest:**
 
 1. **Only repositories import raw JSON.** A component never reads `elements.json`; it asks the
    repository. This is what makes the dataset replaceable without touching the UI.
-2. **Components do not know about URLs.** A component emits an event; the page module decides what
-   that event means. This is what lets the same tile work as a link on one page and a button on
-   another.
+2. **Components do not know about URLs.** A component is *handed* its links and its navigation —
+   `hrefFor`, `go` — and only falls back to `location` when nobody gave it one. The page module, the
+   router, or a test decides what a click means, which is what lets the same tile be a link on the
+   home page and part of a picture on an element page.
 3. **`lib/` is pure.** No DOM, no data, no side effects — which makes it trivially testable, and
    means the trickiest maths in the project (colour interpolation, grid placement) can be tested
    without a browser.
@@ -63,59 +64,71 @@ once, in Phase 3, and every later phase that needs a table is cheap.
 
 ```
 source/
-├── index.html                 the home page's authored template
-├── pages/                     one authored HTML template per page family
+├── README.md                  what belongs in here, and the rule that decides it
+├── styleguide/index.html      the design system on one page — development only, never built
+├── pages/                     one authored HTML template per page family, written as a fragment
+│   ├── home.html
 │   ├── elements-index.html
 │   ├── element-detail.html
+│   ├── element-groups-index.html
+│   ├── group.html
+│   ├── properties-and-states.html, orbitals.html,       the four alternate table views
+│   ├── electronegativity.html, evolution.html
+│   ├── melting-point.html, boiling-point.html,          the three rankings
+│   ├── orbital-configuration.html
 │   ├── glossary-index.html
 │   ├── glossary-term.html
-│   ├── table-view.html
-│   ├── group.html
-│   ├── ranking.html
+│   ├── temperature-calculator.html
+│   ├── downloads.html
 │   ├── about.html
-│   └── contact.html
+│   ├── contact.html
+│   └── 404.html               the not-found document, and the host's fallback
 │
 ├── scripts/
-│   ├── app.js                 the single entry point: boots routing, theme, shared behaviour
+│   ├── app.js                 the single entry point: boots routing, then the page's own behaviour
 │   ├── router/
-│   │   ├── routes.js          the route table: pattern → page module
+│   │   ├── routes.js          the route table, read by the build and the browser alike
 │   │   └── router.js          link interception, history, scroll, 404, fallback
 │   ├── data/                  ← Layer 3: REPOSITORIES. The only readers of JSON.
 │   │   ├── elements-repository.js
 │   │   ├── glossary-repository.js
-│   │   └── categories-repository.js
+│   │   ├── categories-repository.js
+│   │   ├── units-repository.js
+│   │   └── json-source.js     the one place a JSON file is fetched, with a cache
 │   ├── components/            ← Layer 2: components, one file per component
-│   │   ├── periodic-table.js
-│   │   ├── element-tile.js
+│   │   ├── periodic-table.js  the engine: the grid, its five colour modes, its keyboard
+│   │   ├── element-tile.js    one cell's markup, shared by the table and the miniatures
 │   │   ├── element-card.js
 │   │   ├── legend-chips.js
-│   │   ├── site-header.js
-│   │   ├── site-footer.js
-│   │   ├── submenu.js
-│   │   ├── element-search.js
+│   │   ├── element-search.js  the finder
+│   │   ├── search-field.js
+│   │   ├── bar-ranking.js
 │   │   ├── property-list.js
 │   │   ├── faq-block.js
 │   │   ├── shell-diagram.js
-│   │   ├── bar-ranking.js
-│   │   ├── converter-input.js
-│   │   └── filter-bar.js
+│   │   ├── era-timeline.js
+│   │   └── site-header.js, submenu.js, site-footer.js, wordmark.js
 │   ├── pages/                 ← Layer 4: one module per page family
 │   │   ├── home.js
 │   │   ├── elements-index.js
 │   │   ├── element-detail.js
-│   │   ├── table-views.js
+│   │   ├── table-views.js     the four alternate views share one module
 │   │   ├── group.js
-│   │   ├── glossary.js
-│   │   ├── glossary-term.js
-│   │   ├── ranking.js
-│   │   └── calculators.js
+│   │   ├── glossary.js, glossary-term.js
+│   │   ├── ranking.js, orbital-configuration.js
+│   │   ├── temperature-calculator.js
+│   │   └── downloads.js, about.js, contact.js
 │   └── lib/                   pure helpers — no DOM, no data, no side effects
 │       ├── colour-scale.js    numeric domain → colour, with clamps
-│       ├── contrast.js        group colour → safe foreground
-│       ├── grid.js            atomic number → row/column, including the f-block offset
-│       ├── format.js          value + unit → display string; handles "unknown"
-│       ├── keyboard.js        roving focus and arrow-key grid navigation
-│       └── slug.js            name → URL slug, and back
+│       ├── contrast.js        fill → readable foreground, and the alpha maths behind it
+│       ├── grid.js            the frozen positions laid out as cells; which cell a step lands on
+│       ├── keyboard.js        key → direction, and direction → destination cell
+│       ├── format.js          value + unit → display string; `null` becomes "Unknown"
+│       ├── slug.js            name → URL slug, and back
+│       ├── html.js            escaping and attribute building
+│       ├── electron-configuration.js, discovery.js, electronegativity.js
+│       ├── temperature.js     three scales, one of them with a true zero
+│       └── glossary-links.js, plural.js
 │
 ├── styles/
 │   ├── tokens.css             ALL design values. No literal colour or size exists outside this file.
@@ -126,23 +139,29 @@ source/
 │                              one theme only: the light palette in tokens.css (ADR-006)
 │
 ├── data/                      ← Layer 1: the data. JSON only, no logic.
-│   ├── elements.json          118 records
+│   ├── elements.json          118 records — a build artefact, committed on purpose
 │   ├── glossary.json          418 terms
 │   ├── categories.json        the eleven element groups, with palette and counts
-│   └── units.json             unit definitions used by the formatter
+│   ├── units.json             unit definitions used by the formatter
+│   ├── element-notes.json     the prose we wrote, kept out of the fetched file
+│   └── overrides.json         the nine category corrections, each with its reason
 │
 ├── assets/
-│   ├── brand/                 our wordmark, mark, favicon, social image
-│   └── fonts/                 self-hosted webfonts, if any. Licence recorded in DATA_SOURCES.md.
+│   └── brand/favicon.svg      the only image file. The wordmark and the mark are inline SVG, and
+│                             no webfont ships — `--font-body` names Inter and Work Sans and falls
+│                             back to the system's own sans, which is the recorded typeface deviation
 │
 ├── tools/                     development tooling. Plain Node. Never shipped to the browser.
+│   ├── build.js               walks the route table and writes every page
+│   ├── document.js            the <head>, the canonical link and the two crawl files
+│   ├── site-origin.js         SITE_ORIGIN, and the absolute URLs built from it
+│   ├── structured-data.js     the JSON-LD block every page carries
 │   ├── serve.js               zero-dependency static server for local development
-│   └── build-data.js          fetches the open dataset and emits normalised JSON
+│   ├── build-data.js          fetches the open datasets and emits normalised JSON
+│   └── data-sources/          the transforms: pubchem.js, wikidata.js, layout.js, configuration.js
 │
-└── tests/                     Node's built-in test runner. No dependencies.
-    ├── data/
-    ├── lib/
-    └── brand/
+└── tests/                     Node's built-in test runner. No dependencies. 482 tests.
+    └── brand/  components/  data/  lib/  pages/  router/  tools/
 ```
 
 ## Naming rules
@@ -166,10 +185,12 @@ source/
 | The colours, type scale, spacing | `source/styles/tokens.css` |
 | Where an element's data comes from | `source/scripts/data/elements-repository.js` |
 | The raw data itself | `source/data/elements.json` |
-| How the grid is laid out | `source/scripts/lib/grid.js` |
+| How the grid is laid out | `source/tools/data-sources/layout.js` — decided at data time and frozen into each record |
+| Which cell a step lands on | `source/scripts/lib/grid.js` |
 | The periodic table itself | `source/scripts/components/periodic-table.js` |
 | What a URL renders | `source/scripts/router/routes.js` |
 | What the home page does | `source/scripts/pages/home.js` |
+| How a page becomes a document | `source/tools/document.js` |
 | The dev server | `source/tools/serve.js` |
 | Any file at all | `workspace/docs/MIND_MAP.md` |
 
