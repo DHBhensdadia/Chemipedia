@@ -24,7 +24,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 7 | Alternate periodic table views | `COMPLETE` | `a0b0df8`..`d1a4ad4`, plus the close-out commit |
 | 8 | Element group pages | `COMPLETE` | `a49dd6d`..`54832b4`, plus the close-out commit |
 | 9 | Glossary | `COMPLETE` | `5a05a1f`..`73fbb47`, plus the close-out commit |
-| 10 | Calculators and secondary pages | `NOT_STARTED` | — |
+| 10 | Calculators and secondary pages | `COMPLETE` | `df4d60e`..`b9999d3`, plus the close-out commit |
 | 11 | Quality, accessibility, performance, delivery | `NOT_STARTED` | — |
 
 ---
@@ -1112,16 +1112,146 @@ Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
 **Goal:** the temperature calculator, the downloads area, and About and Contact. Scope fixed by
 ADR-002.
 
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 10.0 | The reference's calculator, downloads and secondary pages, audited live | `COMPLETE` | §3.8 for `/temperature-calculators` — three one-way cards of `data-from`/`data-to` over an `output` at `--step-2`, two-decimal rounding, Kelvin written `273.15°K`, and a polite `role=status` warning below absolute zero — and a new §3.10 for the other three. The reference's downloads page is four links into `/printables-and-pdfs/*` and **none of its targets is a file**; its About and Contact are a placeholder sentence each, so there is nothing to model. `df4d60e` |
+| 10.1 | The temperature library | `COMPLETE` | `lib/temperature.js`: Celsius, Fahrenheit and Kelvin converted through Kelvin, the one scale whose zero is a fact, so three pairs are six functions rather than nine. Each scale carries its own absolute zero — `warningFor` says where the floor is — and rounding is offered rather than applied. Pure, with 129 lines of test. `5473e67` |
+| 10.2 | The calculator page | `COMPLETE` | `pages/temperature-calculator.js` in two halves: the markup the build writes — all three fields carry the temperature zero converts to, and the notable-temperature table is filled by the same conversion — and the wiring that makes the three fields one as the reader types. **Iron's and tungsten's melting points are read from the element records, not written down**, because a page stating a number the element's own page contradicts is the defect Phase 6 found. `f05c447` |
+| 10.3 | The print rules, shared | `COMPLETE` | The print rules live in the table's and the card's own stylesheets and in `layout.css`: one rendering path, so the sheet a reader prints is the page they were already reading. Three tokens carry what a printed sheet needs — the orientation, the margin, and a smaller title. `867ce7c` |
+| 10.4 | The downloads page | `COMPLETE` | `pages/downloads.js`: three targets, of which only one is a file — `/data/elements.json`, carrying `download` and a link to the about page's provenance — the other two being pages of this site taught to print. Four ordered steps for getting a good sheet out of a browser. Deliberately **not a copy** of the reference's, for the reason recorded below. `867ce7c` |
+| 10.5 | About and Contact, and ADR-005's provenance | `COMPLETE` | `pages/about.js` writes the sources **once as data** — `DATA_SOURCES`: PubChem PUG REST, public domain; Wikidata, CC0 1.0; both retrieved 1 October 2026, each with its transform script — and the page and its test both read that list, because a licence that changed in one place and not the other would be a claim the site could not support. `pages/contact.js` has no form, deliberately: a static build has no server to post to. One sheet, `styles/pages/about.css`, declared by contact and appended to about. `0602032` |
+| 10.6 | The tests for the four pages | `COMPLETE` | `tests/pages/downloads.test.js` holds every target to the build and the disk; `tests/pages/about.test.js` holds each dataset against `docs/DATA_SOURCES.md` for its name, licence, host, transform script and retrieval date; `tests/pages/contact.test.js` covers the address, the four report parts and the one link out; `tests/pages/temperature-calculator.test.js` drives the three fields through the conversion. `tests/tools/render-template.test.js` widened to all four templates. `f04ae18` |
+| 10.7 | The browser pass, and the two defects it found | `COMPLETE` | At 1280 / 768 / 375: the four headings were still at the glossary index's 3rem step on a phone, so "Temperature calculator", "Downloads and printables" and "About ChemiPedia" each wrapped to two lines — they now step down to 2.1rem as the glossary's already do (`7f8284d`). And the downloads cards' names were `h3` with no `h2` above them, so the page's outline ran `h1 → h3`; each card is a section, so its name is an `h2`, and a test now fails on any skipped level (`b9999d3`). |
+
 **Exit criteria**
 
-- [ ] Conversions round-trip; `0 °C = 32 °F = 273.15 K`; `−40 °C = −40 °F`.
-- [ ] Invalid input handled gracefully, no console errors.
-- [ ] About and Contact contain no reference prose or brand, and About carries the data-provenance
+- [x] Conversions round-trip; `0 °C = 32 °F = 273.15 K`; `−40 °C = −40 °F`.
+- [x] Invalid input handled gracefully, no console errors.
+- [x] About and Contact contain no reference prose or brand, and About carries the data-provenance
   section required by ADR-005.
-- [ ] Every download target resolves in the built output, and the printable periodic table fits a
+- [x] Every download target resolves in the built output, and the printable periodic table fits a
   single page at both A4 and Letter.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+Phase 10 verification
+[x] node --test source/tests ................ pass  (tests 458 · pass 458 · fail 0)
+[x] node --check on every changed module .... pass
+[x] Brand scan .............................. PASS: brand scan clean
+[x] Console/network on every touched page ... zero errors, zero failed requests (4 pages × 3 widths)
+[x] Accessibility tree reviewed ............. one h1 per page, no heading level skipped, a header, a
+                                             main, a footer and two navs, every control named, no
+                                             image without alt
+[x] Keyboard traversal ..................... 26–28 stops in DOM order per page, every one with a
+                                             visible focus ring
+[x] Reduced motion ......................... honoured: 0 elements animating under
+                                             prefers-reduced-motion
+[x] 1280 px screenshot vs reference ......... the calculator compared — differences below; the other
+                                             three have no reference page to compare with
+[x] 768 px  screenshot vs reference ......... the calculator compared — differences below
+[x] 375 px  screenshot vs reference ......... the calculator compared — the reference overflows the
+                                             viewport by 40px, ours does not
+[x] Regression check on an earlier phase .... /glossary/, /elements/hydrogen/ and / at 1280 and 375:
+                                             all 200, 0 console errors, no horizontal overflow
+[x] Deliberate deviations recorded .......... five, listed below
+[x] docs/MIND_MAP.md updated ................ yes
+[x] RUN_STATE.md + HANDOFF.md updated ....... yes
+```
+
+```
+node --test source/tests ............................. tests 458 · pass 458 · fail 0
+                                                       (was 413 at Phase 9's close; the four pages add 45)
+node --check on every module under source/ ........... all modules parse
+node source/tools/build.js ........................... Built 562 routes and the not-found page into dist/
+                                                       0 declared routes still waiting
+                                                       (was 558 built and 4 waiting; the four templates
+                                                       now exist)
+Brand scan over source/ .............................. PASS: brand scan clean
+MIND_MAP completeness over source/ ................... 163 files, 0 missing (167 counting the four
+                                                       .DS_Store files, which are not source)
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity: Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+```
+
+Served by the dev server and exercised in a real browser (Playwright, system Chrome):
+
+```
+  four URLs × three widths ............................. 200 on each, 0 console messages, 0 page
+                                                       errors, no horizontal overflow; every same-origin
+                                                       link on each page followed and answered 200 (16–17
+                                                       of them), and a print stylesheet loaded
+  the calculator's fields .............................. typing 37 °C writes 98.6 °F and 310.15 K;
+                                                       100 °C writes 212 °F and 373.15 K; −40 writes −40
+                                                       on both scales; clearing the Celsius field clears
+                                                       the other two and says nothing
+  below absolute zero .................................. −500 °C still converts (−226.85 K), the typed
+                                                       field is marked `aria-invalid`, and the live region
+                                                       reads "Below absolute zero (−273.15 °C), so this
+                                                       temperature cannot exist."
+  the headings at 375 and 768 .......................... 33.6px on one line for all four pages, and the
+                                                       glossary's unchanged beside them
+  the headings at 1280 ................................. 48px on one line for all four
+  the four pages' geometry at 1280 ..................... calculator: the fields row 1100×90 and each
+                                                       field 356×60, the table 753×400; downloads: three
+                                                       cards 351×242 each and the steps 4 × 82; about:
+                                                       four sections and the sources record 753×596 with
+                                                       three 753×213 blocks; contact: three sections, four
+                                                       parts and three destinations
+  the four pages at 375 ................................ the calculator's table 327×611 inside its own
+                                                       box, the downloads cards stacked to 327, the about
+                                                       record 327×325 — no page scrolls sideways
+```
+
+Print — measured by rendering to PDF and counting the pages in it, not assumed:
+
+```
+  A4     1 sheet   /  /periodic-table/properties-and-states/  /elements/hydrogen/  /elements/iron/
+  Letter 1 sheet   the same four pages
+```
+
+Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
+
+```
+  the calculator against /temperature-calculators ...... page 19.16% / 18.83% / 8.84%; the arrangement
+                                                       is the deliberate difference — three synchronised
+                                                       fields against three one-way cards, and a table of
+                                                       notable temperatures the reference does not have.
+                                                       Our headings measure 1100×52.8 at 1280 and
+                                                       327×36.95 at 375, against its 460×86 and 367×68.09.
+                                                       Our document is 1400px tall at 1280 to its 1524. At
+                                                       375 its own document scrolls sideways to 415px;
+                                                       ours is 375. Our page logged no console error; its
+                                                       page logged a 404.
+  the other three pages ................................ no reference page exists to compare with: the
+                                                       reference's downloads page is a fifth of the site
+                                                       ADR-002 leaves out of scope and none of its targets
+                                                       is a file, and its About and Contact are a
+                                                       placeholder sentence each.
+```
+
+**Appearance — inspected in a browser**
+
+| Width | What was seen | Differences from the reference |
+|---|---|---|
+| 1280 px | The calculator opens on three number fields side by side — Celsius, Fahrenheit and Kelvin, each with its unit beside it — over a note and the table of notable temperatures. Downloads is three cards across the shell, the third flagged as the file, then four numbered steps. About is a hero and four sections, the third carrying the two datasets and their licences as a label-and-value record. Contact is three sections: what a correction needs, where each kind goes, and the address. | Only the calculator has a reference to differ from, and the difference is the arrangement, as above. The other three have no reference page; their shape follows this site's own shell and sheets. |
+| 768 px | The calculator's fields stay one row and its table is 717px inside the shell. The three download cards go two-up; the About record's label column stays 112px. | The reference's calculator stacks its three cards at this width; ours keeps its one row of fields until the field's own floor turns it below 40rem. |
+| 375 px | The fields stack, each full width, and the calculator's table scrolls inside its own box rather than the page. The download cards stack; the sources record goes one column with each label above its value; contact's parts and destinations are single columns. | The reference's calculator overflows the viewport by 40px at this width; ours does not. Its headings keep 30.4px on two lines where ours take 33.6px on one. |
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **The downloads page is not a copy of the reference's.** | Measured live, its four targets are all `/printables-and-pdfs/*` pages — a fifth of the site ADR-002 leaves out of scope — and **none of them is a file**, so there is no downloadable asset to reproduce and no print rule to read off. Ours offers three things, only one of which is a file (`/data/elements.json`); the other two are pages of this site taught to print, which is what the plan asked for: one rendering path, so the sheet a reader prints cannot fall out of step with the page they read. |
+| **The calculator is three synchronised fields, not three one-way cards.** | The reference has three cards each converting one way (F→C, C→F, C→K), so a reader who wants Kelvin must find the Celsius field. The plan asks for the synchronised form, and it removes that awkwardness. The measured vocabulary is kept: the field's shape, values at `--step-2`, two-decimal rounding, and a **polite** live region rather than an alert. |
+| **Kelvin loses the degree sign.** | The reference writes `273.15°K`. Kelvin is not a scale with a degree, and every other figure on this site sets its unit off the number with a space. |
+| **About and Contact are written from nothing.** | The reference's two pages are a placeholder sentence each — *"Content not yet migrated"* — so there is no prose to avoid and no layout to measure. What the audit settles is that neither page should be modelled on the reference. |
+| **The four headings step down on a phone.** | The same defect Phase 9 fixed for the glossary, found again by this phase's browser pass: at the glossary index's 3rem step on a 375px screen, three of the four headings wrapped to two lines. They now take 2.1rem below 56rem, as the glossary's do — a change in the token layer, so every family that shares the step gets it. |
+
+**Commits:** `df4d60e` (the reference's calculator, downloads and secondary pages in the audit), `5473e67` (the temperature library and its tests), `f05c447` (the calculator), `f29912c` (its table on a phone), `867ce7c` (the print rules and the downloads page), `0602032` (About, Contact and the provenance), `f04ae18` (the four pages' tests), `7f8284d` (the headings step down), `b9999d3` (the closing heading level and its test), plus the close-out commit.
 
 ---
 
