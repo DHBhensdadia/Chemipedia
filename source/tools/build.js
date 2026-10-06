@@ -36,6 +36,7 @@ import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
 import { glossaryIndexValues } from "../scripts/pages/glossary.js";
 import { glossaryTermValues } from "../scripts/pages/glossary-term.js";
 import { groupIndexValues, groupValues } from "../scripts/pages/group.js";
+import { homePageValues } from "../scripts/pages/home.js";
 import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../scripts/pages/ranking.js";
 import { tableViewPageValues } from "../scripts/pages/table-views.js";
@@ -109,6 +110,11 @@ const NOT_FOUND_PAGE = {
  * that holds every term and a page for one of them. The 418 term pages share the second row for the
  * reason the 118 element pages share theirs — the route carries the record, and nothing else about
  * them differs.
+ *
+ * The home page is here for a different reason again: it is the one page that is a composition
+ * rather than a family, and its four blocks belong to other pages — the table to the four views,
+ * the search to the elements index, the two diagrams to itself. Writing them at build time is what
+ * keeps the page from being blank to a crawler and reflowing under a reader once the data arrives.
  */
 const FAMILY_RENDERERS = {
   "element-detail": elementPageValues,
@@ -122,6 +128,7 @@ const FAMILY_RENDERERS = {
   evolution: tableViewPageValues,
   group: groupValues,
   "element-groups-index": groupIndexValues,
+  home: homePageValues,
   "glossary-index": glossaryIndexValues,
   "glossary-term": glossaryTermValues,
   "temperature-calculator": calculatorPageValues,

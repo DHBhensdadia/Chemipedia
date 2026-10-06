@@ -2,8 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
+import { createCategoriesRepository } from "../../scripts/data/categories-repository.js";
 import { createElementsRepository } from "../../scripts/data/elements-repository.js";
-import { TABLE_HINT, tableDiagram } from "../../scripts/pages/home.js";
+import { TABLE_HINT, homePageValues, tableDiagram } from "../../scripts/pages/home.js";
+import { placeholderKeys } from "../../tools/render-template.js";
 
 /**
  * A stand-in for the browser's fetch that reads the real file from disk.
@@ -20,7 +22,9 @@ async function fromDisk(url) {
 
 const template = await readFile(new URL("../../pages/home.html", import.meta.url), "utf8");
 const elements = await createElementsRepository({ fetchImpl: fromDisk });
+const categories = await createCategoriesRepository({ fetchImpl: fromDisk });
 const all = elements.all();
+const values = homePageValues({ elements: all, categories: categories.all() });
 
 test("the home template's sections are in the order the page is read", () => {
   const order = [...template.matchAll(/<section class="shell section ([a-z-]+)"/g)].map(
@@ -79,6 +83,28 @@ test("the search sits inside the section that asks the question", () => {
   const find = template.slice(template.indexOf("home-find"));
 
   assert.ok(find.indexOf("Looking for an element?") < find.indexOf("data-home-search"));
+});
+
+test("the template asks for exactly the blocks the page module computes", () => {
+  assert.deepEqual(placeholderKeys(template), Object.keys(values));
+});
+
+test("the table is written at build time, all 118 tiles and the hint under them", () => {
+  assert.equal([...values.table.matchAll(/class="tile"/g)].length, 118);
+  assert.match(values.table, /href="\/elements\/hydrogen\/"/);
+  assert.ok(values.table.includes(TABLE_HINT), "the hint under the legend is missing");
+});
+
+test("the search the build writes is a working form before any script runs", () => {
+  assert.match(values.search, /<form[^>]*class="element-search"[^>]*>/);
+  assert.match(values.search, /action="\/elements\/"/);
+  assert.match(values.search, /id="element-search"/);
+  assert.match(values.search, /data-element-search-results/);
+});
+
+test("the two diagrams are the module's own, drawn for the axes the page explains", () => {
+  assert.equal(values.periods, tableDiagram(all, "period"));
+  assert.equal(values.groups, tableDiagram(all, "group"));
 });
 
 test("the table hint is a sentence about what the table does", () => {

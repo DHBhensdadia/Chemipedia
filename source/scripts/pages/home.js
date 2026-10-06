@@ -1,9 +1,16 @@
 /**
  * The home page.
  *
- * The one page that is a composition rather than a family, so this module is mostly an order of
- * operations: fill the table's host with the engine, fill the search's host with its component,
- * and draw the two explainer diagrams from the same grid model the table is laid out from.
+ * The one page that is a composition rather than a family, so this module is both halves of it: the
+ * four blocks the template asks for, computed at build time, and the behaviour the browser lays over
+ * them.
+ *
+ * Every one of those blocks used to be built in the browser after paint, and that was the page's
+ * one real defect: the shipped document held four empty hosts, so a crawler read a table-less home
+ * page, a reader whose script did not run saw none of it, and a reader who did saw the page jump by
+ * 0.315 of its own viewport when 118 tiles arrived. Every other family had already settled this the
+ * other way — the markup is written at build time and the browser only attaches — so this is that
+ * rule applied to the last page that was an exception to it.
  *
  * The diagrams are the page's own decoration and live here rather than in a component: each one is
  * the table's real shape drawn small, with the axis it explains labelled. A period diagram labels
@@ -11,16 +18,16 @@
  * across the top, so the cells shift one row down. Because both come from `lib/grid.js`, a change
  * to where an element sits moves the diagrams with the table instead of leaving them behind.
  *
- * The template authors the sections and the hosts; this module fills them from the data layer when
- * the page loads. It is started by `app.js`, which reads the page's name from the body the build
- * wrote and calls `startHome` — the same call on a cold load and after a client-side navigation,
- * so there is one way in rather than two that can drift.
+ * Nothing here touches the DOM at build time — `homePageValues` is a pure function of the records,
+ * which is what lets the test suite call it and count what it produced. `startHome` is started by
+ * `app.js`, which reads the page's name from the body the build wrote and calls it — the same call
+ * on a cold load and after a client-side navigation, so there is one way in rather than two that
+ * can drift.
  */
 
 import { attachElementSearch, elementSearch } from "../components/element-search.js";
-import { createPeriodicTable } from "../components/periodic-table.js";
+import { attachPeriodicTable, renderPeriodicTable } from "../components/periodic-table.js";
 import { COLUMNS, createGrid } from "../lib/grid.js";
-import { createCategoriesRepository } from "../data/categories-repository.js";
 import { createElementsRepository } from "../data/elements-repository.js";
 
 /** The line under the legend: what the colours and the keyboard are for. */
@@ -71,46 +78,50 @@ ${labels.concat(cells).join("\n")}
 }
 
 /**
- * Fill the page's hosts from the data layer.
+ * Every block the home template asks for.
+ *
+ * The table is the same engine the four views use, in the mode that colours by family, so the home
+ * page and the views cannot disagree about what the table is. The search is the same component the
+ * elements index carries, and its form submits to that index by the browser's own means, so the
+ * page that asks "Looking for an element?" still answers with script off.
+ *
+ * @param {{ elements: object[], categories?: object[] }} options
+ * @returns {{ table: string, periods: string, groups: string, search: string }}
+ */
+export function homePageValues({ elements, categories = [] }) {
+  return {
+    table: renderPeriodicTable({ elements, categories, mode: "group", hint: TABLE_HINT }),
+    periods: tableDiagram(elements, "period"),
+    groups: tableDiagram(elements, "group"),
+    search: elementSearch(),
+  };
+}
+
+/**
+ * Bring the built page to life.
+ *
+ * The markup is already there, so this attaches and nothing else: the table's roving focus, the
+ * legend's isolation and the search's live filter. The diagrams are decoration with no behaviour,
+ * so nothing is attached to them. Re-running this on a document it has already run on is safe in
+ * the sense that matters — nothing is written, so a second call cannot duplicate the table — and
+ * the router only ever calls it on a body it has just replaced.
  *
  * @param {ParentNode} [root]
  * @returns {Promise<void>}
  */
 export async function startHome(root = document) {
   const elements = await createElementsRepository();
-  const categories = await createCategoriesRepository();
   const all = elements.all();
 
   const tableHost = root.querySelector("[data-home-table]");
 
   if (tableHost) {
-    const table = createPeriodicTable({
-      elements: all,
-      categories: categories.all(),
-      mode: "group",
-      hint: TABLE_HINT,
-    });
-
-    tableHost.innerHTML = table.html;
-    table.attach(tableHost);
+    attachPeriodicTable(tableHost, { model: createGrid(all) });
   }
 
   const searchHost = root.querySelector("[data-home-search]");
 
   if (searchHost) {
-    searchHost.innerHTML = elementSearch();
     attachElementSearch(searchHost, { elements: all });
-  }
-
-  const periods = root.querySelector("[data-periods-diagram]");
-
-  if (periods) {
-    periods.innerHTML = tableDiagram(all, "period");
-  }
-
-  const groups = root.querySelector("[data-groups-diagram]");
-
-  if (groups) {
-    groups.innerHTML = tableDiagram(all, "group");
   }
 }

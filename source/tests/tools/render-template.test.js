@@ -12,6 +12,7 @@ import { elementsIndexPageValues } from "../../scripts/pages/elements-index.js";
 import { glossaryIndexValues } from "../../scripts/pages/glossary.js";
 import { glossaryTermValues } from "../../scripts/pages/glossary-term.js";
 import { groupIndexValues, groupValues } from "../../scripts/pages/group.js";
+import { homePageValues } from "../../scripts/pages/home.js";
 import { configurationPageValues } from "../../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../../scripts/pages/ranking.js";
 import { tableViewPageValues } from "../../scripts/pages/table-views.js";
@@ -114,6 +115,7 @@ test("every page family fills its template, block for block", async () => {
         units: context.units,
       }),
     ],
+    ["home", homePageValues, () => ({ elements: context.elements, categories: context.categories })],
     ["glossary-index", glossaryIndexValues, () => ({ glossary: context.glossary })],
     ["temperature-calculator", calculatorPageValues, () => ({ elements: context.elements })],
     ["downloads", downloadsPageValues, () => ({})],
