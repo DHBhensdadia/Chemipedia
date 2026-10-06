@@ -53,6 +53,22 @@ The same three commands are available as `npm run build`, `npm start` and `npm t
 output lives in `dist/`, which git ignores: the repository holds authored source, and the site is
 generated from it.
 
+## Publishing it
+
+The site is static, so publishing is copying `dist/` to any host that serves files. One thing has to
+be set first: the address the pages claim to live at. Every page carries a canonical link and Open
+Graph metadata, and the build writes `sitemap.xml` and `robots.txt`; all four need an absolute URL,
+and the build defaults to a placeholder that cannot resolve and says so on every run.
+
+```bash
+SITE_ORIGIN=https://example.org node source/tools/build.js   # then publish dist/
+```
+
+Set `SITE_ORIGIN` to the deployed origin, with no trailing slash. Serve directory URLs —
+`/elements/hydrogen/` is canonical and `/elements/hydrogen` redirects to it — and answer an unknown
+path with `dist/404.html` at the same status code, which is what GitHub Pages and Netlify both do by
+default.
+
 ## Working on it
 
 **Read [`workspace/AGENTS.md`](workspace/AGENTS.md) first.** It is the mandatory entry point and it

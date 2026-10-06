@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { renderDocument, stylesheetsFor } from "../../tools/build.js";
+import { renderDocument, robotsFor, sitemapFor, stylesheetsFor } from "../../tools/build.js";
 
 const page = {
   title: "ChemiPedia — a title",
@@ -81,6 +81,47 @@ test("every document links the one app module, once, and names its page", () => 
     "the app is what survives a client-side navigation and runs the new page's behaviour",
   );
   assert.ok(document.includes('<body data-page="element-detail">'), "the body names the page");
+});
+
+test("a published page says where it lives, what it is, and where the data about it comes from", () => {
+  const document = renderDocument({ ...page, path: "/about/" });
+
+  assert.match(document, /<link rel="canonical" href="https:\/\/[^/"]+\/about\/">/);
+  assert.match(document, /<meta property="og:title" content="ChemiPedia — a title">/);
+  assert.match(document, /<meta property="og:url" content="https:\/\/[^/"]+\/about\/">/);
+  assert.match(document, /<meta property="og:type" content="website">/);
+  assert.match(document, /<script type="application\/ld\+json">/);
+});
+
+test("the not-found document claims no address, because it has none", () => {
+  const document = renderDocument(page);
+
+  assert.equal(document.includes("canonical"), false, "a canonical link to a 404 is a lie");
+  assert.equal(document.includes("og:"), false);
+  assert.equal(document.includes("ld+json"), false);
+});
+
+test("the sitemap lists the addresses the build wrote, in order", () => {
+  const xml = sitemapFor(["/", "/about/", "/elements/hydrogen/"]);
+
+  assert.match(xml, /^<\?xml version="1\.0" encoding="UTF-8"\?>/);
+  assert.match(xml, /<urlset xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9">/);
+  assert.ok(xml.trimEnd().endsWith("</urlset>"));
+
+  const locations = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(([, url]) => url);
+
+  assert.equal(locations.length, 3);
+  assert.match(locations[0], /^https:\/\/[^/"]+\/$/);
+  assert.match(locations[1], /\/about\/$/);
+  assert.match(locations[2], /\/elements\/hydrogen\/$/);
+  assert.equal(new Set(locations).size, 3, "an address is listed twice");
+});
+
+test("robots.txt allows everything and points at the sitemap", () => {
+  const robots = robotsFor();
+
+  assert.match(robots, /^User-agent: \*\nAllow: \/\n/);
+  assert.match(robots, /Sitemap: https:\/\/[^\s]+\/sitemap\.xml\n$/);
 });
 
 test("authored markup is placed inside the main landmark and left alone", () => {

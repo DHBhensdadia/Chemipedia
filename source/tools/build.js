@@ -46,6 +46,8 @@ import { allRoutes, routes, templatePathFor } from "../scripts/router/routes.js"
 import { buildContext } from "./build-context.js";
 import { fillTemplate } from "./render-template.js";
 import { NOT_FOUND_FILE, distDir, outputFileForPath, projectRoot, sourceDir } from "./site-paths.js";
+import { absoluteUrl, isPlaceholderOrigin, siteOrigin } from "./site-origin.js";
+import { structuredDataScript } from "./structured-data.js";
 
 /**
  * Directories copied into the build untouched: the scripts, stylesheets, data and artwork the
@@ -53,6 +55,10 @@ import { NOT_FOUND_FILE, distDir, outputFileForPath, projectRoot, sourceDir } fr
  * later phases create.
  */
 const STATIC_DIRECTORIES = ["scripts", "styles", "data", "assets"];
+
+/** The two files a crawler reads, both written from the list of routes the build actually wrote. */
+const SITEMAP_FILE = "sitemap.xml";
+const ROBOTS_FILE = "robots.txt";
 
 /**
  * The stylesheets every page needs, in cascade order: the tokens first, then the layers that read
@@ -181,6 +187,8 @@ export function renderDocument({
   title,
   description,
   body,
+  path: publishedPath = "",
+  element,
   page = "",
   stylesheets = [],
   header = "",
@@ -190,6 +198,21 @@ export function renderDocument({
   const links = stylesheets
     .map((href) => `<link rel="stylesheet" href="${escapeHtml(href)}">`)
     .join("\n");
+  // The not-found document is not a published address, so it claims none: a canonical link to a URL
+  // that 404s by design is exactly the thing canonical is meant to prevent. Every other document
+  // says where it lives, what it is, and — for an element page — the record it is about.
+  const provenance =
+    publishedPath === ""
+      ? ""
+      : `
+<link rel="canonical" href="${escapeHtml(absoluteUrl(publishedPath))}">
+<meta property="og:site_name" content="ChemiPedia">
+<meta property="og:type" content="website">
+<meta property="og:title" content="${escapeHtml(title)}">
+<meta property="og:description" content="${escapeHtml(description)}">
+<meta property="og:url" content="${escapeHtml(absoluteUrl(publishedPath))}">
+<meta name="twitter:card" content="summary">
+${structuredDataScript({ path: publishedPath, title, description, element })}`;
 
   return `<!doctype html>
 <html lang="en">
@@ -198,7 +221,7 @@ export function renderDocument({
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${escapeHtml(title)}</title>
 <meta name="description" content="${escapeHtml(description)}">
-<link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/favicon.svg" type="image/svg+xml">${provenance}
 ${links}
 </head>
 <body${attributes({ "data-page": page })}>
@@ -311,6 +334,34 @@ async function copyStaticDirectories() {
 }
 
 /**
+ * The sitemap: every address the build actually wrote, in the manifest's order.
+ *
+ * The paths come from the build rather than from the manifest, because the manifest declares the
+ * whole inventory including routes still waiting on a template, and a sitemap that lists a page the
+ * site does not serve is a sitemap that lies to a crawler. The not-found document is not here for
+ * the same reason it has no canonical link.
+ *
+ * @param {string[]} paths the routes that were built
+ * @returns {string}
+ */
+export function sitemapFor(paths) {
+  const urls = paths
+    .map((published) => `  <url>\n    <loc>${escapeHtml(absoluteUrl(published))}</loc>\n  </url>`)
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
+
+/**
+ * The crawler instructions: everything is public, and here is where the sitemap is.
+ *
+ * @returns {string}
+ */
+export function robotsFor() {
+  return `User-agent: *\nAllow: /\nSitemap: ${absoluteUrl("/sitemap.xml")}\n`;
+}
+
+/**
  * Rebuild the whole site into `dist/`.
  *
  * The directory is emptied first, so the output never accumulates a page whose route has been
@@ -363,6 +414,8 @@ export async function build() {
   });
 
   await writeFile(path.join(distDir, NOT_FOUND_FILE), notFound, "utf8");
+  await writeFile(path.join(distDir, SITEMAP_FILE), sitemapFor(built), "utf8");
+  await writeFile(path.join(distDir, ROBOTS_FILE), robotsFor(), "utf8");
 
   return { routes: built, skipped, copied, distDir };
 }
@@ -377,6 +430,12 @@ if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) 
 
   if (skipped.length > 0) {
     console.log(`${skipped.length} declared routes are waiting on their templates: ${skipped.join(", ")}`);
+  }
+
+  if (isPlaceholderOrigin) {
+    console.log(
+      `The canonical origin is the placeholder ${siteOrigin} — set SITE_ORIGIN to the deployed address.`,
+    );
   }
 
   for (const name of copied) {
