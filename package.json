@@ -1,6 +1,6 @@
 {
   "name": "chemipedia",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "An interactive periodic table and chemistry reference, built with plain JavaScript, HTML and CSS.",
   "homepage": "https://github.com/DHBhensdadia/chemipedia",

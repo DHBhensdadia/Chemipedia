@@ -9,16 +9,24 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**In development.** This repository is built in phases, and the plan, the current state and the
-rules for working on it live in [`workspace/`](workspace/). The foundation is in place — the route
-manifest, the static build and the development server all work — and the design system is next. The
-site currently serves one placeholder page rather than the periodic table.
+**Complete at `v1.0.0`.** Eleven phases built the site, and the last of them measured it: 562 routes
+plus a not-found page, every one of them rendered at build time rather than assembled by the browser,
+and four gates that pass on measurement rather than on inspection.
+
+| | |
+|---|---|
+| Routes the build writes | 562, plus `404.html` |
+| Tests | `node --test source/tests` — the suite that must pass, with nothing installed |
+| Accessibility | 0 defects across 19 pages from our own sweep; Lighthouse 100 on seven sampled pages |
+| Responsive | 76 of 76 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
+| Performance | worst layout shift 0, slowest cold load 41ms, no long task on any page |
+| SEO | Lighthouse 100: canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` |
 
 | | |
 |---|---|
 | Current phase | see [`workspace/RUN_STATE.md`](workspace/RUN_STATE.md) |
-| Phase status | see [`workspace/progress/PHASE_LOG.md`](workspace/progress/PHASE_LOG.md) |
-| What is being built, and in what order | [`workspace/docs/IMPLEMENTATION_PLAN.md`](workspace/docs/IMPLEMENTATION_PLAN.md) |
+| Phase status and every phase's evidence | [`workspace/progress/PHASE_LOG.md`](workspace/progress/PHASE_LOG.md) |
+| What was built, and in what order | [`workspace/docs/IMPLEMENTATION_PLAN.md`](workspace/docs/IMPLEMENTATION_PLAN.md) |
 
 ## Repository layout
 
@@ -53,6 +61,26 @@ The same three commands are available as `npm run build`, `npm start` and `npm t
 output lives in `dist/`, which git ignores: the repository holds authored source, and the site is
 generated from it.
 
+## The quality gates
+
+`node --test source/tests` is the gate that must pass, and it needs nothing installed. The four
+sweeps behind the table above are development-only: they live in `workspace/tools/visual`, drive the
+system Chrome through Playwright, and are the evidence rather than the opinion.
+
+```bash
+node source/tools/serve.js --port 4180 &
+cd workspace/tools/visual && npm install
+node audit-a11y.mjs         # 19 pages: landmarks, headings, names, contrast, keyboard, motion
+node audit-responsive.mjs   # every page at 375 / 768 / 1024 / 1440
+node audit-performance.mjs  # six pages: timings, bytes, layout shift, long tasks
+node audit-lighthouse.mjs   # Lighthouse's own four categories, seven pages
+```
+
+Each of them exits non-zero on the defect it owns — an unreadable colour, a page that scrolls
+sideways, a page that moves after it has painted, a category under budget — so a phase can gate on
+them. `workspace/tools/visual/README.md` says how to read their output and what each number means.
+None of them is required to run the site, build it or test it.
+
 ## Publishing it
 
 The site is static, so publishing is copying `dist/` to any host that serves files. One thing has to
@@ -68,6 +96,15 @@ Set `SITE_ORIGIN` to the deployed origin, with no trailing slash. Serve director
 `/elements/hydrogen/` is canonical and `/elements/hydrogen` redirects to it — and answer an unknown
 path with `dist/404.html` at the same status code, which is what GitHub Pages and Netlify both do by
 default.
+
+### GitHub Pages
+
+`.github/workflows/pages.yml` is the whole deployment, and it is the two commands above: it works
+out the address the site will be served from, builds with `SITE_ORIGIN` set to it, runs the suite,
+and hands `dist/` to Pages. Enable Pages for the repository with **Source: GitHub Actions**, and
+every push to `main` publishes — nothing else has to be configured, because the site is static and
+the build has no dependencies. The fallback is the host's: an unknown path is answered with the
+built `404.html`.
 
 ## Working on it
 

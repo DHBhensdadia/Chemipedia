@@ -1,0 +1,73 @@
+# Publish the site to GitHub Pages.
+#
+# The site is static, so this is the whole of the deployment: render every route with the project's
+# own build tool, run the suite, and hand `dist/` to Pages. The build is plain Node with no
+# dependencies, which is why there is no install step and nothing to cache — and why a clean clone
+# and this workflow run the same two commands.
+#
+# `SITE_ORIGIN` is what every page's canonical link, Open Graph URL, `sitemap.xml` and `robots.txt`
+# are built from, and it is computed here rather than written down so a fork publishes its own
+# addresses rather than claiming ours. A repository named `<owner>.github.io` is served from the
+# domain root; every other repository is served from a path named after it.
+#
+# The routing fallback is the host's own: an unknown path is answered with the built `404.html`,
+# which is the same behaviour `serve.js` gives a reader locally.
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Work out the address the site is published at
+        id: origin
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER}"
+          repo="${GITHUB_REPOSITORY#*/}"
+
+          if [ "$repo" = "${owner}.github.io" ]; then
+            echo "origin=https://${owner}.github.io" >> "$GITHUB_OUTPUT"
+          else
+            echo "origin=https://${owner}.github.io/${repo}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build
+        run: SITE_ORIGIN="${{ steps.origin.outputs.origin }}" node source/tools/build.js
+
+      - name: Test
+        run: node --test source/tests
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

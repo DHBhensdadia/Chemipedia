@@ -21,6 +21,8 @@ The master index. **Every file in this repository appears here, with what it is 
 
 ```
 WDW/                        the project root (the git repository)
+├── .github/
+│   └── workflows/pages.yml ✅  the deployment: build with the site's own origin, run the suite, hand `dist/` to GitHub Pages
 ├── .gitignore              ✅  files git must never track
 ├── package.json            ✅  the Node project definition: ES modules for the tooling, and the build, serve and test commands. Declares no dependencies.
 ├── README.md               ✅  the front door: what this is and how to run it
@@ -30,6 +32,14 @@ WDW/                        the project root (the git repository)
 
 **The one rule:** *does the browser load it?* Yes → `source/`. No → `workspace/`. There is no third
 place. See `workspace/guides/02-tour-of-the-codebase.md`.
+
+**`.github/` is repository configuration, not a third place.** GitHub Actions reads it and the
+browser never does, so it ships nothing. It holds one file — the workflow that publishes `dist/` —
+and the site builds and its suite passes with the directory deleted.
+
+| File | What it is |
+|---|---|
+| `.github/workflows/pages.yml` | The whole deployment, on push to `main`: it computes the address the site will be served from (the domain root for a repository named `<owner>.github.io`, a path named after the repository otherwise), builds with `SITE_ORIGIN` set to it, runs `node --test source/tests`, and hands `dist/` to Pages. No install step, because the build has no dependencies. The routing fallback is the host's: an unknown path is answered with the built `404.html`. |
 
 ---
 
