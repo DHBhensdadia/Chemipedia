@@ -14,6 +14,10 @@ import {
 } from "../../scripts/lib/contrast.js";
 
 const tokens = await readFile(new URL("../../styles/tokens.css", import.meta.url), "utf8");
+const chips = await readFile(
+  new URL("../../styles/components/legend-chips.css", import.meta.url),
+  "utf8",
+);
 
 /** Every `--g-*` value declared in the token layer, read from the file itself. */
 function groupColours() {
@@ -107,4 +111,37 @@ test("the chosen foreground is the better of the two candidates, not merely acce
 test("the foreground constants match the values the stylesheet declares", () => {
   assert.equal(ON_FILL_DARK.toLowerCase(), tokenValue("on-fill-dark").toLowerCase());
   assert.equal(ON_FILL_LIGHT.toLowerCase(), tokenValue("on-fill-light").toLowerCase());
+});
+
+test("every ink reaches AA on every surface it is written on", () => {
+  // The tertiary ink failed this on the paper and on the sunken surface: 3.06:1 and 2.84:1 at the
+  // 13.6px a caption is actually set at. The values are read from the stylesheet rather than
+  // repeated here, so a palette change is held to the requirement rather than to a memory of it.
+  for (const ink of ["ink", "ink-body", "ink-soft", "ink-faint"]) {
+    for (const surface of ["bg", "surface", "surface-sunk"]) {
+      const ratio = contrastRatio(tokenValue(ink), tokenValue(surface));
+
+      assert.ok(
+        meetsAA(ratio),
+        `--${ink} on --${surface} is ${ratio.toFixed(2)}:1, below AA's ${AA_TEXT}:1`,
+      );
+    }
+  }
+});
+
+test("the pill behind a legend chip's count is drawn by a ring, not a wash", () => {
+  // Anything painted under the count moves the background toward the text: a wash of the text
+  // colour left the count at 3.6:1 on the dark chips and 3.9:1 on the mid-tone ones. A ring leaves
+  // the count on the fill whose foreground the palette already verifies.
+  assert.match(tokens, /--ring-chip-count:/, "tokens.css does not declare the pill's ring");
+  assert.doesNotMatch(
+    tokens,
+    /--mix-chip-count:|--alpha-chip-count:/,
+    "a token for the count's wash is still declared",
+  );
+  assert.match(
+    chips,
+    /\.chip__n\s*\{[^}]*box-shadow:\s*inset 0 0 0 var\(--ring-chip-count\)/,
+    "a chip's count is not ringed rather than washed",
+  );
 });

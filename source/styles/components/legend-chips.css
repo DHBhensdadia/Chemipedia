@@ -2,8 +2,10 @@
 
    One pill per colour key, named and counted, painted by the same --fill and --on-fill the mode
    sets on the tiles, so a chip and the tiles it dims are visibly the same colour. The count sits
-   in a small translucent pill of its own, mixed from the chip's text colour rather than from a
-   second colour, so it works on every fill without a per-chip decision.
+   in a small pill of its own, drawn by a ring in the chip's own text colour rather than by a wash
+   of it. A wash moves the background toward the text, and the measured result was a count at 3.6:1
+   on the dark chips and 3.9:1 on the mid-tone ones; a ring leaves the count on the fill whose
+   foreground the palette already verifies, and needs no per-chip decision.
 
    The chip is an <a> or a <button>, whichever the caller rendered; both are styled here, because
    both are the same object to a reader. */
@@ -49,7 +51,8 @@
 .chip__n {
   padding: var(--pad-chip-count);
   border-radius: var(--radius-pill);
-  background: color-mix(in srgb, var(--on-fill, var(--ink-body)) var(--alpha-chip-count), transparent);
+  box-shadow: inset 0 0 0 var(--ring-chip-count)
+    color-mix(in srgb, var(--on-fill, var(--ink-body)) var(--alpha-chip-ring), transparent);
   font-weight: var(--weight-body);
   font-variant-numeric: tabular-nums;
 }

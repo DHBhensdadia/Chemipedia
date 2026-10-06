@@ -23,7 +23,8 @@ introduces a raw hex value fails its exit criteria.
   --ink:           #15403d;   /* brand ink: rules, headings, the dotted motif */
   --ink-body:      #24312f;   /* body copy */
   --ink-soft:      #5d6b68;   /* secondary */
-  --ink-faint:     #8a938f;   /* tertiary, captions */
+  --ink-faint:     #5b726e;   /* tertiary, captions — darkened from the reference's
+                                 #8a938f; see the note under the palette */
   --ink-inverse:   #fdfbfa;   /* text on ink */
 
   --line:          #e4ddd7;
@@ -68,6 +69,17 @@ we are adopting the palette it defines at the root, not the variant it switches 
   --g-halogens:               #4c575a;   /* grey blue    */
 }
 ```
+
+**The ink ladder had to be compressed.** The reference's own tertiary ink, `#8a938f`, is 3.06:1 on
+our paper and 2.84:1 on the sunken surface — below AA at the 13.6px it is used at (captions, the
+footer, an element's atomic number in a configuration row, a discovery year, a field's unit). Any
+value that passes AA is within half a step of `--ink-soft`, so the four-step ladder the reference
+uses is now three visible steps plus a fourth that reads as faint only by weight and placement
+rather than by lightness. That is the honest cost of the requirement, and a browser sweep over every
+page is what found it: the failure was invisible in the code and obvious on measurement.
+
+**Invariant to test:** every ink token reaches WCAG AA on every surface token it is used on. A test
+in `tests/lib/contrast.test.js` reads both sets of values from `styles/tokens.css` and holds them.
 
 **Invariant to test:** every group colour has a paired foreground that reaches WCAG AA contrast
 against it. The pairs live in `source/data/categories.json` (or a single derived function in
