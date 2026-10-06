@@ -6,8 +6,9 @@
 > **It is not sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-07 (the session that published the site at the author's instruction, and
-fixed the one defect that only a live address served from a path could expose)
+**Last updated:** 2026-10-07 (the session that planned the atom viewer — Phases 12–15 — on
+`feature/atom-3d`, after publishing the site and fixing the one defect that only a live address
+served from a path could expose)
 
 ---
 
@@ -15,18 +16,37 @@ fixed the one defect that only a live address served from a path could expose)
 
 | Field | Value |
 |---|---|
-| **Phase** | Phase 11 — Quality, accessibility, performance and delivery — `COMPLETE` |
-| **Work item** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`**, and the deployment the plan asked for is now **live** at `https://dhbhensdadia.github.io/Chemipedia/` — the author's one-time push ran on request, the live address then exposed a defect no local run could (`bd338dd`), and the corrected build was redeployed and verified |
+| **Phase** | **Phase 12 — The renderer: WebGL2 without a library — `NOT_STARTED`**, the first of the atom viewer's four phases (12–15) planned in `docs/IMPLEMENTATION_PLAN.md` §3. Phases 0–11 are `COMPLETE`, and the site is published |
+| **Branch** | `feature/atom-3d`, cut from `main` at `a22c0d2`, with the plan itself as its first commits. Nothing is merged or pushed yet. `main` is untouched by the feature |
+| **Objective (this feature)** | A page at `/atoms/`, in the navigation as **Atoms** between *Periodic Table* and *Elements*, that draws the chosen element as a three-dimensional atom: a nucleus of protons and neutrons, electrons orbiting on rings, free counts on all three particles, a speed control, a shake and a reset — and a translucent bar pinned to the bottom centre carrying the element card, the three steppers, the speed and the legend. Hand-written WebGL2 (ADR-004), a deep pine stage inside a paper-light page (ADR-006), the element's shell diagram built at build time as the fallback, and a new token group in `tokens.css` as the only place any of its values live. The reference it replicates, and what we deliberately leave behind, are measured in `docs/research/04-reference-atom-viewer-audit.md` |
+| **Work item (previous phase)** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`**, and the deployment the plan asked for is now **live** at `https://dhbhensdadia.github.io/Chemipedia/` — the author's one-time push ran on request, the live address then exposed a defect no local run could (`bd338dd`), and the corrected build was redeployed and verified |
 | **Objective achieved** | The replica is a finished product. Every page is rendered at build time rather than assembled by the browser, so a crawler and a reader whose script did not run both see the site. Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD, and the build writes `sitemap.xml` from the routes it actually wrote plus a `robots.txt` naming it. Nineteen pages pass an accessibility sweep with 0 defects, all 76 page-and-width combinations fit their viewport, the worst layout shift on any page is 0, and Lighthouse scores accessibility, best-practices and SEO at 100 across seven sampled pages |
 | **Status** | `COMPLETE` and **published**. The live site answers 200 for `/`, a stylesheet, a module, the icon, `data/elements.json`, an element page, `sitemap.xml` and `robots.txt`, all under `/Chemipedia/`, and the domain root answers 404 — which is the point of the path. Locally: `node --test source/tests` → **497 pass, 0 fail**. The build writes **562 routes** plus the not-found page and reports **0 waiting**. The four gates all exit 0: accessibility **0 defects / 27 informational lines across 19 pages**; responsive **76 of 76**; performance **worst shift 0, slowest cold load 38–41ms, 0 long tasks**; Lighthouse **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
-| **Current commit** | the deployment fix and its documentation: `bd338dd` (every URL the site writes stays inside the path it is published under), tagged `v1.0.1`, then the close-out commits that carry this record. `v1.0.0` stays where it is, on `e035c6f` — the release whose publication exposed the defect |
-| **Next action** | Nothing is open. The site is live and every push to `main` rebuilds and redeploys it. The next work item is whatever the author chooses; the long-standing deferrals are listed under *Deliberately unfinished* |
+| **Current commit** | on `feature/atom-3d`: the two commits that carry this plan — the second reference's audit, then the four phases with this checkpoint and the handoff. `main` is at `a22c0d2`, which is the publish close-out: the deployment fix `bd338dd` (every URL the site writes stays inside the path it is published under), tagged `v1.0.1`, plus its documentation. `v1.0.0` stays where it is, on `e035c6f` — the release whose publication exposed the defect |
+| **Next action** | **Start Phase 12, work item 12.1**: `scripts/lib/matrix4.js` and its tests. The order inside the phase is matrices → the orbit camera → the sphere geometry → the shaders and the view → the styleguide section that proves them. Then Phase 13's `point-sphere.js` and `atom-model.js`, which are the parts a test can hold completely |
 
 ## Files expected to change in the next work item
 
 ```
-(nothing is pending) workspace/RUN_STATE.md, workspace/HANDOFF.md   only if work resumes
-.github/workflows/pages.yml                                        only if the deployment changes
+Phase 12  source/scripts/lib/matrix4.js            new — the 4x4 arithmetic
+          source/scripts/lib/orbit-camera.js       new — the camera, pure
+          source/scripts/lib/sphere-geometry.js    new — a UV sphere's buffers
+          source/scripts/components/atom-shaders.js  new — the GLSL
+          source/scripts/components/atom-view.js   new — the WebGL2 layer
+          source/tests/lib/*.test.js               one per pure module
+Phase 13  source/scripts/lib/point-sphere.js       new — even points on a sphere
+          source/scripts/lib/atom-model.js         new — record + counts = the model
+          source/scripts/components/atom-scene.js  new — the model, alive
+Phase 14  source/pages/atoms.html                  new template
+          source/scripts/pages/atoms.js            new page family
+          source/styles/pages/atoms.css            new
+          source/styles/components/atom-*.css      new
+          source/styles/tokens.css                 the viewer's token group
+          source/scripts/router/routes.js          the route and nav order 2
+          source/scripts/router/navigation.js      no submenu for the section
+          source/scripts/app.js                    the behaviour entry
+Phase 15  workspace/tools/visual/audit-atom.mjs    new dev-only sweep
+          the four audits' page lists, all documentation, the tag
 ```
 
 The plan is delivered end to end, and the site is live. If a later phase reopens a page, the pieces
@@ -61,6 +81,8 @@ checked against a deployment served from a path, not only against the developmen
 | 11.7 The deployment, and the reference's metadata audited | `COMPLETE` | `.github/workflows/pages.yml` computes its own origin, builds, tests and hands `dist/` to Pages. `research/01` §5 records the reference's metadata live: no JSON-LD, a 404ing favicon, a 404ing `/sitemap.xml` | `b741a49`, `1c431ee` |
 | Publish — the push, and the deployment it corrected | `COMPLETE` | The author's one-time step ran on request: `git remote add origin`, `main` and both tags pushed, every commit attributed on GitHub to `DHBhensdadia` with `Devansh <dhbhensdadia@gmail.com>` and a single contributor in the API's own count. Pages enabled with `build_type=workflow` — the first run failed in `configure-pages` for want of a Pages site, and its rerun was green. The live address then showed the defect a local root cannot: every URL was rooted at the domain instead of at `/Chemipedia/`. Fixed in `bd338dd`: the finished document is rewritten once at build time, the data fetch and the browser's own link read the site's path from `scripts/lib/site-path.js`. Verified: 497 tests, a simulated subpath build of 563 documents with no URL outside the site and none doubled, 118 tiles from the live data, and a live client-side navigation. | `e035c6f` (the push), `bd338dd` (the fix), tagged `v1.0.1` |
 | 11.8 Documentation close-out, and the `guides/` audit it turned up | `COMPLETE` | README, `MIND_MAP.md`, `research/01` §5, this file, `HANDOFF.md`, the Phase 11 entry — and all four guides audited against the source, which found three of them drifted: 18 `(pending)` rows and functions that were never exported, a file tree naming three files that do not exist, and a page trace that had the element page hydrating when it runs no script at all. MIND_MAP completeness: 168 files under `source/`, 0 missing | `ec80c43`, plus the close-out commit |
+| 12.0 The plan, the branch and the second reference's audit | `COMPLETE` | `docs/IMPLEMENTATION_PLAN.md` §2 row 17 and §3's four phases, `docs/research/04` (the reference's scene parameters and the bottom bar's geometry, measured from its own bundles and stylesheets), `MIND_MAP.md`, this file and `HANDOFF.md`. Branch `feature/atom-3d` cut from `main` at `a22c0d2`; no source file exists yet | this branch's first two commits |
+| 12.1–12.5 The renderer | `NOT_STARTED` | See Phase 12 in `docs/IMPLEMENTATION_PLAN.md` | — |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.

@@ -1,8 +1,8 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-07 · **By:** the session that published the site at the author's instruction,
-and fixed the one defect the live address exposed · **After commit:** the deployment fix (`bd338dd`)
-and the close-out commits that carry this note
+**Written:** 2026-10-07 · **By:** the session that planned the atom viewer on `feature/atom-3d`,
+after publishing the site and fixing the defect the live address exposed · **After commit:** the
+two plan commits on `feature/atom-3d`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -11,7 +11,9 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What exists right now
 
-**The plan is delivered and the site is live** at <https://dhbhensdadia.github.io/Chemipedia/>.
+**The plan is delivered and the site is live** at <https://dhbhensdadia.github.io/Chemipedia/>, and
+**a new feature is planned and not yet built**: the atom viewer, as Phases 12–15 on the branch
+`feature/atom-3d` (cut from `main` at `a22c0d2`). Nothing of it is merged or pushed.
 
 - `node --test source/tests` → **497 passing, 0 failing**, with nothing installed.
 - `node source/tools/build.js` → **562 routes** plus the not-found page, **0 waiting**.
@@ -32,9 +34,13 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. There is no next phase. If you are here to work, ask the author what they want built, or pick up
-   one of the deferrals at the end of `RUN_STATE.md`.
-3. Before believing anything about the deployment, build for the address it actually lives at:
+2. **You are on `feature/atom-3d` unless someone has merged it.** Read Phase 12 in
+   `docs/IMPLEMENTATION_PLAN.md` §3 and the measurements in `docs/research/04`, then start at
+   `source/scripts/lib/matrix4.js` with its tests. The work item boundaries are the commits.
+3. Anything about the feature that the plan does not settle is a decision for the author — the
+   stage's look, the bar's contents and the page's copy were all asked about once already and are
+   recorded; do not re-open them silently.
+4. Before believing anything about the deployment, build for the address it actually lives at:
    `SITE_ORIGIN=https://dhbhensdadia.github.io/Chemipedia node source/tools/build.js`, then grep
    `dist/` for a `href="/` that is not `href="/Chemipedia/`. A local root build cannot catch this
    class of defect, which is why it reached production once.
@@ -52,6 +58,24 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 - **`audit-a11y.mjs` composites an element's own `opacity` before it checks contrast.** It did not,
   once, and that is exactly why it missed the faded tile ink that Lighthouse then caught. If you
   change how a colour is applied, check the sweep still models it.
+- **The atom viewer adds the project's only WebGL, and it is written by hand (ADR-004).** Almost all
+  of it is arithmetic under `source/scripts/lib/` — matrices, the camera, the sphere's buffers, the
+  point distribution, the atom model — and that is deliberate: those modules are testable in Node and
+  are where the feature's tests live. Only the drawing calls need a browser, and they are proved on
+  `/styleguide/` before `/atoms/` exists.
+- **The scene's palette comes from `tokens.css` at runtime.** The renderer reads its colours through
+  `getComputedStyle` rather than carrying hex literals, because the one law that has held since
+  Phase 1 is that a literal design value exists in exactly one file. A dark stage inside a paper-light
+  page is a palette decision under ADR-006, not a second theme: the shell, the band and the footer
+  stay light.
+- **The page is content first, and the canvas is an enhancement.** The element card, the counts, the
+  page's prose and the element's shell diagram — the component the element pages already use — are
+  written at build time; the WebGL canvas replaces the diagram only after it has a context and a first
+  frame. A reader with no WebGL, no script, or `prefers-reduced-motion: reduce` must see a finished
+  page, and that path was verified rather than assumed.
+- **The second reference is not the first one.** Its periodic-table and statistics pages are out of
+  scope by the author's instruction, and its palette, copy, dataset and assets are measurements in
+  `docs/research/04` and never shipped. `source/` names neither reference.
 - **Every URL belongs to one of two sides, and only one of them is rewritten.** The build rewrites the
   paths it writes into a finished document (`rootedAt`, from the origin's own path), which reaches
   markup and nothing else. A URL the *browser* writes after load, and a URL a *data fetch* asks for,
@@ -104,6 +128,11 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 Nothing is half-done in the tree, and the site is published. `v1.0.0` stays on `e035c6f` — the
 release whose publication exposed the subpath defect — and `v1.0.1` is on `bd338dd`, which fixes it;
 neither tag was moved, because a pushed tag is a statement the history has already made.
+
+The atom viewer is planned but unbuilt: on `feature/atom-3d`, the plan and the reference audit are
+committed and no `source/` file of the feature exists yet. The feature closes with a merge to `main`
+(`--no-ff`), a green Pages run, the live page checked in a browser, and `v1.1.0` — none of which has
+happened.
 
 Two things are deliberately left, and both are recorded rather than forgotten: the Pages runs print
 Node 20 deprecation notices for five actions that GitHub is already forcing onto Node 24 (cosmetic,

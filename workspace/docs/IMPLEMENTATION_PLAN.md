@@ -62,8 +62,16 @@ reference site uses; column four is ours.
 | 14 | Orbital configurations index | `/orbital-configurations` | `/properties/orbital-configuration` | 6 |
 | 15 | About / Contact | `/about`, `/contact` | `/about`, `/contact` | 10 |
 | 16 | Downloads / printables | `/downloads` | `/downloads` | 10 |
+| 17 | Atom viewer (3D) | `/` — of the **second** reference | `/atoms` | 12–15 |
 | — | ~~Learn (courses, tracks, articles)~~ | `/learn-the-periodic-table/*` | **excluded** | — |
 | — | ~~Games (quizzes, flash cards)~~ | `/periodic-table-games`, `/games/*` | **excluded** | — |
+
+Row 17 is the only page that does not come from the reference this project was planned against. The
+author supplied a **second** reference for one page of it — a three-dimensional atom viewer that
+spins electrons around a nucleus of protons and neutrons — and asked for that page alone: its
+periodic-table and statistics pages are out of scope. Nothing of that reference enters this
+repository but the idea of the page and the shape of its controls. The measurements live in
+[`docs/research/04-reference-atom-viewer-audit.md`](research/04-reference-atom-viewer-audit.md).
 
 ---
 
@@ -416,6 +424,172 @@ Four pages that reuse the Phase 3 component with a different colour mode, legend
 
 ---
 
+### Phases 12–15 — the atom viewer
+
+The site is complete at `v1.0.0` and published, and this is the first feature added to a finished
+product rather than the next step of a plan. It is planned as four phases because it is four
+different kinds of work, and because the first two are maths that must be provable before a page
+depends on them.
+
+**What the feature is.** A new page family at `/atoms/`, in the navigation between *Periodic Table*
+and *Elements* as **Atoms**, that draws the selected element as a three-dimensional atom: a nucleus
+of protons and neutrons, electrons orbiting on rings, a speed control, a shake, a reset, and a
+translucent bar pinned to the bottom centre carrying the element card, the three particle steppers,
+the speed and the legend. Protons, neutrons and electrons are free to set, exactly as the reference
+allows, so the page can also show what is *not* an element and say so plainly.
+
+**What it must respect.** The three constraints that shape every decision below:
+
+1. **No library (ADR-004).** The reference's scene is three.js behind React. Ours is hand-written
+   WebGL2, plain ES modules, no dependency, and it renders on a canvas the build does not have to
+   wait for. That is the largest piece of engineering in the feature, and it is why Phase 12 exists
+   as its own phase with its own tests rather than as the first thing the page does.
+2. **Progressive enhancement, as Phase 11 taught it.** A page whose content exists only after
+   scripting is a page a crawler and a reader whose script did not run cannot see. The atom is
+   decoration and interaction over content that is built: the element card, the counts, the shell
+   diagram — the one the element pages already draw — and the page's own prose are all written at
+   build time, and the canvas replaces the diagram only once it has a context and a first frame.
+3. **One theme, and one place for its values (ADR-006).** The stage is dark where the page around it
+   is paper-light, because that is what makes a glowing nucleus read; but every colour, radius,
+   duration and blur it uses is a token in `tokens.css`, and the renderer *reads its palette from
+   the token layer at runtime* rather than carrying hex literals. A dark stage inside a light site is
+   a palette decision, not a second theme.
+
+**What is explicitly not in this feature:** the second reference's periodic-table and statistics
+pages, its element dataset (ours already holds every fact the model needs), its copy, its assets, and
+any dependency of any kind. Its brand values are recorded in the audit as *measurements* precisely so
+that they are not shipped by accident.
+
+### Phase 12 — The renderer: WebGL2 without a library
+
+**Goal:** the project's one piece of 3D, isolated in a layer of its own and proven on the
+development-only styleguide page before any page depends on it.
+
+**Deliverables**
+
+- `scripts/lib/matrix4.js` — the 4×4 arithmetic a renderer needs and nothing else: perspective,
+  look-at, multiply, translate, rotate, scale.
+- `scripts/lib/orbit-camera.js` — the camera as pure state: distance, azimuth and polar angle,
+  damping from the current value toward its target, zoom and swing limits, and the view matrix. No
+  DOM, so the whole of the camera's behaviour is testable in Node.
+- `scripts/lib/sphere-geometry.js` — vertices, normals and indices for a UV sphere at a given segment
+  count, generated rather than loaded, with the seam and the poles counted correctly.
+- `scripts/components/atom-shaders.js` — the GLSL and the program handling: a lit sphere for
+  nucleons and electrons, a flat translucent ring for an orbit, and a backdrop that gives the stage
+  its depth.
+- `scripts/components/atom-view.js` — the WebGL2 layer around them: context acquisition, canvas
+  sizing with a device-pixel-ratio cap, instanced draws so that a kind of particle costs one draw
+  call, the frame loop, pause when the document is hidden or the canvas is out of view, and a
+  `destroy()` that releases everything.
+- A section on `/styleguide/` (development-only) that renders a field of spheres and drives the
+  camera, so the layer can be seen, timed and tuned before a page exists.
+
+**Exit criteria**
+
+- `node --check` clean on every new module; unit tests for `matrix4`, `orbit-camera` and
+  `sphere-geometry`, including their refusals.
+- The styleguide section renders a moving frame with zero console errors and zero failed requests.
+- Draw-call and frame-time numbers are recorded, not asserted from memory.
+- No literal colour, radius, duration or size in any file of the layer: values arrive as arguments.
+- The existing accessibility and responsive sweeps still pass on every page they already cover.
+
+### Phase 13 — The atom model and the live scene
+
+**Goal:** from an element record to a picture that moves, with the parts that are arithmetic kept
+apart from the parts that draw.
+
+**Deliverables**
+
+- `scripts/lib/point-sphere.js` — the even distribution of N points on a sphere (the golden-angle
+  spiral the reference uses): deterministic, and testable for count, radius, uniqueness and spread.
+- `scripts/lib/atom-model.js` — the feature's core, pure: an element record plus the three counts
+  becomes the whole model the renderer draws — nucleon positions and their kinds (deterministic, so
+  the same element looks the same on every visit), the nucleus radius from the nucleon count, the
+  shells taken from the record's own `shells` array, one electron per electron distributed by shell,
+  each with a stable phase, the orbit radii from our own scale, and the labels: mass number, isotope,
+  charge, and the honest words for the states that are not an element.
+- `scripts/components/atom-scene.js` — the model brought to life on top of the view: orbit rings,
+  instanced nucleons and electrons, per-shell angular speed from the speed setting, the shake impulse
+  and its decay, the camera reset, and the update path when the element or any count changes.
+- Tests: the model against real records (hydrogen, carbon, iron, uranium, oganesson) and against the
+  extremes (no protons, no electrons, the heaviest isotope, more neutrons than any element has), the
+  point distribution's geometry, and the speed mapping.
+
+**Exit criteria**
+
+- Every element and every extreme renders on the styleguide page without an error.
+- The model's rules and refusals are covered by tests, run with nothing installed.
+- Frame time at 1280 × 800 is measured for the heaviest atom the page allows, and written down.
+- Switching element, and changing a count, changes the picture — verified by comparing frames, not
+  by reading the code.
+
+### Phase 14 — The page, the bar and the navigation
+
+**Goal:** the feature a reader can reach: one navbar item, one page, and the translucent bar the
+author asked for by name.
+
+**Deliverables**
+
+- The route: `/atoms/`, template `atoms`, in the manifest with `nav: { label: "Atoms", order: 2 }`;
+  *Periodic Table* stays at 1 and *Elements*, *Glossary* and *Calculators* move to 3, 4 and 5.
+- `scripts/pages/atoms.js` — `atomsPageValues` for the build and `startAtoms` for the browser: the
+  card and counts for the element the page opens on, the shell diagram the fallback shows, the bar's
+  markup, and the wiring of the canvas, the element picker, the three steppers, the speed, the shake,
+  the reset and the announcements.
+- `styles/pages/atoms.css` and the scene's and the bar's component sheets: the deep pine stage, the
+  glass bar, the steppers, the slider and the legend.
+- A new token group in `tokens.css` (the atom viewer): the stage and its vignette, the glass surface
+  with its border and glow, the three particle colours with the foreground each needs for its label,
+  the ring colour and opacity, the motion, and the bar's geometry.
+- The fallbacks: without WebGL, without scripting, or with reduced motion asked for, the page shows
+  the element's shell diagram with its counts written out, and under reduced motion one still frame
+  with a play control. Each path is seen in a browser, not assumed.
+- Accessibility: the canvas is `role="img"` with a name that states the current atom; every control
+  is a real button, range input or select with a label; a polite live region announces the atom after
+  a change; the bar is operable by keyboard alone with a focus ring that is visible on the dark stage.
+- Each element page gains one link into the viewer, so the feature is reachable from the content a
+  reader is already reading.
+
+**Exit criteria**
+
+- The page renders at 1280 / 768 / 375 px with no console error and no failed request.
+- The navbar item sits between *Periodic Table* and *Elements*, and every path the shell links to is
+  still a declared route (the shell test holds this).
+- The bar is usable with the keyboard alone and announces each change once.
+- The no-script and no-WebGL paths show the built diagram and the counts, and the reduced-motion path
+  holds a still frame.
+- The brand scan is clean: the second reference's name appears nowhere under `source/`.
+
+### Phase 15 — Quality, delivery and the second reference's line
+
+**Goal:** close the feature the way Phase 11 closed the site: measured, documented, deployed, tagged.
+
+**Deliverables**
+
+- The sweeps extended to the new page: the accessibility sweep (19 → 20 pages), the responsive sweep
+  at four widths, and Lighthouse over it.
+- `workspace/tools/visual/audit-atom.mjs` — a development-only sweep for what no other sweep can see:
+  that the canvas actually paints (frames differ), that each control changes the render (a pixel hash
+  before and after), that reduced motion holds one frame, that the page survives WebGL being
+  unavailable, the frame-time budget, the counts it draws, and captures at three widths.
+- Documentation: `DESIGN_SYSTEM.md` (the token group and the stage's rules), `ARCHITECTURE.md`
+  (**ADR-007**: raw WebGL2, progressive enhancement, palette read from tokens, no library),
+  `MIND_MAP.md`, `BRAND_GUIDELINES.md` (the second reference: what we take, what never enters the
+  repository), `DATA_SOURCES.md` (no new data, and why), the guides, `progress/PHASE_LOG.md`,
+  `RUN_STATE.md`, `HANDOFF.md`, and the README's route count and status.
+- Delivery: merged to `main` with `--no-ff`, pushed, the Pages run green, the live page verified in a
+  browser at `https://dhbhensdadia.github.io/Chemipedia/atoms/` with the same checks the publish
+  entry used, and tagged `v1.1.0`.
+
+**Exit criteria**
+
+- All four gates pass with the new page included, and the numbers are recorded.
+- The live page is verified in a browser, not only by `curl`.
+- The mind map has no missing file and no document contradicts another.
+- `v1.1.0` is tagged on the last commit of the close-out.
+
+---
+
 ## 4. Phase dependency graph
 
 ```
@@ -437,10 +611,20 @@ Phase 5  Routing + Element Pages  (needs 1, 2)
 Phase 9  Glossary      (needs 2, 5 for cross-links)
 Phase 10 Calculators + Secondary pages
 Phase 11 Quality, A11y, Performance, Delivery
+   │
+Phase 12 The renderer      (needs 1: the tokens and the styleguide to be seen on)
+   │
+Phase 13 The atom model    (needs 2 for the records, 12 for the camera and the geometry)
+   │
+Phase 14 The page + nav + bar  (needs 1, 2, 13)
+   │
+Phase 15 Quality, delivery  (needs 14; closes on the live page)
 ```
 
 Phases 6, 7 and 8 may be reordered freely. Phase 3 must precede 4, 7 and 8. Phase 5 is
-independent of 3 but shares the design system.
+independent of 3 but shares the design system. Phase 12 depends on no feature phase — it is the one
+piece of work in the project that can be built, seen and tested on its own — and Phase 13 can begin
+as soon as the camera and the sphere geometry exist, before the view has its backdrop.
 
 ## 5. Estimate
 
@@ -458,6 +642,10 @@ independent of 3 but shares the design system.
 | 9 Glossary | medium, and content-heavy: 418 definitions to author |
 | 10 Calculators, downloads and secondary pages | medium |
 | 11 Quality and delivery | medium |
+| 12 The renderer (WebGL2, camera, geometry, the frame loop) | large — the largest single piece of new engineering since the table engine |
+| 13 The atom model and the live scene | medium-large, and mostly arithmetic that tests can hold |
+| 14 The page, the bar and the navigation | medium — the design work is the bar |
+| 15 Quality, delivery and documentation | medium, and it ends with a live page and a tag |
 
 ## 6. Risks and how the plan absorbs them
 
@@ -469,6 +657,11 @@ independent of 3 but shares the design system.
 | Scope creep toward the reference's Learn/Games sections | Explicitly out of scope in `WORKING_AGREEMENT.md` §5; navigation and footer are re-cut in Phase 1. |
 | The architecture choice proves wrong mid-build | ADR-001 is recorded with its alternatives and consequences, so the reversal is a documented decision, not a rewrite from scratch. The layers are deliberately arranged so a reversal of the page layer leaves the data, repository and component layers intact. |
 | The 418 glossary definitions and 118 element prose entries are a large authoring task | Both are content work, isolated in Phase 2 and Phase 9. The page machinery for each is small, so the phases can be split across several sessions without leaving the repository unusable. |
+| A hand-written renderer is the largest new surface since the table engine, and it cannot be unit-tested in a browser | The layer is split so that almost all of it *is* testable: matrices, camera, geometry and the atom model are pure modules under `source/scripts/lib/` with tests in Node, and only the drawing calls need a browser. Phase 12 exists to prove the layer on the styleguide page before a page depends on it, and the frame time is measured rather than assumed. |
+| WebGL may be unavailable, refused or software-rendered | The page is built around a fallback rather than a hope: the element's shell diagram and its counts are written at build time and are what a reader sees until a first frame exists, so a machine without WebGL loses the animation and nothing else. The path is verified by disabling WebGL in a browser in Phase 14 and again in Phase 15. |
+| A canvas is invisible to assistive technology, and a dark stage is a contrast risk | The canvas is `role="img"` with a name that states the current atom, every control is a native control with a label, a polite live region announces changes, and the bar's labels are contrast-checked against the glass they sit on — which is exactly what `audit-a11y.mjs` composites. |
+| The second reference is a different site with its own brand | Its palette, copy, datasets and assets are recorded in `docs/research/04` as measurements and never shipped; the brand scan already walks `source/` for the name of a reference, and Phase 14's exit criteria require the scan to stay clean. |
+| Scope creep from the second reference's other pages | `/periodic-table` and `/statistics` are excluded by the author's instruction and recorded as such in `docs/research/04` §1, so their absence is a decision rather than an unfinished task. |
 
 ---
 
