@@ -254,6 +254,31 @@ main {
 
 /* The section is a `.shell`, so only its top margin is set here: the inline centring belongs to
    the layout primitive and a margin shorthand would overwrite it. */
+/* The terms this element's entry mentions: the same pills the group pages use for their siblings,
+   because they are the same thing — a link to a word's own page. */
+.el-terms__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.el-terms__link {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-4);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.el-terms__link:hover {
+  border-color: var(--line-strong);
+}
+
 .el-similar {
   margin-block-start: var(--margin-similar);
   padding: var(--pad-similar);

@@ -22,6 +22,10 @@
  * destination, the same accessible name — but they are all out of the tab order, because a reader
  * tabbing through a page should meet the 118 elements in the index, not in a diagram on the way
  * past.
+ *
+ * The one block that looks outward is the glossary's: the terms this element's entry mentions,
+ * linked to their definitions. It is the other end of the relation a term page shows, and both ends
+ * are one rule, held in `lib/glossary-links.js`.
  */
 
 import { faqBlock } from "../components/faq-block.js";
@@ -29,6 +33,7 @@ import { propertyList, countsPanel, discoveryList } from "../components/property
 import { shellDiagram, shellSummary } from "../components/shell-diagram.js";
 import { elementTile } from "../components/element-tile.js";
 import { createGrid } from "../lib/grid.js";
+import { termsForElement } from "../lib/glossary-links.js";
 import { attributes, escapeHtml } from "../lib/html.js";
 import { UNKNOWN } from "../lib/format.js";
 
@@ -262,6 +267,40 @@ ${link(next, "next", "Next", " el-pager__link--next")}
 }
 
 /**
+ * The terms this element's own entry mentions, as links into the glossary.
+ *
+ * The other end of the relation a term page shows: that page lists the elements that mention it,
+ * and this one lists the terms it mentions, both through `lib/glossary-links.js` so the two pages
+ * cannot disagree about which words are in the entry. The block is written only when there is
+ * something in it — a heading over an empty list would be worse than no heading.
+ *
+ * @param {{ element: object, glossary?: object | null }} options
+ * @returns {string} an empty string when the entry mentions no term, or when no glossary was given
+ */
+export function elementGlossary({ element, glossary = null }) {
+  const terms = glossary ? termsForElement(element, glossary) : [];
+
+  if (terms.length === 0) {
+    return "";
+  }
+
+  const items = terms
+    .map(
+      (entry) =>
+        `<li><a class="el-terms__link" href="/glossary/${entry.slug}/">` +
+        `${escapeHtml(entry.term)}</a></li>`,
+    )
+    .join("\n");
+
+  return `<section class="el-section el-terms" aria-labelledby="terms-title">
+<h2 class="el-section__title" id="terms-title">Terms in this entry</h2>
+<ul class="el-terms__list">
+${items}
+</ul>
+</section>`;
+}
+
+/**
  * Every block the page's template asks for, keyed by the placeholder's name.
  *
  * The build fills the template with this object; a test holds the keys and the template's
@@ -271,10 +310,15 @@ ${link(next, "next", "Next", " el-pager__link--next")}
  * `elements` is the whole table, not a filtered list: the mini table draws all 118 and the strip
  * needs the two neighbours of this one.
  *
- * @param {{ element: object, elements: object[], categories?: object[], units: object }} options
+ * `glossary` is the repository, not an array, because the block it fills is a question asked of it —
+ * which of its terms this element's entry mentions — and a copy of the array could not answer it.
+ * A caller that has none gets an empty block rather than an error: an element page is worth
+ * rendering without a glossary.
+ *
+ * @param {{ element: object, elements: object[], categories?: object[], units: object, glossary?: object | null }} options
  * @returns {Record<string, string>}
  */
-export function elementPageValues({ element, elements, categories = [], units }) {
+export function elementPageValues({ element, elements, categories = [], units, glossary = null }) {
   const { previous, next } = neighbouringElements(elements, element.atomicNumber);
   const siblings = similarElements(element, elements);
   const category = categories.find((candidate) => candidate.slug === element.category) ?? null;
@@ -286,6 +330,7 @@ export function elementPageValues({ element, elements, categories = [], units })
     lede: `<p class="el-lede"${attributes({ "data-key": element.category })}>${escapeHtml(element.summary ?? UNKNOWN)}</p>`,
     faq: faqBlock({ element, units }),
     sections: elementSections({ element }),
+    glossary: elementGlossary({ element, glossary }),
     counts: countsPanel({ element }),
     properties: propertyList({ element, units, categories }),
     orbital: elementOrbital({ element }),

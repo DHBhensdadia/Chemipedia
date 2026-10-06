@@ -23,6 +23,7 @@ const elementValues = elementPageValues({
   elements: context.elements,
   categories: context.categories,
   units: context.units,
+  glossary: context.glossary,
 });
 
 test("the placeholders a template asks for are read in order, once each", () => {

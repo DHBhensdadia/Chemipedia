@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
+import { termsForElement } from "../../scripts/lib/glossary-links.js";
 import { buildContext } from "../../tools/build-context.js";
 import { fillTemplate, placeholderKeys } from "../../tools/render-template.js";
 import {
@@ -30,6 +31,7 @@ const rendered = new Map(
       elements,
       categories: context.categories,
       units: context.units,
+      glossary: context.glossary,
     }),
   ]),
 );
@@ -82,11 +84,16 @@ test("every element's page carries every block the template asks for", () => {
       assert.equal(block.includes("{{"), false, `${element.symbol}'s ${name} block holds a placeholder`);
     }
 
-    // Three blocks may be empty, and only when the record has nothing to put in them: a page
+    // Four blocks may be empty, and only when the record has nothing to put in them: a page
     // never carries a section with nothing to say, and never leaves out one it could fill.
     assert.equal(values.orbital === "", element.shells.length === 0, `${element.symbol}'s orbital`);
     assert.equal(values.similar === "", similarElements(element, elements).length === 0, `${element.symbol}'s siblings`);
     assert.equal(values.faq === "", faqEntries(element, { units: context.units }).length === 0, `${element.symbol}'s FAQ`);
+    assert.equal(
+      values.glossary === "",
+      termsForElement(element, context.glossary).length === 0,
+      `${element.symbol}'s terms`,
+    );
 
     for (const name of ["strip", "hero", "headline", "lede", "sections", "counts", "properties", "pager"]) {
       assert.ok(values[name].length > 0, `${element.symbol}'s ${name} block is empty`);
@@ -96,6 +103,31 @@ test("every element's page carries every block the template asks for", () => {
     assert.ok(values.lede.includes(escapeHtml(element.summary)), `${element.symbol}'s lede is not its summary`);
     assert.ok(values.strip.includes(`aria-current="page"`), `${element.symbol}'s strip does not mark it`);
   }
+});
+
+test("the terms an element's entry mentions are links to their definitions", () => {
+  const hydrogenTerms = termsForElement(byNumber(1), context.glossary);
+  const markup = valuesFor(byNumber(1)).glossary;
+  const links = [...markup.matchAll(/href="(\/glossary\/[^"]+)"/g)].map(([, href]) => href);
+
+  assert.equal(hydrogenTerms.length, 7);
+  assert.deepEqual(
+    hydrogenTerms.map((entry) => entry.slug),
+    ["atom", "electron", "element", "fuel-cell", "gas", "hydrocarbon", "proton"],
+    "the entry's terms are not the glossary's reading order",
+  );
+  assert.equal(links.length, hydrogenTerms.length, "a term was not linked");
+  assert.deepEqual(
+    links,
+    hydrogenTerms.map((entry) => `/glossary/${entry.slug}/`),
+    "a term does not link to its own page",
+  );
+  assert.match(markup, /<h2 class="el-section__title" id="terms-title">Terms in this entry<\/h2>/);
+
+  // An element whose entry mentions none carries no section at all, rather than a heading over an
+  // empty list — seventeen of the 118 are in that position.
+  assert.equal(valuesFor(byNumber(4)).glossary, "");
+  assert.equal(termsForElement(byNumber(4), context.glossary).length, 0);
 });
 
 test("the strip and the pager walk the table, wrapping at both ends", () => {

@@ -6,20 +6,19 @@
  * plan asked a term page to do: the definition, the terms it sits near, and the elements whose
  * entries mention it. Both of those lists are derived from the records rather than written, so a
  * correction to a definition or to an element's prose moves the links with it instead of leaving
- * them pointing at a word that is no longer there.
+ * them pointing at a word that is no longer there. The second list is the same relation the
+ * element pages read from their own end, so it lives in `lib/glossary-links.js` rather than here.
  *
  * Runs at build time in Node. There is no behaviour: a term page is content, the router is the
  * only script it needs, and that is why it has no entry in the app's behaviour table.
  */
 
+import { elementsForTerm } from "../lib/glossary-links.js";
 import { attributes, escapeHtml } from "../lib/html.js";
 import { levelBadge } from "./glossary.js";
 
 /** Enough related terms to be useful and few enough to stay a column. */
 const RELATED_LIMIT = 6;
-
-/** The same, for the elements a term is mentioned by. */
-const ELEMENT_LIMIT = 8;
 
 /**
  * Words too common to mean anything when two terms share one.
@@ -102,67 +101,6 @@ export function relatedTerms(entry, glossary, limit = RELATED_LIMIT) {
     )
     .slice(0, limit)
     .map(({ other }) => other);
-}
-
-/** Everything about an element that a reader might have met a glossary term in. */
-const ELEMENT_TEXT_FIELDS = [
-  "name",
-  "symbol",
-  "category",
-  "block",
-  "state",
-  "crystalStructure",
-  "summary",
-  "uses",
-  "sources",
-];
-
-/**
- * The text of an element's entry, as one string to search.
- *
- * Only fields a reader actually sees are searched, so a term is linked from an element because the
- * element's own entry mentions it rather than because some field happens to contain the letters.
- *
- * @param {object} element
- * @returns {string}
- */
-export function elementText(element) {
-  const plain = ELEMENT_TEXT_FIELDS.map((field) => element[field] ?? "");
-  const discovery = element.discovery ?? {};
-
-  return [...plain, discovery.discoveredBy, discovery.place, discovery.nameOrigin]
-    .filter((value) => typeof value === "string")
-    .join(" \u00b7 ");
-}
-
-/**
- * Escape a string so it can be used inside a regular expression.
- *
- * @param {string} value
- * @returns {string}
- */
-function escapeRegExp(value) {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-/**
- * The elements whose entries mention a term as a whole word, in atomic order.
- *
- * The match is on word boundaries, so a search for the term ion does not fire on the ends of
- * solution and reaction, and the list is capped because a word like gas is genuinely mentioned by
- * most of the table.
- *
- * @param {{ term: string }} entry
- * @param {object[]} elements
- * @param {number} [limit]
- * @returns {object[]}
- */
-export function elementsForTerm(entry, elements, limit = ELEMENT_LIMIT) {
-  const pattern = new RegExp(`\\b${escapeRegExp(entry.term.toLowerCase())}\\b`, "i");
-
-  return elements
-    .filter((element) => pattern.test(elementText(element).toLowerCase()))
-    .slice(0, limit);
 }
 
 /**

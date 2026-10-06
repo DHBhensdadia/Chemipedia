@@ -13,8 +13,8 @@ import {
   termMatches,
   termRow,
 } from "../../scripts/pages/glossary.js";
+import { elementsForTerm } from "../../scripts/lib/glossary-links.js";
 import {
-  elementsForTerm,
   glossaryTermValues,
   neighbours,
   relatedTerms,
