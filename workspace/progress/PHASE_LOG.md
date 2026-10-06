@@ -25,7 +25,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 8 | Element group pages | `COMPLETE` | `a49dd6d`..`54832b4`, plus the close-out commit |
 | 9 | Glossary | `COMPLETE` | `5a05a1f`..`73fbb47`, plus the close-out commit |
 | 10 | Calculators and secondary pages | `COMPLETE` | `df4d60e`..`b9999d3`, plus the close-out commit |
-| 11 | Quality, accessibility, performance, delivery | `NOT_STARTED` | — |
+| 11 | Quality, accessibility, performance, delivery | `COMPLETE` | `f1cef8e`..`ec80c43`, plus the close-out commit; tagged `v1.0.0` |
 
 ---
 
@@ -1257,20 +1257,141 @@ Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
 
 ## Phase 11 — Quality, accessibility, performance and delivery
 
+**Goal:** turn a working replica into a finished product.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| 11.0 | The accessibility sweep, and the 443 contrast failures it found | `COMPLETE` | `tools/visual/audit-a11y.mjs` answers the questions a code review cannot: heading order, control names, table captions, contrast against the surface a colour is **actually** composited over, the table's roving tab stop and its arrow keys, and reduced motion — one page per family, nineteen in all, exiting non-zero on a defect so a phase can gate on it. Its first run found **443 failures with one cause**: the reference's own tertiary ink, `#8a938f`, is **3.06:1** on our paper, below AA at the 13.6px step it is used at — every caption, the footer, a configuration row's atomic number, a discovery year, a calculator's unit. `--ink-faint` is now `#5b726e`, which costs the palette a visible fourth step, because any value that passes is within half a step of the secondary ink. The legend chips failed a second way: their count sat on a wash of the chip's own text colour, which lifts the background toward the text — **3.6:1** on the dark chips and **3.9:1** on the mid-tone ones — so the count is ringed rather than washed. The palette's ink-on-surface invariant is now a test that reads both sets of values from the stylesheet. `f1cef8e`, `969cbdf` |
+| 11.1 | The responsive sweep over four widths | `COMPLETE` | `audit-responsive.mjs`: nineteen pages at 375 / 768 / 1024 / 1440 — 76 combinations — reporting each page's own horizontal overflow and naming the element that leaves the viewport, rather than only the page that scrolled. The table's own scroller is excluded because its eighteen columns are the recorded exception, so what fails is the page moving, never the table scrolling. Its first run found a real defect: at 375px the orbital-configuration row's element column took its full 22rem and left the notation at zero width, so `[He]2s1` and every other configuration spilled **68px** past the page; the row is one column below the first breakpoint now, and the two columns are unchanged from 640px up. `7269c9f`, `04a9e45` |
+| 11.2 | Per-page metadata, and the two crawl files | `COMPLETE` | Every published document gains a `rel="canonical"` link, an Open Graph set (`og:site_name`, `og:type`, `og:title`, `og:description`, `og:url`) and a `summary` Twitter card; an element page's JSON-LD block is a `Thing` named after the element, with the symbol as an alternate name and the record's own atomic number and weight as `PropertyValue`s. The build writes `sitemap.xml` from the routes it **actually wrote** — not from the manifest, which declares pages whose templates may still be missing — 562 `<loc>` entries, and `robots.txt` naming it. The not-found document claims no canonical, because it has no published address. The origin is read from `SITE_ORIGIN` and defaults to a reserved `.example` address that cannot resolve: a confident, wrong canonical is worse than none, so the build says on every run that the placeholder is still in place. `bf44dd7` |
+| 11.3 | The build split the 400-line law forced | `COMPLETE` | The home page's build-time rendering pushed `build.js` past the project's file-length limit, so the half of it that answers *what a document looks like* moved to `tools/document.js` (`renderDocument`, `sitemapFor`, `robotsFor`), and `build.js` keeps *what is on the site* — routes, templates, families, files. Behaviour unchanged: 472 tests, the same 562 routes and the same 562-loc sitemap. `3b3b09f` |
+| 11.4 | The home page's table, diagrams and finder, drawn at build time | `COMPLETE` | The home page was the last page whose blocks were built after paint: the shipped document held four empty hosts and **118 tiles** arrived from the data layer once the script ran, growing the page by **926px** under the reader — a layout shift of **0.315** — and leaving a crawler, and a reader with the script off, with a table-less home page. `homePageValues` now computes the same four blocks through the same table engine the four views use, and `startHome` only **attaches** behaviour to markup that is already there. Measured after: `dist/index.html` is 71,361 bytes carrying 118 tiles, 236 diagram cells, one canonical and no duplicate id; with the script off a reader still sees all 118 tiles, both diagrams and the finder; after a client-side navigation the roving tab stop still moves and no id is duplicated; **layout shift 0**. `06c5e76` |
+| 11.5 | The performance sweep, and the shift it found | `COMPLETE` | `audit-performance.mjs`: six pages — home, the elements index, an element, a table view, the glossary and the calculator — each in a fresh context on a cold cache, reporting the navigation timings, the bytes transferred by initiator, the element and tile counts, the layout shift after paint and every long task the main thread ran. It exits non-zero over a 0.1 shift or a 2000ms load, proved by forcing the budget negative and watching the run fail. It measured rather than assumed: the 0.315 shift above is its finding, and shift 0 on all six pages is its record. `8869b4c` |
+| 11.6 | Lighthouse as the phase's outside opinion, and the four defects it found | `COMPLETE` | `audit-lighthouse.mjs` drives Lighthouse — mobile emulation, throttled — over seven pages: the six the performance sweep measures plus a group page, which is the only page that rests in the table's isolation state. It gates accessibility at 1.0 and best-practices at 0.95 and only records performance and SEO, because a 100 over loopback would be a claim about the harness. It found four things our own sweep had not caught, each fixed where it starts: a tile's number and name faded to 0.9 and 0.92 of the ink, and the actinide sage only has 4.96:1 to give, so they measured **4.32:1 at 8.8px** — the ceiling is now derived from the eleven pairings (0.93) and every fading token, the card's number included (**4.01:1** on the elements index), is held above it by a test; an isolated table dimmed **whole tiles** to 0.22, taking the text with it, so **109 tiles** on the group pages measured **1.5:1** — the drain now mixes the fill towards the paper and leaves the ink alone; the element page's miniature table is one picture, so a `role="listitem"` inside its `role="img"` was an ARIA orphan, and the tile's list role is now the caller's choice; and three families named their links with an `aria-label` that reworded what the link shows, hiding the card's group and measurement from a reader who cannot see them, so the visible content is the name now. Our own sweep was taught to composite an element's own `opacity`, which is why it had missed the first. `5cc54d1`, `964bf80` |
+| 11.7 | The deployment, and the reference's own metadata audited live | `COMPLETE` | `.github/workflows/pages.yml` is the whole deployment: on a push to `main` it computes the address the site will be served from — the domain root for a repository named `<owner>.github.io`, a path named after the repository otherwise — builds with `SITE_ORIGIN` set to it, runs `node --test source/tests`, and hands `dist/` to Pages. The YAML was validated and the origin logic checked for both repository-name shapes. The README's status table, quality-gates section and Pages subsection were rewritten to state only what is measured. Separately, the reference's metadata was audited live into `research/01` §5: it ships **no JSON-LD**, declares no icon and answers `/favicon.ico` with a 404 on every page load, and its `/sitemap.xml` is itself a 404 behind a 922-entry child sitemap under an index. `b741a49`, `1c431ee` |
+| 11.8 | Documentation close-out, and the `guides/` audit it turned up | `COMPLETE` | README (status, gates, publishing), `MIND_MAP.md` (the `.github/` node and its row, the two new tools, the audit row), `research/01` §5 with the reference's metadata, `RUN_STATE.md`, `HANDOFF.md` and this entry. The close-out also **audited all four guides against the source, and three of them had drifted**: the interview reference still carried 18 `(pending)` rows from Phases 2–6 and named functions that were never exported (`foregroundFor`, `byCategory`, `createScale`, `rovingFocus`, `hydrate`); the tour's file tree listed three files that do not exist (`index.html` at the source root, `converter-input.js`, `filter-bar.js`) and missed eighteen that do; and the page trace said the element page hydrates in the browser, which it never did — `element-detail` has **no** entry in `PAGE_BEHAVIOUR` at all, and its mini table, shell diagram, pager and FAQ are all built. All three now describe what ships, and where the truth was better than the old text (the 0.315 shift, the 4.32:1 label) it is written in. `MIND_MAP` completeness: **168 files under `source/`, 0 missing**. No `TODO` remains in a tracked file; the word appears only where the two documents that discuss it name it. |
+
 **Exit criteria**
 
-- [ ] Accessibility sweep passed: landmarks, headings, labels, contrast AA, reduced motion, full
-  keyboard traversal, focus management on route change.
-- [ ] Responsive audit passed at 375 / 768 / 1024 / 1440 px on every page.
-- [ ] Performance measured and recorded; no render-blocking work.
-- [ ] Per-page titles, descriptions, canonical, Open Graph, structured data; `sitemap.xml`;
+- [x] Accessibility sweep passed: landmarks, headings, labels, contrast AA, reduced motion, full
+  keyboard traversal, focus management on route change. (19 pages, 0 defects, 27 informational
+  lines; Lighthouse accessibility 100 on all 7 sampled pages.)
+- [x] Responsive audit passed at 375 / 768 / 1024 / 1440 px on every page. (76 of 76.)
+- [x] Performance measured and recorded; no render-blocking work. (Worst layout shift 0, slowest cold
+  load 38ms, 0 long tasks. No script in the head but the JSON-LD data block, which does not execute;
+  the module that does run is `type="module"` at the end of the body, so it is deferred; and the
+  data layer is read at build time rather than fetched before paint. What is left blocking a first
+  paint is the site's own 9–14 small same-origin stylesheets, which is what prevents a flash of
+  unstyled content.)
+- [x] Per-page titles, descriptions, canonical, Open Graph, structured data; `sitemap.xml`;
   `robots.txt`.
-- [ ] Print stylesheet for the table and element pages.
-- [ ] Documentation current; no `TODO` in tracked files.
-- [ ] Deployed; `v1.0.0` tagged.
-- [ ] A clean clone runs and deploys following only the README.
+- [x] Print stylesheet for the table and element pages — **built and measured in Phase 10** (work
+  item 10.3, one sheet per table page and per sampled card at A4 and Letter). Not rebuilt here.
+- [x] Documentation current; no `TODO` in tracked files.
+- [x] Deployment written, gated and documented, and `v1.0.0` tagged. The deployment is the committed
+  Pages workflow with the host's own routing fallback, and the README's publishing steps; the tag is
+  local. **The push itself is the author's one-time step** (`docs/GIT_WORKFLOW.md` §8) and the
+  repository has no remote, so nothing is published yet — recorded as a deviation below, not as done.
+- [x] A clean clone runs and deploys following only the README. Verified by cloning the repository
+  into an empty directory: `node source/tools/build.js` writes 562 routes and `node --test
+  source/tests` passes 482, with nothing installed, because the project declares no dependencies.
 
-**Verification:** _pending_ · **Commits:** _pending_
+**Verification**
+
+```
+Phase 11 verification
+[x] node --test source/tests ................ pass  (tests 482 · pass 482 · fail 0)
+[x] node --check on every changed module .... pass  (111 modules under source/, every one parses)
+[x] Brand scan .............................. PASS: brand scan clean
+[x] Console/network on every touched page ... zero errors and zero failed requests on ours across all
+                                             four sweeps (19 + 6 + 7 + 13 pages); in the same run the
+                                             reference logged one 404 — its own undeclared favicon
+[x] Accessibility tree reviewed ............. 0 defects and 27 informational lines over 19 pages —
+                                             19 pages answered 200, six table-keyboard measurements,
+                                             two live regions; Lighthouse accessibility 100 on 7
+[x] Keyboard traversal ..................... the table's roving tab stop, on each of the six pages
+                                             that carries the table: 118 tiles, 1 stop, ArrowRight
+                                             moves Hydrogen to Helium and still leaves one stop
+[x] Reduced motion ......................... honoured: 0 elements animating under
+                                             prefers-reduced-motion
+[x] 1280 px capture vs reference ........... compared (home): the table region identical to the
+                                             pixel in size (1230 × 626, size delta 0 × 0) and the
+                                             same 18 columns to a hundredth of a pixel, crop
+                                             mismatch 2.31% — the typeface class, and unmoved by
+                                             this phase's build-time rendering
+[x] 768 px capture vs reference ............ compared (home): all five crops identical in width and
+                                             within 2px of height; table crop 8.89%
+[x] 375 px capture vs reference ............ compared (home): table crop 4.23%; no horizontal
+                                             overflow on either page
+[x] 1024 / 1440 px responsive sweep ........ 76 of 76 page-and-width combinations fit, every width
+[x] Regression check on an earlier phase .... the home page, which this phase moved from client to
+                                             build: 118 tiles, 236 diagram cells, 1 canonical, no
+                                             duplicate id, layout shift 0, table keyboard intact
+[x] Deliberate deviations recorded .......... seven, listed below
+[x] docs/MIND_MAP.md updated ................ yes
+[x] RUN_STATE.md + HANDOFF.md updated ....... yes
+```
+
+```
+node --test source/tests ............................. tests 482 · pass 482 · fail 0
+                                                       (was 458 at Phase 10's close; the four
+                                                       accessibility defects and the home page's
+                                                       rendering add 24)
+node --check on every module under source/ ........... 111 modules, every one parses
+node source/tools/build.js ........................... Built 562 routes and the not-found page into dist/
+                                                       0 declared routes still waiting
+Brand scan over source/ .............................. PASS: brand scan clean
+MIND_MAP completeness ................................ 168 files under source/, 0 missing; the new
+                                                       .github/workflows/pages.yml and the two new
+                                                       visual tools are all listed
+node workspace/tools/visual/audit-a11y.mjs ........... 0 defect(s) and 27 informational line(s) across
+                                                       19 pages                              · exit 0
+node workspace/tools/visual/audit-responsive.mjs ..... 76 of 76 page-and-width combinations fit their
+                                                       viewport                             · exit 0
+node workspace/tools/visual/audit-performance.mjs .... worst layout shift 0, slowest cold load 38ms,
+                                                       0 long task(s)                       · exit 0
+node workspace/tools/visual/audit-lighthouse.mjs ..... accessibility 100 · best-practices 100 · seo 100
+                                                       on all 7 pages; performance 89 mean (82–98),
+                                                       recorded rather than gated · the run recorded at
+                                                       the baseline commit was 92 mean (83–98), and the
+                                                       two differ only by run-to-run throttling variance
+                                                                                            · exit 0
+clean clone in an empty directory, nothing installed . node source/tools/build.js → 562 routes;
+                                                       node --test source/tests → 482 pass, 0 fail
+git log --format='%an <%ae> | committer: %cn <%ce>' ... one identity, Devansh <dhbhensdadia@gmail.com>,
+                                                       author and committer, on every commit
+git status --short .................................... clean at the close-out commit
+```
+
+**Appearance — the one page this phase changed, compared**
+
+Only the home page's own markup changed (work item 11.4): its four blocks moved from the browser to
+the build. It was captured against the reference at three widths in the harness, and the numbers say
+the change moved nothing.
+
+| Width | Table crop | Size delta | What differs, and why |
+|---|---|---|---|
+| 1280 px | 2.31% | 0 × 0 | The grid's eighteen column widths match the reference's to a hundredth of a pixel and the tile box is identical (`37.94px`, radius `3px`, same background). The differing pixels are the typeface, plus this phase's deliberate changes: our tile numbers and names are at `0.95` / `0.96` where the reference's are at `0.9` / `0.92`, because 0.9 of the ink is 4.32:1 on the actinide sage. The whole table sits 22.89px lower, which is the hero above it measuring taller in our typeface, and it does so in both pages' boxes equally. |
+| 768 px | 8.89% | 0 × ±1 | Every crop is identical in width; the ±1px is rounding in the captured band. Our legend wraps at this width where the reference's still fits, which is the known twelve-group-names deviation. |
+| 375 px | 4.23% | 0 × 0 | Same table, same columns; neither page overflows its viewport. |
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **The tertiary ink is darker than the reference's.** `--ink-faint` is `#5b726e` rather than the reference's `#8a938f`. | The reference's own value is 3.06:1 on our paper — 443 failures across nineteen pages at the 13.6px step it is used at. The cost is honest and recorded in `DESIGN_SYSTEM.md`: the palette's fourth step is compressed, because any value that passes AA at that size is within half a step of the secondary ink. |
+| **Faded tile ink is capped by measurement, not by taste.** `--opacity-tile-number` 0.95, `--opacity-tile-name` 0.96, `--opacity-card-z` 0.95, against the reference's 0.9 / 0.92 / 0.85. | The actinide sage has 4.96:1 to give at full ink, so 0.9 of it is 4.32:1 at 8.8px. The ceiling is derived from the eleven pairings by `lowestAlphaForAA` (0.93) and every fading token is held above it by a test, so the next fade cannot reintroduce the defect. |
+| **An isolated table drains the fill, not the tiles.** The reference sets `opacity: 0.22` on every non-member tile; ours mixes the tile's fill 30% towards the paper and leaves the ink alone. | Dimming the whole tile dims its text with it: 109 drained tiles measured **1.5:1** on the group pages. The isolation still reads — that is what the 30% mix is for — but the label stays legible, and `.is-match` and `:focus-visible` restore the full fill. |
+| **The home page is rendered at build time.** The reference assembles its table after paint. | Server-rendering the same four blocks through the same engine removed a 0.926-page shift (0.315 CLS to 0), and it is also what makes the home page exist for a crawler and for a reader whose script did not run. |
+| **`twitter:card` is `summary`, not `summary_large_image`.** | We have no social image. A large card with a missing image is the worse lie, and the reference's own `og:image` is a relative path no crawler can resolve. |
+| **Three families' links carry no `aria-label`.** The element card, the ranking bar and a group's member card name themselves by their visible content. | An `aria-label` that rewords what a link shows is a label-content-name mismatch, and it was hiding the card's group and its measurement from a reader who cannot see them. |
+| **The deployment is published by the author's one-time push.** The workflow, the routing fallback and the README's publishing steps are committed; the `v1.0.0` tag is local. | `docs/GIT_WORKFLOW.md` §8 makes publishing a deliberate, author-approved step (`git remote add` then `git push -u origin main && git push --tags`), and the repository has no remote. Nothing is claimed to be live. |
+
+**Commits:** `f1cef8e` (the tertiary ink and the legend counts meet AA), `969cbdf` (the accessibility sweep), `7269c9f` (the configuration rows stack on a phone), `04a9e45` (the responsive sweep), `bf44dd7` (canonical, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt`), `3b3b09f` (the document skeleton out of the build), `06c5e76` (the home page drawn at build time), `8869b4c` (the performance sweep and its budgets), `5cc54d1` (the four accessibility defects), `964bf80` (Lighthouse and the baseline), `b741a49` (the Pages workflow and the README), `1c431ee` (the reference's metadata in the audit), `ec80c43` (the four guides corrected against the source), plus the close-out commit.
+
+**Tag:** `v1.0.0` on the close-out commit.
 
 ---
 
