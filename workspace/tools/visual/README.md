@@ -28,6 +28,15 @@ node compare.mjs \
 
 Serve the build first: `node source/tools/serve.js --port 4180`.
 
+**The accessibility sweep.** `node audit-a11y.mjs` — with the build served on 4180, or with `BASE=`
+pointing at it — walks one page per family, nineteen in all, and reports what a code review cannot:
+one `h1` and no skipped heading level, each landmark exactly once, a name on every control, a
+caption on every table, every text colour against the surface it is actually painted on (it
+composites the translucent layers and every `color-mix()` between the text and the page), one roving
+tab stop in the table with the arrow keys moving it, and nothing animating under
+`prefers-reduced-motion`. It exits non-zero on a defect, so a phase can gate on it; the HTTP status,
+the live regions a page declares and the table's stop count are printed but do not fail the run.
+
 **What it writes.** `workspace/screenshots/<label>/` — `ours-<w>.png`, `reference-<w>.png`,
 `diff-<w>.png`, one crop per region, `*-diff-<w>.png`, and `report.json` with every measurement
 from both pages. That directory is gitignored: captures are working evidence, not artefacts.

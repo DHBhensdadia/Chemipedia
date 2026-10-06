@@ -87,6 +87,7 @@ place. See `workspace/guides/02-tour-of-the-codebase.md`.
 | File | What it is |
 |---|---|
 | `tools/visual/README.md` | How to run it, how to read its output, and what it must never become. |
+| `tools/visual/audit-a11y.mjs` | The accessibility sweep: one page per family, each measured for landmarks, heading levels, control names, table captions, contrast against the composited surface behind every text colour, the table's roving tab stop and its arrow keys, and reduced motion. Exits non-zero on a defect, so a phase can gate on it. |
 | `tools/visual/compare.mjs` | The harness: opens the reference and the build in the same headless Chrome at the same width and colour scheme, captures both, diffs them pixel by pixel, crops the table, the hero, the finder, the elements index's card grid, a ranking's list, and — on an element page — the strip, hero, card, miniature table, columns, counts, facts, orbital, FAQ, siblings and pager, and reports every measurement taken from both pages. A comma list inside one selector string is split before it is queried, so a metric's own order of preference decides which element it describes. |
 | `tools/visual/package.json` | Its three dev-only dependencies (`playwright`, `pixelmatch`, `pngjs`) and its one script. Separate from the repository's own dependency-free `package.json` on purpose. |
 | `tools/visual/package-lock.json` | The pinned install, so a later run compares against the same version. |
