@@ -480,18 +480,32 @@ development-only styleguide page before any page depends on it.
   torus — and the file is named for the pair of shapes it owns rather than for one of them.
 - `scripts/components/atom-shaders.js` — the GLSL and the program handling: a lit sphere for
   nucleons and electrons, a translucent tube for an orbit, and a backdrop that gives the stage its
-  depth.
+  depth. Each program publishes the attribute and uniform names it declares, which is what lets a test
+  hold the shader's half of the interface to the buffers bound on the JavaScript side.
 - `scripts/components/atom-view.js` — the WebGL2 layer around them: context acquisition, canvas
   sizing with a device-pixel-ratio cap, instanced draws so that a kind of particle costs one draw
-  call, the frame loop, pause when the document is hidden or the canvas is out of view, and a
-  `destroy()` that releases everything.
+  call, and a `destroy()` that releases everything. A machine that cannot build the programs is a
+  viewer that reports itself unavailable rather than a page that throws.
+- `scripts/components/atom-meshes.js` — *amended while building it.* The sphere, the ring cache and
+  the buffers around them: one unit sphere uploaded once and drawn per instance, each instance
+  attribute in its own tightly packed buffer, a ring mesh built once per radius and kept, and the one
+  place in the project a WebGL buffer is created or deleted. The plan had this inside `atom-view.js`;
+  the layer is under the project's 400-line ceiling only with the vertices kept apart from the frame.
+- `scripts/components/frame-loop.js` — *amended while building it.* The loop as its own unit: how much
+  time a frame carries and the clamp on a frame that arrives after a pause, whether a hidden page is
+  stepped at all, and what happens when a step stops or replaces the loop. The clock, the scheduler and
+  the visibility rule are injectable and default to the browser's own, so all of it is held still in
+  Node — and this too came out of `atom-view.js` to bring the layer under the line ceiling.
 - A section on `/styleguide/` (development-only) that renders a field of spheres and drives the
   camera, so the layer can be seen, timed and tuned before a page exists.
 
 **Exit criteria**
 
-- `node --check` clean on every new module; unit tests for `matrix4`, `orbit-camera` and
-  `sphere-geometry`, including their refusals.
+- `node --check` clean on every new module; unit tests for `matrix4`, `orbit-camera`,
+  `primitive-geometry`, `frame-loop`, `atom-shaders`, `atom-meshes` and `atom-view`, including their
+  refusals. The drawing modules are judged through a recording WebGL stub (`tests/components/
+  webgl-stub.js`), which is what lets "one instanced call for ninety particles", "a dropped attribute
+  is skipped" and "nothing is left on the card" be claims a test can make.
 - The styleguide section renders a moving frame with zero console errors and zero failed requests.
 - Draw-call and frame-time numbers are recorded, not asserted from memory.
 - No literal colour, radius, duration or size in any file of the layer: values arrive as arguments.
