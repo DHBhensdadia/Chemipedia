@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { renderDocument, robotsFor, sitemapFor, stylesheetsFor } from "../../tools/build.js";
+import { stylesheetsFor } from "../../tools/build.js";
+import { renderDocument, robotsFor, sitemapFor } from "../../tools/document.js";
 
 const page = {
   title: "ChemiPedia — a title",
