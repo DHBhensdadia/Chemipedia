@@ -35,9 +35,14 @@ caption on every table, every text colour against the surface it is actually pai
 composites the translucent layers and every `color-mix()` between the text and the page), one roving
 tab stop in the table with the arrow keys moving it, and nothing animating under
 `prefers-reduced-motion`. It exits non-zero on a defect, so a phase can gate on it; the HTTP status,
-the live regions a page declares and the table's stop count are printed but do not fail the run.
+the live regions a page declares and the table's stop count are printed but do not fail the run.**The responsive sweep.** `node audit-responsive.mjs` does the same for layout at 375, 768, 1024 and
+1440: it reports a page that scrolls sideways and names the elements that leave the viewport. The
+periodic table is excluded on purpose — its eighteen columns are the recorded exception, and it
+scrolls inside its own box rather than moving the page. It exits non-zero on an overflow.
 
-**What it writes.** `workspace/screenshots/<label>/` — `ours-<w>.png`, `reference-<w>.png`,
+**What it writes.**
+
+`workspace/screenshots/<label>/` — `ours-<w>.png`, `reference-<w>.png`,
 `diff-<w>.png`, one crop per region, `*-diff-<w>.png`, and `report.json` with every measurement
 from both pages. That directory is gitignored: captures are working evidence, not artefacts.
 
