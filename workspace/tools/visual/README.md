@@ -42,6 +42,15 @@ the live regions a page declares and the table's stop count are printed but do n
 periodic table is excluded on purpose — its eighteen columns are the recorded exception, and it
 scrolls inside its own box rather than moving the page. It exits non-zero on an overflow.
 
+**The Lighthouse baseline.** `node audit-lighthouse.mjs` runs Lighthouse's own four categories over
+seven pages — the six the performance sweep measures plus a group page, which is the one page that
+rests in the table's isolation state — and prints a score per category per page plus every failing
+accessibility, best-practices and SEO audit. Chrome comes from `chrome-launcher` and the categories
+from Lighthouse itself, so the numbers are not ours to argue with. It exits non-zero when
+accessibility is not perfect or best-practices drops below 0.95; performance and SEO are recorded
+rather than gated, because a 100 on loopback would be a claim about the harness. It is the slowest
+of the five tools — a run over the default pages takes about a minute — so run it last.
+
 **The performance sweep.** `node audit-performance.mjs` measures six pages — home, the elements
 index, an element, a table view, the glossary and the calculator — in a fresh context each and on a
 cold cache, and reports what the browser saw rather than what a file size suggests: response, first
