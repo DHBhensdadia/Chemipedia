@@ -21,6 +21,32 @@ export const siteOrigin = (process.env.SITE_ORIGIN ?? PLACEHOLDER_ORIGIN).replac
 export const isPlaceholderOrigin = siteOrigin === PLACEHOLDER_ORIGIN;
 
 /**
+ * The path the site is published under, where it is not published at the domain root.
+ *
+ * A project site is served from a path named after its repository — `https://<owner>.github.io/<repo>/`
+ * — so an address written from the site's own root, `/elements/hydrogen/`, would leave that path and
+ * 404. The deployment states where it lives once, in `SITE_ORIGIN`, and this is the path of that
+ * address: `/Chemipedia` for the repository above, and empty at a root deployment or in a local
+ * build. One value, so the addresses a document writes and the address it claims cannot drift.
+ *
+ * An origin that is not a URL yields no path rather than an exception: a canonical link built from
+ * one is already wrong, and a build should say so rather than fail to start.
+ */
+export const siteBase = pathOf(siteOrigin);
+
+/**
+ * @param {string} origin
+ * @returns {string} the origin's path, with no trailing slash
+ */
+function pathOf(origin) {
+  try {
+    return new URL(origin).pathname.replace(/\/+$/, "");
+  } catch {
+    return "";
+  }
+}
+
+/**
  * A site path as the absolute URL the metadata needs.
  *
  * @param {string} pathname a published path, with a leading slash

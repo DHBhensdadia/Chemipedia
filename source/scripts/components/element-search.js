@@ -16,6 +16,7 @@
  */
 
 import { attributes, escapeHtml } from "../lib/html.js";
+import { sitePath } from "../lib/site-path.js";
 
 /** The most results a query offers at once. */
 export const RESULT_LIMIT = 8;
@@ -135,7 +136,9 @@ export function attachElementSearch(root, { elements, hrefFor, limit, go } = {})
     return () => {};
   }
 
-  const linkFor = hrefFor ?? ((element) => `/elements/${element.slug}/`);
+  // This list is written after the page has loaded, so the build's rewriting of the document's own
+  // paths has already happened and cannot reach it: the link has to place itself inside the site.
+  const linkFor = hrefFor ?? ((element) => sitePath(`/elements/${element.slug}/`));
   const navigate = go ?? ((href) => window.location.assign(href));
   let matches = [];
 

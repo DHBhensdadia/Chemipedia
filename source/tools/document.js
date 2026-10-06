@@ -16,6 +16,10 @@
  * and the module that survives it needs to know which page's behaviour to run — one lookup by name
  * rather than a second set of rules about which URL means which page.
  *
+ * A deployment that is not at a domain root is the one thing about the document that depends on
+ * where it is published rather than on what it says: a project site is served from a path named
+ * after its repository, and every URL the page roots at `/` has to name that path too.
+ *
  * The sitemap is written from the routes the build actually wrote rather than from the manifest,
  * because the manifest declares the whole inventory including routes still waiting on a template,
  * and a sitemap that lists a page the site does not serve is a sitemap that lies to a crawler. The
@@ -24,8 +28,29 @@
 
 import { escapeHtml } from "../scripts/lib/html.js";
 import { attributes } from "../scripts/lib/html.js";
-import { absoluteUrl } from "./site-origin.js";
+import { absoluteUrl, siteBase } from "./site-origin.js";
 import { structuredDataScript } from "./structured-data.js";
+
+/**
+ * Point every URL the site roots at its own `/` at the path the deployment is served from.
+ *
+ * The markup a page body, a component and this skeleton write is written from the site's own root,
+ * because that is what the site means and what the development server serves. A project site on
+ * GitHub Pages is not at a root, so those URLs have to gain the deployment's path or they leave the
+ * site and 404. Rewriting the finished document is what keeps that from having to be remembered in
+ * every component that writes a link, and the local case — where the base is empty — is a no-op, so
+ * nothing about a local build changes.
+ *
+ * Only an attribute value that starts at the root is rewritten: `//host/path` is another origin,
+ * `#main` is this page, and `mailto:` is not the site at all.
+ *
+ * @param {string} markup a finished document
+ * @param {string} [base] the path the deployment is served from, empty at a domain root
+ * @returns {string}
+ */
+export function rootedAt(markup, base = siteBase) {
+  return base === "" ? markup : markup.replace(/(\s(?:href|src|action)=")\/(?!\/)/g, `$1${base}/`);
+}
 
 /**
  * Wrap authored markup in the document skeleton every page shares.
@@ -75,7 +100,7 @@ export function renderDocument({
 <meta name="twitter:card" content="summary">
 ${structuredDataScript({ path: publishedPath, title, description, element })}`;
 
-  return `<!doctype html>
+  return rootedAt(`<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
@@ -96,7 +121,7 @@ ${footer}
 <script type="module" src="/scripts/app.js"></script>
 </body>
 </html>
-`;
+`);
 }
 
 /**

@@ -10,8 +10,19 @@
  * name in the data folder into parsed JSON.
  */
 
-/** Where the browser finds the data. The build copies `source/data` to this path in the output. */
-export const DATA_ROOT = "/data";
+import { sitePath } from "../lib/site-path.js";
+
+/**
+ * Where the browser finds the data.
+ *
+ * The build copies `source/data` into the site's own root, and the site is not always served from a
+ * domain root: a project page is served from a folder named after its repository, where a bare
+ * `/data` would ask the domain root for a file that only exists under the site. Putting the address
+ * together through `lib/site-path.js` is what keeps this request inside the site. The injected
+ * `base` below is what keeps it out of the way of a build or a test that holds the files directly,
+ * and it is why this module needs no second rule about where the data is.
+ */
+export const DATA_ROOT = sitePath("/data");
 
 /**
  * Read a JSON file from the data folder.

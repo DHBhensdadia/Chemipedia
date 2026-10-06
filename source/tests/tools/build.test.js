@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import { stylesheetsFor } from "../../tools/build.js";
-import { renderDocument, robotsFor, sitemapFor } from "../../tools/document.js";
+import { renderDocument, robotsFor, rootedAt, sitemapFor } from "../../tools/document.js";
 
 const page = {
   title: "ChemiPedia — a title",
@@ -100,6 +100,49 @@ test("the not-found document claims no address, because it has none", () => {
   assert.equal(document.includes("canonical"), false, "a canonical link to a 404 is a lie");
   assert.equal(document.includes("og:"), false);
   assert.equal(document.includes("ld+json"), false);
+});
+
+test("a deployment at a path keeps the site's own links inside it", () => {
+  // The failure this prevents is silent and total: a project site on GitHub Pages is served from a
+  // path named after its repository, and a stylesheet asked for at `/styles/base.css` would be
+  // asked for at the domain root, where nothing is.
+  const markup = [
+    '<link rel="stylesheet" href="/styles/base.css">',
+    '<script type="module" src="/scripts/app.js"></script>',
+    '<a class="nav__link" href="/elements/hydrogen/">Hydrogen</a>',
+  ].join("\n");
+
+  const under = rootedAt(markup, "/Chemipedia");
+
+  assert.ok(under.includes('href="/Chemipedia/styles/base.css"'));
+  assert.ok(under.includes('src="/Chemipedia/scripts/app.js"'));
+  assert.ok(under.includes('href="/Chemipedia/elements/hydrogen/"'));
+});
+
+test("a deployment at a root, and a local build, are left exactly as they are", () => {
+  const markup = '<a href="/elements/">Elements</a>';
+
+  assert.equal(rootedAt(markup, ""), markup);
+});
+
+test("only the site's own URLs are rewritten", () => {
+  const markup = [
+    '<a href="#main">Skip</a>',
+    '<a href="//example.com/x">Elsewhere</a>',
+    '<a href="https://example.com/x">Elsewhere</a>',
+    '<a href="mailto:devansh@example.com">Mail</a>',
+  ].join("\n");
+
+  assert.equal(rootedAt(markup, "/Chemipedia"), markup);
+});
+
+test("a document built at a root keeps the paths the development server serves", () => {
+  // The base is empty here, which is both a local build and a site published at a domain root, so
+  // the skeleton's own icon and module stay exactly where they were written.
+  const document = renderDocument({ ...page, stylesheets: ["/styles/base.css"] });
+
+  assert.ok(document.includes('href="/assets/brand/favicon.svg"'), "the icon is not at a path");
+  assert.ok(document.includes('href="/styles/base.css"'));
 });
 
 test("the sitemap lists the addresses the build wrote, in order", () => {
