@@ -670,11 +670,16 @@
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at
    33.6px against 48px for the index, and 35.2px against 51.2px for a term. Left at their desktop
    sizes they wrap to two lines on a phone — "Glossary of Terms" at 375, and a term as short as
-   "Absolute zero". */
+   "Absolute zero". The four secondary pages are set at that same 3rem step, so they step down
+   with it: "Temperature calculator", "Downloads and printables" and "About ChemiPedia" were all
+   wrapping to two lines at 375 for the same reason. */
 @media (max-width: 56rem) {
   :root {
     --type-gls-name: 2.1rem;
     --type-gls-term-head: 2.2rem;
+    --type-calc-name: 2.1rem;
+    --type-dl-name: 2.1rem;
+    --type-abt-name: 2.1rem;
   }
 }
 
