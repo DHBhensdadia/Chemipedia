@@ -53,6 +53,12 @@ export function createGlStub({ fails = null, dropped = [] } = {}) {
   const uniformLocations = new Map();
   let invented = 0;
 
+  // Which vertex array is bound, carried on every attribute call. An attribute binding belongs to the
+  // array that is bound when it is made, so this is what lets a test say "the draw used an array that
+  // knew about both the sphere and the particles" — the difference between a call that paints and one
+  // that silently reads zeroes.
+  let bound = null;
+
   /**
    * @param {string} kind
    * @returns {object}
@@ -123,7 +129,8 @@ export function createGlStub({ fails = null, dropped = [] } = {}) {
   };
 
   gl.bindVertexArray = (vao) => {
-    calls.push({ method: "bindVertexArray", vao: vao ?? null });
+    bound = vao ?? null;
+    calls.push({ method: "bindVertexArray", vao: bound });
   };
 
   gl.deleteVertexArray = (vao) => {
@@ -139,15 +146,15 @@ export function createGlStub({ fails = null, dropped = [] } = {}) {
   };
 
   gl.enableVertexAttribArray = (location) => {
-    calls.push({ method: "enableVertexAttribArray", location });
+    calls.push({ method: "enableVertexAttribArray", location, vao: bound });
   };
 
   gl.vertexAttribPointer = (location, size, type, normalized, stride, offset) => {
-    calls.push({ method: "vertexAttribPointer", location, size, type, normalized, stride, offset });
+    calls.push({ method: "vertexAttribPointer", location, size, type, normalized, stride, offset, vao: bound });
   };
 
   gl.vertexAttribDivisor = (location, divisor) => {
-    calls.push({ method: "vertexAttribDivisor", location, divisor });
+    calls.push({ method: "vertexAttribDivisor", location, divisor, vao: bound });
   };
 
   gl.viewport = (x, y, width, height) => {

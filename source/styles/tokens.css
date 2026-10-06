@@ -682,6 +682,68 @@
   --pad-abt-source-row: var(--sp-2) 0;
   --size-con-part-no: 1.75rem; /* a report part's number, in its own square */
   --radius-con-part-no: var(--radius-pill);
+
+  /* -------------------------------------------------------------------------
+     21. The atom viewer — the scene's own palette and numbers.
+
+     The viewer is the one part of the site that draws in three dimensions, and
+     the one place a dark stage sits inside a light page. That is a palette
+     decision and not a second theme (ADR-006): the page around the canvas is
+     still paper, and the ink, the rules and the chrome are unchanged.
+
+     Every value the scene needs is here, for the reason every other value is:
+     the renderer reads its palette out of this layer at runtime, because a
+     graphics card is not CSS. How the atom looks is therefore a change to this
+     file rather than to a shader, a buffer or a page.
+
+     The three particle colours are the table's own family — the coral of the
+     noble gases, the warm grey of the site's rules and the pale blue of the
+     non-metals — given the scene's names and tuned for a dark ground, where a
+     pale group colour that earns its keep on paper is either mud or a glare.
+     They are deliberately not the reference's values: its palette is recorded
+     in docs/research/04-reference-atom-viewer-audit.md so that it is *not*
+     shipped by accident.
+
+     The numbers below the colours are the scene's geometry in the units the
+     renderer uses: radii and orbit distances in the atom's own scale, angles in
+     radians, and the sphere's and a ring's detail as the counts the meshes are
+     generated from.
+     ------------------------------------------------------------------------- */
+  --atom-stage: #08211f; /* deep pine, darker than --ink, so the page around it reads as paper */
+  --atom-stage-height: 34rem; /* the stage's own height before any page fits it to the viewport */
+  --atom-proton: #e57860;
+  --atom-neutron: #cfc5bc;
+  --atom-electron: #a6c6d5;
+  --atom-orbit: #d7e6e2;
+  --atom-orbit-opacity: 0.18;
+  --atom-orbit-tube: 0.007; /* thin enough to read as a path, thick enough to survive the camera */
+  --atom-orbit-base: 2; /* the innermost orbit's radius; each shell after it steps out by --atom-orbit-step */
+  --atom-orbit-step: 1.2;
+  --atom-nucleon-radius: 0.2;
+  --atom-electron-radius: 0.1;
+  --atom-electron-glow: 0.5; /* how much of an electron's own colour is added where the light misses */
+  --atom-sphere-segments: 24;
+  --atom-sphere-rings: 16;
+  --atom-ring-segments: 48;
+  --atom-ring-tube-segments: 6;
+  --atom-light-direction: 10 10 5;
+  --atom-light-strength: 1;
+  --atom-ambient: 0.32; /* the floor under the light: how much of a particle is visible in shadow */
+  --atom-spin: 0.16; /* radians a second the atom turns, until a shake starts it spinning faster */
+  --atom-camera-distance: 17;
+  --atom-camera-azimuth: 0.7;
+  --atom-camera-polar: 1.2;
+  --atom-camera-damping: 8; /* how quickly the camera reaches where it was asked to go, per second */
+  --atom-camera-fov: 50; /* degrees, converted to radians by the reader */
+  --atom-camera-near: 0.1;
+  --atom-camera-far: 120;
+  --atom-camera-min-distance: 6;
+  --atom-camera-max-distance: 34;
+  --atom-camera-tilt-limit: 0.35; /* radians kept clear of each pole, so the view cannot flip over */
+  --atom-drag-sensitivity: 0.01; /* radians a dragged pixel swings the view */
+  --atom-zoom-step: 1.1; /* what one wheel notch multiplies the distance by */
+  --atom-pixel-ratio-limit: 2; /* pixels per CSS pixel: beyond this a 3D stage costs more than it shows */
+  --atom-longest-step: 0.1; /* the most time one frame may carry, after a tab has been backgrounded */
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

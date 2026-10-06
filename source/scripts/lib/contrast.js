@@ -59,10 +59,16 @@ export function normaliseHex(hex) {
 /**
  * The three channels of a colour, as numbers from 0 to 255.
  *
+ * Exported because one thing in the project needs a colour broken into numbers rather than compared:
+ * the atom viewer, which hands its palette to a graphics card, and which should not be parsing hexes
+ * of its own. The scale stays 0–255 here — the division by 255 belongs to the caller that knows what
+ * a graphics card wants.
+ *
  * @param {string} hex
  * @returns {number[]}
+ * @throws {TypeError} when the value is not a hex colour
  */
-function channels(hex) {
+export function channels(hex) {
   const value = normaliseHex(hex);
 
   return [0, 2, 4].map((offset) => Number.parseInt(value.slice(offset, offset + 2), 16));

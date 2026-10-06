@@ -174,6 +174,49 @@ test("the sphere is bound once per vertex and the particles once per instance", 
   });
 });
 
+test("the draw uses one vertex array that carries the sphere and the particles together", () => {
+  const gl = createGlStub();
+  const mesh = createSphereInstances(gl, { attribs: locations(gl, SPHERE_ATTRIBUTES), ...SPHERE });
+
+  mesh.set(particles(5));
+  mesh.draw(5);
+
+  // The array the draw itself bound, and everything that was pointed at while it was bound. A
+  // per-particle array of its own would leave the shader's `aPosition` undefined, which reads as zero,
+  // collapses every sphere to a point at its own centre, and paints nothing — while still issuing the
+  // call, which is why a test that only counted calls passed this bug.
+  const drawn = callsOf(gl, "bindVertexArray").filter((call) => call.vao).at(-1).vao;
+  const pointed = callsOf(gl, "vertexAttribPointer").filter((call) => call.vao === drawn);
+
+  assert.deepEqual(
+    pointed.map((call) => call.location.name).sort(),
+    [...SPHERE_ATTRIBUTES].sort(),
+    "every attribute the sphere program declares must belong to the array the draw binds",
+  );
+
+  const divisors = Object.fromEntries(
+    SPHERE_ATTRIBUTES.map((name) => [
+      name,
+      [
+        ...new Set(
+          callsOf(gl, "vertexAttribDivisor")
+            .filter((call) => call.vao === drawn && call.location.name === name)
+            .map((call) => call.divisor),
+        ),
+      ],
+    ]),
+  );
+
+  assert.deepEqual(divisors, {
+    aPosition: [0],
+    aNormal: [0],
+    aOffset: [1],
+    aRadius: [1],
+    aColour: [1],
+    aGlow: [1],
+  });
+});
+
 test("an attribute the driver dropped is skipped rather than bound at a negative location", () => {
   const gl = createGlStub({ dropped: ["aNormal"] });
   const attribs = locations(gl, SPHERE_ATTRIBUTES);

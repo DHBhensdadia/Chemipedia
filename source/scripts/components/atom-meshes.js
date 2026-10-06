@@ -139,25 +139,26 @@ export function createSphereInstances(gl, { attribs, segments, rings }) {
   const normalBuffer = uploadFloats(gl, mesh.normals, gl.STATIC_DRAW);
   const indexBuffer = uploadIndex(gl, mesh.indices);
   const indexType = indexConstant(gl, mesh.indexType);
-  const meshVao = makeVao(gl, attribs, [
-    { name: "aPosition", size: 3, buffer: positionBuffer, stride: 0, divisor: 0 },
-    { name: "aNormal", size: 3, buffer: normalBuffer, stride: 0, divisor: 0 },
-  ]);
 
   let capacity = 0;
   let buffers = [];
   let staging = [];
-  let instanceVao = null;
+  let vao = null;
 
-  /** Give back the instance buffers, keeping the sphere itself. */
+  /**
+   * Give back the instance buffers and the vertex array that pointed at them, keeping the sphere.
+   *
+   * The sphere's own attributes live in that same array rather than in one of their own, which is the
+   * whole of the next decision; either way, replacing it means replacing this.
+   */
   function release() {
     for (const buffer of buffers) {
       gl.deleteBuffer(buffer);
     }
 
-    if (instanceVao) {
-      gl.deleteVertexArray(instanceVao);
-      instanceVao = null;
+    if (vao) {
+      gl.deleteVertexArray(vao);
+      vao = null;
     }
 
     buffers = [];
@@ -184,17 +185,24 @@ export function createSphereInstances(gl, { attribs, segments, rings }) {
       uploadFloats(gl, new Float32Array(capacity * part.size), gl.DYNAMIC_DRAW),
     );
     staging = INSTANCE_ATTRIBUTES.map((part) => new Float32Array(capacity * part.size));
-    instanceVao = makeVao(
-      gl,
-      attribs,
-      INSTANCE_ATTRIBUTES.map((part, at) => ({
+
+    // **One vertex array, carrying the sphere and the instances together.** The sphere's own vertices
+    // and the per-particle numbers are two halves of one draw, and a vertex array is the whole of what
+    // an attribute binding belongs to: pointing the instance buffers in an array of their own leaves
+    // the shader's `aPosition` unbound, which reads as zero, which collapses every sphere to a point at
+    // its own centre — a draw call that succeeds and paints nothing. The unit tests pass either way,
+    // because the call is made either way; this was found by reading the pixels in a browser.
+    vao = makeVao(gl, attribs, [
+      { name: "aPosition", size: 3, buffer: positionBuffer, stride: 0, divisor: 0 },
+      { name: "aNormal", size: 3, buffer: normalBuffer, stride: 0, divisor: 0 },
+      ...INSTANCE_ATTRIBUTES.map((part, at) => ({
         name: part.name,
         size: part.size,
         buffer: buffers[at],
         stride: part.size * Float32Array.BYTES_PER_ELEMENT,
         divisor: 1,
       })),
-    );
+    ]);
   }
 
   return {
@@ -242,11 +250,11 @@ export function createSphereInstances(gl, { attribs, segments, rings }) {
      * @returns {boolean} whether a call was issued
      */
     draw(count) {
-      if (!instanceVao || count <= 0) {
+      if (!vao || count <= 0) {
         return false;
       }
 
-      gl.bindVertexArray(instanceVao);
+      gl.bindVertexArray(vao);
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
       gl.drawElementsInstanced(gl.TRIANGLES, mesh.indexCount, indexType, 0, count);
 
@@ -256,7 +264,6 @@ export function createSphereInstances(gl, { attribs, segments, rings }) {
     /** Give everything back. */
     dispose() {
       release();
-      gl.deleteVertexArray(meshVao);
       gl.deleteBuffer(positionBuffer);
       gl.deleteBuffer(normalBuffer);
       gl.deleteBuffer(indexBuffer);
