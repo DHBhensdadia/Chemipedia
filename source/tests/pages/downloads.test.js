@@ -86,6 +86,7 @@ test("a card names the target, says what the reader gets and opens it", () => {
     const card = downloadCard(target);
 
     assert.match(card, /<article class="dl-card"/);
+    assert.match(card, /<h2 class="dl-card__name">/, "a card's name is not a section of the page");
     assert.match(card, new RegExp(`data-download-kind="${target.kind}"`));
     assert.ok(card.includes(target.name), `${target.name} is not on its card`);
     assert.ok(card.includes(escapeHtml(target.note)), `${target.name}'s card does not say what it is`);
@@ -138,6 +139,21 @@ test("the page carries its lede and all three cards", () => {
     "a card did not reach the page",
   );
   assert.equal(/\{\{[a-z]+\}\}/.test(values.cards + values.steps), false, "a placeholder survived the fill");
+});
+
+test("the page's headings do not skip a level", () => {
+  const filled = fillTemplate(template, values, { name: "pages/downloads.html" });
+  const levels = [...filled.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
+
+  assert.equal(levels[0], 1, "the page does not open with its one h1");
+  levels.forEach((level, index) => {
+    if (index > 0) {
+      assert.ok(
+        level <= levels[index - 1] + 1,
+        `the heading at position ${index + 1} jumps to h${level} from h${levels[index - 1]}`,
+      );
+    }
+  });
 });
 
 test("the template and the module ask for the same blocks, in the same order", () => {

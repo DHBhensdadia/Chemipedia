@@ -108,7 +108,7 @@ export function downloadCard(target) {
   }>${escapeHtml(target.action)}</a>`;
 
   return `<article class="dl-card"${attributes({ "data-download-kind": target.kind })}>
-  <h3 class="dl-card__name">${escapeHtml(target.name)}</h3>
+  <h2 class="dl-card__name">${escapeHtml(target.name)}</h2>
   <p class="dl-card__note">${escapeHtml(target.note)}</p>
   <p class="dl-card__links">${link}${
     file
