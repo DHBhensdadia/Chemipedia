@@ -1395,7 +1395,7 @@ the change moved nothing.
 
 **Commits:** `f1cef8e` (the tertiary ink and the legend counts meet AA), `969cbdf` (the accessibility sweep), `7269c9f` (the configuration rows stack on a phone), `04a9e45` (the responsive sweep), `bf44dd7` (canonical, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt`), `3b3b09f` (the document skeleton out of the build), `06c5e76` (the home page drawn at build time), `8869b4c` (the performance sweep and its budgets), `5cc54d1` (the four accessibility defects), `964bf80` (Lighthouse and the baseline), `b741a49` (the Pages workflow and the README), `1c431ee` (the reference's metadata in the audit), `ec80c43` (the four guides corrected against the source), plus the close-out commits that carry this entry: the phase log, the run-state checkpoint and the handoff note, and the wording fix that makes the README and both checkpoints quote the sweep's two timings as one range.
 
-**Tag:** `v1.0.0`, annotated, on the last of them.
+**Tag:** `v1.0.0`, annotated, on the last commit of the phase's close-out.
 
 ---
 

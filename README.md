@@ -40,21 +40,45 @@ The rule that decides which is which: *does the browser load it?* Yes → `sourc
 
 ## Running it locally
 
-```bash
-node source/tools/serve.js
-```
-
-Then open the URL it prints — `http://localhost:4173/` unless that port is taken. No install step
-and no dependencies: the build and the development server are plain Node, and the server builds the
-site for you if it has not been built yet.
-
-The individual steps, if you want them:
+**Requires Node 20 or newer** — that is the whole list. There is no install step, no `node_modules`
+and no build tool beyond `node` itself.
 
 ```bash
 git clone <this repository> && cd chemipedia
-node source/tools/build.js     # render every declared route into dist/
+node source/tools/serve.js
+```
+
+It prints the address it is serving on, and that is the one to open:
+
+```
+Built 562 routes into dist/          <- only when dist/ is missing or you pass --rebuild
+Serving dist/ at http://localhost:4173/   (Ctrl+C to stop)
+```
+
+Open `http://localhost:4173/` and the home page is there — the periodic table, its group chips, and
+an element page behind every tile. The server binds `127.0.0.1` only, so nothing is reachable from
+another machine. `/styleguide/` is the design system on one page; it is development-only, served
+from the source tree, and never built or deployed.
+
+**If the port is already in use** the server stops and says so rather than picking another:
+
+```
+Error: Port 4173 is already in use. Pass --port <number> to choose another.
+```
+
+(It is a start-up failure rather than a request one, so it surfaces as an unhandled rejection: Node
+prints the stack above that message and the process exits `1`.)
+
+So run it on a port of your own with `node source/tools/serve.js --port 4180`, or set `PORT`. The
+other two options are `--rebuild` (build before serving even if `dist/` exists) and `--help`.
+
+The individual steps, if you want them separately:
+
+```bash
+git clone <this repository> && cd chemipedia
+node source/tools/build.js     # render every route into dist/   -> "Built 562 routes and the not-found page"
 node source/tools/serve.js     # serve dist/ locally
-node --test source/tests       # run the test suite
+node --test source/tests       # run the test suite             -> "tests 482 · pass 482 · fail 0"
 ```
 
 The same three commands are available as `npm run build`, `npm start` and `npm test`. The built
