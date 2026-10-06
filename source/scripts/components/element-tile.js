@@ -5,6 +5,11 @@
  * clickable and its accessible name says the three facts a reader needs without reading the
  * three lines: "Hydrogen, symbol H, atomic number 1".
  *
+ * It is a list item too, because the table is a list of cells — and only there. The element page's
+ * miniature is one picture with a caption rather than a list of links, so its tiles carry no list
+ * role: a list item whose list is a single image is an ARIA error, and the caller says which of the
+ * two it is building by passing `role`.
+ *
  * Where the tile sits is not this module's to decide. The position arrives on the record,
  * computed by the build from the atomic number alone, and is written into `grid-column` and
  * `grid-row`: a stylesheet that re-derived the layout would be a second answer to a question that
@@ -32,6 +37,7 @@ import { attributes, classNames, escapeHtml } from "../lib/html.js";
  *   band?: number | null,     the colour band in a numeric mode
  *   tabbable?: boolean,       whether this is the tile the tab key lands on
  *   compact?: boolean,        symbol and number only
+ *   role?: string | null,     the list role, or none inside a picture
  *   current?: boolean,        whether this is the page's own element
  *   match?: boolean           whether the table is isolating this tile's key
  * }} options
@@ -46,6 +52,7 @@ export function elementTile({
   band = null,
   tabbable = false,
   compact = false,
+  role = "listitem",
   current = false,
   match = false,
 }) {
@@ -67,7 +74,7 @@ export function elementTile({
     "data-row": row,
     "data-column": column,
     style: `grid-column:${column};grid-row:${row}`,
-    role: "listitem",
+    role,
     tabindex: tabbable ? 0 : -1,
     "aria-current": current ? "page" : null,
     title: `${element.name} · ${element.symbol} · ${element.atomicNumber}`,

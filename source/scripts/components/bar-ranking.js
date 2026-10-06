@@ -91,6 +91,11 @@ export function domainOf(elements, field) {
  * measurement has no place in an order of measurements. Its value column says so in the project's
  * one word for not knowing rather than with a dash.
  *
+ * The element's link is named by what it shows — the symbol, the name and the atomic number —
+ * rather than by an `aria-label` that reworded them, because a name written twice is a name that
+ * can be written twice differently, and the label-in-name rule holds the accessible name to the
+ * words on the screen.
+ *
  * @param {{
  *   element: object,
  *   field: string,
@@ -105,14 +110,13 @@ export function barRankRow({ element, field, units, domain, place }) {
   const definition = units?.definitionFor(field) ?? {};
   const value = measured ? formatMeasurement(element[field], definition) : UNKNOWN;
   const ratio = measured && domain ? barRatio(element[field], domain) : 0;
-  const label = `${element.name}, symbol ${element.symbol}, atomic number ${element.atomicNumber}`;
 
   return `<li class="${classNames("rank", !measured && "rank--unknown")}"${attributes({
     "data-key": element.category,
     "data-ratio": measured ? ratio.toFixed(4) : null,
   })}>
 <span class="rank__place" aria-hidden="true">${place === null ? "" : escapeHtml(place)}</span>
-<a class="rank__element" href="/elements/${escapeHtml(element.slug)}/"${attributes({ "aria-label": label })}>
+<a class="rank__element" href="/elements/${escapeHtml(element.slug)}/">
 <span class="rank__sym">${escapeHtml(element.symbol)}</span>
 <span class="rank__name">${escapeHtml(element.name)}</span>
 <span class="rank__z">${escapeHtml(element.atomicNumber)}</span>

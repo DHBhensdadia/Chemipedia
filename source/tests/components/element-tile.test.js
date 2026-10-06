@@ -26,6 +26,13 @@ test("a tile is a link carrying its cell and its three facts", () => {
   assert.match(markup, /<span class="tile__name">Hydrogen<\/span>/);
 });
 
+test("a tile can be built without its list role, for a picture of the table", () => {
+  const tile = elementTile({ element: hydrogen, compact: true, role: null });
+
+  assert.doesNotMatch(tile, /role=/, "a list item whose list is an image is an ARIA error");
+  assert.match(tile, /class="tile tile--compact"/);
+});
+
 test("a tile starts out of the tab order, and the roving one is put in it", () => {
   assert.match(elementTile({ element: hydrogen }), /tabindex="-1"/);
   assert.match(elementTile({ element: hydrogen, tabbable: true }), /tabindex="0"/);

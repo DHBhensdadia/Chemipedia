@@ -87,6 +87,23 @@ against it. The pairs live in `source/data/categories.json` (or a single derived
 `alkali-metals`, `metalloids`) take the cream foreground; pale groups take the dark ink. The
 reference does the same thing with its `--fill` / `--on-fill` custom properties.
 
+**A group colour may only be faded as far as its tightest pairing allows.** A tile sets its atomic
+number and its name in the symbol's own colour and fades them, and that fade is the tile's whole
+hierarchy — but fading moves the ink towards the fill behind it. On `--g-actinides` (`#559982`) the
+dark ink is 4.96:1, so 0.9 of it lands at 4.32:1: below AA at the 8.8px an atomic number is actually
+set at. `--opacity-tile-number`, `--opacity-tile-name` and `--opacity-card-z` are therefore capped
+by the tightest of the eleven pairings, which is 0.93, rather than chosen for taste — and it was
+Lighthouse, not a code review, that caught the two that were not.
+
+**Invariant to test:** `lowestAlphaForAA(ink, fill)` in `lib/contrast.js` derives that ceiling from
+the pairings themselves, and `tests/lib/contrast.test.js` holds every fading token above it.
+
+**An isolated table drains its fill, never its tiles.** A group page rests with one key at full
+colour and the rest quietened. Fading the whole tile to 0.22 takes its text with it: an ink and a
+fill that both move towards the paper converge on the paper, and the drained tiles measured 1.5:1.
+The drain is a `color-mix()` towards the paper instead, which leaves the text at full strength on a
+pale tint of its own group, where the dark ink reaches AA.
+
 **How to apply a group colour:** set the custom property on the element, do not add a modifier class
 per group.
 

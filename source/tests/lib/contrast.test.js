@@ -6,7 +6,9 @@ import {
   AA_TEXT,
   ON_FILL_DARK,
   ON_FILL_LIGHT,
+  compositeOver,
   contrastRatio,
+  lowestAlphaForAA,
   meetsAA,
   normaliseHex,
   readableForeground,
@@ -37,6 +39,14 @@ function tokenValue(name) {
 
   assert.ok(match, `tokens.css does not declare --${name}`);
   return match[1];
+}
+
+/** The value of a single numeric token, as written in the stylesheet, unit and all. */
+function numericToken(name) {
+  const match = tokens.match(new RegExp(`--${name}:\\s*([\\d.]+)`));
+
+  assert.ok(match, `tokens.css does not declare --${name}`);
+  return Number(match[1]);
 }
 
 test("a hex colour is normalised to six digits", () => {
@@ -126,6 +136,78 @@ test("every ink reaches AA on every surface it is written on", () => {
         `--${ink} on --${surface} is ${ratio.toFixed(2)}:1, below AA's ${AA_TEXT}:1`,
       );
     }
+  }
+});
+
+test("fading an ink moves it towards the fill it sits on", () => {
+  assert.equal(compositeOver("#000000", "#ffffff", 1), "#000000");
+  assert.equal(compositeOver("#000000", "#ffffff", 0), "#ffffff");
+  assert.equal(compositeOver("#000000", "#ffffff", 0.5), "#808080");
+  assert.equal(compositeOver("#12211f", "#559982"), "#12211f", "a full-strength ink is its own colour");
+});
+
+test("the ceiling is the alpha where AA stops, and there is none when the ink cannot reach it", () => {
+  assert.equal(lowestAlphaForAA("#12211f", "#559982"), 0.93, "the actinide sage is the tight pairing");
+  assert.equal(lowestAlphaForAA("#fdfbfa", "#477f6c"), 1, "a pairing with no margin affords no fade");
+  assert.equal(lowestAlphaForAA("#ffffff", "#ffffff"), null, "an ink that fails at full strength has no ceiling");
+  assert.ok(
+    contrastRatio(compositeOver("#12211f", "#559982", 0.93), "#559982") >= AA_TEXT,
+    "the ceiling is derived from the threshold it claims to meet",
+  );
+});
+
+test("a tile's faded ink stays inside AA on every fill a tile is painted with", () => {
+  // The atomic number and the name are the symbol's own colour at a fraction of it, and that
+  // fraction is the tightest thing in the palette: 0.9 of the dark ink over the actinide sage came
+  // out at 4.32:1 at the 8.8px an atomic number is set at, which is an AA failure Lighthouse found
+  // and the accessibility sweep's own compositing did not. The ceiling is derived from the eleven
+  // pairings a tile is really painted with — not their deeper second values, which no tile ever
+  // sits on — so a fill can be adjusted without the fade quietly breaking it.
+  const fills = [...groupColours()].filter(([name]) => !name.endsWith("-deep"));
+
+  assert.equal(fills.length, 11, "a tile is painted with the eleven group fills");
+
+  for (const token of ["opacity-tile-number", "opacity-tile-name", "opacity-card-z"]) {
+    const alpha = numericToken(token);
+
+    assert.ok(alpha < 1, `--${token} is ${alpha}: a tile's hierarchy is the fade itself`);
+
+    for (const [name, fill] of fills) {
+      const ink = readableForeground(fill);
+      const allowed = lowestAlphaForAA(ink, fill);
+      const ratio = contrastRatio(compositeOver(ink, fill, alpha), fill);
+
+      assert.ok(
+        allowed !== null && alpha >= allowed,
+        `--${token} at ${alpha} leaves ${ink} on --${name} at ${ratio.toFixed(2)}:1, below AA's ${AA_TEXT}:1 (that fill affords ${allowed})`,
+      );
+    }
+  }
+});
+
+test("an isolated table drains its fill, and the ink on the drained fill reaches AA", () => {
+  // The group pages are written with one key isolated, so this is a resting state rather than a
+  // hover: fading the whole tile to 0.22 of an ink over 0.22 of a fill converges on the paper and
+  // came out at 1.5:1. The drain is a mix towards the paper instead, and the text stays at full
+  // strength on what that leaves — which is a pale tint, so the dark ink is the one that holds.
+  const mix = numericToken("mix-tile-dim") / 100;
+  const paper = tokenValue("bg");
+
+  assert.match(tokens, /--mix-tile-dim:/, "tokens.css does not declare the drain");
+  assert.doesNotMatch(
+    tokens,
+    /--dim-tile:|--drain-tile:/,
+    "a token that fades the whole tile is still declared",
+  );
+
+  for (const [name, fill] of [...groupColours()].filter(([key]) => !key.endsWith("-deep"))) {
+    const drained = compositeOver(fill, paper, mix);
+    const ratio = contrastRatio(ON_FILL_DARK, drained);
+
+    assert.ok(
+      meetsAA(ratio),
+      `--${name} drained to ${drained} leaves the ink at ${ratio.toFixed(2)}:1, below AA`,
+    );
   }
 });
 

@@ -12,12 +12,17 @@ const categoryOf = (element) =>
   context.categories.find((category) => category.slug === element.category) ?? null;
 const options = (element) => ({ element, category: categoryOf(element), units: context.units });
 
-test("a card is a link to the element, named by the same three facts a tile is", () => {
+test("a card is a link to the element, named by what it shows", () => {
   const card = elementCard(options(bySymbol("H")));
 
   assert.match(card, /<li class="card"[^>]*data-element-card/);
   assert.match(card, /href="\/elements\/hydrogen\/"/);
-  assert.match(card, /aria-label="Hydrogen, symbol H, atomic number 1"/);
+  assert.doesNotMatch(
+    card,
+    /aria-label=/,
+    "a name written twice can be written twice differently; the visible text is the name",
+  );
+  assert.doesNotMatch(card, /aria-hidden/, "the tile's number and symbol are part of the card's name");
   assert.match(card, /<span class="card__z">1<\/span>/);
   assert.match(card, /<span class="card__sym">H<\/span>/);
 });

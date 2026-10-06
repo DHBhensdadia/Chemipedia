@@ -3,9 +3,12 @@
  * its state.
  *
  * A card is a link to the element's page before it is anything else, so the whole card is the
- * link. The tile inside it is the same fact the table draws — the atomic number and the symbol in
- * the category's colour — and it is hidden from assistive technology because the link's own name
- * already says all three of the facts the tile shows: ``Hydrogen, symbol H, atomic number 1``.
+ * link, and what names it is what it shows: the tile's number and symbol, the name, the group, the
+ * weight and the state. It used to be named by an `aria-label` that reworded the tile — "Hydrogen,
+ * symbol H, atomic number 1" — and the two drifted apart: the label hid the group and the
+ * measurement from a reader who cannot see them, and it named the link in an order the visible text
+ * does not have, which is the label-in-name failure the accessibility sweep and Lighthouse both
+ * reported. A name that is the content cannot drift from the content.
  *
  * Three of the card's five facts are data, and each comes from its owner rather than from this
  * file: the weight is the element's `atomicWeight` formatted with the unit `units.json` gives it,
@@ -20,8 +23,8 @@
  *
  * The card also carries the three searchable facts as `data-` attributes — the name, the symbol
  * and the atomic number — because the index filters the cards the page already holds rather than
- * fetching the data a second time. They are the same three facts the link's name states, written in
- * the form a client-side filter can read.
+ * fetching the data a second time. They are the same three facts the tile shows, written in the
+ * form a client-side filter can read.
  */
 
 import { attributes, escapeHtml } from "../lib/html.js";
@@ -68,8 +71,6 @@ export function cardMeta({ element, category, units }) {
  * @returns {string}
  */
 export function elementCard({ element, category = null, units }) {
-  const label = `${element.name}, symbol ${element.symbol}, atomic number ${element.atomicNumber}`;
-
   return `<li class="card"${attributes({
     "data-element-card": true,
     "data-name": element.name.toLowerCase(),
@@ -78,9 +79,8 @@ export function elementCard({ element, category = null, units }) {
   })}>
 <a class="card__link" href="/elements/${escapeHtml(element.slug)}/"${attributes({
     "data-key": element.category,
-    "aria-label": label,
   })}>
-<span class="card__tile" aria-hidden="true"><span class="card__z">${escapeHtml(element.atomicNumber)}</span><span class="card__sym">${escapeHtml(element.symbol)}</span></span>
+<span class="card__tile"><span class="card__z">${escapeHtml(element.atomicNumber)}</span><span class="card__sym">${escapeHtml(element.symbol)}</span></span>
 ${cardMeta({ element, category, units })}
 </a>
 </li>`;

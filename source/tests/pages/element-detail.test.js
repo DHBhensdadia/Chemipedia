@@ -209,6 +209,11 @@ test("the mini table draws all 118 elements, none tabbable, and marks this one",
     assert.equal([...hero.matchAll(/class="tile tile--compact/g)].length, 118, `${element.symbol}'s mini table`);
     assert.equal([...hero.matchAll(/tabindex="-1"/g)].length, 118, "a diagram is not a place to tab through the table");
     assert.equal([...hero.matchAll(/aria-current="page"/g)].length, 1, `${element.symbol} is not marked`);
+    assert.equal(
+      [...hero.matchAll(/role="listitem"/g)].length,
+      0,
+      "the miniature is one picture: a list item whose list is an image is an ARIA error",
+    );
     assert.ok(hero.includes(`href="/elements/${element.slug}/"`), `${element.symbol}'s own cell does not link to it`);
   }
 });

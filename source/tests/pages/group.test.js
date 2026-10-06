@@ -89,6 +89,24 @@ test("every group page declares the sheets the table and its own cards need", ()
   );
 });
 
+test("a member card is named by what it shows, not by a label that rewords it", () => {
+  const members = membersOf("noble-gases");
+  const markup = groupMemberList({ members, units });
+
+  assert.equal(
+    [...markup.matchAll(/<a class="grp-member"/g)].length,
+    members.length,
+    "one link per member",
+  );
+  assert.doesNotMatch(
+    markup,
+    /aria-label=|aria-hidden/,
+    "the link's name is the card's content: a label that rewords the tile leaves the weight and the state unnamed",
+  );
+  assert.match(markup, /<span class="grp-member__z">2<\/span><span class="grp-member__sym">He<\/span>/);
+  assert.match(markup, /<span class="grp-member__name">Helium<\/span>/);
+});
+
 test("the eleven groups' memberships partition the records, and match their declared counts", () => {
   const seen = new Map();
 

@@ -4,7 +4,8 @@
  * It answers the questions a code review cannot: is there one h1 and does the outline ever skip a
  * level, is every landmark present exactly once, does every control have a name, is every table
  * captioned, does every text colour reach WCAG AA against the surface it is actually painted on
- * (compositing every translucent layer and `color-mix()` between the text and the page), does the
+ * (compositing every translucent layer, any `opacity` on the text itself, and every `color-mix()`
+ * between the text and the page), does the
  * table keep one roving tab stop and move with the arrow keys, and does anything still animate when
  * the reader has asked for reduced motion.
  *
@@ -151,12 +152,16 @@ for (const path of PAGES) {
 
       seen.add(element);
 
-      const colour = rgb(style.color);
+      const painted = rgb(style.color);
 
-      if (!colour) {
+      if (!painted) {
         continue;
       }
 
+      // An element's own `opacity` fades its text towards whatever is behind it, which is how a
+      // tile's atomic number is made secondary — and it is composited before anyone reads the
+      // colour, so a sweep that reads `color` alone reports a ratio the reader never sees.
+      const colour = { ...painted, a: painted.a * Number(style.opacity) };
       const size = parseFloat(style.fontSize);
       const weight = Number(style.fontWeight) || 400;
       const large = size >= 24 || (size >= 18.66 && weight >= 700);

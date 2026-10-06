@@ -248,25 +248,31 @@
 /* -------------------------------------------------------------------------
    Isolation.
 
-   Pointing at or reaching a legend chip dims every key but its own. The dimmed tiles keep their
-   text readable — 0.22 of a fill is still a fill — and the focused tile is exempt, because a
-   focus ring drawn at 22 per cent opacity is not a focus ring.
+   Pointing at or reaching a legend chip drains every key but its own, and the drain happens to what
+   is behind the tile's text rather than to the tile. Fading the whole tile took its text with it:
+   an ink and a fill that both move towards the paper converge on it, and 0.22 of each came out at
+   1.5:1 — which is what Lighthouse measured on the group pages, where the isolation is the resting
+   state. Draining the fill leaves the text on a pale tint of its own group, where the dark ink the
+   palette verifies against a pale fill reaches AA, so the tile quietens because its colour has
+   gone rather than because its words have.
    ------------------------------------------------------------------------- */
 
 .pt__grid[data-isolated] .tile {
-  opacity: var(--dim-tile);
-  filter: saturate(var(--drain-tile));
+  background-color: color-mix(in srgb, var(--fill, var(--surface-sunk)) var(--mix-tile-dim), var(--bg));
+  color: var(--on-fill-dark);
 }
 
 .pt__grid[data-isolated] .tile.is-match {
   z-index: 2;
-  opacity: 1;
-  filter: none;
+  background-color: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
 }
 
+/* The focused tile keeps the page's colours too: a reader tabbing through a drained table should
+   see where the focus is without the tile's text changing under them. */
 .pt__grid[data-isolated] .tile:focus-visible {
-  opacity: 1;
-  filter: none;
+  background-color: var(--fill, var(--surface-sunk));
+  color: var(--on-fill, var(--ink-body));
 }
 
 /* -------------------------------------------------------------------------

@@ -259,8 +259,14 @@
   --pad-tile-inline: 0.15rem;
   --leading-tile: 1.05;
   --leading-tile-symbol: 0.72;
-  --opacity-tile-number: 0.9;
-  --opacity-tile-name: 0.92;
+  /* A tile's two secondary lines are the symbol's own colour at a fraction of it, and the fraction
+     is the tightest thing in the palette: fading moves the ink towards the fill, and the actinide
+     sage takes the dark ink at 4.96:1, so 0.9 of it landed at 4.32:1 — a real AA failure at the
+     8.8px an atomic number is set at. 0.95 is what every one of the eleven pairings can afford,
+     derived in scripts/lib/contrast.js and held there by a test, so a future colour change cannot
+     quietly eat the margin again. */
+  --opacity-tile-number: 0.95;
+  --opacity-tile-name: 0.96;
 
   --type-tile-z: clamp(0.55rem, 0.85cqw, 0.95rem);
   --type-tile-symbol: clamp(1rem, 2.15cqw, 2.2rem);
@@ -269,8 +275,8 @@
   --lift-tile: -2px; /* a tile rises towards the pointer */
   --scale-tile: 1.04;
   --lift-tile-sm: -1px;
-  --dim-tile: 0.22; /* what a tile keeps when its group is isolated */
-  --drain-tile: 0.35; /* and how far its colour is drained */
+  --mix-tile-dim: 30%; /* what a tile keeps of its own colour when another key is isolated: the rest
+                          goes to the paper, because fading a whole tile fades its text with it */
   --outline-tile-current: 2.5px; /* the tile a page is about */
 
   --height-tile-gap: 0.6rem; /* row 8: the space between the body and the f block */
@@ -433,7 +439,9 @@
   --type-card-z: 0.6rem; /* 9.6px, measured */
   --inset-card-z-block: 3px;
   --inset-card-z-inline: 5px;
-  --opacity-card-z: 0.85;
+  --opacity-card-z: 0.95; /* the tile number's own ceiling: 0.85 of the ink on the sage came out at
+                             4.01:1, and the eleven pairings afford no more fading than this —
+                             see --opacity-tile-number */
   --gap-card-line: 1px; /* between the three lines of a card's words, measured */
 
   /* -------------------------------------------------------------------------

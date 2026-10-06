@@ -131,6 +131,9 @@ export function elementMiniTable({ element, elements }) {
         key: cell.element.category,
         compact: true,
         tabbable: false,
+        // The miniature is one picture with a caption, not a list of links, so its tiles are not
+        // list items: a list item whose list is an image is the ARIA error the a11y sweep found.
+        role: null,
         current: cell.element.atomicNumber === element.atomicNumber,
       }),
     )

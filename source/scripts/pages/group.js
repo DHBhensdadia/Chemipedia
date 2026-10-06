@@ -185,9 +185,13 @@ ${rows
  * The group's members as cards: the element's tile, its name, its weight and its state.
  *
  * The card is a link to the element's page before it is anything else, so the whole card is the
- * link. Its weight is formatted through the units data and its state is the record's own word,
- * capitalised, which is the same pair of rules the elements index follows — a measurement reads the
- * same on both pages or it is a bug.
+ * link, and the link is named by what the card shows: the tile's number and symbol, then the name,
+ * the weight and the state. It used to be named by an `aria-label` that reworded the tile, which
+ * left the weight and the state unnamed and put the link's name in an order the visible text does
+ * not have — the label-in-name failure Lighthouse reported on every group page. Its weight is
+ * formatted through the units data and its state is the record's own word, capitalised, which is
+ * the same pair of rules the elements index follows — a measurement reads the same on both pages or
+ * it is a bug.
  *
  * @param {{ members: object[], units?: object }} options
  * @returns {string}
@@ -201,9 +205,8 @@ export function groupMemberList({ members, units }) {
       return `<li class="grp-members__item"><a${attributes({
         class: "grp-member",
         href: `/elements/${escapeHtml(element.slug)}/`,
-        "aria-label": `${element.name}, symbol ${element.symbol}, atomic number ${element.atomicNumber}`,
       })}>
-<span class="grp-member__tile" aria-hidden="true"><span class="grp-member__z">${escapeHtml(element.atomicNumber)}</span><span class="grp-member__sym">${escapeHtml(element.symbol)}</span></span>
+<span class="grp-member__tile"><span class="grp-member__z">${escapeHtml(element.atomicNumber)}</span><span class="grp-member__sym">${escapeHtml(element.symbol)}</span></span>
 <span class="grp-member__meta"><span class="grp-member__name">${escapeHtml(element.name)}</span><span class="grp-member__sub">${escapeHtml(`${weight} \u00b7 ${state}`)}</span></span>
 </a></li>`;
     })

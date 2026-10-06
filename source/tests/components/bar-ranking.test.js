@@ -54,7 +54,10 @@ test("a row is the place, the element, the bar and the value, and the bar carrie
   assert.match(row, /<li class="rank" data-key="non-metals" data-ratio="0\.0034">/);
   assert.match(row, /class="rank__place" aria-hidden="true">1<\/span>/);
   assert.match(row, /href="\/elements\/hydrogen\/"/);
-  assert.match(row, /aria-label="Hydrogen, symbol H, atomic number 1"/);
+  assert.match(row, /<span class="rank__sym">H<\/span>/);
+  assert.match(row, /<span class="rank__name">Hydrogen<\/span>/);
+  assert.match(row, /<span class="rank__z">1<\/span>/);
+  assert.doesNotMatch(row, /aria-label=/, "the element's link is named by what the row shows");
   assert.ok(row.includes('<span class="rank__value">-259.34\u00a0°C</span>'));
   assert.match(row, /style="--ratio:0\.0034"/);
 });

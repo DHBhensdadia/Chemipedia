@@ -111,6 +111,56 @@ export function contrastRatio(one, other) {
 }
 
 /**
+ * A text colour painted over a fill at a partial alpha: what `opacity` on the element renders.
+ *
+ * Fading moves the text towards the surface under it, so this is the colour a reader actually
+ * sees — and the colour a contrast ratio has to be measured against, because the browser blends
+ * before it draws.
+ *
+ * @param {string} ink
+ * @param {string} fill
+ * @param {number} [alpha] 0–1
+ * @returns {string} the composite, in six-digit form with a leading hash
+ */
+export function compositeOver(ink, fill, alpha = 1) {
+  const front = channels(ink);
+  const back = channels(fill);
+  const blended = front.map((value, index) => alpha * value + (1 - alpha) * back[index]);
+
+  return `#${blended.map((value) => Math.round(value).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/**
+ * How far a text colour may be faded over the fill behind it and still reach AA.
+ *
+ * A tile sets its atomic number and its name in the symbol's own colour and fades them, and that
+ * fade is the tile's whole hierarchy. But fading moves the text towards the fill it sits on, and on
+ * a pairing that only just passes — the actinide sage takes the dark ink at 4.96:1 — a tenth of it
+ * is the difference between readable and not. This is the arithmetic the browser does, so the token
+ * that does the fading can be held to the tightest pairing rather than to a value someone liked.
+ *
+ * @param {string} ink
+ * @param {string} fill
+ * @param {number} [target] the ratio the faded ink has to reach
+ * @returns {number | null} the lowest hundredth of an alpha — which is the most the ink can be
+ *   faded — or null when the ink does not reach the target at full strength either
+ */
+export function lowestAlphaForAA(ink, fill, target = AA_TEXT) {
+  let allowed = null;
+
+  for (let step = 0; step <= 100; step += 1) {
+    const alpha = step / 100;
+
+    if (contrastRatio(compositeOver(ink, fill, alpha), fill) >= target) {
+      allowed = alpha;
+      break;
+    }
+  }
+
+  return allowed;
+}
+
+/**
  * The foreground to use on a given fill: whichever of the two candidates
  * contrasts against it better.
  *
