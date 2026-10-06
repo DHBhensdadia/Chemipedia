@@ -72,7 +72,7 @@ and the site builds and its suite passes with the directory deleted.
 
 | File | What it is |
 |---|---|
-| `research/01-reference-site-audit.md` | **The most important research artefact.** A live audit of the reference site: what it is built with, the full URL inventory, page anatomy family by family (home, elements index, element detail with all ~40 property rows, table views, glossary, calculators), the extracted design tokens in full, the signature visual motif, what we deliberately change, and a list of outstanding audit work. |
+| `research/01-reference-site-audit.md` | **The most important research artefact.** A live audit of the reference site: what it is built with, the full URL inventory, page anatomy family by family (home, elements index, element detail with all ~40 property rows, table views, glossary, calculators), the extracted design tokens in full, the signature visual motif, every page's metadata and the three crawl files, what we deliberately change, and a list of outstanding audit work. |
 | `research/02-tooling-and-visual-verification.md` | How an agent that cannot see verifies appearance. The tools available, Playwright and Playwright MCP and their dependency conflict with ADR-004, the two-track resolution, and the standardised ten-step visual verification recipe. |
 | `research/03-git-and-github-standards.md` | The seven rules of a great commit message with sources, why Conventional Commits was considered and rejected, the audit table of what makes a history look machine-generated, branching and history shape, author identity, and practical hygiene. |
 

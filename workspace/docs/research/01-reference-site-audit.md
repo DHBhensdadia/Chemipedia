@@ -664,7 +664,57 @@ have our own palette and wordmark, so the result reads as our design language.
 
 ---
 
-## 5. What we deliberately change
+## 5. Metadata and crawlability
+
+Audited live on 2026-10-06 with `curl` and a desktop user-agent, over the home page and one element
+page, plus the three crawl files. This is what the reference actually serves:
+
+| | Home `/` | Element `/elements/hydrogen` |
+|---|---|---|
+| `<title>` | `The Periodic Table of Elements \| Breaking Atom` (46 chars) | `Hydrogen (H) — Atomic Number 1 \| Breaking Atom` (46) |
+| `<meta name="description">` | 146 chars | 200 chars, **cut mid-word** (`…hydrogenati`) at the template's limit |
+| `rel="canonical"` | `https://www.breakingatom.com/` | the page's own address |
+| `og:title` / `og:description` | identical to the title and description | identical |
+| `og:image` | — | a **relative** path (`/images/…Hydrogen1200x.png`), which no crawler can resolve |
+| `twitter:card` | `summary_large_image` | `summary_large_image` |
+| JSON-LD | none | **none** |
+
+No `og:site_name`, `og:type` or `og:url` appears on either page.
+
+**The three crawl files.** `robots.txt` allows everything and names
+`https://www.breakingatom.com/sitemap-index.xml`, which is a 191-byte index pointing at one child,
+`sitemap-0.xml` — **922** `<loc>` entries behind a needless second request. **`/sitemap.xml` is a
+404**, and that 404 page's own head carries
+`<link rel="canonical" href="https://www.breakingatom.com/404">`, so the reference tells a crawler
+that its error page is a real address.
+
+**Two defects worth naming.** No page declares an icon, and `/favicon.ico` answers **404**
+`text/html`, so every page load in the reference logs a failed request. Our build declares the
+favicon on every document — the not-found one included — which is why no sweep of ours has ever
+reported a failed request.
+
+**What we take, and what we add.** We take the shape: a title and a description per page, a
+canonical link, an Open Graph pair that repeats them, and a Twitter card. We add four things:
+
+1. **`og:site_name`, `og:type` and `og:url`**, which the reference omits — and an `og:image`, ours
+   absolute rather than relative. Our Twitter card is `summary` rather than
+   `summary_large_image`, because we have no social image and a banner card with a missing image is
+   the worse lie.
+2. **JSON-LD on every page**: a `WebPage` that is part of one `WebSite`, and on an element page a
+   `Thing` named after the element, with the symbol as an alternate name and the record's own atomic
+   number and weight as `PropertyValue`s. The reference ships none, which is the largest gap in its
+   metadata and the one the SEO audit rewards.
+3. **One `sitemap.xml`** rather than an index over a single child, listing only the **562 routes the
+   build actually wrote** rather than the manifest's inventory, because a sitemap that lists a page
+   the site does not serve is a sitemap that lies to a crawler.
+4. **No canonical on the not-found document.** It is not a published address, so it claims none.
+
+Descriptions are clipped to a word boundary rather than mid-word, and an element page's title
+follows the reference's shape (`Hydrogen (H) — atomic number 1`) without its brand suffix.
+
+---
+
+## 6. What we deliberately change
 
 | Item | Reference | ChemiPedia |
 |---|---|---|
@@ -677,13 +727,14 @@ have our own palette and wordmark, so the result reads as our design language.
 | Typeface | Faktum (commercial) | our own stack |
 | Paths | `/terms`, `/glossary-of-terms/:slug` | `/glossary`, `/glossary/:slug` |
 | Property typo | `Oxydation States` | `Oxidation States` |
+| Metadata | no JSON-LD, no declared icon, `/sitemap.xml` 404s | a `WebPage` per page, JSON-LD naming the element on its own page, a declared favicon, one sitemap |
 
 Everything else — the grid, the rhythm, the palette relationships, the motion, the dotted rule,
 the information architecture — is reproduced deliberately.
 
 ---
 
-## 6. Outstanding audit work
+## 7. Outstanding audit work
 
 - [x] Element group pages (`/element-groups/:slug`) — audited 2026-10-06; see §3.6, which carries
   the measured skeleton, the eleven live member lists held against our own taxonomy, the eleven deep
@@ -700,8 +751,13 @@ the information architecture — is reproduced deliberately.
 - [x] Downloads, About and Contact — audited 2026-10-06; see §3.10. Downloads is a page of links
   into an out-of-scope section with no file of its own, and About and Contact are unimplemented
   placeholders.
-- [ ] Tablet and mobile layouts — the four page families measured since §3.7 each carry their
-  three-width numbers in place, so what remains is the sweep itself, in Phase 11.
+- [x] Tablet and mobile layouts — the four page families measured since §3.7 each carry their
+  three-width numbers in place, and the sweep itself is Phase 11: nineteen pages at 375 / 768 /
+  1024 / 1440, 76 of 76 combinations fitting their viewport, with the periodic table's own scroller
+  the one recorded exception.
+- [x] Metadata and crawlability — audited 2026-10-06; see §5, which carries both pages' heads, the
+  three crawl files, the reference's 922-entry sitemap behind an index, its 404ing `/sitemap.xml`
+  and its canonical-on-404, and its undeclared, 404ing favicon.
 - [x] Dark theme — resolved: the reference switches to it at runtime, but its `:root` palette is
 the light one. We ship light only (ADR-006).
 
