@@ -9,7 +9,7 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**Complete at `v1.0.0`.** Eleven phases built the site, and the last of them measured it: 562 routes
+**Complete at `v1.0.0`.** Twelve phases built the site, and the last of them measured it: 562 routes
 plus a not-found page, every one of them rendered at build time rather than assembled by the browser,
 and four gates that pass on measurement rather than on inspection.
 
@@ -19,7 +19,7 @@ and four gates that pass on measurement rather than on inspection.
 | Tests | `node --test source/tests` — the suite that must pass, with nothing installed |
 | Accessibility | 0 defects across 19 pages from our own sweep; Lighthouse 100 on seven sampled pages |
 | Responsive | 76 of 76 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
-| Performance | worst layout shift 0, slowest cold load 41ms, no long task on any page |
+| Performance | worst layout shift 0, slowest cold load 38–41ms across the recorded runs, no long task on any page |
 | SEO | Lighthouse 100: canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` |
 
 | | |

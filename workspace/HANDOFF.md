@@ -19,7 +19,7 @@ release is tagged `v1.0.0`.
 - Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD; the
   build writes a 562-`loc` `sitemap.xml` and a `robots.txt` naming it.
 - Four gates, all exit 0: accessibility **0 defects over 19 pages**, responsive **76 of 76**, worst
-  layout shift **0** with a 38ms slowest cold load, Lighthouse **100 / 100 / 100** for
+  layout shift **0** with a slowest cold load of 38–41ms across runs, Lighthouse **100 / 100 / 100** for
   accessibility, best-practices and SEO (performance 89 mean, recorded not gated).
 - `.github/workflows/pages.yml` is the whole deployment. **Nothing is live**: there is no git
   remote. Publishing is the author's one-time step (`docs/GIT_WORKFLOW.md` §8) and is the one thing

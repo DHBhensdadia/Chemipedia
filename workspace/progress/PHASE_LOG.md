@@ -1280,7 +1280,8 @@ Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
   lines; Lighthouse accessibility 100 on all 7 sampled pages.)
 - [x] Responsive audit passed at 375 / 768 / 1024 / 1440 px on every page. (76 of 76.)
 - [x] Performance measured and recorded; no render-blocking work. (Worst layout shift 0, slowest cold
-  load 38ms, 0 long tasks. No script in the head but the JSON-LD data block, which does not execute;
+  load 38ms on this close-out run and 41ms on the run that landed the sweep — the same six pages, cold
+  cache, so the spread is the machine rather than the site; 0 long tasks. No script in the head but the JSON-LD data block, which does not execute;
   the module that does run is `type="module"` at the end of the body, so it is deferred; and the
   data layer is read at build time rather than fetched before paint. What is left blocking a first
   paint is the site's own 9–14 small same-origin stylesheets, which is what prevents a flash of
@@ -1352,6 +1353,9 @@ node workspace/tools/visual/audit-responsive.mjs ..... 76 of 76 page-and-width c
                                                        viewport                             · exit 0
 node workspace/tools/visual/audit-performance.mjs .... worst layout shift 0, slowest cold load 38ms,
                                                        0 long task(s)                       · exit 0
+                                                       (the run recorded when the sweep landed read
+                                                       41ms; both are cold-cache timings on a shared
+                                                       machine, and the README quotes the pair)
 node workspace/tools/visual/audit-lighthouse.mjs ..... accessibility 100 · best-practices 100 · seo 100
                                                        on all 7 pages; performance 89 mean (82–98),
                                                        recorded rather than gated · the run recorded at
@@ -1389,7 +1393,7 @@ the change moved nothing.
 | **Three families' links carry no `aria-label`.** The element card, the ranking bar and a group's member card name themselves by their visible content. | An `aria-label` that rewords what a link shows is a label-content-name mismatch, and it was hiding the card's group and its measurement from a reader who cannot see them. |
 | **The deployment is published by the author's one-time push.** The workflow, the routing fallback and the README's publishing steps are committed; the `v1.0.0` tag is local. | `docs/GIT_WORKFLOW.md` §8 makes publishing a deliberate, author-approved step (`git remote add` then `git push -u origin main && git push --tags`), and the repository has no remote. Nothing is claimed to be live. |
 
-**Commits:** `f1cef8e` (the tertiary ink and the legend counts meet AA), `969cbdf` (the accessibility sweep), `7269c9f` (the configuration rows stack on a phone), `04a9e45` (the responsive sweep), `bf44dd7` (canonical, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt`), `3b3b09f` (the document skeleton out of the build), `06c5e76` (the home page drawn at build time), `8869b4c` (the performance sweep and its budgets), `5cc54d1` (the four accessibility defects), `964bf80` (Lighthouse and the baseline), `b741a49` (the Pages workflow and the README), `1c431ee` (the reference's metadata in the audit), `ec80c43` (the four guides corrected against the source), plus the close-out commit.
+**Commits:** `f1cef8e` (the tertiary ink and the legend counts meet AA), `969cbdf` (the accessibility sweep), `7269c9f` (the configuration rows stack on a phone), `04a9e45` (the responsive sweep), `bf44dd7` (canonical, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt`), `3b3b09f` (the document skeleton out of the build), `06c5e76` (the home page drawn at build time), `8869b4c` (the performance sweep and its budgets), `5cc54d1` (the four accessibility defects), `964bf80` (Lighthouse and the baseline), `b741a49` (the Pages workflow and the README), `1c431ee` (the reference's metadata in the audit), `ec80c43` (the four guides corrected against the source), plus the close-out commit and the commit that quotes the sweep's two timings together.
 
 **Tag:** `v1.0.0` on the close-out commit.
 
