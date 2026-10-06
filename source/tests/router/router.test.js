@@ -296,11 +296,46 @@ test("a history move fetches the document again without pushing an entry, and re
   });
 
   router.start();
+
+  // What a real history move looks like when the event arrives: the address has already changed.
+  env.win.location.href = "https://chempedia.test/elements/iron/";
   env.listeners.get("popstate")({ state: { router: true, scrollY: 420 } });
   await settle();
 
+  assert.deepEqual(env.calls.fetched, ["https://chempedia.test/elements/iron/"]);
   assert.deepEqual(env.calls.pushed, [], "a history move must not push another entry");
   assert.deepEqual(env.calls.scrolled, [{ top: 420, left: 0, behavior: "instant" }]);
+});
+
+test("a fragment move within the page is the browser's, while a query makes it another page", async () => {
+  const env = fakePage();
+  const router = createRouter({
+    document: env.doc,
+    window: env.win,
+    fetchImpl: env.fetchImpl,
+    parse: () => env.parsed,
+    startPage: env.startPage,
+  });
+
+  router.start();
+
+  // Chrome fires `popstate` for a fragment move as well, with the new address already in place and
+  // no state of ours on the entry. Re-rendering here would settle the reader at the top of the page
+  // they had just jumped into, so the router must do nothing at all.
+  env.win.location.href = `${BASE}#letter-P`;
+  env.listeners.get("popstate")({ state: null });
+  await settle();
+
+  assert.deepEqual(env.calls.fetched, [], "a fragment move fetched a document");
+  assert.deepEqual(env.calls.scrolled, [], "a fragment move moved the reader away from it");
+  assert.deepEqual(env.calls.pushed, []);
+
+  // And a query on the page we are on is a different page as far as the router is concerned.
+  env.win.location.href = `${BASE}?q=acid`;
+  env.listeners.get("popstate")({ state: { router: true, scrollY: 0 } });
+  await settle();
+
+  assert.deepEqual(env.calls.fetched, [`${BASE}?q=acid`], "a query change is a page of its own");
 });
 
 test("the entry the reader arrived on gets a state for the scroll position to live in", () => {

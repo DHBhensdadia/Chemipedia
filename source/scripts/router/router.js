@@ -122,6 +122,27 @@ export function createRouter({
 } = {}) {
   let busy = false;
   let frame = 0;
+  let current = "";
+
+  /**
+   * The page a URL names, without its fragment.
+   *
+   * Two URLs with one key are the same page, and a fragment is where on that page the reader is:
+   * `/glossary/` and `/glossary/#letter-P` are one document, and the second is the first with the
+   * reader somewhere else in it.
+   *
+   * @param {string} href
+   * @returns {string}
+   */
+  function pageKey(href) {
+    try {
+      const url = new URL(String(href), win.location.href);
+
+      return `${url.pathname}${url.search}`;
+    } catch {
+      return String(href);
+    }
+  }
 
   /** Keep the reader's place on the entry they are on, so a history move can come back to it. */
   function savePlace() {
@@ -224,6 +245,7 @@ export function createRouter({
 
       swap(parse(html));
       settle(top);
+      current = pageKey(url.href);
     } catch {
       // A real navigation is the honest fallback: the browser knows how to show an error, and a
       // reader who has lost the network should not be left looking at a page that half-exists.
@@ -249,12 +271,28 @@ export function createRouter({
     navigate(url);
   }
 
+  /**
+   * A history move: another page, or another place in this one.
+   *
+   * The second case has to be told from the first, because Chrome and Safari fire `popstate` for a
+   * fragment move and the new entry carries no state of ours. Left alone, this handler fetched the
+   * page the reader was already on and settled them at the top of it, taking back the jump they had
+   * just asked for — which is what the glossary's rail of letters did until a browser pass measured
+   * it. A move to the page already on screen is the browser's own work: `/glossary/#letter-P` is
+   * `/glossary/`, and the fragment says where in that document to stop.
+   */
   function onPopState(event) {
+    if (pageKey(win.location.href) === current) {
+      return;
+    }
+
     navigate(win.location.href, { history: false, top: event.state?.scrollY ?? 0 });
   }
 
   return {
     start() {
+      current = pageKey(win.location.href);
+
       if (win.history.state === null) {
         win.history.replaceState({ router: true, scrollY: win.scrollY }, "");
       }
