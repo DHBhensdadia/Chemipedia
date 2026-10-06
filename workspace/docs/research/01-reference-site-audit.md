@@ -436,10 +436,46 @@ main
 
 ### 3.8 Temperature calculators — `/temperature-calculators`
 
-- Title: `Temperature Calculator and Conversions`. Sub-paragraph: *"Use our temperature calculator
-  to convert between Fahrenheit, Celsius, and Kelvin."* (ours to rewrite).
-- Three numeric inputs that convert live in both directions.
-- Small, self-contained, and a good candidate for the cleanest unit-test suite in the project.
+**Measured 2026-10-06**, including the live behaviour of all three fields.
+
+- Title: `Temperature Calculator and Conversions`. Hero: a heading plus one sub-paragraph of the
+  reference's own copy (ours to rewrite). No filter, no table.
+- Body: a `.cards` grid — **one column, 411.094px at 1280** — holding three `div.card`s, each
+  `data-conv` with `data-from` and `data-to`:
+
+  | Card | `data-from` | `data-to` | Input id |
+  |---|---|---|---|
+  | Fahrenheit to Celsius | `F` | `C` | `f-to-c` |
+  | Celsius to Fahrenheit | `C` | `F` | `c-to-f` |
+  | Celsius to Kelvin | `C` | `K` | `c-to-k` |
+
+- A card is an `h2`, then a `.card__row` holding a visually-hidden `label`, an `input` and an
+  `output.card__out[for=<id>]`, then a `p.card__warn[data-warn][role=status][aria-live=polite]`.
+- The input is `type="number"`, `step="any"`, `inputmode="decimal"`, placeholder `0`, and **carries
+  no `min`, no `max` and no `aria-describedby`**. The `type` is the whole of its validation: pressing
+  a letter after `12` leaves `12`, because the browser refuses the keystroke.
+- **Each card converts one way only**, and Kelvin has no field of its own — the three pairs are
+  F→C, C→F and C→K, so a reader who wants Kelvin types in the third card's Celsius field.
+- The output is filled from the placeholder's zero before anything is typed: `-17.78°C`, `32°F`,
+  `273.15°K`. It is **30.976px** — our `--step-2` — in the ink `rgb(21, 64, 61)`.
+- Rounding is at most two decimals with trailing zeros dropped: `37.78°C`, `100°C`, `32°F`,
+  `-868°F`, `-11.11°C`.
+- Below absolute zero the conversion still happens and the warning appears beside it: `-500` in any
+  field gives `-295.56°C` / `-868°F` / `-226.85°K` with *"Below absolute zero — not a reachable
+  temperature."* Clearing the field returns the output to the zero conversion and the warning to
+  empty.
+- **Kelvin is written `273.15°K`**, with a degree sign, and the unit follows the number with no
+  space.
+
+**What we take, and what we deliberately change.** The measured vocabulary is kept: the field's
+shape, the output at `--step-2` in the ink, the two-decimal rounding, and a warning that is a polite
+live region rather than an alert. Three one-way cards become **three synchronised fields** —
+Celsius, Fahrenheit and Kelvin, each updated as any of them is typed in — because that is the form
+the plan asks for and it removes the reference's awkwardness that a reader wanting Kelvin must find
+the Celsius field. We drop the degree sign on Kelvin (it is not a scale with a degree) and set the
+unit off the number with a space, as every other figure on this site does. The notable reference
+points are printed at build time, so the page is useful with the script off.
+
 
 ### 3.9 Attribute rankings — `/melting-point`, `/boiling-point`, `/orbital-configurations`
 
@@ -469,6 +505,44 @@ reproduced. The sortable table is not: Phase 6's deliverable is a *ranking*, one
 with the bar visualisation the implementation plan names, and the project's one word for a missing
 value (`Unknown`) rather than the reference's “Not measured”. The index's hero search is kept, and
 the ranking pages carry no filter of their own.
+
+### 3.10 Downloads, About and Contact
+
+**Measured 2026-10-06.** One of these three has a page to study; the other two have nothing.
+
+**`/downloads`.** Title `Download The Periodic Table and Elements`. No submenu of headings at all.
+
+- Hero: **400.5px tall** — the tallest hero in the site — and it is a coloured band, since its `h1`
+  measures white (`rgb(255, 255, 255)`) at **43.2px/49.68px**, smaller than the 51.2px the other
+  index heroes use.
+- Shell 1100px holding a `div.panel` **1100 × 331**, carrying four cards. Each card is an SVG
+  preview image measured **261 × 174** with an empty `alt`, a title, and a one-line description:
+
+  | Card | Target |
+  |---|---|
+  | Electronegativity Periodic Table | `/printables-and-pdfs/electronegativity-periodic-table` |
+  | Orbitals Periodic Table | `/printables-and-pdfs/orbitals-periodic-table` |
+  | Periodic Table PDF | `/printables-and-pdfs/periodic-table-pdf` |
+  | Properties and States Periodic Table | `/printables-and-pdfs/properties-and-states-periodic-table` |
+
+  Two of the four preview images point at the same file. The second `.panel` is 0 × 0 — a hidden
+  duplicate.
+- Below that, a strip reading *"Each element has its own printable card"* followed by **all 118
+  element links**, each the symbol then the name.
+- **Nothing on the page is itself a file.** Every one of its targets is another page of the
+  reference's own site, and the four printable ones live under `/printables-and-pdfs/*`, which
+  ADR-002 leaves out of scope. So there is no downloadable asset to reproduce and no print rule to
+  read off: the whole family is ours to design, and what it must satisfy is the plan's exit
+  criterion — every target resolving in our own built output, and the table fitting one sheet at
+  A4 and Letter.
+
+**`/about` and `/contact` are not implemented on the reference.** Each returns an `h1` (`about`,
+`contact`), 54.88px/60.368px in the ink, over a single sentence: *"Placeholder — ported from
+about.html. Content not yet migrated."* — 9 words of main content, no headings, no links, no
+images. There is therefore no prose to avoid copying and no layout to measure. Both pages are ours
+by the plan: About describes ChemiPedia and carries the **Data sources** section ADR-005 requires,
+and Contact is written in our own words. What the audit settles is only that neither page should be
+modelled on the reference, because there is nothing there to model.
 
 ---
 
@@ -619,8 +693,15 @@ the information architecture — is reproduced deliberately.
 - [x] The four alternate table views — audited 2026-10-06; see §3.5, which now carries their
   measured skeleton, their four legends with the colours read off the tiles, and the evolution
   view's timeline.
-- [ ] Glossary term detail page — audit before Phase 9.
-- [ ] Tablet and mobile layouts — capture breakpoints before Phase 1 signs off.
+- [x] Glossary term detail page — audited 2026-10-06; see §3.7, which carries the index's rail,
+  letters, row grid and badge colours, and the term page's DOM.
+- [x] Temperature calculator — audited 2026-10-06; see §3.8, which carries the three cards' live
+  behaviour, the two-decimal rounding and the below-absolute-zero warning.
+- [x] Downloads, About and Contact — audited 2026-10-06; see §3.10. Downloads is a page of links
+  into an out-of-scope section with no file of its own, and About and Contact are unimplemented
+  placeholders.
+- [ ] Tablet and mobile layouts — the four page families measured since §3.7 each carry their
+  three-width numbers in place, so what remains is the sweep itself, in Phase 11.
 - [x] Dark theme — resolved: the reference switches to it at runtime, but its `:root` palette is
 the light one. We ship light only (ADR-006).
 
