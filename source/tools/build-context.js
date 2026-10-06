@@ -11,9 +11,13 @@
  * The base is an absolute path for the same reason: `loadJson` builds `${base}/${name}`, so with the
  * data directory as the base the fetch's argument is already the file to open.
  *
- * Three files, once, however many routes the build renders. The manifest needs the elements before
- * it can even be assembled — the 118 element routes are derived from the records — and every one of
- * those pages reads the same array.
+ * Four files, once, however many routes the build renders. The manifest needs the elements and the
+ * terms before it can even be assembled — the 118 element routes and the 418 glossary routes are
+ * derived from the records — and every one of those pages reads the same repository.
+ *
+ * The glossary is handed over as the repository rather than as its array, because its pages ask it
+ * questions: which letters have terms under them, what order the terms read in, which term is which
+ * slug. A copy of the array could answer none of those.
  */
 
 import { readFile } from "node:fs/promises";
@@ -21,6 +25,7 @@ import path from "node:path";
 
 import { createCategoriesRepository } from "../scripts/data/categories-repository.js";
 import { createElementsRepository } from "../scripts/data/elements-repository.js";
+import { createGlossaryRepository } from "../scripts/data/glossary-repository.js";
 import { createUnitsRepository } from "../scripts/data/units-repository.js";
 import { sourceDir } from "./site-paths.js";
 
@@ -50,16 +55,18 @@ export async function fromDataFile(url) {
 /**
  * Load every data file the build renders from.
  *
- * @returns {Promise<{ elements: object[], categories: object[], units: object }>} `units` is the
- *   repository itself: a page asks it for a field's definition rather than for a copy of the table
+ * @returns {Promise<{ elements: object[], categories: object[], units: object, glossary: object }>}
+ *   `units` and `glossary` are the repositories themselves: a page asks them a question rather than
+ *   taking a copy of the table
  */
 export async function buildContext() {
   const options = { fetchImpl: fromDataFile, base: dataDir };
-  const [elements, categories, units] = await Promise.all([
+  const [elements, categories, units, glossary] = await Promise.all([
     createElementsRepository(options),
     createCategoriesRepository(options),
     createUnitsRepository(options),
+    createGlossaryRepository(options),
   ]);
 
-  return { elements: elements.all(), categories: categories.all(), units };
+  return { elements: elements.all(), categories: categories.all(), units, glossary };
 }

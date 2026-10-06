@@ -46,6 +46,10 @@ export const PAGE_BEHAVIOUR = {
   // what runs in the browser. The index has no entry — it is a page of cards and links, and the
   // router alone is everything it needs.
   group: (doc) => import("./pages/group.js").then((module) => module.startGroup(doc)),
+  // The glossary index has one because of the filter. The 418 term pages have none: a term page is
+  // its definition and the links out of it, and the router alone is everything it needs.
+  "glossary-index": (doc) =>
+    import("./pages/glossary.js").then((module) => module.startGlossaryIndex(doc)),
 };
 
 /**

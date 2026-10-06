@@ -82,6 +82,16 @@ const GROUP_STYLES = [
 /** The group pages' own sheet, which the index page has to ask for by name. */
 const GROUP_PAGE_SHEET = "styles/pages/group.css";
 
+/**
+ * The glossary's own sheet, declared by both of its templates.
+ *
+ * One file for the index and the 418 term pages, for the reason `group.css` is one file for the
+ * eleven group pages: they are one arrangement, and the term page is the index's article. Neither
+ * template is named `glossary`, so the build appends nothing for them by itself and both routes ask
+ * for the file by name.
+ */
+const GLOSSARY_STYLES = ["styles/pages/glossary.css"];
+
 export const routes = [
   {
     path: "/",
@@ -220,6 +230,7 @@ export const routes = [
       "the terms that only make sense once two elements sit next to each other.",
     nav: { label: "Glossary", order: 3 },
     section: "reference",
+    styles: GLOSSARY_STYLES,
   },
   {
     path: "/element-groups/",
@@ -321,19 +332,49 @@ export function groupRoutes(categories) {
 }
 
 /**
+ * The glossary family: one route per term.
+ *
+ * Four hundred and eighteen pages, and like the other two families not one of them is authored.
+ * Each route carries the term's record, so the page's title, its description and its definition all
+ * come from the one place that holds them.
+ *
+ * The path is the term's own slug, which is the term's name folded to a URL: a reader who has the
+ * word has the address, and two terms that differ only in case are one page rather than two.
+ *
+ * The description is the definition rather than a second sentence written about it. A term page
+ * exists to say what the term means, and a summary of a summary is a worse answer to a search than
+ * the definition itself.
+ *
+ * @param {object[]} terms every glossary record, as `glossary.json` holds them
+ * @returns {object[]}
+ */
+export function glossaryRoutes(terms) {
+  return terms.map((term) => ({
+    path: `/glossary/${term.slug}/`,
+    template: "glossary-term",
+    title: `${term.term} \u2014 chemistry glossary`,
+    description: term.definition,
+    section: "reference",
+    styles: GLOSSARY_STYLES,
+    term,
+  }));
+}
+
+/**
  * Everything the site publishes: the authored routes and the generated families.
  *
  * One function rather than a spread at each call site, because the build and the tests must agree
  * about what the site contains, and two spreads in two files is how they come to disagree.
  *
- * Both families take their records explicitly rather than defaulting to an empty list: a caller
- * that forgot one would otherwise publish a site that is quietly missing a hundred and eighteen
- * pages, or eleven.
+ * Every family takes its records explicitly rather than defaulting to an empty list: a caller that
+ * forgot one would otherwise publish a site that is quietly missing a hundred and eighteen pages,
+ * or eleven, or four hundred and eighteen.
  *
  * @param {object[]} elements
  * @param {object[]} categories
+ * @param {object[]} terms
  * @returns {object[]}
  */
-export function allRoutes(elements, categories) {
-  return [...routes, ...elementRoutes(elements), ...groupRoutes(categories)];
+export function allRoutes(elements, categories, terms) {
+  return [...routes, ...elementRoutes(elements), ...groupRoutes(categories), ...glossaryRoutes(terms)];
 }

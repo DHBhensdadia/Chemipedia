@@ -22,7 +22,7 @@ const context = await buildContext();
 const { elements, categories, units } = context;
 const groupPages = groupRoutes(categories);
 const routeBySlug = new Map(groupPages.map((route) => [route.category.slug, route]));
-const manifest = allRoutes(elements, categories);
+const manifest = allRoutes(elements, categories, context.glossary.all());
 const declared = new Set(manifest.map((route) => route.path));
 const valuesFor = (slug) =>
   groupValues({ route: routeBySlug.get(slug), elements, categories, units });
@@ -38,7 +38,7 @@ test("the site publishes one route per group, and every route is its own URL", (
 
   assert.equal(groupPages.length, 11);
   assert.equal(new Set(paths).size, 11, "two groups share a URL");
-  assert.equal(manifest.length, routes.length + 118 + 11);
+  assert.equal(manifest.length, routes.length + 118 + 11 + 418);
   assert.equal(routeBySlug.size, categories.length, "a category has no page");
 
   for (const route of groupPages) {

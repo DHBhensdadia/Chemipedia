@@ -23,7 +23,7 @@ const pagePart = (path) => path.split("#")[0].split("?")[0];
  * call every one of them undeclared.
  */
 const context = await buildContext();
-const manifest = allRoutes(context.elements, context.categories);
+const manifest = allRoutes(context.elements, context.categories, context.glossary.all());
 const declared = new Set(manifest.map((route) => route.path));
 
 test("the primary navigation comes from the manifest, in the order it asks for", () => {

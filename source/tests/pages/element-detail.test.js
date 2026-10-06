@@ -53,7 +53,10 @@ test("the site publishes one route per element, and every route is its own URL",
 
   assert.equal(elementPages.length, 118);
   assert.equal(new Set(paths).size, 118, "two elements share a URL");
-  assert.equal(allRoutes(elements, context.categories).length, routes.length + 118 + 11);
+  assert.equal(
+    allRoutes(elements, context.categories, context.glossary.all()).length,
+    routes.length + 118 + 11 + 418,
+  );
 
   for (const [index, route] of elementPages.entries()) {
     const element = elements[index];

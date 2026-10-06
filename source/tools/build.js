@@ -31,6 +31,8 @@ import { submenu as submenuBand } from "../scripts/components/submenu.js";
 import { attributes, escapeHtml } from "../scripts/lib/html.js";
 import { elementPageValues } from "../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../scripts/pages/elements-index.js";
+import { glossaryIndexValues } from "../scripts/pages/glossary.js";
+import { glossaryTermValues } from "../scripts/pages/glossary-term.js";
 import { groupIndexValues, groupValues } from "../scripts/pages/group.js";
 import { configurationPageValues } from "../scripts/pages/orbital-configuration.js";
 import { rankingPageValues } from "../scripts/pages/ranking.js";
@@ -93,6 +95,11 @@ const NOT_FOUND_PAGE = {
  * mode from the template it is filling. The eleven group pages share theirs for the last reason
  * again: the route carries the category, so the twelfth row is a group page rather than a
  * different page about groups.
+ *
+ * The glossary gets two rows rather than one because it is two pages in one arrangement: an index
+ * that holds every term and a page for one of them. The 418 term pages share the second row for the
+ * reason the 118 element pages share theirs — the route carries the record, and nothing else about
+ * them differs.
  */
 const FAMILY_RENDERERS = {
   "element-detail": elementPageValues,
@@ -106,13 +113,15 @@ const FAMILY_RENDERERS = {
   evolution: tableViewPageValues,
   group: groupValues,
   "element-groups-index": groupIndexValues,
+  "glossary-index": glossaryIndexValues,
+  "glossary-term": glossaryTermValues,
 };
 
 /**
  * The body of a route: its template, filled when a family renderer claims it.
  *
  * @param {object} route
- * @param {{ elements: object[], categories: object[], units: object }} context
+ * @param {{ elements: object[], categories: object[], units: object, glossary: object }} context
  * @returns {Promise<string>}
  */
 async function bodyFor(route, context) {
@@ -130,6 +139,7 @@ async function bodyFor(route, context) {
     elements: context.elements,
     categories: context.categories,
     units: context.units,
+    glossary: context.glossary,
   });
 
   return fillTemplate(template, values, { name: templatePathFor(route) });
@@ -245,11 +255,11 @@ export function shellFor(page, currentPath, manifest = routes) {
 /**
  * The manifest the build renders: everything the site publishes, in one list.
  *
- * @param {{ elements: object[], categories: object[] }} context
+ * @param {{ elements: object[], categories: object[], glossary: object }} context
  * @returns {object[]}
  */
 export function manifestFor(context) {
-  return allRoutes(context.elements, context.categories);
+  return allRoutes(context.elements, context.categories, context.glossary.all());
 }
 
 /**
