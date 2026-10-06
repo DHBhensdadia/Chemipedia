@@ -3,6 +3,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 import { fillTemplate, placeholderKeys } from "../../tools/render-template.js";
+import { aboutPageValues } from "../../scripts/pages/about.js";
+import { calculatorPageValues } from "../../scripts/pages/temperature-calculator.js";
+import { contactPageValues } from "../../scripts/pages/contact.js";
+import { downloadsPageValues } from "../../scripts/pages/downloads.js";
 import { elementPageValues } from "../../scripts/pages/element-detail.js";
 import { elementsIndexPageValues } from "../../scripts/pages/elements-index.js";
 import { glossaryIndexValues } from "../../scripts/pages/glossary.js";
@@ -111,6 +115,10 @@ test("every page family fills its template, block for block", async () => {
       }),
     ],
     ["glossary-index", glossaryIndexValues, () => ({ glossary: context.glossary })],
+    ["temperature-calculator", calculatorPageValues, () => ({ elements: context.elements })],
+    ["downloads", downloadsPageValues, () => ({})],
+    ["about", aboutPageValues, () => ({})],
+    ["contact", contactPageValues, () => ({})],
     [
       "glossary-term",
       glossaryTermValues,

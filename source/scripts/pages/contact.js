@@ -110,15 +110,15 @@ ${WHERE_IT_GOES.map(
 }
 
 /**
- * Every block the contact template asks for.
+ * Every block the contact template asks for, in the order the page reads them.
  *
- * @returns {{ lede: string, address: string, parts: string, where: string }}
+ * @returns {{ lede: string, parts: string, where: string, address: string }}
  */
 export function contactPageValues() {
   return {
     lede: CONTACT_LEDE,
-    address: `<a class="con-address__link" href="mailto:${escapeHtml(CONTACT_EMAIL)}">${escapeHtml(CONTACT_EMAIL)}</a>`,
     parts: partsBlock(),
     where: goesBlock(),
+    address: `<a class="con-address__link" href="mailto:${escapeHtml(CONTACT_EMAIL)}">${escapeHtml(CONTACT_EMAIL)}</a>`,
   };
 }
