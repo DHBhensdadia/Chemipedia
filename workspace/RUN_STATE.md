@@ -6,8 +6,8 @@
 > **It is not sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-06 (the session that closed Phase 11 — quality, accessibility, performance
-and delivery — and delivered `v1.0.0`)
+**Last updated:** 2026-10-07 (the session that published the site at the author's instruction, and
+fixed the one defect that only a live address served from a path could expose)
 
 ---
 
@@ -16,11 +16,11 @@ and delivery — and delivered `v1.0.0`)
 | Field | Value |
 |---|---|
 | **Phase** | Phase 11 — Quality, accessibility, performance and delivery — `COMPLETE` |
-| **Work item** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`.** The only thing the plan asks for that is not done is the one-time push that makes the site live, which `docs/GIT_WORKFLOW.md` §8 assigns to the author |
+| **Work item** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`**, and the deployment the plan asked for is now **live** at `https://dhbhensdadia.github.io/Chemipedia/` — the author's one-time push ran on request, the live address then exposed a defect no local run could (`bd338dd`), and the corrected build was redeployed and verified |
 | **Objective achieved** | The replica is a finished product. Every page is rendered at build time rather than assembled by the browser, so a crawler and a reader whose script did not run both see the site. Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD, and the build writes `sitemap.xml` from the routes it actually wrote plus a `robots.txt` naming it. Nineteen pages pass an accessibility sweep with 0 defects, all 76 page-and-width combinations fit their viewport, the worst layout shift on any page is 0, and Lighthouse scores accessibility, best-practices and SEO at 100 across seven sampled pages |
-| **Status** | `COMPLETE`. `node --test source/tests` → **482 pass, 0 fail**. The build writes **562 routes** plus the not-found page and reports **0 waiting**. The four gates all exit 0: accessibility **0 defects / 27 informational lines across 19 pages**; responsive **76 of 76**; performance **worst shift 0, slowest cold load 38–41ms, 0 long tasks**; Lighthouse **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
-| **Current commit** | the last commit of the phase's close-out, tagged `v1.0.0`. Phase 11 work commits: `f1cef8e`..`ec80c43`, then the phase log, the checkpoints and the README's run instructions |
-| **Next action** | Nothing is open on the plan. If the site should go live, the author's one-time step is `git remote add origin <url>` then `git push -u origin main && git push --tags`, and GitHub Pages enabled with **Source: GitHub Actions** — the workflow does the rest. Otherwise the next work item is whatever the author chooses: the three long-standing deferrals are listed under *Deliberately unfinished* |
+| **Status** | `COMPLETE` and **published**. The live site answers 200 for `/`, a stylesheet, a module, the icon, `data/elements.json`, an element page, `sitemap.xml` and `robots.txt`, all under `/Chemipedia/`, and the domain root answers 404 — which is the point of the path. Locally: `node --test source/tests` → **497 pass, 0 fail**. The build writes **562 routes** plus the not-found page and reports **0 waiting**. The four gates all exit 0: accessibility **0 defects / 27 informational lines across 19 pages**; responsive **76 of 76**; performance **worst shift 0, slowest cold load 38–41ms, 0 long tasks**; Lighthouse **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
+| **Current commit** | the deployment fix and its documentation: `bd338dd` (every URL the site writes stays inside the path it is published under), tagged `v1.0.1`, then the close-out commits that carry this record. `v1.0.0` stays where it is, on `e035c6f` — the release whose publication exposed the defect |
+| **Next action** | Nothing is open. The site is live and every push to `main` rebuilds and redeploys it. The next work item is whatever the author chooses; the long-standing deferrals are listed under *Deliberately unfinished* |
 
 ## Files expected to change in the next work item
 
@@ -29,11 +29,12 @@ and delivery — and delivered `v1.0.0`)
 .github/workflows/pages.yml                                        only if the deployment changes
 ```
 
-The plan is delivered end to end. The one command the project still owes is the author's push, and
-it changes no file but `README.md`'s claim that the site is published — which it deliberately does
-not yet make. If a later phase reopens a page, the pieces to touch are the page's family module, its
-template, its sheet, its entry in the route manifest and its tests; `docs/MIND_MAP.md` §4 answers
-"which file owns this" for every case, and every new file must appear there in the same commit.
+The plan is delivered end to end, and the site is live. If a later phase reopens a page, the pieces
+to touch are the page's family module, its template, its sheet, its entry in the route manifest and
+its tests; `docs/MIND_MAP.md` §4 answers "which file owns this" for every case, and every new file
+must appear there in the same commit. Anything that writes a URL — markup a page or a component
+builds, a data file a repository reads, a link the browser writes after a page has loaded — must be
+checked against a deployment served from a path, not only against the development server at a root.
 
 ## Work item ledger
 
@@ -58,6 +59,7 @@ template, its sheet, its entry in the route manifest and its tests; `docs/MIND_M
 | 11.5 The performance sweep, and the shift it found | `COMPLETE` | `tools/visual/audit-performance.mjs`: six pages cold, reporting timings, bytes, shift and long tasks; exits non-zero over a 0.1 shift or a 2000ms load. Worst shift 0, slowest load 38–41ms across runs, 0 long tasks | `8869b4c` |
 | 11.6 Lighthouse, and the four defects it found | `COMPLETE` | `tools/visual/audit-lighthouse.mjs` over seven pages, gating accessibility at 1.0 and best-practices at 0.95. Fixed the faded tile ink (4.32:1), the drained tiles (1.5:1), the element page's orphaned list items and three label-content-name mismatches | `5cc54d1`, `964bf80` |
 | 11.7 The deployment, and the reference's metadata audited | `COMPLETE` | `.github/workflows/pages.yml` computes its own origin, builds, tests and hands `dist/` to Pages. `research/01` §5 records the reference's metadata live: no JSON-LD, a 404ing favicon, a 404ing `/sitemap.xml` | `b741a49`, `1c431ee` |
+| Publish — the push, and the deployment it corrected | `COMPLETE` | The author's one-time step ran on request: `git remote add origin`, `main` and both tags pushed, every commit attributed on GitHub to `DHBhensdadia` with `Devansh <dhbhensdadia@gmail.com>` and a single contributor in the API's own count. Pages enabled with `build_type=workflow` — the first run failed in `configure-pages` for want of a Pages site, and its rerun was green. The live address then showed the defect a local root cannot: every URL was rooted at the domain instead of at `/Chemipedia/`. Fixed in `bd338dd`: the finished document is rewritten once at build time, the data fetch and the browser's own link read the site's path from `scripts/lib/site-path.js`. Verified: 497 tests, a simulated subpath build of 563 documents with no URL outside the site and none doubled, 118 tiles from the live data, and a live client-side navigation. | `e035c6f` (the push), `bd338dd` (the fix), tagged `v1.0.1` |
 | 11.8 Documentation close-out, and the `guides/` audit it turned up | `COMPLETE` | README, `MIND_MAP.md`, `research/01` §5, this file, `HANDOFF.md`, the Phase 11 entry — and all four guides audited against the source, which found three of them drifted: 18 `(pending)` rows and functions that were never exported, a file tree naming three files that do not exist, and a page trace that had the element page hydrating when it runs no script at all. MIND_MAP completeness: 168 files under `source/`, 0 missing | `ec80c43`, plus the close-out commit |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
@@ -72,7 +74,8 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 | **Everything a reader is meant to read is written at build time.** | The home page was the last exception and it cost a 0.315 layout shift and a table-less page for a crawler and for a reader whose script did not run. Every family is now rendered by the build from the same functions the browser would have used, and a page's behaviour only **attaches** to markup that is already there. |
 | **Where the reference's own value fails AA, accessibility wins and the deviation is recorded.** | The reference's tertiary ink is 3.06:1 on our paper and its isolation dims text to 1.5:1. We darkened the ink and drain the fill instead of the tile, and both costs are written down in `DESIGN_SYSTEM.md` and in the Phase 11 deviations table rather than quietly absorbed. |
 | **A canonical link is configuration, and the default cannot resolve.** | `site-origin.js` reads `SITE_ORIGIN` and falls back to a reserved `.example` address, and the build says on every run that the placeholder is in place. A confident, wrong canonical is worse than none, and the workflow passes the real origin in. |
-| **The deployment is a workflow; publication is the author's step.** | `docs/GIT_WORKFLOW.md` §8 makes publishing deliberate and author-approved. The workflow, the routing fallback and the README's steps are the deliverable; the push is not claimed until it happens. |
+| **The deployment is a workflow; publication is the author's step.** | `docs/GIT_WORKFLOW.md` §8 makes publishing deliberate and author-approved. The workflow, the routing fallback and the README's steps are the deliverable; the push was not claimed until it happened, and it happened on the author's instruction. |
+| **A site that declares where it lives must place every URL inside that path.** | The live address is a project site, served from `/Chemipedia/`. A path written from the site's own root is right locally and leaves the site in production, and two of them cannot be rewritten after the fact: a request for a data file, and a link the browser writes after the page has loaded. So the deployment's path is read once in the build (`tools/site-origin.js` → `rootedAt` in `tools/document.js`) and once in the browser (`scripts/lib/site-path.js`, off the module's own address) — and a deployment served from a path is a case the suite covers, not a hope. |
 | **Derive a claim rather than assert it.** | Unchanged, and now applied to nine families: the fading ceiling is derived from the eleven group fills by `lowestAlphaForAA` rather than chosen, and a test holds every fading token above it. |
 | ADR-001..006 | Unchanged; see `docs/ARCHITECTURE.md` and the previous sessions' notes in the phase log. |
 
@@ -80,7 +83,8 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 
 | Risk | Impact | Mitigation |
 |---|---|---|
-| **Nothing is published** | The plan's deployment criterion is met on the pipeline, not on a live URL: there is no remote, so no Pages build has run | `docs/GIT_WORKFLOW.md` §8 is the author's one-time step; the README documents both the workflow and the push. Recorded as a Phase 11 deviation rather than as done. |
+| **The deployed address is not a domain root** | It is a project site served from `/Chemipedia/`, so a URL written from the site's own root leaves the site and 404s — which is what the first deployment did | The path is read from the origin once (`tools/site-origin.js`), the finished document is rewritten once (`rootedAt`), the data fetch and the browser's own link go through `scripts/lib/site-path.js`, and a subpath-simulated build is part of the recovery steps below. `v1.0.1` is the fix; `v1.0.0` is the release that exposed it, deliberately left where it is. |
+| **Deprecation notices on every Pages run** | `checkout@v4`, `setup-node@v4`, `configure-pages@v5`, `upload-artifact@v4` and `deploy-pages@v4` target Node 20 and are being forced onto Node 24; `ubuntu-latest` moves to Ubuntu 26 on 2026-10-19 | Cosmetic today: both jobs succeeded in both runs with the notices on them. Bumping the action versions is one line each and is deliberately not bundled into a deployment fix. |
 | The preview webview does not composite | The panel's own screenshot tool may still fail; it is not on the critical path | `workspace/tools/visual` captures, diffs and measures in headless Chrome. Phase 11 closed on its four sweeps rather than on a capture, because the only page whose markup changed was compared numerically. |
 | The preview window has no operating-system focus | `focus`, `blur` and real key events are never delivered, so tab-order and hover behaviour cannot be exercised as a person would | The harness's own Playwright pages are real browsers; every keyboard check this project has run went through them. |
 | Three pages have no reference to compare with | About, Contact and the downloads page cannot be pixel-diffed against anything | Accepted since Phase 10: the evidence for those three is the accessibility, keyboard, overflow and link checks rather than a diff. |
@@ -102,8 +106,10 @@ Three deferrals stand, each recorded where it belongs:
    paragraphs would have no source to audit them against.
 2. **Two schema fields** that no acceptable source supplies (`covalentRadius`, `latticeParameters`) —
    see `docs/DATA_SOURCES.md`.
-3. **The one-time push** — the deployment exists and is documented; nothing is live. That is the
-   author's step, not an omission.
+3. **The typeface** — not the reference's, recorded as a Phase 1 deviation.
+
+The one-time push is no longer on this list: it ran on the author's instruction on 2026-10-06, and
+the site it published is live.
 
 ## How to resume in 60 seconds
 
@@ -111,10 +117,16 @@ Three deferrals stand, each recorded where it belongs:
 git log --oneline -20             # what has actually been committed
 git status --short                # anything half-done?
 cat workspace/RUN_STATE.md        # this file
-node --test source/tests          # is the last checkpoint real?  expect: 482 passing
+node --test source/tests          # is the last checkpoint real?  expect: 497 passing
 node source/tools/build.js        # renders 562 routes, 0 waiting
+SITE_ORIGIN=https://<owner>.github.io/<repo> node source/tools/build.js   # the deployed shape
 node source/tools/serve.js --port 4180   # the site
 ```
+
+That third command is the one worth running before believing anything about a deployment: it renders
+the same 562 routes for an address that is not a domain root, and a document that names the domain
+root instead of its own path is visible in the output with one `grep`. The live site is
+<https://dhbhensdadia.github.io/Chemipedia/>.
 
 And the four gates, from `workspace/tools/visual` after `npm install`:
 

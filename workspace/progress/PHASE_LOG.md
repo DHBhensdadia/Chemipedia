@@ -26,6 +26,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 9 | Glossary | `COMPLETE` | `5a05a1f`..`73fbb47`, plus the close-out commit |
 | 10 | Calculators and secondary pages | `COMPLETE` | `df4d60e`..`b9999d3`, plus the close-out commit |
 | 11 | Quality, accessibility, performance, delivery | `COMPLETE` | `f1cef8e`..`ec80c43`, plus the close-out commit; tagged `v1.0.0` |
+| Publish | The push, and the deployment it corrected | `COMPLETE` | `e035c6f` pushed as the release, then `bd338dd` (the fix), plus the close-out commits; tagged `v1.0.1` |
 
 ---
 
@@ -1292,9 +1293,11 @@ Harness against the reference (workspace/tools/visual, 1280 / 768 / 375):
   item 10.3, one sheet per table page and per sampled card at A4 and Letter). Not rebuilt here.
 - [x] Documentation current; no `TODO` in tracked files.
 - [x] Deployment written, gated and documented, and `v1.0.0` tagged. The deployment is the committed
-  Pages workflow with the host's own routing fallback, and the README's publishing steps; the tag is
-  local. **The push itself is the author's one-time step** (`docs/GIT_WORKFLOW.md` §8) and the
-  repository has no remote, so nothing is published yet — recorded as a deviation below, not as done.
+  Pages workflow with the host's own routing fallback, and the README's publishing steps; at the
+  close of this phase the tag was local and the repository had no remote, so **the push itself was
+  still the author's one-time step** (`docs/GIT_WORKFLOW.md` §8) — recorded as a deviation below
+  rather than as done. It ran the day after, on the author's instruction; the publish entry below
+  records what the live address then exposed.
 - [x] A clean clone runs and deploys following only the README. Verified by cloning the repository
   into an empty directory: `node source/tools/build.js` writes 562 routes and `node --test
   source/tests` passes 482, with nothing installed, because the project declares no dependencies.
@@ -1391,11 +1394,84 @@ the change moved nothing.
 | **The home page is rendered at build time.** The reference assembles its table after paint. | Server-rendering the same four blocks through the same engine removed a 0.926-page shift (0.315 CLS to 0), and it is also what makes the home page exist for a crawler and for a reader whose script did not run. |
 | **`twitter:card` is `summary`, not `summary_large_image`.** | We have no social image. A large card with a missing image is the worse lie, and the reference's own `og:image` is a relative path no crawler can resolve. |
 | **Three families' links carry no `aria-label`.** The element card, the ranking bar and a group's member card name themselves by their visible content. | An `aria-label` that rewords what a link shows is a label-content-name mismatch, and it was hiding the card's group and its measurement from a reader who cannot see them. |
-| **The deployment is published by the author's one-time push.** The workflow, the routing fallback and the README's publishing steps are committed; the `v1.0.0` tag is local. | `docs/GIT_WORKFLOW.md` §8 makes publishing a deliberate, author-approved step (`git remote add` then `git push -u origin main && git push --tags`), and the repository has no remote. Nothing is claimed to be live. |
+| **The deployment was published by the author's one-time push, a day after this phase closed.** The workflow, the routing fallback and the README's publishing steps were committed here; the tags and the live site followed on the author's instruction. | `docs/GIT_WORKFLOW.md` §8 makes publishing a deliberate, author-approved step, and nothing was claimed live on the strength of a pipeline. It did go live — and the live address then exposed a defect **this phase's four sweeps could not see**, because all four run against a site served at a domain root: every URL was rooted at the domain rather than at the site's own path. Fixed in `bd338dd`; the publish entry below has the verification. |
 
 **Commits:** `f1cef8e` (the tertiary ink and the legend counts meet AA), `969cbdf` (the accessibility sweep), `7269c9f` (the configuration rows stack on a phone), `04a9e45` (the responsive sweep), `bf44dd7` (canonical, Open Graph, JSON-LD, `sitemap.xml`, `robots.txt`), `3b3b09f` (the document skeleton out of the build), `06c5e76` (the home page drawn at build time), `8869b4c` (the performance sweep and its budgets), `5cc54d1` (the four accessibility defects), `964bf80` (Lighthouse and the baseline), `b741a49` (the Pages workflow and the README), `1c431ee` (the reference's metadata in the audit), `ec80c43` (the four guides corrected against the source), plus the close-out commits that carry this entry: the phase log, the run-state checkpoint and the handoff note, and the wording fix that makes the README and both checkpoints quote the sweep's two timings as one range.
 
 **Tag:** `v1.0.0`, annotated, on the last commit of the phase's close-out.
+
+---
+
+## Publish — the push, and the deployment it corrected
+
+**Goal:** put the finished site on the author's own GitHub account, under the author's own name, and
+have the address that repository gives it serve the site.
+
+Not a phase: nothing on the plan was open. This is the author's one-time publishing step of
+`docs/GIT_WORKFLOW.md` §8, run on the author's instruction, plus the one class of defect that only a
+live address can show.
+
+**Work items**
+
+| ID | Item | Status | Notes |
+|---|---|---|---|
+| P.1 | The repository, and the author's ownership of it | `COMPLETE` | The remote is `https://github.com/DHBhensdadia/Chemipedia.git`, public, and empty at the time. `main` and both tags were pushed: `e035c6f` as `main`, `v1.0.0` on it and `v0.1.0` on `a16d35e`, confirmed by `git ls-remote`. Authorship was then checked **on GitHub rather than locally**: every commit's `author.login` is `DHBhensdadia` (id 207889312, attested `type: User`), `commit_author` is `Devansh <dhbhensdadia@gmail.com>`, and the contributors endpoint counts **one** contributor with 106 contributions. No unlinked grey avatar, so §9 of the workflow — a commit-email mismatch — is not in play. `e035c6f` |
+| P.2 | Pages enabled, and the first run made green | `COMPLETE` | The first run of `Publish` failed in `actions/configure-pages@v5` with *Get Pages site failed … Not Found*: the workflow was correct and the repository had no Pages site yet. Enabled through the API with `build_type=workflow` rather than by hand, and the run rerun: build ✓ 23s, deploy ✓ 38s, overall ✓. Only warnings are the Node 20 deprecation notices. |
+| P.3 | The live address, and the defect a root build cannot show | `COMPLETE` | The site loaded **and was broken**: its documents asked for `/styles/tokens.css`, `/scripts/app.js` and `/assets/brand/favicon.svg` — the **domain** root, where nothing is, because a project site is served from `/Chemipedia/`. The page returned 200 while everything it needed 404'd, which is why the fix is in two places and not one: the build rewrites every URL a finished document roots at its own `/`, and the two requests the rewriting cannot reach — a data file, and the finder's link, which the browser writes after the page has loaded — ask `scripts/lib/site-path.js`, which reads the site's path off its own module's address. `bd338dd` |
+| P.4 | Verified against the deployed shape, then on the deployment | `COMPLETE` | See the block below. Every check was run against a site served from a path, and then against the live address itself. |
+
+**Verification**
+
+```
+node --test source/tests ............................. tests 497 · pass 497 · fail 0
+                                                       (482 at Phase 11's close; the deployment
+                                                       fix adds 15: 4 for the document rewriting,
+                                                       1 for the origin's path, 6 for the runtime
+                                                       site path, 4 for the data address)
+SITE_ORIGIN=https://dhbhensdadia.github.io/Chemipedia
+  node source/tools/build.js ......................... Built 562 routes and the not-found page into dist/
+walk over every built document ....................... 563 files · 0 URLs outside /Chemipedia · 0 doubled
+local Pages simulation (dist/ served under /Chemipedia at 127.0.0.1:4182)
+  GET /Chemipedia/ ................................... 200
+  GET /Chemipedia/styles/tokens.css .................. 200
+  GET /Chemipedia/scripts/app.js ..................... 200
+  GET /Chemipedia/assets/brand/favicon.svg ........... 200
+  GET /Chemipedia/data/elements.json ................. 200   (this one was a 404 Fetch before P.3)
+  GET /Chemipedia/elements/hydrogen/ ................. 200
+                    · 118 tiles built from the data, 13 stylesheets applied, computed
+                      border colour read off the rendered tile
+                    · a client-side navigation from a tile: URL pushed, body swapped,
+                      element-detail started, fetched document 200
+Gh workflow run “Publish” on bd338dd ................. build ✓ 23s · deploy ✓ 38s · overall ✓
+https://dhbhensdadia.github.io/Chemipedia/ ........... 200
+  /styles/tokens.css, /scripts/app.js,
+  /scripts/lib/site-path.js, /assets/brand/favicon.svg,
+  /data/elements.json, /elements/hydrogen/, /glossary/,
+  /sitemap.xml, /robots.txt ......................... 200 each
+https://dhbhensdadia.github.io/styles/tokens.css ..... 404   (the domain root: correctly empty)
+live, in a browser ................................... SITE_BASE “/Chemipedia” · DATA_ROOT “/Chemipedia/data”
+                                                       · 118 tiles · favicon and all 13 sheets under
+                                                       the site's path · finder's match link
+                                                       “/Chemipedia/elements/gold/” · client-side
+                                                       navigation landing on the element page
+git log --format='%an <%ae>' ......................... one identity on every commit, author and
+                                                       committer · no co-author footer anywhere
+```
+
+**Deliberate deviations**
+
+| Deviation | Why |
+|---|---|
+| **`v1.0.0` was not moved, and `v1.0.1` was added instead.** | The tag was already pushed, so it is a statement the history has made: `v1.0.0` is the release whose publication exposed the subpath defect. `v1.0.1` is on `bd338dd`. Moving a pushed tag would need a force-push of the ref, and `docs/GIT_WORKFLOW.md` §8 forbids that without the author's in-the-moment instruction. |
+| **Pages was enabled through the API rather than by hand.** | `POST /repos/:owner/:repo/pages` with `build_type=workflow` is the same setting as clicking **Source: GitHub Actions**, and it is reproducible. The alternative was telling the author to visit a settings page for a click. |
+| **The Node 20 deprecation notices were left alone.** | Five actions target Node 20 and are being forced onto Node 24; both jobs succeeded with the notices on them. Bumping five action versions is a separate change from a deployment fix, and mixing them would make a failed deploy ambiguous. Recorded in `RUN_STATE.md` as a known risk instead. |
+| **`package.json`'s `homepage` was corrected to the repository's real name.** | It said `chemipedia` where the repository is `Chemipedia`. GitHub redirects either way, but this is the address the project publishes, and the path case is what the deployment depends on. |
+
+**Commits:** `e035c6f` (the README's run instructions — the last commit of `v1.0.0`, and the one that
+went live first), `bd338dd` (the deployment fix), plus the close-out commits carrying this entry, the
+run-state checkpoint, the handoff note and the README's status.
+
+**Tag:** `v1.0.1`, annotated, on `bd338dd`.
 
 ---
 

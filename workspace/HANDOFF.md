@@ -1,7 +1,8 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-06 · **By:** the session that closed Phase 11 — quality, accessibility,
-performance and delivery — and tagged `v1.0.0` · **After commit:** the Phase 11 close-out commit
+**Written:** 2026-10-07 · **By:** the session that published the site at the author's instruction,
+and fixed the one defect the live address exposed · **After commit:** the deployment fix (`bd338dd`)
+and the close-out commits that carry this note
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -10,10 +11,9 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What exists right now
 
-**The plan is delivered.** All twelve phases are `COMPLETE`, the working tree is clean, and the
-release is tagged `v1.0.0`.
+**The plan is delivered and the site is live** at <https://dhbhensdadia.github.io/Chemipedia/>.
 
-- `node --test source/tests` → **482 passing, 0 failing**, with nothing installed.
+- `node --test source/tests` → **497 passing, 0 failing**, with nothing installed.
 - `node source/tools/build.js` → **562 routes** plus the not-found page, **0 waiting**.
 - Every page is rendered at build time; the browser only attaches behaviour to markup it finds.
 - Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD; the
@@ -21,18 +21,23 @@ release is tagged `v1.0.0`.
 - Four gates, all exit 0: accessibility **0 defects over 19 pages**, responsive **76 of 76**, worst
   layout shift **0** with a slowest cold load of 38–41ms across runs, Lighthouse **100 / 100 / 100** for
   accessibility, best-practices and SEO (performance 89 mean, recorded not gated).
-- `.github/workflows/pages.yml` is the whole deployment. **Nothing is live**: there is no git
-  remote. Publishing is the author's one-time step (`docs/GIT_WORKFLOW.md` §8) and is the one thing
-  the plan asks for that has not happened.
+- The repository is `github.com/DHBhensdadia/Chemipedia`, `main` and the tags are pushed, and
+  `.github/workflows/pages.yml` is the whole deployment: every push to `main` rebuilds, runs the
+  suite and republishes. Pages is enabled with **Source: GitHub Actions**, set through the API
+  (`POST /repos/:owner/:repo/pages` with `build_type=workflow`) rather than by hand.
+- The live address is a **project site**, served from the path `/Chemipedia/`, which is the one
+  thing about this deployment that a local run cannot show you. It broke once — every URL was
+  rooted at the domain instead of at that path — and the fix is `bd338dd`.
 
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
 2. There is no next phase. If you are here to work, ask the author what they want built, or pick up
-   one of the three recorded deferrals at the end of `RUN_STATE.md`.
-3. If the site should go live, the author's step is `git remote add origin <url>`, then
-   `git push -u origin main && git push --tags`, then enable Pages with **Source: GitHub Actions**.
-   Nothing else needs configuring — the site is static and the build has no dependencies.
+   one of the deferrals at the end of `RUN_STATE.md`.
+3. Before believing anything about the deployment, build for the address it actually lives at:
+   `SITE_ORIGIN=https://dhbhensdadia.github.io/Chemipedia node source/tools/build.js`, then grep
+   `dist/` for a `href="/` that is not `href="/Chemipedia/`. A local root build cannot catch this
+   class of defect, which is why it reached production once.
 
 ## What is fragile or easy to get wrong
 
@@ -47,6 +52,12 @@ release is tagged `v1.0.0`.
 - **`audit-a11y.mjs` composites an element's own `opacity` before it checks contrast.** It did not,
   once, and that is exactly why it missed the faded tile ink that Lighthouse then caught. If you
   change how a colour is applied, check the sweep still models it.
+- **Every URL belongs to one of two sides, and only one of them is rewritten.** The build rewrites the
+  paths it writes into a finished document (`rootedAt`, from the origin's own path), which reaches
+  markup and nothing else. A URL the *browser* writes after load, and a URL a *data fetch* asks for,
+  cannot be reached that way and must go through `scripts/lib/site-path.js`, which reads the site's
+  path off its own module's address. Adding a runtime link anywhere else will reintroduce exactly the
+  defect this session fixed: correct locally, 404 in production.
 - **The origin is configuration.** `SITE_ORIGIN` defaults to a reserved `.example` address that
   cannot resolve, and the build says so on every run. A confident, wrong canonical is worse than
   none — never hard-code one.
@@ -90,10 +101,13 @@ release is tagged `v1.0.0`.
 
 ## Anything deliberately left in a half state
 
-Nothing is half-done in the tree. One thing is deliberately not done, and it is the author's:
-**the site is not published.** The Pages workflow, the routing fallback and the README's publishing
-steps are committed and the tag is local; the push needs a remote, which does not exist.
+Nothing is half-done in the tree, and the site is published. `v1.0.0` stays on `e035c6f` — the
+release whose publication exposed the subpath defect — and `v1.0.1` is on `bd338dd`, which fixes it;
+neither tag was moved, because a pushed tag is a statement the history has already made.
 
-Three deferrals stand from earlier phases: the trade-off that left the "expanded explanation" out of
-Phase 9, the two schema fields no acceptable source supplies (`covalentRadius`, `latticeParameters`),
-and the typeface, which is not the reference's and is recorded as a Phase 1 deviation.
+Two things are deliberately left, and both are recorded rather than forgotten: the Pages runs print
+Node 20 deprecation notices for five actions that GitHub is already forcing onto Node 24 (cosmetic,
+and a one-line bump per action when someone is not mid-deployment-fix), and the three deferrals from
+earlier phases — the "expanded explanation" Phase 9 left out, the two schema fields no acceptable
+source supplies (`covalentRadius`, `latticeParameters`), and the typeface, which is not the
+reference's and is recorded as a Phase 1 deviation.

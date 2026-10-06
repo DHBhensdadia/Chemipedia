@@ -13,8 +13,12 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 plus a not-found page, every one of them rendered at build time rather than assembled by the browser,
 and four gates that pass on measurement rather than on inspection.
 
+It is published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and redeployed by
+`.github/workflows/pages.yml` on every push to `main`.
+
 | | |
 |---|---|
+| Published at | <https://dhbhensdadia.github.io/Chemipedia/> — a GitHub Pages project site, so served from the path `/Chemipedia/` rather than from a domain root |
 | Routes the build writes | 562, plus `404.html` |
 | Tests | `node --test source/tests` — the suite that must pass, with nothing installed |
 | Accessibility | 0 defects across 19 pages from our own sweep; Lighthouse 100 on seven sampled pages |
@@ -120,6 +124,14 @@ Set `SITE_ORIGIN` to the deployed origin, with no trailing slash. Serve director
 `/elements/hydrogen/` is canonical and `/elements/hydrogen` redirects to it — and answer an unknown
 path with `dist/404.html` at the same status code, which is what GitHub Pages and Netlify both do by
 default.
+
+**An address that is not a domain root carries its path.** This site's own address is
+`https://dhbhensdadia.github.io/Chemipedia`, where the site lives under the path named after its
+repository — so `SITE_ORIGIN` includes that path, and the build places every URL it writes inside
+it, because a stylesheet asked for at `/styles/base.css` would be asked of the domain root, where
+nothing is. The one link the browser writes after the page has loaded — the finder's list of matches
+— is placed there by `scripts/lib/site-path.js`, which reads the site's path off its own module's
+address: the one address guaranteed to be inside the site, wherever the site is put.
 
 ### GitHub Pages
 
