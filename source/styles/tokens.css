@@ -581,6 +581,17 @@
   --level-expert-ink: #38246b;
 }
 
+/* The glossary's two headings step down below the shell, where the reference's own do: measured at
+   33.6px against 48px for the index, and 35.2px against 51.2px for a term. Left at their desktop
+   sizes they wrap to two lines on a phone — "Glossary of Terms" at 375, and a term as short as
+   "Absolute zero". */
+@media (max-width: 56rem) {
+  :root {
+    --type-gls-name: 2.1rem;
+    --type-gls-term-head: 2.2rem;
+  }
+}
+
 /* The element's name takes its larger step once the hero has room for the card and the
    miniature table side by side. Measured: 48px below the breakpoint, 76.8px above it. */
 @media (min-width: 56rem) {
