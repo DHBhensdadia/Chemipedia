@@ -18,6 +18,9 @@
  * 2. **A harness can make things fail.** `fails` turns any shader compilation or any link into a
  *    driver refusal, and `dropped` makes an attribute unavailable, which is how the refusal paths — a
  *    program that will not build, an attribute the driver optimised away — are reached on purpose.
+ *
+ * `createCanvas` is here for the same reason: a canvas is a two-property object and a getter as far as
+ * the layer is concerned, and every test that runs the layer outside a browser needs the same one.
  */
 
 /**
@@ -39,6 +42,63 @@ const VERBATIM = [
   "shaderSource",
   "useProgram",
 ];
+
+/**
+ * A canvas that counts what is written to it.
+ *
+ * The surface's size is set by assigning to `width` and `height`, and assigning to either clears what
+ * was drawn — so a test has to count the writes rather than read the value back. It lives beside the
+ * context stub because both are the same kind of object: the smallest thing the layer's two modules
+ * need in order to run outside a browser.
+ *
+ * @param {object} [options]
+ * @param {object | null} [options.context] what the canvas should hand back for `webgl2`
+ * @param {boolean} [options.refuses] whether asking for a context should throw instead
+ * @param {number} [options.clientWidth]
+ * @param {number} [options.clientHeight]
+ * @returns {object}
+ */
+export function createCanvas({
+  context = null,
+  refuses = false,
+  clientWidth = 400,
+  clientHeight = 200,
+} = {}) {
+  const writes = { width: 0, height: 0 };
+  const surface = { width: 0, height: 0 };
+
+  return {
+    writes,
+    clientWidth,
+    clientHeight,
+
+    get width() {
+      return surface.width;
+    },
+
+    set width(value) {
+      surface.width = value;
+      writes.width += 1;
+    },
+
+    get height() {
+      return surface.height;
+    },
+
+    set height(value) {
+      surface.height = value;
+      writes.height += 1;
+    },
+
+    getContext: (kind) => {
+      if (refuses) {
+        throw new Error("this browser will not give out a context");
+      }
+
+      return kind === "webgl2" ? context : null;
+    },
+  };
+}
 
 /**
  * @param {object} [options]

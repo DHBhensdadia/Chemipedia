@@ -732,6 +732,9 @@
   --atom-light-strength: 1;
   --atom-ambient: 0.32; /* the floor under the light: how much of a particle is visible in shadow */
   --atom-spin: 0.16; /* radians a second the atom turns, until a shake starts it spinning faster */
+  --atom-spin-axis: 0.35 1 0.12; /* tipped rather than upright, so rings sweep instead of holding */
+  --atom-shake-speed: 6; /* radians a second a shake adds to that turn */
+  --atom-shake-decay: 1.6; /* per second the added turn decays away at */
   --atom-camera-distance: 17;
   --atom-camera-azimuth: 0.7;
   --atom-camera-polar: 1.2;

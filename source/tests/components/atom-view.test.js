@@ -4,55 +4,7 @@ import assert from "node:assert/strict";
 import { createAtomView } from "../../scripts/components/atom-view.js";
 import { createOrbitCamera } from "../../scripts/lib/orbit-camera.js";
 import { identity } from "../../scripts/lib/matrix4.js";
-import { callsOf, createGlStub, memoryOf } from "./webgl-stub.js";
-
-/**
- * A canvas that counts what is written to it.
- *
- * The surface's size is set by assigning to `width` and `height`, and assigning to either clears what
- * was drawn — so a test has to count the writes rather than read the value back.
- *
- * @param {object} [options]
- * @param {object | null} [options.context] what the canvas should hand back for `webgl2`
- * @param {boolean} [options.refuses] whether asking for a context should throw instead
- * @returns {object}
- */
-function createCanvas({ context = null, refuses = false, clientWidth = 400, clientHeight = 200 } = {}) {
-  const writes = { width: 0, height: 0 };
-  const surface = { width: 0, height: 0 };
-
-  return {
-    writes,
-    clientWidth,
-    clientHeight,
-
-    get width() {
-      return surface.width;
-    },
-
-    set width(value) {
-      surface.width = value;
-      writes.width += 1;
-    },
-
-    get height() {
-      return surface.height;
-    },
-
-    set height(value) {
-      surface.height = value;
-      writes.height += 1;
-    },
-
-    getContext: (kind) => {
-      if (refuses) {
-        throw new Error("this browser will not give out a context");
-      }
-
-      return kind === "webgl2" ? context : null;
-    },
-  };
-}
+import { callsOf, createCanvas, createGlStub, memoryOf } from "./webgl-stub.js";
 
 /** The scene's own numbers, in the shape the view expects them. */
 const CONFIG = {
