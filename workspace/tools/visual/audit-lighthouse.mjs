@@ -33,6 +33,7 @@ const PAGES = (
     "/",
     "/elements/",
     "/elements/hydrogen/",
+    "/atoms/",
     "/periodic-table/properties-and-states/",
     "/element-groups/noble-gases/",
     "/glossary/",

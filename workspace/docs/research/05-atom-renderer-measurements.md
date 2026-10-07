@@ -310,3 +310,60 @@ All claims held, 0 console message(s)
 - **The "heaviest atom the feature allows" is a statement about the feature's rules.** The guide's own
   inputs go further — 300 neutrons and 200 electrons are on offer there because a reader tuning the
   picture wants the headroom — which is exactly why its ceiling is measured in the same run.
+
+---
+
+## Phase 15 — the page's own frame time, and what the site's sweeps say about it
+
+Phase 13 measured the scene on the **style guide**, which is a development page: it can say what the
+drawing costs, and it cannot say what a reader's browser does with it. Phase 14 built the page; this
+reading is the page itself, on the same machine (Apple M4), at 1280 × 800, with the heaviest atom the
+**published controls** allow — oganesson, 118 protons, 179 neutrons and 118 electrons, 413 particles
+and 7 rings.
+
+`tools/visual/audit-atom.mjs` measures the browser's own frame times through `requestAnimationFrame`
+over ninety frames, **twice**: once with the atom turning, and once with the loop stopped. The second
+reading is the control — it is the same page, the same stage and the same stylesheets doing nothing —
+so the scene is judged against its own page rather than against a theoretical budget. Long tasks are
+counted in the same window.
+
+```
+  oganesson, 1280 x 800: median 16.70 ms, mean 16.61 ms, worst 16.80 ms over 90 frames, 0 long task(s)
+  the same page held still: median 16.70 ms, worst 16.70 ms
+
+  ok   the heaviest atom draws without a long task
+  ok   and the page keeps the cadence it has when nothing is moving (16.70 vs 16.70 ms a frame)
+  ok   no frame of the heaviest atom runs away (worst 16.80 ms)
+```
+
+**What that says.** The page is vsync-bound and stays vsync-bound: the median frame with the heaviest
+atom turning is the median frame with the page held still — 16.70 ms, the display's own cadence — and
+the worst frame of the run is 16.80 ms, one tenth of a millisecond over it. There is no long task in
+ninety frames, so nothing the scene does blocks the main thread for 50 ms or more. That is the
+statement a frame-time budget should make, and it is deliberately a statement about the *page*: the
+scene's own isolated cost is Phase 13's 0.258 ms, and this reading does not re-measure it.
+
+**What it does not say.** Nothing about a phone, nothing about a device pixel ratio above one, and
+nothing about a machine other than this one. It also says nothing about *feel* — whether the atom turns
+at a pleasant rate is a judgement, and the recorded answer is the token (`--atom-orbit-speed`), not a
+number here.
+
+**The site's own sweeps, with the page in them.** The four gates Phase 11 built now cover `/atoms/`,
+and the numbers are recorded because a gate is only a gate with its readings written down:
+
+| Gate | `/atoms/` | The site |
+|---|---|---|
+| Accessibility (own sweep) | — | 0 defects, 29 informational lines across **20** pages |
+| Responsive | — | **80 of 80** page-and-width combinations at 375 / 768 / 1024 / 1440 |
+| Performance (cold load) | response 1 ms, paint 44 ms, DCL 24 ms, load 25 ms, 428 KB, layout shift **0**, 0 long tasks | worst shift 0, slowest load 35 ms across seven pages |
+| Lighthouse | accessibility **100**, best-practices **100**, SEO **100**, performance **78** | mean over eight pages: 100 / 100 / 100 / 89 |
+
+The 428 KB is the largest payload of any sampled page and it is the element data the bar's chooser
+reads — 118 records, fetched once, the same file every other page reads (`docs/DATA_SOURCES.md` §7:
+the feature added no data of its own). Lighthouse's performance score for the page is **78**, the
+lowest of the eight, and its diagnostics name the reasons rather than the page: 92 KiB of unminified
+JavaScript, 41 KiB of unminified CSS, and a render-blocking chain of twelve stylesheets. Those are the
+project's standing, deliberate costs — readable source, no bundler, no minifier, one request per module
+and per sheet (ADR-004) — and they are the same costs the home page pays at 85. What the page's own
+code controls is clean: **total blocking time 0 ms** and **cumulative layout shift 0**. Performance is
+recorded and not gated, which is the decision Phase 11 made and this phase keeps.

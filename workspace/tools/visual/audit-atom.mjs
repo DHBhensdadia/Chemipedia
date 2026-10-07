@@ -25,7 +25,13 @@
  *   8. **The fragment chooses the element, and the element pages lead here.** `/atoms/#uranium`
  *      opens on uranium with its counts, and the one link an element page carries opens the viewer
  *      on that element — followed with a real click, through the router, the way a reader does it.
- *   9. **Three widths, no console message and no failed request** at any of them.
+ *   9. **The page keeps the browser's cadence on its heaviest atom.** The frame's cost is measured on
+ *      the page rather than inferred from the style guide: the browser's own frame times over ninety
+ *      frames with the heaviest atom the controls allow turning, and again with the loop stopped, so
+ *      the scene is judged against the same page doing nothing. Long tasks are counted in the same
+ *      window. What this is not is an isolated per-frame cost — Phase 13 measured that separately,
+ *      0.258 ms for this atom on the same machine.
+ *  10. **Three widths, no console message and no failed request** at any of them.
  *
  * Usage: with a dev server running, `BASE=http://127.0.0.1:4188 node audit-atom.mjs`.
  * It exits non-zero on a failed claim, a console error or a failed request.
@@ -92,6 +98,61 @@ async function said() {
       fallback: document.querySelector("#atom-fallback").hidden,
     }),
     { readout: READOUT, announce: ANNOUNCE, name: NAME, link: LINK },
+  );
+}
+
+/**
+ * The browser's own frame times over the next frames, in milliseconds, with any long task in the same
+ * window. `requestAnimationFrame` is the browser's clock, so this measures what a reader experiences
+ * rather than what the scene thinks it spent.
+ *
+ * @param {number} count
+ * @returns {Promise<{ frames: number, median: number, mean: number, worst: number, longTasks: number }>}
+ */
+async function cadence(count) {
+  return page.evaluate(
+    (frames) =>
+      new Promise((resolve) => {
+        const deltas = [];
+        const tasks = [];
+        const observer = new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            tasks.push(entry.duration);
+          }
+        });
+
+        observer.observe({ type: "longtask", buffered: false });
+
+        let last = performance.now();
+        let seen = 0;
+
+        const tick = (now) => {
+          deltas.push(now - last);
+          last = now;
+          seen += 1;
+
+          if (seen < frames) {
+            requestAnimationFrame(tick);
+
+            return;
+          }
+
+          observer.disconnect();
+
+          const sorted = [...deltas].sort((one, other) => one - other);
+
+          resolve({
+            frames: deltas.length,
+            median: sorted[Math.floor(sorted.length / 2)],
+            mean: deltas.reduce((sum, delta) => sum + delta, 0) / deltas.length,
+            worst: sorted[sorted.length - 1],
+            longTasks: tasks.length,
+          });
+        };
+
+        requestAnimationFrame(tick);
+      }),
+    count,
   );
 }
 
@@ -207,6 +268,39 @@ await page.click("#atom-motion");
 await page.waitForTimeout(300);
 
 check((await frameHash()) !== paused, "pressing it starts the atom moving again");
+
+console.log("\nThe frame-time budget\n");
+
+// The heaviest atom the controls allow, at the size the plan asks to be measured at.
+await page.selectOption("#atom-picker", "118");
+await page.waitForTimeout(400);
+
+const turning = await cadence(90);
+
+await page.click("#atom-motion");
+await page.waitForTimeout(300);
+
+const stopped = await cadence(90);
+
+await page.click("#atom-motion");
+await page.waitForTimeout(200);
+
+console.log(
+  `\n  oganesson, 1280 x 800: median ${turning.median.toFixed(2)} ms, mean ${turning.mean.toFixed(2)} ms, ` +
+    `worst ${turning.worst.toFixed(2)} ms over ${turning.frames} frames, ${turning.longTasks} long task(s)\n` +
+    `  the same page held still: median ${stopped.median.toFixed(2)} ms, worst ${stopped.worst.toFixed(2)} ms\n`,
+);
+
+check(turning.longTasks === 0, "the heaviest atom draws without a long task");
+check(
+  turning.median < stopped.median * 1.5 + 1,
+  `and the page keeps the cadence it has when nothing is moving (${turning.median.toFixed(2)} vs ` +
+    `${stopped.median.toFixed(2)} ms a frame)`,
+);
+check(
+  turning.worst < 50,
+  `no frame of the heaviest atom runs away (worst ${turning.worst.toFixed(2)} ms)`,
+);
 
 console.log("\nThree widths\n");
 for (const width of [375, 768, 1280]) {
