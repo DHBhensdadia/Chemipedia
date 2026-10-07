@@ -719,7 +719,9 @@
   --atom-orbit-tube: 0.007; /* thin enough to read as a path, thick enough to survive the camera */
   --atom-orbit-base: 2; /* the innermost orbit's radius; each shell after it steps out by --atom-orbit-step */
   --atom-orbit-step: 1.2;
+  --atom-orbit-speed: 0.9; /* radians a second the innermost ring turns at */
   --atom-nucleon-radius: 0.2;
+  --atom-nucleus-packing: 1.5; /* cluster radius = nucleon radius x cube root of count x this */
   --atom-electron-radius: 0.1;
   --atom-electron-glow: 0.5; /* how much of an electron's own colour is added where the light misses */
   --atom-sphere-segments: 24;

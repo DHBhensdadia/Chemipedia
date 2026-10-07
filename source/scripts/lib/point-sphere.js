@@ -34,8 +34,9 @@
  * The angle between one point and the next: π(3 − √5), the golden angle.
  *
  * Not a design value — it is the constant that makes the spiral turn, the same way π makes a circle.
+ * Exported because the atom model spreads its electrons' starting angles with the same angle.
  */
-const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
+export const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 
 /**
  * @param {unknown} value
