@@ -1,8 +1,8 @@
 # HANDOFF.md — note to the next agent
 
 **Written:** 2026-10-07 · **By:** the session that closed **Phase 14** of the atom viewer — the page, the
-bar, and the way in from every element page — on `feature/atom-3d` · **After commit:** this session's
-close-out commit on `feature/atom-3d`
+bar, and the way in from every element page — on `feature/atom-3d` · **After commit:** `190a08b` on
+`feature/atom-3d`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.

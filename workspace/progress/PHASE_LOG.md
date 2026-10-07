@@ -29,7 +29,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | Publish | The push, and the deployment it corrected | `COMPLETE` | `e035c6f` pushed as the release, then `bd338dd` (the fix), plus the close-out commits; tagged `v1.0.1` |
 | 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
 | 13 | The atom model and the live scene (feature branch) | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`; not merged, not pushed |
-| 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d` and the close-out commit on `feature/atom-3d`; not merged, not pushed |
+| 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`; not merged, not pushed |
 
 ---
 
@@ -1781,9 +1781,9 @@ like any other.
 [✓] RUN_STATE.md + HANDOFF.md updated ......... in this commit
 ```
 
-**Commits.** `861307d` the route, the page and the bar · and this work item's commit, which adds the link
-from every element page into the viewer, the fragment it lands on, the keyboard and fragment claims in the
-browser audit, the two site-wide sweeps, and the split the line ceiling forced.
+**Commits.** `861307d` the route, the page, the bar and the navbar item · `190a08b` the link from every
+element page into the viewer, the fragment it lands on, the keyboard and fragment claims in the browser
+audit, the two site-wide sweeps, and the split the line ceiling forced.
 
 ---
 
