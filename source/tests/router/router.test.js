@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 
 import { createRouter, navigationFor } from "../../scripts/router/router.js";
 
+import { element as fakeElement, head as fakeHead, metaIn, sheetAddresses } from "./dom-fixtures.js";
+
 const BASE = "https://chempedia.test/elements/hydrogen/";
 
 /** An anchor as `navigationFor` reads one: only attributes, nothing else. */
@@ -35,12 +37,26 @@ function fakePage({
     childNodes: ["incoming node"],
     querySelectorAll: () => [script],
   };
+  // The arriving page draws with the sheets every page shares plus one of its own, and claims its own
+  // description; the leaving page has a sheet the arriving one does not declare at all.
+  const nextHead = fakeHead([
+    fakeElement("title", {}, "New title"),
+    fakeElement("meta", { name: "description", content: "New description" }),
+    fakeElement("link", { rel: "stylesheet", href: "/styles/tokens.css" }),
+    fakeElement("link", { rel: "stylesheet", href: "/styles/pages/elements-index.css" }),
+    fakeElement("script", { type: "application/ld+json" }, '{"@type":"WebPage"}'),
+  ]);
   const parsed = {
     title: "New title",
-    querySelector: (selector) =>
-      selector === 'meta[name="description"]' ? { getAttribute: () => "New description" } : null,
+    head: nextHead,
     body: nextBody,
   };
+  const head = fakeHead([
+    fakeElement("title", {}, "Old title"),
+    fakeElement("meta", { name: "description", content: "Old description" }),
+    fakeElement("link", { rel: "stylesheet", href: "/styles/tokens.css" }),
+    fakeElement("link", { rel: "stylesheet", href: "/styles/pages/table-views.css" }),
+  ]);
   const liveScript = { src: "/scripts/app.js" };
   const body = {
     dataset: { page },
@@ -54,12 +70,22 @@ function fakePage({
   const doc = {
     title: "Old title",
     body,
+    head,
+    createElement: (tagName) => fakeElement(tagName),
     getElementById: (id) => (id === "main" ? main : null),
     querySelector: (selector) => (selector === 'meta[name="description"]' ? meta : null),
     addEventListener: (type, handler) => listeners.set(type, handler),
     removeEventListener: (type) => listeners.delete(type),
   };
   const win = {
+    // A timer that fires at once: a test does not sit through the sheet grace, and the sheet is the
+    // case that matters — cached and ready before the swap.
+    setTimeout: (callback) => {
+      callback();
+
+      return 1;
+    },
+    clearTimeout: () => {},
     location: { href, assign: (url) => calls.assigned.push(url) },
     history: {
       state: { router: true, scrollY: 0 },
@@ -94,7 +120,21 @@ function fakePage({
 
   const startPage = (name) => calls.started.push(name);
 
-  return { doc, win, body, main, meta, script, liveScript, parsed, calls, listeners, fetchImpl, startPage };
+  return {
+    doc,
+    win,
+    body,
+    head,
+    main,
+    meta,
+    script,
+    liveScript,
+    parsed,
+    calls,
+    listeners,
+    fetchImpl,
+    startPage,
+  };
 }
 
 /** A click as the router meets one, with a target that answers `closest`. */
@@ -147,7 +187,7 @@ test("`target=_self` is the same tab, so the link is still ours", () => {
   assert.ok(navigationFor(anchor({ href: "/elements/iron/", target: "_self" }), { base: BASE }));
 });
 
-test("a click on one of our links fetches the page and swaps the body, title and description", async () => {
+test("a click on one of our links fetches the page and swaps the head and the body", async () => {
   const env = fakePage();
   const router = createRouter({
     document: env.doc,
@@ -159,6 +199,9 @@ test("a click on one of our links fetches the page and swaps the body, title and
 
   router.start();
 
+  // The sheet the two pages share, held onto so the swap can be asked whether it kept the element
+  // itself: a sheet re-created is a sheet re-fetched, and the reader sees the page redraw for it.
+  const shared = env.head.children.find((node) => node.getAttribute("href") === "/styles/tokens.css");
   const event = clickOn(anchor({ href: "/elements/iron/" }));
 
   env.listeners.get("click")(event);
@@ -168,7 +211,21 @@ test("a click on one of our links fetches the page and swaps the body, title and
   assert.deepEqual(env.calls.fetched, ["https://chempedia.test/elements/iron/"]);
   assert.deepEqual(env.calls.pushed, ["https://chempedia.test/elements/iron/"]);
   assert.equal(env.doc.title, "New title");
-  assert.equal(env.meta.content, "New description");
+  assert.equal(metaIn(env.head, "description").getAttribute("content"), "New description");
+  // The arriving page's own sheet, and only the sheets it declares: the leaving page's is gone.
+  assert.deepEqual(sheetAddresses(env.head), ["/styles/tokens.css", "/styles/pages/elements-index.css"]);
+  assert.equal(
+    env.head.children.includes(shared),
+    true,
+    "the shared stylesheet was re-created rather than carried across",
+  );
+  assert.equal(
+    env.head.children.some(
+      (node) => node.getAttribute("href") === "/styles/pages/elements-index.css" && node !== shared,
+    ),
+    true,
+    "the arriving page's own sheet never reached the head",
+  );
   assert.deepEqual(env.body.childNodes, ["incoming node", env.liveScript]);
   assert.equal(env.script.removed, true, "the fetched document's script was adopted");
   assert.equal(
