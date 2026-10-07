@@ -24,6 +24,7 @@ const PAGES = [
   "/elements/",
   "/elements/hydrogen/",
   "/elements/uranium/",
+  "/atoms/",
   "/properties/melting-point/",
   "/properties/boiling-point/",
   "/properties/orbital-configuration/",

@@ -54,7 +54,26 @@
   .guide__modes { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-block: var(--sp-3); }
   .guide__mode { padding: var(--sp-1) var(--sp-4); border: var(--rule-hairline); border-radius: var(--radius-pill); background: var(--surface); color: var(--ink); font: inherit; font-size: var(--step--1); cursor: pointer; }
   .guide__mode[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--ink-inverse); }
+  .guide__field { display: flex; align-items: center; gap: var(--sp-2); font-size: var(--step--1); }
+  .guide__field select, .guide__field input[type="number"] { padding: var(--sp-1); border: var(--rule-hairline); border-radius: var(--radius); background: var(--surface); color: var(--ink); font: inherit; }
   .table-demo { overflow-x: clip; }
+  /* The dark stage the viewer draws on. Nothing here is a design decision of its own: the ground,
+     the corners and the readout all come from the token layer, and the token layer is what the
+     renderer reads its palette from at runtime. */
+  .atom-demo { position: relative; background: var(--atom-stage); border-radius: var(--radius); overflow: hidden; }
+  .atom-demo__canvas { display: block; width: 100%; height: var(--atom-stage-height); touch-action: none; cursor: grab; }
+  .atom-demo__canvas:active { cursor: grabbing; }
+  .atom-demo__readout {
+    position: absolute; inset-inline-start: var(--sp-3); inset-block-end: var(--sp-3);
+    margin: 0; padding: var(--sp-1) var(--sp-3);
+    font-family: var(--font-mono); font-size: var(--step--1); line-height: var(--leading-tight);
+    color: var(--on-fill-light); background: var(--atom-stage); border-radius: var(--radius);
+    box-shadow: var(--shadow-md);
+  }
+  .atom-demo__fallback {
+    position: absolute; inset: 0; display: grid; place-content: center; margin: 0;
+    padding: var(--sp-5); color: var(--on-fill-light); text-align: center;
+  }
 </style>
 </head>
 <body>
@@ -170,6 +189,54 @@
   </section>
 
   <section class="guide__section section">
+    <h2 class="section__title">The atom viewer</h2>
+    <p>
+      The one part of the site that draws in three dimensions, proved here before any page depends on
+      it. The real modules on a canvas of real pixels, over the real records: pick any of the 118
+      elements, or type the three counts, and the atom is built from that record's own shells — one
+      instanced draw call for every particle, one small mesh per orbit, and a camera that eases toward
+      whatever you ask for. Drag to swing it, wheel to come closer.
+    </p>
+    <p class="guide__note">
+      The readout under the stage is measured on this machine rather than remembered: the draw calls
+      are counted by wrapping the context before the layer acquires it, and the frame time is the
+      scene's own work — the camera, the electrons, the uploads and the draw — averaged over a second
+      of frames. Nothing here is asserted from another machine's numbers.
+    </p>
+    <div class="demo">
+      <p class="demo__label">atom-model + atom-scene + atom-view + orbit-camera + atom-meshes + atom-shaders</p>
+      <div class="atom-demo" id="atom-demo">
+        <canvas class="atom-demo__canvas" id="atom-demo-canvas" role="img"
+          aria-label="A demonstration atom: a nucleus of protons and neutrons, with electrons orbiting on rings"></canvas>
+        <p class="atom-demo__readout" id="atom-demo-readout" aria-live="polite">Waiting for the first frame…</p>
+      </div>
+    </div>
+    <div class="guide__modes" role="group" aria-label="The atom the stage draws">
+      <label class="guide__field">Element
+        <select id="atom-demo-element"></select>
+      </label>
+      <label class="guide__field">Protons
+        <input type="number" id="atom-demo-protons" min="0" max="200" step="1" inputmode="numeric">
+      </label>
+      <label class="guide__field">Neutrons
+        <input type="number" id="atom-demo-neutrons" min="0" max="300" step="1" inputmode="numeric">
+      </label>
+      <label class="guide__field">Electrons
+        <input type="number" id="atom-demo-electrons" min="0" max="200" step="1" inputmode="numeric">
+      </label>
+      <label class="guide__field">Speed
+        <input type="range" id="atom-demo-speed" min="0" max="5" step="0.5" value="1">
+      </label>
+    </div>
+    <div class="guide__modes" role="group" aria-label="Demonstration controls">
+      <button class="guide__mode" type="button" id="atom-demo-reset">Reset view</button>
+      <button class="guide__mode" type="button" id="atom-demo-pause" aria-pressed="false">Pause</button>
+      <button class="guide__mode" type="button" id="atom-demo-shake">Shake</button>
+      <button class="guide__mode" type="button" id="atom-demo-heavy">Heaviest atom</button>
+    </div>
+  </section>
+
+  <section class="guide__section section">
     <h2 class="section__title">Motion</h2>
     <p>
       Short, decelerating, upward. Nothing runs longer than <span class="swatch__name">--dur-slow</span>,
@@ -180,6 +247,7 @@
 
 <script type="module">
   import { readableForeground, contrastRatio, meetsAA, AA_TEXT } from "/scripts/lib/contrast.js";
+  import { startAtomDemo } from "./atom-demo.js";
   import { createCategoriesRepository } from "/scripts/data/categories-repository.js";
   import { createElementsRepository } from "/scripts/data/elements-repository.js";
   import { createPeriodicTable } from "/scripts/components/periodic-table.js";
@@ -264,6 +332,11 @@
   }
 
   showTable("group");
+
+  // The viewer's demonstration lives in a module of its own: a scene, a camera, a readout and five
+  // controls is more than this page has room for inline, and the layer deserves the same treatment as
+  // any other module. See atom-demo.js.
+  startAtomDemo();
 </script>
 </body>
 </html>

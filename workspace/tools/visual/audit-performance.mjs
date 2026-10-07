@@ -28,6 +28,7 @@ const PAGES = [
   "/",
   "/elements/",
   "/elements/hydrogen/",
+  "/atoms/",
   "/periodic-table/properties-and-states/",
   "/glossary/",
   "/calculators/temperature/",

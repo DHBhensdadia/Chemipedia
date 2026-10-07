@@ -1,0 +1,96 @@
+/* The stage the atom is drawn on, and everything that has to work when it cannot be drawn.
+ *
+ * A deep pine panel inside a paper-light page (ADR-006): the page around it stays the site, and the
+ * panel is the one dark surface on it. Three things live in the panel, and only ever one of them is
+ * the picture: the canvas, the shell diagram the build wrote as the fallback, and — under a
+ * reduced-motion preference, where there is no motion to show — the same canvas held on one frame.
+ *
+ * The fallback is a paper card rather than the diagram painted on the stage, because that diagram is
+ * the element pages' figure: its rings and its electrons are the site's ink, and ink on this stage is
+ * invisible. Putting it on paper inside the panel keeps it the drawing a reader already knows.
+ *
+ * The scene's own values are not here. The stage, the three particle colours, the rings, the
+ * camera and the light are all in `tokens.css` §21, because the renderer reads them through
+ * `getComputedStyle` and a graphics card cannot read a stylesheet.
+ */
+
+.at-stage {
+  position: relative;
+  background: var(--atom-stage);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.at-stage__canvas {
+  display: block;
+  inline-size: 100%;
+  block-size: var(--atom-stage-height);
+  touch-action: none;
+  cursor: grab;
+}
+
+.at-stage__canvas:active {
+  cursor: grabbing;
+}
+
+.at-stage__canvas[hidden] {
+  display: none;
+}
+
+.at-stage__fallback {
+  display: grid;
+  place-items: center;
+  gap: var(--sp-4);
+  padding: var(--sp-6) var(--sp-4);
+  min-block-size: var(--atom-stage-height);
+}
+
+.at-stage__fallback[hidden] {
+  display: none;
+}
+
+.at-stage__diagram {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-4);
+  inline-size: min(100%, var(--size-diagram));
+}
+
+.at-stage__counts {
+  margin: 0;
+  max-inline-size: 46ch;
+  color: var(--atom-bar-ink-dim);
+  font-size: var(--step--1);
+  text-align: center;
+}
+
+.at-stage__readout {
+  position: absolute;
+  inset-block-start: var(--sp-3);
+  inset-inline-start: var(--sp-4);
+  margin: 0;
+  color: var(--atom-bar-ink-dim);
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+}
+
+.at-stage__announce {
+  margin-block-start: var(--sp-4);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+  min-block-size: var(--sp-5);
+}
+
+/* The play control's own line, under the still frame it belongs to. */
+.at-stage__still {
+  margin: 0;
+  color: var(--atom-bar-ink-dim);
+  font-size: var(--step--1);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .at-stage__canvas {
+    cursor: default;
+  }
+}

@@ -225,6 +225,76 @@ had assumed both would be implemented.
 
 ---
 
+### ADR-007 — The atom viewer draws itself: raw WebGL2, no library, tokens as its palette
+
+**Status:** `ACCEPTED` (2026-10-07, author instruction)
+**Governs:** the atom viewer — `scripts/lib/{matrix4,orbit-camera,primitive-geometry,point-sphere,atom-model}.js`,
+`scripts/components/{atom-shaders,atom-meshes,atom-view,atom-scene,atom-bar,atom-stage}.js`, the `/atoms/`
+page and `tokens.css` §21
+
+**Context.** The feature the author asked for replicates the 3D atom viewer of a **second** reference:
+protons and neutrons in a nucleus, electrons orbiting on their shells, a camera the reader can swing,
+and a translucent bar driving it. Nothing else on this site draws anything but markup and SVG, and
+ADR-004 already binds the project to zero runtime dependencies — which rules out the obvious answer,
+a 3D library, before the first line is written.
+
+**Options considered**
+
+| Option | Description | Strengths | Costs |
+|---|---|---|---|
+| **A. A 3D library (Three.js and similar)** | Load a renderer, a scene graph, cameras, materials and lights, and describe the atom as objects. | Days of work saved; lighting, picking, post-processing and glTF all come for free. | Breaks ADR-004's zero-dependency rule, and the whole of the viewer becomes configuration of somebody else's abstractions. The maths this project exists to demonstrate — matrices, cameras, geometry generation — would be imported rather than written. |
+| **B. Canvas 2D, painted to look three-dimensional** | Project the particles by hand, sort by depth and draw circles, with a painted nucleus. | No WebGL, no shaders, works everywhere, and much less code. | Nothing about it is three-dimensional: no depth buffer, no lighting, no real geometry, and the camera can only be faked. It is a picture of a 3D viewer rather than a 3D viewer, which is not what was asked for. |
+| **C. Hand-written WebGL2** *(chosen)* | Generate the sphere and ring meshes in plain JavaScript, write the GLSL, upload per-particle buffers once, and draw the whole atom in one instanced call. | Zero dependencies, so ADR-004 holds. The arithmetic — 4×4 matrices, a spherical camera, mesh generation, point distribution — is pure JavaScript under `lib/`, which means it is testable in Node with no browser at all. The drawing layer is small enough to read in one sitting. | Every convenience is written by hand, and only a browser can prove the drawing itself works. |
+
+**Decision.** Option C, with four rules that carry the decision beyond the choice of technology:
+
+1. **Raw WebGL2, hand-written, no library, and no new runtime dependency of any kind.** `source/` gains
+   GLSL and JavaScript and nothing else. A reader who clones the repository still installs nothing to
+   run the site.
+2. **Progressive enhancement, in this order.** The page is finished before any script runs: the
+   masthead, the hero, the element's **shell diagram** — the SVG component the element pages already
+   use — the counts in words and the entire bar are written by the build. The canvas is revealed by the
+   first frame that is actually drawn, and never before it. A reader with no WebGL2 keeps the diagram
+   and is told why; a reader whose script never runs keeps the page; a reader who asked for reduced
+   motion gets one still frame and a Play control, because a preference is a default and not a veto.
+3. **The palette is read from the token layer at runtime.** `getComputedStyle` on the root element
+   hands the renderer the same `--atom-*` values every other surface reads, because a graphics card is
+   not CSS. How the atom looks is therefore a change to `tokens.css` and never to a shader, a buffer or
+   a page — the project's oldest rule, kept where it is hardest to keep.
+4. **The model is pure and the scene owns the clock.** `atom-model.js` turns a record and three counts
+   into positions, kinds, radii and phases with no canvas, no clock and no document; `atom-scene.js`
+   accumulates the time and moves the electrons along it. That split is why the electrons cannot jump
+   when a reader changes the speed, and why 27 of the feature's tests need no browser.
+
+**Consequences**
+
+- Positive: the feature demonstrates exactly what the project exists to show — the arithmetic behind a
+  3D renderer, tested — rather than a library's API. The site's dependency count is still zero.
+- Positive: a defect in the drawing layer is a defect in **our** code, so a fix is a fix and not a
+  configuration attempt.
+- Negative: no shadows, no post-processing, no built-in picking, and every mesh is generated at run
+  time rather than loaded. The scene is deliberately lit by one directional light plus an ambient
+  floor, and the particles are instanced rather than drawn individually, which caps how many a page can
+  show. The heaviest atom the controls allow is measured rather than assumed: 382 particles and 7 rings
+  in 8 draw calls, 0.258 ms of the scene's own work a frame, and the page holds the browser's 16.70 ms
+  cadence with it turning.
+- Negative: **the drawing cannot be verified in Node.** The stub canvas proves the calls are issued in
+  the right order with the right arguments, and it cannot prove anything was painted — a defect that
+  collapsed every sphere to a point left every unit test green. The feature therefore carries two
+  browser audits (`tools/visual/audit-atom-renderer.mjs`, `audit-atom-scene.mjs`, `audit-atom.mjs`) that
+  read the drawing buffer and classify its pixels against the same tokens the renderer reads. **A
+  change to this layer is not verified until those have run.**
+- Accepted cost: the second reference's own palette, scene parameters and bar geometry were measured
+  and recorded in `docs/research/04-reference-atom-viewer-audit.md` — as measurements, so that what we
+  designed ourselves is visibly ours.
+
+**Reversal cost.** Medium, and deliberately so. Replacing the renderer means re-implementing the four
+modules under `lib/` and the three drawing modules under `components/`; the model, the words, the page
+family, the bar and the fallbacks survive a swap untouched, because none of them knows a shader from a
+CanvasRenderingContext. That is the reason the boundary is drawn where it is.
+
+---
+
 ## Part 3 — Sub-questions resolved with ADR-001
 
 **Generated output is ignored, and rebuilt on demand.** The repository holds authored source only;

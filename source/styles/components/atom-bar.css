@@ -1,0 +1,224 @@
+/* The bar: the glass panel at the bottom of the stage, and the one place a reader changes the atom.
+ *
+ * It is translucent rather than opaque — the fill is the stage's own colour at an alpha, with the
+ * scene blurred behind it — because the atom is the point and the controls are the annotation. The
+ * geometry was measured off the reference's own bar and is recorded in
+ * `docs/research/04-reference-atom-viewer-audit.md`; what is deliberately not copied is its palette
+ * (brand rules) and its vertical-centre placement, which fights a footer and a phone.
+ *
+ * Four things are worth reading here:
+ *
+ *   1. **Every control is a native control.** The steppers are buttons around a number input, the
+ *      speed is a range input, and the element chooser is a select — so the bar is operable by
+ *      keyboard and by a screen reader without a single ARIA attribute invented for it.
+ *   2. **The focus ring is its own token.** The site's ring is the ink, which is invisible on a dark
+ *      stage; `--atom-focus` is the one warm colour in the scene.
+ *   3. **The bar wraps rather than scrolls.** Under 40rem it becomes two rows and the stage grows to
+ *      hold them, because a horizontally scrolling control bar on a phone is a control bar nobody
+ *      finishes using.
+ *   4. **Nothing here holds a design value.** Every colour, radius, space and duration is a token;
+ *      the only literals are the three breakpoints the project's law allows.
+ *   5. **Every control says its own colour.** Most of the bar sets one, but the card's symbol is an
+ *      `<a>`, and a link's colour is the site's ink by default — which on this dark glass is the
+ *      one thing in the bar a reader cannot read. The sweep measured it at 1.47:1 before the token
+ *      was set here, which is what `tools/visual/audit-a11y.mjs` is for.
+ */
+
+.at-bar {
+  position: absolute;
+  inset-block-end: var(--atom-bar-inset);
+  inset-inline: var(--atom-bar-inset);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--atom-bar-gap);
+  max-inline-size: var(--atom-bar-max);
+  margin-inline: auto;
+  padding: var(--atom-bar-pad) var(--sp-4);
+  border: var(--rule-hairline);
+  border-color: var(--atom-bar-border);
+  border-radius: var(--atom-bar-radius);
+  background: var(--atom-bar-fill);
+  backdrop-filter: blur(var(--atom-bar-blur));
+  /* The reference's panel carries a soft halo of its own accent rather than a drop shadow: it reads as
+     glass catching the light over the atom instead of a card floating above it. Ours is the electron's
+     hue, not the reference's cyan, for the same reason every other colour here is ours. */
+  box-shadow: 0 0 var(--atom-bar-glow-radius) var(--atom-bar-glow);
+  color: var(--atom-bar-ink);
+}
+
+.at-bar__card {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.at-bar__symbol {
+  color: var(--atom-bar-ink);
+  font-size: var(--step-2);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.at-bar__symbol:hover {
+  text-decoration: underline;
+}
+
+.at-bar__name {
+  font-size: var(--step--1);
+  color: var(--atom-bar-ink-dim);
+}
+
+.at-bar__counts {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.at-bar__legend-title {
+  font-size: var(--step--1);
+  color: var(--atom-bar-ink-dim);
+}
+
+/* A control's own label is bright and heavy where the legend's is dim, which is the reference's own
+   arrangement: the words beside a field are what a reader is looking for, and the shared vocabulary
+   underneath is not. */
+.at-bar__control-label {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--atom-bar-ink);
+}
+
+.at-bar__stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.at-bar__step {
+  inline-size: var(--sp-6);
+  block-size: var(--sp-6);
+  border: var(--rule-hairline);
+  border-color: var(--atom-bar-border);
+  border-radius: var(--radius-pill);
+  background: var(--atom-bar-tint);
+  color: var(--atom-bar-ink);
+  font: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.at-bar__step:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.at-bar__number {
+  inline-size: var(--sp-8);
+  padding: var(--sp-1);
+  border: var(--rule-hairline);
+  border-color: var(--atom-bar-border);
+  border-radius: var(--radius);
+  background: var(--atom-bar-tint);
+  color: var(--atom-bar-ink);
+  font: inherit;
+  font-size: var(--step--1);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.at-bar__speed {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.at-bar__slider {
+  inline-size: var(--sp-8);
+  accent-color: var(--atom-proton);
+}
+
+.at-bar__buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.at-bar__button {
+  padding: var(--sp-1) var(--sp-3);
+  border: var(--rule-hairline);
+  border-color: var(--atom-bar-border);
+  border-radius: var(--radius-pill);
+  background: var(--atom-bar-tint);
+  color: var(--atom-bar-ink);
+  font: inherit;
+  font-size: var(--step--1);
+  cursor: pointer;
+}
+
+.at-bar__legend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.at-bar__legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--step--1);
+  color: var(--atom-bar-ink-dim);
+}
+
+.at-bar__dot {
+  inline-size: var(--sp-3);
+  block-size: var(--sp-3);
+  border-radius: var(--radius-pill);
+  background: var(--dot);
+}
+
+.at-bar__select {
+  padding: var(--sp-1);
+  border: var(--rule-hairline);
+  border-color: var(--atom-bar-border);
+  border-radius: var(--radius);
+  background: var(--atom-bar-tint);
+  color: var(--atom-bar-ink);
+  font: inherit;
+  font-size: var(--step--1);
+  max-inline-size: var(--size-diagram);
+}
+
+/* The stage's own ring, because the site's is the ink and this surface is dark. */
+.at-bar :focus-visible,
+.at-stage__canvas:focus-visible {
+  outline: var(--focus-width) solid var(--atom-focus);
+  outline-offset: var(--focus-offset);
+}
+
+@media (max-width: 56rem) {
+  .at-bar__legend {
+    inline-size: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 40rem) {
+  .at-bar {
+    gap: var(--sp-3);
+  }
+
+  .at-bar__counts,
+  .at-bar__speed,
+  .at-bar__buttons {
+    inline-size: 100%;
+    justify-content: center;
+  }
+}

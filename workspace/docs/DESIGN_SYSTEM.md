@@ -199,6 +199,66 @@ Character: short, decelerating, upward. Never bouncy, never longer than `--dur-s
 }
 ```
 
+### 1.7 The atom viewer — `tokens.css` §21, the last group in the file
+
+The one part of this layer that is not read by a browser's style engine alone. The atom viewer is
+hand-written WebGL2 (ADR-007), and **a graphics card cannot read a stylesheet** — so the renderer asks
+`getComputedStyle` for the same custom properties every other surface reads, at start-up. The rule
+this keeps is the project's oldest one, applied where it is hardest: how the atom looks is a change to
+this file and never to a shader, a buffer or a page.
+
+```css
+--atom-stage: #0d2b28;        /* deep pine: darker than --ink, so the page around it reads as paper */
+--atom-stage-height: 34rem;
+--atom-grid-line: #1c423b;  --atom-grid-pitch: 28;  --atom-grid-major: 4;   /* the field's grid */
+--atom-grid-major-strength: 1.9;  --atom-grid-fade: 0.55;
+--atom-proton:  #e57860;      /* the table's noble-gas coral, tuned for a dark ground */
+--atom-neutron: #cfc5bc;      /* the site's own warm rule grey */
+--atom-electron:#7fd2e8;      /* the non-metals' pale blue, raised to carry a glow */
+--atom-orbit: #d7e6e2;  --atom-orbit-opacity: 0.18;  --atom-orbit-tube: 0.007;
+--atom-nucleon-radius: 0.2;   --atom-nucleus-packing: 0.9;   --atom-electron-radius: 0.1;
+--atom-orbit-base: 2;  --atom-orbit-step: 1.2;  --atom-orbit-spread: 0.15;  --atom-orbit-speed: 0.9;
+--atom-spin: 0.16;  --atom-shake-speed: 6;  --atom-shake-decay: 1.6;
+--atom-light-direction: 10 10 5;   --atom-light-strength: 0.85;
+--atom-light-sky: #ffffff;  --atom-light-ground: #bbbbbb;  --atom-ambient: 0.75;
+--atom-light-roughness: 0.4;  --atom-light-metalness: 0.2;  --atom-light-specular: 0.5;
+--atom-camera-distance: 13.1;  --atom-camera-fov: 50;  --atom-drag-sensitivity: 0.01;
+--atom-bar-fill: rgba(9, 34, 31, 0.55);  --atom-bar-blur: 15px;  --atom-bar-radius: 0.75rem;
+--atom-bar-glow: rgba(127, 210, 232, 0.06);  --atom-bar-glow-radius: 40px;
+--atom-bar-ink: #eef4f2;  --atom-on-particle: #10201f;  --atom-focus: #ffd9a0;  /* …67 in all */
+```
+
+The three particle colours are this design system's own family rather than a new palette: the coral
+the noble gases already use, the warm grey of the rules, and the non-metals' pale blue — renamed for
+the scene and tuned for a dark ground, where a pale group colour that earns its keep on paper is
+either mud or a glare. The second reference's own values are recorded in
+`docs/research/04-reference-atom-viewer-audit.md` precisely so that they are not shipped by accident.
+
+**The light is three tokens and not one.** A surface takes a sky over a ground (`--atom-light-sky`,
+`--atom-light-ground`, `--atom-ambient`) plus one directional light (`--atom-light-strength`,
+`--atom-light-direction`), and its highlight's width and tint come from a roughness and a metalness the
+same way a physical material's would. The reason is the same one the rest of this system runs on: the
+difference between a sphere that looks like a dark disc with a bright side and one that looks like a
+sphere *is* a design decision, so it is declared here — at 0.4 roughness and 0.2 metalness, which are
+the reference's own numbers — rather than buried in a shader.
+
+**The field is five tokens, and it is drawn rather than styled.** `--atom-grid-line` is the line's colour
+written as it comes out of the shader rather than as a line over the field, because the renderer mixes
+towards one colour and because the pixel audits have to be able to name a pixel as the panel's rather
+than the scene's; `--atom-grid-pitch` is CSS pixels between lines, multiplied by the surface's own ratio
+in the pass so the grid is the same size on any display; `--atom-grid-major` and
+`--atom-grid-major-strength` are the stronger rule every fourth line; and `--atom-grid-fade` is how much
+darker the field goes towards the corners. The reference draws the same idea as a page pattern behind a
+transparent canvas; ours is the scene's own first draw, because a canvas transparent enough to show a
+stylesheet through it cannot also blend a translucent ring into the field — which is measured, and is
+recorded in `docs/research/05-atom-renderer-measurements.md`.
+
+The rest of the group is geometry, motion and glass in the units the renderer works in — radii and
+orbit distances in the atom's own scale, angles in radians, mesh detail as segment counts — followed by
+the bar's measured glass values. Nothing here is a colour chosen twice: the bar's fill **is** the
+stage's colour carried as an alpha, so the glass shows the scene behind it, and its halo is the
+electron's own hue at six percent rather than the reference's cyan.
+
 ## 2. Base layer — `source/styles/base.css`
 
 Reset and element defaults: `box-sizing: border-box` everywhere, margin reset, `text-rendering`,
@@ -238,7 +298,15 @@ in `source/styles/components/`. Styles never bleed across files.
 | `property-list` | the ~40-row labelled property table, with sentinel handling | element detail |
 | `definition-list` | key/value pairs for Discovery and similar | element detail, glossary |
 | `faq-block` | generated question/answer pairs from element data | element detail |
-| `shell-diagram` | generated SVG electron shell diagram | element detail |
+| `shell-diagram` | generated SVG electron shell diagram | element detail, the atoms page (its fallback) |
+| `atom-view` | the WebGL2 layer: context, programs, buffers, one instanced draw a frame | atoms page, style guide |
+| `atom-scene` | the model, alive: where every particle is this frame, and the camera | atoms page, style guide |
+| `atom-bar` | the glass bar under the stage: card, three count steppers, speed, Shake/Reset/Pause, legend, element chooser | atoms page |
+| `atom-stage` | the page's browser half: builds the scene, wires the bar, and replaces the diagram on the first frame drawn | atoms page |
+
+The last four are the one place the inventory's "one stylesheet of the same name" does not hold: the
+drawing modules carry no sheet of their own, because every value they draw with is a token in §21 read
+at runtime, and the stage's own rules live in `styles/pages/atoms.css` beside the page they belong to.
 | `bar-ranking` | horizontal magnitude bars for the ranking pages | melting/boiling point pages |
 | `converter-input` | one synchronised numeric input in the temperature calculator | calculators |
 | `filter-bar` | search + letter jump index | glossary, elements index |
@@ -269,7 +337,31 @@ palette, and no component reads a literal colour. Adding a second theme later is
 contained change — a second value set under a root attribute — rather than a refactor. It is recorded
 here as a deliberate, reversible omission rather than an oversight.
 
-## 7. Phase 1 deliverable
+## 7. The atom stage — a dark scene inside a light page
+
+`/atoms/` is one dark rectangle in an otherwise paper-light site, and that is a palette decision
+rather than a second theme (ADR-006 stands: there is one theme, one `:root`, and no `data-theme`).
+Four rules govern it, and every one of them exists because a colour on a dark ground behaves
+differently from the same colour on paper:
+
+1. **The stage owns the dark, and nothing else does.** The masthead, the submenu band, the footer,
+the page's prose and its headings stay paper-light. `--atom-stage` is set on the stage element, so the
+page around it is unchanged and a reader scrolling past cannot mistake the site for a dark one.
+2. **Nothing on the stage inherits a colour.** A link's colour is the site's ink by default, which is
+invisible here; the focus ring is the site's ink too. So every control in the bar names its own ink
+(`--atom-bar-ink`, `--atom-bar-ink-dim`), the bar has its own ring (`--atom-focus`), and the
+accessibility sweep measures the result against the composited glass rather than against the page.
+   The first run of that sweep measured the bar's symbol link at **1.47:1** for exactly this reason.
+3. **The glass shows the scene behind it.** The bar is translucent — the stage's own colour at an
+alpha, with a backdrop blur — because the atom is the point and the controls are the annotation. It is
+the only blurred surface on the site, and it is the only one that could be: what is behind it is a
+drawing, not text.
+4. **The stage is sized by the page, not by the viewport.** `--atom-stage-height` is the stage's own
+height, and the bar floats inside it at `--atom-bar-inset`; the bar wraps to two rows under `40rem`
+rather than scrolling, and the stage grows to hold them. A horizontally scrolling control bar on a
+phone is one nobody finishes using.
+
+## 8. Phase 1 deliverable
 
 A **style guide page** rendering every token and every component in isolation: the palette swatches,
 the type scale, the spacing scale, all eleven group colours with their foregrounds and a contrast

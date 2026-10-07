@@ -14,10 +14,13 @@
  *      with an extension — the site publishes directory-style URLs, so an extension means an asset
  *      or a document this module has no business swapping.
  *   2. Pushes the URL and fetches the built document for it — the same file a full load would get.
- *   3. Replaces the body with the fetched one, updates the title and the description, and re-runs
+ *   3. Makes the head the fetched document's head and replaces the body with its body, then re-runs
  *      the page's own behaviour by the name the body carries. Scripts are stripped from the
- *      incoming body on the way in: a module is evaluated once, and what a page needs to start is
- *      a call, not a second script tag.
+ *      incoming document on the way in: a module is evaluated once, and what a page needs to start
+ *      is a call, not a second script tag. The head is not an afterthought — a page family declares
+ *      exactly the stylesheets it draws with, so a swap that left the head alone would show the
+ *      arriving page in the leaving page's sheets, which is what `page-head.js` exists to prevent —
+ *      and the arriving sheets are given their moment to load before the body changes.
  *   4. Puts the reader where they expect to be: at the top for a new page, back where they were for
  *      a history move, with focus handed to the main landmark so the next Tab does not start again
  *      from the masthead.
@@ -28,8 +31,11 @@
  * router hands the navigation back to the browser and lets a real load happen.
  *
  * The decisions are separated from the plumbing so they can be tested in Node: `navigationFor` is
- * the whole of step 1 and returns a URL or null, with no DOM in it at all.
+ * the whole of step 1 and returns a URL or null, with no DOM in it at all, and the head's own rules
+ * live in `page-head.js` rather than in the middle of the swap.
  */
+
+import { adoptHead, prepareHead } from "./page-head.js";
 
 /**
  * The URL a link points at when the router should handle it, or null when it should not.
@@ -109,7 +115,9 @@ export function navigationFor(anchor, { base }) {
  *   window?: Window,
  *   fetchImpl?: typeof fetch,
  *   parse?: (html: string) => Document,
- *   startPage?: (name: string) => void
+ *   startPage?: (name: string) => void,
+ *   setTimer?: (callback: () => void, ms: number) => unknown,
+ *   clearTimer?: (timer: unknown) => void
  * }} [options]
  * @returns {{ start: () => void, stop: () => void, navigate: (url: string | URL) => Promise<void>, busy: () => boolean }}
  */
@@ -119,6 +127,8 @@ export function createRouter({
   fetchImpl = fetch,
   parse = (html) => new DOMParser().parseFromString(html, "text/html"),
   startPage = () => {},
+  setTimer = (callback, ms) => win.setTimeout(callback, ms),
+  clearTimer = (timer) => win.clearTimeout(timer),
 } = {}) {
   let busy = false;
   let frame = 0;
@@ -176,17 +186,10 @@ export function createRouter({
     win.scrollTo({ top, left: 0, behavior: "instant" });
   }
 
-  /** Replace the document's content with a freshly fetched one, keeping head and behaviour right. */
+  /** Replace the document's content with a freshly fetched one, keeping behaviour right. */
   function swap(next) {
     if (doc.title !== undefined) {
       doc.title = next.title;
-    }
-
-    const description = typeof next.querySelector === "function" ? next.querySelector('meta[name="description"]') : null;
-    const currentDescription = typeof doc.querySelector === "function" ? doc.querySelector('meta[name="description"]') : null;
-
-    if (description && currentDescription) {
-      currentDescription.setAttribute("content", description.getAttribute("content") ?? "");
     }
 
     // Scripts in the incoming body are deliberately not adopted: the module they name is already
@@ -242,8 +245,15 @@ export function createRouter({
       }
 
       const html = await response.text();
+      const arriving = parse(html);
 
-      swap(parse(html));
+      // The arriving page's own sheets are put in place and given their moment first, so the body is
+      // only ever shown in the sheets it was built with. The head and the body then change together,
+      // in one task, and no reader ever sees one without the other.
+      await prepareHead(doc, arriving, { setTimer, clearTimer }).waited;
+      adoptHead(doc, arriving);
+
+      swap(arriving);
       settle(top);
       current = pageKey(url.href);
     } catch {

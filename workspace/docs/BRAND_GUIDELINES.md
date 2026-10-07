@@ -154,3 +154,39 @@ items, or empty cells for the removed sections.
 - Any commercial typeface without a licence recorded in `docs/DATA_SOURCES.md`.
 - Any element photograph or diagram taken from a source whose licence we cannot state.
 - Our electron shell diagrams are **generated SVG** drawn from the element data — never images.
+- The second reference's logo, favicon, page copy, dataset or bundled assets (see §9).
+
+## 9. The second reference — the atom viewer
+
+One page of this site comes from a second source. The atom viewer at `/atoms/` was asked for by the
+author against a site whose whole subject is a three-dimensional atom, and `docs/research/04-reference-atom-viewer-audit.md`
+records what it does — its scene parameters, its bar's geometry, and its palette — as **measurements**.
+This section is the line between measuring it and shipping it.
+
+**What we took, and why each is not something to copy.**
+
+| Taken | What it means here |
+|---|---|
+| The idea of the page | A 3D atom a reader can turn: a nucleus, electrons on their shells, and a bar of controls. An idea is not a design, and the brief is "replicate that page, not that site". |
+| The *placement* of the control bar | Pinned to the bottom centre of the stage, translucent. Measured off the reference's own stylesheet and recorded; the placement is what the author asked for by name. |
+| The scene's parameters as **numbers to compare against** | Orbit spacing, camera distance, the falloff of a ring's speed. Our values were then chosen against our own palette and our own scale, and the differences are recorded. |
+
+**What never enters this repository.**
+
+- Its palette. Our three particle colours are this design system's own family — the noble gases' coral,
+  the rules' warm grey, the non-metals' pale blue — renamed for the scene and tuned for a dark ground.
+  Where our value differs from its value, ours is in `tokens.css` and its is in `docs/research/04`, and
+  the research document says so in those words.
+- Its copy. Every sentence on the page — the lede, the notes, the card's wording, the announcement a
+  screen reader hears — is ours.
+- Its dataset. The viewer reads `source/data/elements.json`, the same records every other page reads;
+  the feature added no data at all (see `docs/DATA_SOURCES.md` §8).
+- Its assets, its fonts, its analytics, and its `/periodic-table` and `/statistics` pages, which the
+  author explicitly put out of scope.
+- **Its name.** It appears in `docs/research/04-reference-atom-viewer-audit.md` and in this section, and
+  nowhere under `source/` — where `tests/brand/brand.test.js` now fails the suite if it appears, in the
+  same scan that has always forbidden the first reference's name.
+
+The rule the two references share: **measure at will, ship nothing.** A reader of this project should be
+able to read the research documents and the source and see, for every value, either a measurement with
+its provenance or a decision with its reason.

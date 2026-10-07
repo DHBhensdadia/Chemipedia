@@ -7,11 +7,13 @@ or if you wrote it and have been asked to explain it in an interview — start h
 Everything in this folder describes **the code as it actually is**. If a guide disagrees with the
 source, the guide is wrong and must be fixed in the same commit as the code.
 
-> **Complete as of `v1.0.0`.** These guides were written up-front as a specification of intent, and
-> the intention was to correct each one at the end of every phase. Some were not corrected as they
-> landed — the interview reference still carried `(pending)` rows into the final phase, and the tour
-> named files that were never created — so Phase 11's close-out audited all four against the source
-> and corrected them. A guide that has drifted is a defect.
+> **Complete as of `v1.0.1`, with the atom viewer on `feature/atom-3d`.** These guides were written
+> up-front as a specification of intent, and the intention was to correct each one at the end of every
+> phase. Some were not corrected as they landed — the interview reference still carried `(pending)`
+> rows into the final phase, and the tour named files that were never created — so Phase 11's close-out
+> audited all four against the source and corrected them, and the atom viewer's close-out did it again
+> for the four modules, three sheets and one page family that feature added. A guide that has drifted
+> is a defect.
 
 ---
 

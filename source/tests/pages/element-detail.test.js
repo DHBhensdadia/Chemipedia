@@ -234,6 +234,25 @@ test("the shell diagram is right for hydrogen, carbon, iron, gold and uranium", 
   }
 });
 
+test("every element page carries one link into the viewer, naming its own element", () => {
+  const atoms = routes.find((route) => route.template === "atoms");
+
+  assert.ok(atoms, "the viewer's route is not in the manifest");
+
+  for (const element of elements) {
+    const links = [...valuesFor(element).orbital.matchAll(/<a class="el-orbital__viewer" href="([^"]+)">([^<]+)<\/a>/g)];
+
+    assert.equal(links.length, 1, `${element.symbol} carries ${links.length} links into the viewer`);
+    assert.equal(links[0][1], `/atoms/#${element.slug}`, `${element.symbol}'s link opens another element`);
+    assert.ok(links[0][2].includes(element.name), `${element.symbol}'s link does not name it`);
+  }
+
+  // The destination is a page this site publishes, which is the half of the URL the fragment cannot
+  // check for itself: `/atoms/#iron` is `/atoms/` and a fragment, and the fragment is the element.
+  assert.match(valuesFor(elements[0]).orbital, /<a class="el-orbital__viewer" href="\/atoms\/#/);
+  assert.equal(new Set(elements.map((element) => element.slug)).size, elements.length);
+});
+
 test("the FAQ's answers are the property panel's own values, on every page", () => {
   for (const element of elements) {
     const values = valuesFor(element);

@@ -9,21 +9,29 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**Complete at `v1.0.0`.** Twelve phases built the site, and the last of them measured it: 562 routes
-plus a not-found page, every one of them rendered at build time rather than assembled by the browser,
-and four gates that pass on measurement rather than on inspection.
+**Complete at `v1.0.1`**, and published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and
+redeployed by `.github/workflows/pages.yml` on every push to `main`.
 
-It is published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and redeployed by
-`.github/workflows/pages.yml` on every push to `main`.
+Twelve phases built the site, and the last of them measured it: 562 routes plus a not-found page, every
+one of them rendered at build time rather than assembled by the browser, and four gates that pass on
+measurement rather than on inspection.
+
+**Four more phases added its one page that draws.** `/atoms/` — in the navigation as *Atoms*, and
+reachable from every element page — draws the chosen element as a three-dimensional atom: a nucleus of
+protons and neutrons, electrons orbiting on their shells, a camera a reader can swing, and a
+translucent bar driving it. It is hand-written WebGL2 (`docs/ARCHITECTURE.md`, ADR-007), it adds no
+dependency and no data, and it degrades to the element's own shell diagram rather than to a blank
+stage. **It is on `feature/atom-3d` until the author merges it**; everything below is measured on that
+branch.
 
 | | |
 |---|---|
 | Published at | <https://dhbhensdadia.github.io/Chemipedia/> — a GitHub Pages project site, so served from the path `/Chemipedia/` rather than from a domain root |
-| Routes the build writes | 562, plus `404.html` |
-| Tests | `node --test source/tests` — the suite that must pass, with nothing installed |
-| Accessibility | 0 defects across 19 pages from our own sweep; Lighthouse 100 on seven sampled pages |
-| Responsive | 76 of 76 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
-| Performance | worst layout shift 0, slowest cold load 38–41ms across the recorded runs, no long task on any page |
+| Routes the build writes | 563, plus `404.html` |
+| Tests | `node --test source/tests` — 658 passing, 0 failing, with nothing installed |
+| Accessibility | 0 defects across 20 pages from our own sweep; Lighthouse 100 on eight sampled pages |
+| Responsive | 80 of 80 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
+| Performance | worst layout shift 0, slowest cold load 25–41ms across the recorded runs, no long task on any page, and `/atoms/` holds the browser's 16.70ms frame cadence with its heaviest atom turning |
 | SEO | Lighthouse 100: canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` |
 
 | | |
@@ -55,7 +63,7 @@ node source/tools/serve.js
 It prints the address it is serving on, and that is the one to open:
 
 ```
-Built 562 routes into dist/          <- only when dist/ is missing or you pass --rebuild
+Built 563 routes into dist/          <- only when dist/ is missing or you pass --rebuild
 Serving dist/ at http://localhost:4173/   (Ctrl+C to stop)
 ```
 
@@ -80,9 +88,9 @@ The individual steps, if you want them separately:
 
 ```bash
 git clone <this repository> && cd chemipedia
-node source/tools/build.js     # render every route into dist/   -> "Built 562 routes and the not-found page"
+node source/tools/build.js     # render every route into dist/   -> "Built 563 routes and the not-found page"
 node source/tools/serve.js     # serve dist/ locally
-node --test source/tests       # run the test suite             -> "tests 482 · pass 482 · fail 0"
+node --test source/tests       # run the test suite             -> "tests 658 · pass 658 · fail 0"
 ```
 
 The same three commands are available as `npm run build`, `npm start` and `npm test`. The built
@@ -98,10 +106,13 @@ system Chrome through Playwright, and are the evidence rather than the opinion.
 ```bash
 node source/tools/serve.js --port 4180 &
 cd workspace/tools/visual && npm install
-node audit-a11y.mjs         # 19 pages: landmarks, headings, names, contrast, keyboard, motion
+node audit-a11y.mjs         # 20 pages: landmarks, headings, names, contrast, keyboard, motion
 node audit-responsive.mjs   # every page at 375 / 768 / 1024 / 1440
-node audit-performance.mjs  # six pages: timings, bytes, layout shift, long tasks
-node audit-lighthouse.mjs   # Lighthouse's own four categories, seven pages
+node audit-performance.mjs  # seven pages: timings, bytes, layout shift, long tasks
+node audit-lighthouse.mjs   # Lighthouse's own four categories, eight pages
+node audit-atom.mjs         # the atoms page itself: 57 claims, from its pixels to its keyboard
+node audit-atom-scene.mjs   # the style guide driving the model: all 118 elements, every extreme
+node audit-atom-renderer.mjs # the drawing layer on the style guide: buffers, calls and pixels
 ```
 
 Each of them exits non-zero on the defect it owns — an unreadable colour, a page that scrolls
@@ -151,7 +162,9 @@ Nothing in `source/` should be touched before that sequence has been followed.
 ## What this is not
 
 The **Learn** and **Games** sections of the site whose design this project reproduces are out of
-scope, deliberately. They are not stubbed and not planned.
+scope, deliberately. They are not stubbed and not planned. Neither are the `/periodic-table` and
+`/statistics` pages of the second reference the atom viewer was measured against — the author's
+instruction was one page of it, and one page is what was built.
 
 ## Data and attribution
 

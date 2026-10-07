@@ -288,7 +288,40 @@ and not of any one dataset:
 - This document is the canonical record. If a source is added, it is added here in the same commit
   as the data that uses it.
 
-## 7. Tests that guard this document
+## 7. The atom viewer adds no data — and one derived number, recorded
+
+The atom viewer (`/atoms/`) is the one page of this site whose subject is not a property: it draws
+atoms. It added **no dataset, no file, no field and no source**. Two facts make that worth writing down.
+
+**Everything it draws comes from the records the site already ships.** The page reads
+`source/data/elements.json` through the same repository every other page reads — `atomicNumber` for a
+nucleus's protons, `shells` for its rings, `atomicWeight` for the neutrons it opens on, and the name and
+symbol for its card. The build script, the schema, the overrides file and the provenance rules in §§2–6
+are untouched by this feature, and there is nothing new to attribute.
+
+**One number is computed rather than read, and one element shows it plainly.** The neutrons an element
+opens on are its **rounded standard atomic weight less its atomic number**. A standard atomic weight is
+an average over an element's isotopes in their natural abundance, so this is an approximation rather
+than a claim about a particular nucleus, and copper is the case where it is visible: copper's weight
+rounds to 64, and 64 is neither of its isotopes — Cu-63 has 34 neutrons and Cu-65 has 36, so the rule
+gives 35, and the viewer opens on a copper with 35 neutrons.
+
+| Element | Weight (u) | Rounded | Protons | Neutrons the rule gives | The isotopes' own |
+|---|---|---|---|---|---|
+| Carbon | 12.011 | 12 | 6 | 6 | C-12: 6 · C-13: 7 |
+| Iron | 55.84 | 56 | 26 | 30 | Fe-56: 30 |
+| **Copper** | **63.546** | **64** | **29** | **35** | **Cu-63: 34 · Cu-65: 36** |
+| Uranium | 238.03 | 238 | 92 | 146 | U-238: 146 |
+
+Recorded rather than hidden, in three places: the rule's docblock in `scripts/lib/atom-model.js`, the
+exception itself in `progress/PHASE_LOG.md`, and this table. The card's mass number is the **counts the
+reader has** rather than a claim about an isotope, which is why a reader who sets the neutrons to
+thirty-four sees a copper that is copper-63.
+
+Nothing in this section changes a value the rest of the site reads: a page that shows atomic weight, or
+isotope data, or a melting point still reads the record exactly as before.
+
+## 8. Tests that guard this document
 
 | Assertion | Where |
 |---|---|
@@ -298,5 +331,5 @@ and not of any one dataset:
 | Every property value is a number, a string, `null`, or an array of those — never `undefined` | `source/tests/data/*` |
 | No field anywhere in the data carries the sentinel string | `source/tests/data/*` |
 | The derived layout matches the table's shape: no two elements share a cell, every group is 1–18 | `source/tests/data/*` |
-| No record or prose field contains a prohibited brand string | `source/tests/brand/*` |
+| No record or prose field contains either reference's prohibited brand string | `source/tests/brand/*` |
 | Every element has non-empty `summary`, `uses` and `sources` | `source/tests/data/*` — added by the commit that authors them |

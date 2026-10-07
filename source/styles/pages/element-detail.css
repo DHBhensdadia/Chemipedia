@@ -244,6 +244,26 @@ main {
   font-size: var(--step--1);
 }
 
+/* The way from the still diagram into the viewer. It is the pill the terms row uses, because it is
+   the same thing: one link out of the page, and the two beside each other should not look like two
+   different kinds of control. */
+.el-orbital__viewer {
+  display: block;
+  margin-block-start: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  border: var(--rule-hairline);
+  border-radius: var(--radius-pill);
+  color: var(--ink);
+  font-size: var(--step--1);
+  font-weight: var(--weight-bold);
+  text-align: center;
+  text-decoration: none;
+}
+
+.el-orbital__viewer:hover {
+  border-color: var(--line-strong);
+}
+
 /* ---------------------------------------------------------------------------
    The siblings row.
 

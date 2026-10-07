@@ -57,6 +57,9 @@ export const PAGE_BEHAVIOUR = {
     import("./pages/temperature-calculator.js").then((module) =>
       module.startTemperatureCalculator(doc),
     ),
+  // The atoms page: the stage, the bar and everything a reader can change. The page itself is
+  // written by the build, so this entry only replaces the fallback diagram with the scene.
+  atoms: (doc) => import("./components/atom-stage.js").then((module) => module.startAtomStage(doc)),
 };
 
 /**

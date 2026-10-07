@@ -40,57 +40,18 @@
  *
  * The generated families — element detail pages, group pages and glossary terms — are appended by
  * the phases that introduce their data, each route carrying the values its template needs.
+ *
+ * The sheet sets that two or more routes share live in `route-sheets.js` and are re-exported here, so
+ * that a page's own sheets stay beside its template while the arrangement's sheets are written once.
  */
 
 import { plural } from "../lib/plural.js";
-
-/**
- * The stylesheets every one of the four table views needs, in cascade order.
- *
- * The tile sheet draws a tile and the legend sheet draws a chip, but neither decides a colour: they
- * consume `--fill` and `--on-fill`, and the periodic table's sheet is the one map that turns an
- * element's key into that pair. A view of 118 tiles that did not declare it is a view of 118 grey
- * tiles — which is exactly what the elements index shipped before Phase 6's browser pass caught it.
- *
- * The four views are one arrangement rather than four, so the list is written once and the
- * evolution view appends the timeline's own sheet to it.
- */
-const TABLE_VIEW_STYLES = [
-  "styles/components/element-tile.css",
-  "styles/components/legend-chips.css",
-  "styles/components/periodic-table.css",
-  "styles/pages/table-views.css",
-];
-
-/**
- * The stylesheets every group page needs, in cascade order.
- *
- * The three component sheets a group page draws the table with. Its own file is not listed: a
- * family's main template is named after the family, so the build appends `styles/pages/group.css`
- * for the group pages by itself, and naming it twice links the same sheet twice.
- *
- * The index page is the exception the other way round. Its cards are a category's colour on a
- * tile, and the only sheet that knows what a category's colour is happens to be the table's, so it
- * declares these three and adds the family's own file by hand.
- */
-const GROUP_STYLES = [
-  "styles/components/element-tile.css",
-  "styles/components/legend-chips.css",
-  "styles/components/periodic-table.css",
-];
-
-/** The group pages' own sheet, which the index page has to ask for by name. */
-const GROUP_PAGE_SHEET = "styles/pages/group.css";
-
-/**
- * The glossary's own sheet, declared by both of its templates.
- *
- * One file for the index and the 418 term pages, for the reason `group.css` is one file for the
- * eleven group pages: they are one arrangement, and the term page is the index's article. Neither
- * template is named `glossary`, so the build appends nothing for them by itself and both routes ask
- * for the file by name.
- */
-const GLOSSARY_STYLES = ["styles/pages/glossary.css"];
+import {
+  GLOSSARY_STYLES,
+  GROUP_PAGE_SHEET,
+  GROUP_STYLES,
+  TABLE_VIEW_STYLES,
+} from "./route-sheets.js";
 
 export const routes = [
   {
@@ -116,11 +77,28 @@ export const routes = [
     description:
       "Every element in the periodic table, ordered by atomic number, with its symbol, group, " +
       "atomic weight and state at room temperature.",
-    nav: { label: "Elements", order: 2 },
+    nav: { label: "Elements", order: 3 },
     section: "elements",
     // The periodic table's sheet carries the key-to-colour map every surface that shows a category
     // is painted by, so a page of cards names the same key the table does and gets the same colour.
     styles: ["styles/components/periodic-table.css", "styles/components/element-card.css"],
+  },
+  {
+    path: "/atoms/",
+    template: "atoms",
+    title: "Atoms — an element's atom in three dimensions",
+    description:
+      "See an element's atom drawn in three dimensions: a nucleus of protons and neutrons, with " +
+      "electrons orbiting in their shells, and the counts to explore any atom you like.",
+    nav: { label: "Atoms", order: 2 },
+    section: "atoms",
+    // The stage and the bar are the page's two large pieces and each owns its sheet; the scene's own
+    // values are all in `tokens.css` §21, because a graphics card cannot read a stylesheet.
+    styles: [
+      "styles/components/atom-scene.css",
+      "styles/components/atom-bar.css",
+      "styles/components/shell-diagram.css",
+    ],
   },
   {
     path: "/periodic-table/properties-and-states/",
@@ -218,7 +196,7 @@ export const routes = [
     description:
       "Convert temperatures between Celsius, Fahrenheit and Kelvin, with the notable reference " +
       "points listed alongside.",
-    nav: { label: "Calculators", order: 4 },
+    nav: { label: "Calculators", order: 5 },
     section: "tools",
   },
   {
@@ -228,7 +206,7 @@ export const routes = [
     description:
       "A glossary of the vocabulary of the periodic table and chemistry, from absolute zero to " +
       "the terms that only make sense once two elements sit next to each other.",
-    nav: { label: "Glossary", order: 3 },
+    nav: { label: "Glossary", order: 4 },
     section: "reference",
     styles: GLOSSARY_STYLES,
   },

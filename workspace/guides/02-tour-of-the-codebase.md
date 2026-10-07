@@ -1,7 +1,9 @@
 # Guide 2 — Tour of the codebase
 
 > **This describes the repository as it ships.** ADR-001 settled on the zero-dependency Node static
-> site generator, every folder below exists, and `v1.0.0` closed the last phase. Where a name here and
+> site generator, every folder below exists, and `v1.0.1` closed the last phase of the site; the atom
+> viewer on `feature/atom-3d` adds the four `atom-*` components, the `atom-*` lib modules and one page
+> family. Where a name here and
 > the code disagree, the code is right and this guide is a defect — fix it in the same commit.
 
 ## The one rule that decides everything
@@ -66,6 +68,8 @@ is what the build calls to write the home page's table into the HTML.
 source/
 ├── README.md                  what belongs in here, and the rule that decides it
 ├── styleguide/index.html      the design system on one page — development only, never built
+├── styleguide/atom-demo.js    the viewer driven by hand: a picker over all 118 records, three
+│                             free count fields, a speed, a shake and a reset
 ├── pages/                     one authored HTML template per page family, written as a fragment
 │   ├── home.html
 │   ├── elements-index.html
@@ -80,6 +84,7 @@ source/
 │   ├── glossary-term.html
 │   ├── temperature-calculator.html
 │   ├── downloads.html
+│   ├── atoms.html             the atom viewer, whose canvas is its enhancement
 │   ├── about.html
 │   ├── contact.html
 │   └── 404.html               the not-found document, and the host's fallback
@@ -88,6 +93,7 @@ source/
 │   ├── app.js                 the single entry point: boots routing, then the page's own behaviour
 │   ├── router/
 │   │   ├── routes.js          the route table, read by the build and the browser alike
+│   │   ├── route-sheets.js    the stylesheet sets two or more routes share
 │   │   └── router.js          link interception, history, scroll, 404, fallback
 │   ├── data/                  ← Layer 3: REPOSITORIES. The only readers of JSON.
 │   │   ├── elements-repository.js
@@ -107,6 +113,13 @@ source/
 │   │   ├── faq-block.js
 │   │   ├── shell-diagram.js
 │   │   ├── era-timeline.js
+│   │   ├── atom-view.js       ← the WebGL2 layer: context, programs, buffers, one draw a frame
+│   │   ├── atom-meshes.js     the sphere and the ring, and the per-particle buffers
+│   │   ├── atom-shaders.js    the GLSL, and createProgram
+│   │   ├── atom-scene.js      the model, alive: every particle this frame, and the camera
+│   │   ├── atom-bar.js        the glass bar's markup
+│   │   ├── atom-stage.js      the page's browser half: builds the scene, wires the bar
+│   │   ├── frame-loop.js      when a frame is drawn
 │   │   └── site-header.js, submenu.js, site-footer.js, wordmark.js
 │   ├── pages/                 ← Layer 4: one module per page family
 │   │   ├── home.js
@@ -117,6 +130,7 @@ source/
 │   │   ├── glossary.js, glossary-term.js
 │   │   ├── ranking.js, orbital-configuration.js
 │   │   ├── temperature-calculator.js
+│   │   ├── atoms.js           the viewer's page family (build half)
 │   │   └── downloads.js, about.js, contact.js
 │   └── lib/                   pure helpers — no DOM, no data, no side effects
 │       ├── colour-scale.js    numeric domain → colour, with clamps
@@ -128,6 +142,13 @@ source/
 │       ├── html.js            escaping and attribute building
 │       ├── electron-configuration.js, discovery.js, electronegativity.js
 │       ├── temperature.js     three scales, one of them with a true zero
+│       ├── matrix4.js         the 4×4 arithmetic the renderer hands to the GPU
+│       ├── orbit-camera.js    spherical state, eased toward a target, polar limits
+│       ├── primitive-geometry.js  a sphere and a ring, generated rather than loaded
+│       ├── point-sphere.js    even points on a sphere: a nucleus's own packing
+│       ├── atom-model.js      a record + three counts = every particle's place and kind
+│       ├── atom-words.js      the sentences both halves of the page read
+│       ├── site-path.js       the site's own path, for any URL written after load
 │       └── glossary-links.js, plural.js
 │
 ├── styles/
@@ -160,7 +181,7 @@ source/
 │   ├── build-data.js          fetches the open datasets and emits normalised JSON
 │   └── data-sources/          the transforms: pubchem.js, wikidata.js, layout.js, configuration.js
 │
-└── tests/                     Node's built-in test runner. No dependencies. 482 tests.
+└── tests/                     Node's built-in test runner. No dependencies. 658 tests.
     └── brand/  components/  data/  lib/  pages/  router/  tools/
 ```
 
@@ -191,6 +212,10 @@ source/
 | What a URL renders | `source/scripts/router/routes.js` |
 | What the home page does | `source/scripts/pages/home.js` |
 | How a page becomes a document | `source/tools/document.js` |
+| The 3D renderer | `source/scripts/components/atom-view.js`, with the maths beside it in `scripts/lib/{matrix4,orbit-camera,primitive-geometry}.js` |
+| What the atom viewer draws | `source/scripts/lib/atom-model.js` (a record and three counts) and `source/scripts/components/atom-scene.js` (the same, alive) |
+| What the atom viewer looks like | `source/styles/tokens.css` §21 — the renderer reads those values at runtime |
+| How an element page reaches the viewer | `source/scripts/pages/element-detail.js` (`elementViewerLink`) and `elementFromFragment` in `components/atom-stage.js` |
 | The dev server | `source/tools/serve.js` |
 | Any file at all | `workspace/docs/MIND_MAP.md` |
 

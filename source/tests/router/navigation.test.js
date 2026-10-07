@@ -31,11 +31,11 @@ test("the primary navigation comes from the manifest, in the order it asks for",
 
   assert.deepEqual(
     navigation.map((item) => item.label),
-    ["Periodic Table", "Elements", "Glossary", "Calculators"],
+    ["Periodic Table", "Atoms", "Elements", "Glossary", "Calculators"],
   );
   assert.deepEqual(
     navigation.map((item) => item.path),
-    ["/", "/elements/", "/glossary/", "/calculators/temperature/"],
+    ["/", "/atoms/", "/elements/", "/glossary/", "/calculators/temperature/"],
   );
 });
 

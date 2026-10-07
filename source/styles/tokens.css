@@ -682,6 +682,121 @@
   --pad-abt-source-row: var(--sp-2) 0;
   --size-con-part-no: 1.75rem; /* a report part's number, in its own square */
   --radius-con-part-no: var(--radius-pill);
+
+  /* -------------------------------------------------------------------------
+     21. The atom viewer — the scene's own palette and numbers.
+
+     The viewer is the one part of the site that draws in three dimensions, and
+     the one place a dark stage sits inside a light page. That is a palette
+     decision and not a second theme (ADR-006): the page around the canvas is
+     still paper, and the ink, the rules and the chrome are unchanged.
+
+     Every value the scene needs is here, for the reason every other value is:
+     the renderer reads its palette out of this layer at runtime, because a
+     graphics card is not CSS. How the atom looks is therefore a change to this
+     file rather than to a shader, a buffer or a page.
+
+     The three particle colours are the table's own family — the coral of the
+     noble gases, the warm grey of the site's rules and the pale blue of the
+     non-metals — given the scene's names and tuned for a dark ground, where a
+     pale group colour that earns its keep on paper is either mud or a glare.
+     They are deliberately not the reference's values: its palette is recorded
+     in docs/research/04-reference-atom-viewer-audit.md so that it is *not*
+     shipped by accident.
+
+     The numbers below the colours are the scene's geometry in the units the
+     renderer uses: radii and orbit distances in the atom's own scale, angles in
+     radians, and the sphere's and a ring's detail as the counts the meshes are
+     generated from.
+
+     **The proportions are the reference's, and were re-measured against it.**
+     How tightly a nucleus is packed, how far its rings stand off it, how big
+     the whole atom is in its frame and how the light falls on a particle are
+     all read off the reference's own scene and quoted here in our units; the
+     arithmetic and the pixel measurements behind each number are in
+     docs/research/04-reference-atom-viewer-audit.md. The palette above is still
+     ours — the reference's red, grey and cyan are recorded there and nowhere in
+     this file.
+     ------------------------------------------------------------------------- */
+  --atom-stage: #0d2b28; /* deep pine, lighter than the panel was: the grid needs a field with room in it */
+  --atom-stage-height: 34rem; /* the stage's own height before any page fits it to the viewport */
+  /* The grid the reference draws behind its scene, in our own palette and at a panel's scale rather
+     than a page's: a line every 1.75rem, every fourth one stronger, and the field a shade darker
+     towards the corners so the panel reads as a space with a middle rather than as paper. The line's
+     colour is written as it comes out rather than as a line over the field, because the renderer reads
+     it as one colour and mixes towards it — and because the pixel audits have to be able to name a
+     pixel as the panel's rather than the scene's. */
+  --atom-grid-line: #1c423b;
+  --atom-grid-pitch: 28; /* CSS pixels between lines */
+  --atom-grid-major: 4; /* every fourth line is drawn stronger */
+  --atom-grid-major-strength: 1.9;
+  --atom-grid-fade: 0.55; /* how much darker the field is at the panel's corners */
+  --atom-proton: #e57860;
+  --atom-neutron: #cfc5bc;
+  --atom-electron: #7fd2e8;
+  --atom-orbit: #d7e6e2;
+  --atom-orbit-opacity: 0.18;
+  --atom-orbit-tube: 0.007; /* thin enough to read as a path, thick enough to survive the camera */
+  --atom-orbit-base: 2; /* the innermost orbit's radius; each shell after it steps out by --atom-orbit-step */
+  --atom-orbit-step: 1.2;
+  --atom-orbit-spread: 0.15; /* how much further out every ring sits per unit of nucleus radius */
+  --atom-orbit-speed: 0.9; /* radians a second the innermost ring turns at */
+  --atom-nucleon-radius: 0.2;
+  --atom-nucleus-packing: 0.9; /* cluster radius = nucleon radius x cube root of count x this */
+  --atom-electron-radius: 0.1;
+  --atom-electron-glow: 0.5; /* how much of an electron's own colour is added where the light misses */
+  --atom-sphere-segments: 32;
+  --atom-sphere-rings: 24;
+  --atom-ring-segments: 48;
+  --atom-ring-tube-segments: 6;
+  --atom-light-direction: 10 10 5;
+  --atom-light-strength: 0.85; /* the directional light: how much of a surface it can add to the sky's own */
+  --atom-light-sky: #ffffff; /* the light above a surface, and the light under it */
+  --atom-light-ground: #bbbbbb;
+  --atom-ambient: 0.75; /* the sky-and-ground light's own strength: the floor under the directional one */
+  --atom-light-roughness: 0.4; /* how tight a highlight a particle carries, and how much of it */
+  --atom-light-metalness: 0.2;
+  --atom-light-specular: 0.5;
+  --atom-spin: 0.16; /* radians a second the atom turns, until a shake starts it spinning faster */
+  --atom-spin-start: 1.2867; /* the turn the atom opens already carrying, so the first frame is a view */
+  --atom-spin-axis: 0.5525 -0.7701 -0.3190; /* the reference's own opening tilt, written as one turn */
+  --atom-shake-speed: 6; /* radians a second a shake adds to that turn */
+  --atom-shake-decay: 1.6; /* per second the added turn decays away at */
+  --atom-camera-distance: 13.1;
+  --atom-camera-azimuth: 0.7;
+  --atom-camera-polar: 1.2;
+  --atom-camera-damping: 8; /* how quickly the camera reaches where it was asked to go, per second */
+  --atom-camera-fov: 50; /* degrees, converted to radians by the reader */
+  --atom-camera-near: 0.1;
+  --atom-camera-far: 120;
+  --atom-camera-min-distance: 4.6;
+  --atom-camera-max-distance: 26;
+  --atom-camera-tilt-limit: 0.35; /* radians kept clear of each pole, so the view cannot flip over */
+  --atom-drag-sensitivity: 0.01; /* radians a dragged pixel swings the view */
+  --atom-zoom-step: 1.1; /* what one wheel notch multiplies the distance by */
+  --atom-pixel-ratio-limit: 2; /* pixels per CSS pixel: beyond this a 3D stage costs more than it shows */
+  --atom-longest-step: 0.1; /* the most time one frame may carry, after a tab has been backgrounded */
+
+  /* The bar: the one piece of glass on the site, and the only place a reader changes the atom. Its
+     fill is the stage's own colour carried as an alpha rather than a second surface colour, so the
+     glass shows the scene behind it; what is behind it is the stage. The geometry and the glass
+     values were measured off the reference's own bar, and the measurements are in
+     docs/research/04-reference-atom-viewer-audit.md. */
+  --atom-bar-fill: rgba(9, 34, 31, 0.55); /* the reference's glass: a tint over the field, not a wall over it */
+  --atom-bar-border: rgba(215, 230, 226, 0.18);
+  --atom-bar-tint: rgba(215, 230, 226, 0.07); /* a control's own surface, one step up from the glass */
+  --atom-bar-blur: 15px;
+  --atom-bar-glow: rgba(127, 210, 232, 0.06); /* the reference's soft halo, in our electron's own hue */
+  --atom-bar-glow-radius: 40px;
+  --atom-bar-radius: 0.75rem;
+  --atom-bar-pad: 0.85rem;
+  --atom-bar-gap: 1.1rem;
+  --atom-bar-inset: 1rem; /* how far the bar floats above the stage's bottom edge */
+  --atom-bar-max: 68rem;
+  --atom-bar-ink: #eef4f2; /* the bar's own text: the page's ink is far too dark on the stage */
+  --atom-bar-ink-dim: #b6c6c2;
+  --atom-on-particle: #10201f; /* text on a particle-coloured chip; all three particles are light */
+  --atom-focus: #ffd9a0; /* the focus ring, because the site's own is the ink and the stage is dark */
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at
