@@ -147,8 +147,20 @@ export async function startAtomDemo() {
       lightDirection: value.list("--atom-light-direction"),
       lightStrength: value.number("--atom-light-strength"),
       ambient: value.number("--atom-ambient"),
+      skyColour: value.colour("--atom-light-sky"),
+      groundColour: value.colour("--atom-light-ground"),
+      roughness: value.number("--atom-light-roughness"),
+      metalness: value.number("--atom-light-metalness"),
+      specular: value.number("--atom-light-specular"),
     },
     clearColour: value.stage(),
+    grid: {
+      colour: value.colour("--atom-grid-line"),
+      pitch: value.number("--atom-grid-pitch"),
+      major: value.number("--atom-grid-major"),
+      majorStrength: value.number("--atom-grid-major-strength"),
+      fade: value.number("--atom-grid-fade"),
+    },
     loop: { longestStep: value.number("--atom-longest-step") },
   });
 

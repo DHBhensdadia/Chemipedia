@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { buildAtom, placeElectrons, NEUTRON, PROTON } from "../../scripts/lib/atom-model.js";
+import { buildAtom, NEUTRON, PROTON } from "../../scripts/lib/atom-model.js";
+import { placeElectrons } from "../../scripts/lib/atom-orbit.js";
 import { atom, recordFor, records, SCALE } from "./atom-fixtures.js";
 
 /**
@@ -30,7 +31,12 @@ test("hydrogen is one proton, one electron and one ring", () => {
   assert.equal(hydrogen.particleCount, 2);
   assert.equal(hydrogen.shells.length, 1);
   assert.equal(hydrogen.shells[0].electrons, 1);
-  assert.equal(hydrogen.shells[0].radius, SCALE.orbitBase);
+  // The base radius, carried out by the nucleus' own share: even hydrogen's single proton pushes its
+  // ring out a little, because the rule is the reference's and knows nothing of how small it is.
+  assert.equal(
+    hydrogen.shells[0].radius,
+    SCALE.orbitBase * (1 + SCALE.orbitSpread * hydrogen.nucleusRadius),
+  );
   assert.equal(hydrogen.shells[0].angularSpeed, SCALE.orbitSpeed);
   assert.deepEqual(hydrogen.labels.isotope, "H-1");
   assert.equal(hydrogen.labels.kind, "element");
@@ -61,6 +67,98 @@ test("carbon-12 mixes its six protons through the twelve nucleons", () => {
   for (let index = 1; index < kinds.length; index += 1) {
     assert.notEqual(kinds[index - 1], kinds[index], `nucleons ${index - 1} and ${index} are alike`);
   }
+});
+
+/**
+ * The distance from each nucleon to the nearest other one, in units of a nucleon's own diameter.
+ *
+ * One is touching, less than one is overlapping, and more than one is a gap you can see through. This
+ * is the number the packing is chosen for, and the only way to say "the nucleus is a clump" that is a
+ * measurement rather than a description.
+ *
+ * @param {object} built
+ * @returns {number[]}
+ */
+function nearestNeighbourGaps(built) {
+  const { positions } = built.nucleons;
+  const diameter = built.particleRadius * 2;
+  const gaps = [];
+
+  for (let one = 0; one < built.nucleonCount; one += 1) {
+    let nearest = Number.POSITIVE_INFINITY;
+
+    for (let other = 0; other < built.nucleonCount; other += 1) {
+      if (one === other) {
+        continue;
+      }
+
+      nearest = Math.min(
+        nearest,
+        Math.hypot(
+          positions[one * 3] - positions[other * 3],
+          positions[one * 3 + 1] - positions[other * 3 + 1],
+          positions[one * 3 + 2] - positions[other * 3 + 2],
+        ),
+      );
+    }
+
+    gaps.push(nearest / diameter);
+  }
+
+  return gaps;
+}
+
+test("a nucleus is a clump of spheres rather than a shell with gaps in it", () => {
+  // The packing is the reference's own nucleus scale factor, and this is what it is for. Before it, the
+  // cluster radius was a third larger and every element showed daylight between its nucleons: carbon at
+  // 1.55 diameters apart and iron at 1.27. Now every element but helium touches, and everything from
+  // carbon up overlaps — which is what makes a nucleus read as one lump of matter rather than as a
+  // scatter of spheres the camera happens to have caught.
+  const means = [];
+  const worsts = [];
+  const tooSmallToClump = [];
+
+  for (const record of records) {
+    const built = atom({
+      record,
+      protons: record.atomicNumber,
+      neutrons: Math.max(0, Math.round(record.atomicWeight) - record.atomicNumber),
+      electrons: record.atomicNumber,
+    });
+
+    if (built.nucleonCount < 2) {
+      continue;
+    }
+
+    if (built.nucleonCount < 12) {
+      tooSmallToClump.push(record.symbol);
+    }
+
+    const gaps = nearestNeighbourGaps(built);
+    const mean = gaps.reduce((sum, gap) => sum + gap, 0) / gaps.length;
+    const worst = Math.max(...gaps);
+
+    assert.ok(mean <= 1.05, `${record.symbol} sits ${mean} diameters apart on average`);
+    means.push(mean);
+
+    if (built.nucleonCount >= 12) {
+      // Every nucleon of every element with a dozen or more of them overlaps a neighbour: a sphere that
+      // touched nothing would be the gap the eye finds first.
+      assert.ok(worst < 1, `${record.symbol} has a nucleon ${worst} diameters from its nearest`);
+      worsts.push(worst);
+    }
+  }
+
+  assert.equal(means.length, records.length - 1, "every element but hydrogen was measured");
+  assert.deepEqual(
+    tooSmallToClump,
+    ["He", "Li", "Be", "B"],
+    "four nucleons is the smallest set that cannot all touch, and five elements are that light",
+  );
+  assert.equal(worsts.length, records.length - 5, "the other 113 overlap at least one neighbour");
+
+  // And the heaviest are the tightest, which is the cube root of the count showing through.
+  assert.ok(Math.min(...worsts) < 0.65, `the tightest element's worst gap is ${Math.min(...worsts)}`);
 });
 
 test("however many protons there are, they are spread through the cluster", () => {
@@ -149,16 +247,65 @@ test("a neutral atom of every element lands on that element's own shells", () =>
   }
 });
 
-test("the rings step outward from the base radius", () => {
+test("the rings step outward from the base radius, carried out by the nucleus", () => {
   const oganesson = atom({ record: recordFor(118), protons: 118, neutrons: 176, electrons: 118 });
+  const spread = 1 + SCALE.orbitSpread * oganesson.nucleusRadius;
 
   assert.equal(oganesson.shells.length, 7);
 
   for (const { number, radius } of oganesson.shells) {
-    const wanted = Math.max(SCALE.orbitBase, oganesson.nucleusRadius + SCALE.nucleonRadius);
+    const wanted = Math.max(SCALE.orbitBase, oganesson.nucleusRadius + SCALE.nucleonRadius) * spread;
 
-    assert.ok(Math.abs(radius - (wanted + SCALE.orbitStep * (number - 1))) < 1e-9);
+    assert.ok(Math.abs(radius - (wanted + SCALE.orbitStep * spread * (number - 1))) < 1e-9);
   }
+});
+
+test("a heavier atom's rings stand further out than a lighter one's", () => {
+  // What the spread is for: the rings are placed against the nucleus rather than around a fixed box, so
+  // the whole picture grows with the element instead of a heavy nucleus swelling inside rings that
+  // stayed where they were.
+  const light = atom({ record: recordFor(1), protons: 1, neutrons: 0, electrons: 1 });
+  const heavy = atom({ record: recordFor(92), protons: 92, neutrons: 146, electrons: 92 });
+  const growth = heavy.shells[0].radius / light.shells[0].radius;
+
+  assert.ok(growth > 1, `uranium's first ring is only ${growth} of hydrogen's`);
+  assert.ok(
+    Math.abs(growth - (1 + SCALE.orbitSpread * heavy.nucleusRadius) / (1 + SCALE.orbitSpread * light.nucleusRadius)) < 1e-9,
+    "the growth is the spread's own ratio and nothing else",
+  );
+
+  // And it is a nudge rather than a second nucleus: the rings still sit where the base radius put them.
+  assert.ok(growth < 1.5, `uranium's rings grew by ${growth}`);
+});
+
+test("every ring has a plane of its own, and the first three are the picture's own", () => {
+  const oganesson = atom({ record: recordFor(118), protons: 118, neutrons: 176, electrons: 118 });
+  const normals = oganesson.shells.map((shell) => [shell.orientation[4], shell.orientation[5], shell.orientation[6]]);
+
+  assert.equal(normals.length, 7);
+
+  for (const [index, normal] of normals.entries()) {
+    const length = Math.hypot(...normal);
+
+    assert.ok(Math.abs(length - 1) < 1e-9, `ring ${index + 1}'s plane is not a plane: |n| = ${length}`);
+  }
+
+  for (let one = 0; one < normals.length; one += 1) {
+    for (let other = one + 1; other < normals.length; other += 1) {
+      const facing = Math.abs(
+        normals[one][0] * normals[other][0] +
+          normals[one][1] * normals[other][1] +
+          normals[one][2] * normals[other][2],
+      );
+
+      assert.ok(facing < 0.99, `rings ${one + 1} and ${other + 1} share a plane`);
+    }
+  }
+
+  // The first three are fixed rather than derived: one upright, one flat in the plane the rings are
+  // built in, and one tipped halfway between the two.
+  assert.deepEqual(normals[0].map((value) => Math.round(value * 1e6) / 1e6), [0, 1, 0]);
+  assert.deepEqual(normals[1].map((value) => Math.round(value * 1e6) / 1e6), [0, 0, -1]);
 });
 
 test("no ring passes through the nucleus, however many neutrons are asked for", () => {
@@ -174,10 +321,12 @@ test("no ring passes through the nucleus, however many neutrons are asked for", 
     }
 
     // And the ladder is still a ladder: the shift moves every ring rather than closing the gaps.
+    const spread = 1 + SCALE.orbitSpread * built.nucleusRadius;
+
     for (let index = 1; index < built.shells.length; index += 1) {
       const gap = built.shells[index].radius - built.shells[index - 1].radius;
 
-      assert.ok(Math.abs(gap - SCALE.orbitStep) < 1e-9);
+      assert.ok(Math.abs(gap - SCALE.orbitStep * spread) < 1e-9);
     }
   }
 });

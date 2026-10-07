@@ -37,6 +37,7 @@ const VERBATIM = [
   "compileShader",
   "cullFace",
   "depthMask",
+  "disable",
   "enable",
   "linkProgram",
   "shaderSource",
@@ -225,12 +226,26 @@ export function createGlStub({ fails = null, dropped = [] } = {}) {
     calls.push({ method: "uniform1f", uniform: location?.name ?? null, value });
   };
 
+  gl.uniform2fv = (location, value) => {
+    calls.push({ method: "uniform2fv", uniform: location?.name ?? null, value: [...value] });
+  };
+
   gl.uniform3fv = (location, value) => {
     calls.push({ method: "uniform3fv", uniform: location?.name ?? null, value: [...value] });
   };
 
   gl.uniformMatrix4fv = (location, transpose, value) => {
-    calls.push({ method: "uniformMatrix4fv", uniform: location?.name ?? null, transpose, value });
+    // Copied, like the colours above and for the same reason: the layer reuses one array per uniform,
+    // so a transcript that kept the array itself would hold the last frame's matrix in every one of
+    // them — which reads as "this uniform was set sixteen times to the same thing" and hides the very
+    // mistake a transcript is there to catch.
+    calls.push({ method: "uniformMatrix4fv", uniform: location?.name ?? null, transpose, value: [...value] });
+  };
+
+  gl.drawArrays = (mode, first, count) => {
+    // Recorded without a vertex array of its own: the full-screen triangle takes its corners from the
+    // vertex' index, which is why it needs no buffer and nothing bound.
+    calls.push({ method: "drawArrays", mode, first, count });
   };
 
   gl.drawElements = (mode, count, type, offset) => {

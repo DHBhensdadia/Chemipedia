@@ -55,7 +55,7 @@ export function recordFor(atomicNumber) {
 /**
  * The scene's own scale, as `tokens.css` §21 declares it.
  *
- * A model is only ever drawn at one scale and these five numbers are that scale: if the stylesheet
+ * A model is only ever drawn at one scale and these six numbers are that scale: if the stylesheet
  * moves one, the picture moves with it, and the tests say so.
  */
 export const SCALE = {
@@ -63,6 +63,7 @@ export const SCALE = {
   nucleusPacking: token("--atom-nucleus-packing"),
   orbitBase: token("--atom-orbit-base"),
   orbitStep: token("--atom-orbit-step"),
+  orbitSpread: token("--atom-orbit-spread"),
   orbitSpeed: token("--atom-orbit-speed"),
 };
 

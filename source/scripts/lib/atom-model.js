@@ -16,6 +16,10 @@
  * picture on every visit and a test can hold it still. The reference reshuffles its protons on every
  * mount; a nucleus that looked different each time could not be compared with itself.
  *
+ * **Where the rings face, and where their electrons are, is `atom-orbit.js`.** A shell leaves here
+ * carrying the plane it lies in and the phases its electrons start at; that module turns a shell into
+ * places, once a frame, and nothing in either file needs the other to be a scene.
+ *
  * **Honest about the states that are not an element.** The counts are free, so a reader will reach
  * seven protons and forty neutrons, or no protons at all. The model names the element when the proton
  * count matches one, and otherwise says so in `labels.note` and `labels.kind` rather than inventing a
@@ -27,6 +31,7 @@
  */
 
 import { GOLDEN_ANGLE, pointSphere } from "./point-sphere.js";
+import { shellOrientation } from "./atom-orbit.js";
 
 /** The kind of a nucleon that carries the element's identity. */
 export const PROTON = 1;
@@ -52,6 +57,20 @@ const KEPLER = 1.5;
 function asCount(value, name) {
   if (!Number.isInteger(value) || value < 0) {
     throw new TypeError(`${name} must be a whole number, zero or more`);
+  }
+
+  return value;
+}
+
+/**
+ * @param {unknown} value
+ * @param {string} name
+ * @returns {number}
+ * @throws {TypeError} when the value is not a finite number of zero or more
+ */
+function asSpread(value, name) {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+    throw new TypeError(`${name} must be a number of zero or more`);
   }
 
   return value;
@@ -240,6 +259,8 @@ function labelsFor(record, { protons, neutrons, electrons, massNumber }) {
  * @param {number} options.scale.orbitBase the innermost ring's radius, before any clearing of the
  *   nucleus
  * @param {number} options.scale.orbitStep how much further out each ring after the first sits
+ * @param {number} options.scale.orbitSpread how much further out every ring sits for each unit of
+ *   the nucleus' radius, so that a heavier atom's rings reach past a heavier nucleus
  * @param {number} options.scale.orbitSpeed radians a second the innermost ring turns at
  * @returns {object} the model: nucleons, shells and labels
  * @throws {TypeError} when a count is not a whole number of zero or more, a scale is not positive, or
@@ -255,6 +276,7 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
     nucleusPacking,
     orbitBase,
     orbitStep,
+    orbitSpread,
     orbitSpeed,
   } = scale ?? {};
 
@@ -262,6 +284,7 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
   asScale(nucleusPacking, "a nucleus' packing");
   asScale(orbitBase, "an orbit's base radius");
   asScale(orbitStep, "an orbit's step");
+  asSpread(orbitSpread, "an orbit's spread");
   asScale(orbitSpeed, "an orbit's speed");
 
   const nucleonCount = protonCount + neutronCount;
@@ -282,17 +305,22 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
     kinds[index] = kindAt(index, protonCount, nucleonCount);
   }
 
+  // Every ring reaches further out than the bare base by a share of the nucleus' own radius, which is
+  // what keeps a heavier atom's rings *around* its heavier nucleus rather than swallowed by it: the
+  // picture grows with the element, the way the reference's does.
+  const spread = 1 + orbitSpread * nucleusRadius;
+
   // No ring may pass through the nucleus. The base radius is what the picture is built around, and it
   // is only overruled by a nucleus too large for it — a reader can slide the neutrons up without
   // anything above them stopping, and a ring through the middle of the nucleons would be the model's
   // fault rather than theirs.
-  const orbitInner = Math.max(orbitBase, nucleusRadius + nucleonRadius);
+  const orbitInner = Math.max(orbitBase, nucleusRadius + nucleonRadius) * spread;
   const shells = [];
   let placed = 0;
 
   for (let number = 1; placed < electronCount; number += 1) {
     const taking = Math.min(shellCapacity(element, number), electronCount - placed);
-    const radius = orbitInner + orbitStep * (number - 1);
+    const radius = orbitInner + orbitStep * spread * (number - 1);
     const phases = new Float64Array(taking);
 
     for (let electron = 0; electron < taking; electron += 1) {
@@ -306,6 +334,7 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
       number,
       electrons: taking,
       radius,
+      orientation: shellOrientation(number),
       angularSpeed: orbitSpeed * Math.pow(orbitInner / radius, KEPLER),
       phases,
     });
@@ -328,47 +357,4 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
     shells,
     labels: labelsFor(element, { protons: protonCount, neutrons: neutronCount, electrons: electronCount, massNumber }),
   };
-}
-
-/**
- * Where every electron is at a given moment.
- *
- * Written into the caller's own array rather than returned, because this runs once a frame and a
- * viewer that allocated a new array sixty times a second would be spending its budget on the garbage
- * collector. The electrons come out in the order the shells hold them: the first ring's electrons
- * first, then the next ring's.
- *
- * @param {object} atom a model from `buildAtom`
- * @param {number} seconds since the scene started
- * @param {Float32Array} target where to write, three numbers per electron
- * @param {number} [offset] how far into the target to start
- * @returns {number} how many electrons were placed
- * @throws {TypeError} when the seconds are not a finite number or the target is too short
- */
-export function placeElectrons(atom, seconds, target, offset = 0) {
-  if (typeof seconds !== "number" || !Number.isFinite(seconds)) {
-    throw new TypeError("the time an electron is placed at must be a finite number");
-  }
-
-  if (!target || typeof target.length !== "number" || target.length - offset < atom.electrons * 3) {
-    throw new TypeError(`the target must hold ${atom.electrons * 3} numbers for the electrons`);
-  }
-
-  let written = 0;
-
-  for (const shell of atom.shells) {
-    for (const phase of shell.phases) {
-      const angle = phase + shell.angularSpeed * seconds;
-      const at = offset + written * 3;
-
-      // The ring lies in the x/z plane and turns about y, which is the plane the rings are built in
-      // and the same plane the model is spun about.
-      target[at] = shell.radius * Math.cos(angle);
-      target[at + 1] = 0;
-      target[at + 2] = shell.radius * Math.sin(angle);
-      written += 1;
-    }
-  }
-
-  return written;
 }

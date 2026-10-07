@@ -21,7 +21,9 @@
  *
  * The ring shapes are a cache keyed by their geometry, not by the shell they belong to: switching from
  * carbon to silicon changes which rings are drawn but not how many radii the site will ever ask for,
- * so the second element drawn shares most of the first one's meshes.
+ * so the second element drawn shares most of the first one's meshes. What a ring's *plane* is does not
+ * enter that key, and should not: two shells of the same radius are the same tube turned differently,
+ * and turning one is a uniform the draw is given rather than a mesh to build.
  */
 
 import { sphereGeometry, torusGeometry } from "../lib/primitive-geometry.js";
@@ -329,8 +331,8 @@ export function createRingShapes(gl, { attribs }) {
      * viewer gains a hitch the moment a reader picks a heavier element.
      *
      * @param {{ radius: number, tube: number, segments: number, tubeSegments: number,
-     *   colour: number[], opacity: number }[]} list
-     * @returns {{ shape: object, colour: number[], opacity: number }[]}
+     *   colour: number[], opacity: number, orientation?: number[] }[]} list
+     * @returns {{ shape: object, colour: number[], opacity: number, orientation: number[] | null }[]}
      * @throws {TypeError} when a ring's geometry is not a ring
      */
     prepare(list) {
@@ -341,9 +343,14 @@ export function createRingShapes(gl, { attribs }) {
           shapes.set(key, build(ring));
         }
 
-        // The colour and the transparency belong to the shell rather than to the mesh, so two shells
-        // that shared a radius would still draw in their own colours.
-        return { shape: shapes.get(key), colour: ring.colour, opacity: ring.opacity };
+        // The colour, the transparency and the plane belong to the shell rather than to the mesh, so
+        // two shells that shared a radius would still draw in their own colours, on their own planes.
+        return {
+          shape: shapes.get(key),
+          colour: ring.colour,
+          opacity: ring.opacity,
+          orientation: ring.orientation ?? null,
+        };
       });
     },
 

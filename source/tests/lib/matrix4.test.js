@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 
 import {
+  eulerRotation,
   identity,
   lookAt,
   multiply,
@@ -11,6 +12,7 @@ import {
   rotationY,
   rotationZ,
   scaling,
+  transformDirection,
   transformPoint,
   translation,
 } from "../../scripts/lib/matrix4.js";
@@ -141,6 +143,32 @@ test("a turn preserves length, which is the whole reason it is a rotation", () =
   close(length(turned), length(point), 1e-12);
 });
 
+test("three angles at once is the three turns, applied in the order they are written", () => {
+  const angles = [0.4, -1.1, 0.85];
+  const together = eulerRotation(angles);
+  const oneAtATime = multiply(rotationX(angles[0]), multiply(rotationY(angles[1]), rotationZ(angles[2])));
+
+  closeVector(together, oneAtATime, 1e-12);
+
+  // And the order is not commutative, which is the whole reason it has to be stated: y then x is a
+  // different turn from x then y, and a reader handed the wrong one gets a picture that looks fine.
+  const other = multiply(rotationY(angles[1]), multiply(rotationX(angles[0]), rotationZ(angles[2])));
+
+  assert.ok(
+    Math.abs(together[1] - other[1]) > 1e-3,
+    "the order of the axes made no difference, which cannot be right",
+  );
+});
+
+test("a direction is turned by a matrix and never moved by it", () => {
+  const turn = multiply(translation([10, -4, 2.5]), rotationZ(0.7));
+
+  closeVector(transformDirection(turn, [1, 0, 0]), transformPoint(rotationZ(0.7), [1, 0, 0]), 1e-12);
+  // The same point, carried by the same matrix, does pick the movement up — which is the difference.
+  closeVector(transformPoint(turn, [1, 0, 0]), [10 + Math.cos(0.7), -4 + Math.sin(0.7), 2.5], 1e-12);
+  closeVector(transformDirection(turn, [0, 0, 0]), [0, 0, 0], 1e-12);
+});
+
 test("scaling resizes by axis or all at once", () => {
   closeVector(transformPoint(scaling(3), [1, 1, 1]), [3, 3, 3], 1e-12);
   closeVector(transformPoint(scaling([1, 2, 4]), [1, 1, 1]), [1, 2, 4], 1e-12);
@@ -159,6 +187,10 @@ test("a malformed matrix, axis, scale or vector is refused rather than drawn wro
   assert.throws(() => scaling([1, 2]), TypeError);
   assert.throws(() => translation([1, 2]), TypeError);
   assert.throws(() => transformPoint(identity(), [1, 2]), TypeError);
+  assert.throws(() => transformDirection(identity(), [1, 2]), TypeError);
+  assert.throws(() => transformDirection([1, 2, 3], [1, 2, 3]), TypeError);
+  assert.throws(() => eulerRotation([1, 2]), TypeError);
+  assert.throws(() => eulerRotation([1, 2, Number.NaN]), TypeError);
   assert.throws(() => perspective(1, 0, 1, 10), TypeError, "an aspect of zero cannot be divided into");
   assert.throws(() => perspective(1, 1, 10, 10), TypeError, "the far plane must be beyond the near one");
 });

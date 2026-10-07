@@ -168,8 +168,20 @@ export async function startAtomStage(doc = document) {
       lightDirection: tokens.list("--atom-light-direction"),
       lightStrength: tokens.number("--atom-light-strength"),
       ambient: tokens.number("--atom-ambient"),
+      skyColour: tokens.colour("--atom-light-sky"),
+      groundColour: tokens.colour("--atom-light-ground"),
+      roughness: tokens.number("--atom-light-roughness"),
+      metalness: tokens.number("--atom-light-metalness"),
+      specular: tokens.number("--atom-light-specular"),
     },
     clearColour: tokens.stage(),
+    grid: {
+      colour: tokens.colour("--atom-grid-line"),
+      pitch: tokens.number("--atom-grid-pitch"),
+      major: tokens.number("--atom-grid-major"),
+      majorStrength: tokens.number("--atom-grid-major-strength"),
+      fade: tokens.number("--atom-grid-fade"),
+    },
     loop: { longestStep: tokens.number("--atom-longest-step") },
   });
 

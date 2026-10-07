@@ -10,8 +10,26 @@ import { callsOf, createCanvas, createGlStub, memoryOf } from "./webgl-stub.js";
 const CONFIG = {
   sphere: { segments: 8, rings: 6 },
   pixelRatioLimit: 2,
-  lighting: { lightDirection: [10, 10, 5], lightStrength: 1, ambient: 0.35 },
+  lighting: {
+    lightDirection: [10, 10, 5],
+    lightStrength: 1,
+    ambient: 0.35,
+    skyColour: [1, 1, 1],
+    groundColour: [0.73, 0.73, 0.73],
+    roughness: 0.4,
+    metalness: 0.2,
+    specular: 0.5,
+  },
   clearColour: [0.06, 0.12, 0.1, 1],
+};
+
+/** A field, as `tokens.css` declares one. */
+const GRID = {
+  colour: [0.11, 0.26, 0.23],
+  pitch: 28,
+  major: 4,
+  majorStrength: 1.9,
+  fade: 0.55,
 };
 
 /**
@@ -157,10 +175,47 @@ test("the context is set up for a scene with depth, back faces culled and transl
   );
   assert.deepEqual(callsOf(gl, "cullFace")[0].args, [gl.BACK]);
   assert.deepEqual(callsOf(gl, "blendFunc")[0].args, [gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA]);
-  assert.equal(callsOf(gl, "createProgram").length, 2, "the sphere and the ring programs");
+  assert.equal(
+    callsOf(gl, "createProgram").length,
+    3,
+    "the field, the sphere and the ring programs",
+  );
 });
 
-test("a frame draws the rings first, from behind, and then every particle in one call", () => {
+test("the field is the first thing a frame draws, and the atom is drawn over it", () => {
+  const gl = createGlStub();
+  const canvas = createCanvas({ context: gl });
+  const view = createAtomView(canvas, { ...CONFIG, grid: GRID });
+
+  view.resize(1);
+  view.setParticles(particles(4));
+  view.setRings([ring({ radius: 2 })]);
+  view.draw({ model: identity(), camera: camera() });
+
+  const methods = gl.calls.map((call) => call.method);
+  const field = methods.indexOf("drawArrays");
+
+  assert.ok(field > -1, "the grid was never drawn");
+  assert.ok(
+    methods.indexOf("clear") < field && field < methods.indexOf("drawElementsInstanced"),
+    "the grid has to be under the atom: it is what the atom is drawn on",
+  );
+  assert.equal(callsOf(gl, "drawArrays").length, 1, "one triangle is the whole field");
+});
+
+test("a stage with no grid is still a stage: nothing is drawn for a field that was not asked for", () => {
+  const gl = createGlStub();
+  const view = createAtomView(createCanvas({ context: gl }), CONFIG);
+
+  view.resize(1);
+  view.setParticles(particles(4));
+  view.draw({ model: identity(), camera: camera() });
+
+  assert.deepEqual(callsOf(gl, "drawArrays"), []);
+  assert.equal(callsOf(gl, "drawElementsInstanced").length, 1, "the atom should still be drawn");
+});
+
+test("a frame draws every particle in one call and then the rings, over it", () => {
   const gl = createGlStub();
   const canvas = createCanvas({ context: gl });
   const view = createAtomView(canvas, CONFIG);
@@ -185,9 +240,12 @@ test("a frame draws the rings first, from behind, and then every particle in one
 
   const methods = gl.calls.map((call) => call.method);
 
+  // The rings are drawn last, over an atom that has already written depth: a ring's near half crosses
+  // the nucleus as a faint line and its far half is behind it, which is the only thing that says the
+  // orbits go round the atom rather than sit on it.
   assert.ok(
-    methods.indexOf("drawElements") < methods.indexOf("drawElementsInstanced"),
-    "the translucent rings belong behind the particles",
+    methods.indexOf("drawElementsInstanced") < methods.indexOf("drawElements"),
+    "the translucent rings belong over the particles, not under them",
   );
   assert.deepEqual(
     callsOf(gl, "depthMask").map((call) => call.args[0]),
@@ -197,13 +255,23 @@ test("a frame draws the rings first, from behind, and then every particle in one
   assert.deepEqual(callsOf(gl, "viewport").at(-1), { method: "viewport", x: 0, y: 0, width: 400, height: 200 });
 });
 
-test("each ring carries its own colour and transparency, and the particles their own glow", () => {
+test("each ring carries its own colour, transparency and plane, and the particles their own glow", () => {
   const gl = createGlStub();
   const view = createAtomView(createCanvas({ context: gl }), CONFIG);
+  const turned = [0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
   view.setParticles(particles(3));
-  view.setRings([ring({ colour: [0.2, 0.8, 1], opacity: 0.15 }), ring({ colour: [1, 0, 0], opacity: 0.5 })]);
+  view.setRings([
+    ring({ colour: [0.2, 0.8, 1], opacity: 0.15 }),
+    ring({ colour: [1, 0, 0], opacity: 0.5, orientation: turned }),
+  ]);
   view.draw({ model: identity(), camera: camera() });
+
+  const planes = callsOf(gl, "uniformMatrix4fv").filter((call) => call.uniform === "uOrientation");
+
+  assert.equal(planes.length, 2, "one plane per ring");
+  assert.deepEqual([...planes[0].value], identity(), "a ring declared without a plane is the ring built");
+  assert.deepEqual([...planes[1].value], turned);
 
   assert.deepEqual(
     callsOf(gl, "uniform3fv")
@@ -310,7 +378,11 @@ test("disposing the view gives back every program, buffer and array it made", ()
   view.destroy();
 
   assert.equal(view.hasDrawn(), false);
-  assert.equal(callsOf(gl, "deleteProgram").length, 2);
+  assert.equal(
+    callsOf(gl, "deleteProgram").length,
+    callsOf(gl, "createProgram").length,
+    "every program the view built should have been given back",
+  );
   assert.deepEqual(memoryOf(gl).outstanding, []);
 });
 

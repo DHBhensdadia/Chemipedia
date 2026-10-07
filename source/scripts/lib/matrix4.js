@@ -285,6 +285,25 @@ export function rotationAbout(axis, radians) {
 }
 
 /**
+ * A turn about each axis at once, given as three angles.
+ *
+ * The axes are applied in the order x, then y, then z, which is the order every graphics text writes
+ * an "XYZ" rotation in and the order the viewer's reference does the same sum in. Three separate
+ * turns are three separate matrices and a product, and the product is written out here rather than
+ * left to a caller because a caller who gets the order wrong gets a picture that looks plausible and
+ * is not the one that was meant.
+ *
+ * @param {number[]} angles three radians
+ * @returns {number[]}
+ * @throws {TypeError} when the angles are not three finite numbers
+ */
+export function eulerRotation(angles) {
+  const [x, y, z] = asVector(angles, "angles");
+
+  return multiply(rotationX(x), multiply(rotationY(y), rotationZ(z)));
+}
+
+/**
  * @param {number} radians
  * @returns {number[]}
  */
@@ -329,6 +348,30 @@ export function transformPoint(matrix, point) {
     m[0] * x + m[4] * y + m[8] * z + m[12],
     m[1] * x + m[5] * y + m[9] * z + m[13],
     m[2] * x + m[6] * y + m[10] * z + m[14],
+  ];
+}
+
+/**
+ * Where a direction points once a matrix has been applied to it.
+ *
+ * A direction moves by the matrix' turn and not by its place: the translation a point picks up is
+ * deliberately left out, which is the whole difference between the two. The viewer needs it for one
+ * thing — carrying the light's direction out of the world's frame and into the camera's, so that the
+ * shaders can name a direction the same way the surface they light does.
+ *
+ * @param {number[]} matrix
+ * @param {number[]} direction
+ * @returns {number[]}
+ * @throws {TypeError} when either argument is malformed
+ */
+export function transformDirection(matrix, direction) {
+  const m = asMatrix(matrix, "matrix");
+  const [x, y, z] = asVector(direction, "direction");
+
+  return [
+    m[0] * x + m[4] * y + m[8] * z,
+    m[1] * x + m[5] * y + m[9] * z,
+    m[2] * x + m[6] * y + m[10] * z,
   ];
 }
 

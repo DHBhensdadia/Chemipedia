@@ -1,7 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { createProgram, RING_PROGRAM, SPHERE_PROGRAM } from "../../scripts/components/atom-shaders.js";
+import {
+  createProgram,
+  GRID_PROGRAM,
+  RING_PROGRAM,
+  SPHERE_PROGRAM,
+} from "../../scripts/components/atom-shaders.js";
 import { INSTANCE_ATTRIBUTES, MESH_ATTRIBUTES } from "../../scripts/components/atom-meshes.js";
 import { callsOf, createGlStub } from "./webgl-stub.js";
 
@@ -9,6 +14,7 @@ import { callsOf, createGlStub } from "./webgl-stub.js";
 const PROGRAMS = [
   ["sphere", SPHERE_PROGRAM],
   ["ring", RING_PROGRAM],
+  ["grid", GRID_PROGRAM],
 ];
 
 /**
@@ -51,12 +57,24 @@ test("every source asks for GLSL ES 3.00 on its very first line", () => {
 test("the sources are written in ES 3.00 and use nothing from ES 1.00", () => {
   for (const [name, program] of PROGRAMS) {
     for (const source of [program.vertex, program.fragment]) {
-      assert.match(source, /^in \w+ /m, `${name} should declare an input`);
+      // An input is what a shader reads from the stage before it — except for the one program whose
+      // geometry comes from the vertex' own index, and that one has to say so rather than merely have
+      // no inputs, or this rule would stop being a rule.
+      assert.ok(
+        /^in \w+ /m.test(source) || (source === program.vertex && program.attributes.length === 0 && /gl_VertexID/.test(source)),
+        `${name} declares nothing to read and does not build its geometry from the vertex index either`,
+      );
 
       // Every one of these is an ES 1.00 spelling that ES 3.00 removed outright. A shader containing
       // one does not compile, so this is the cheapest way to catch a line copied from an old example.
       assert.doesNotMatch(source, /\bvarying\b|\battribute\b|\btexture2D\b|gl_FragColor/, name);
     }
+
+    assert.equal(
+      program.attributes.length === 0,
+      /gl_VertexID/.test(program.vertex),
+      `${name}: a program with no attributes has to be one that uses the vertex index`,
+    );
 
     assert.match(
       program.fragment,
@@ -94,15 +112,27 @@ test("every attribute a program declares is one its vertex shader actually reads
   }
 });
 
-test("every attribute the meshes bind is one of these programs' attributes", () => {
+test("every attribute a mesh binds is declared by the program that draws it", () => {
+  // Each mesh is drawn by one program: the spheres and the field's single triangle by the first two
+  // lists below, the rings by theirs. A mesh's attributes have to be in the program that draws it — and
+  // the field, which has no mesh at all, declares none.
   for (const name of MESH_ATTRIBUTES) {
-    for (const [programName, program] of PROGRAMS) {
+    for (const [programName, program] of [
+      ["sphere", SPHERE_PROGRAM],
+      ["ring", RING_PROGRAM],
+    ]) {
       assert.ok(
         program.attributes.includes(name),
         `the meshes bind ${name}, which the ${programName} program does not declare`,
       );
     }
   }
+
+  assert.deepEqual(
+    GRID_PROGRAM.attributes,
+    [],
+    "the field's triangle comes from the vertex index, so it binds nothing",
+  );
 
   for (const part of INSTANCE_ATTRIBUTES) {
     assert.ok(

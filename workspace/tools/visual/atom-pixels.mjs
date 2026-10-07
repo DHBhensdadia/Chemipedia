@@ -26,11 +26,11 @@
  * more than that at every brightness.
  */
 
-/** How far a sampled pixel has to be from the stage colour to count as drawn at all. */
-const DRAWN = 24;
-
 /** How much leftover counts as "this colour, lit", summed over the three channels. */
 const SAME_COLOUR = 70;
+
+/** How far from the panel's own colours a pixel may be and still be the panel. */
+const PANEL = 40;
 
 /** Every seventh pixel is sampled, which is twenty-eight bytes: at the widest surface this is a
  * two-million-pixel buffer, and the answer does not depend on reading all of it. */
@@ -48,7 +48,7 @@ const SAMPLE_EVERY = 28;
  */
 export async function paintedShare(page, selector) {
   return page.evaluate(
-    ({ stage, drawn, same, step }) =>
+    ({ stage, panel, same, step }) =>
       new Promise((resolve) => {
         const canvas = document.querySelector(stage);
         const gl = canvas?.getContext("webgl2");
@@ -66,10 +66,50 @@ export async function paintedShare(page, selector) {
           return [1, 3, 5].map((at) => Number.parseInt(value.slice(at, at + 2), 16));
         };
         const ground = rgb("--atom-stage");
+        const line = rgb("--atom-grid-line");
+        const fade = Number.parseFloat(tokens.getPropertyValue("--atom-grid-fade").trim()) || 0;
         const palette = {
           proton: rgb("--atom-proton"),
           neutron: rgb("--atom-neutron"),
           electron: rgb("--atom-electron"),
+        };
+
+        /**
+         * The panel's own colour at one point on it, and how far a pixel is from being it.
+         *
+         * The stage is not one colour any more: it is the field with a grid drawn over it, both of them
+         * a shade darker towards the corners — the shader's own formula, repeated here so that a pixel
+         * on the grid is read as the panel it is and not as something the scene drew. An anti-aliased
+         * edge is the field and the line mixed, which is why the distance is measured to the segment
+         * between them rather than to either end of it.
+         *
+         * @param {number[]} pixel
+         * @param {number} x the pixel's column, in the surface's own pixels
+         * @param {number} y its row
+         * @param {number} width
+         * @param {number} height
+         * @returns {number} the summed distance from the panel's nearest own colour
+         */
+        const fromPanel = (pixel, x, y, width, height) => {
+          const across = (x / width) * 2 - 1;
+          const down = (y / height) * 2 - 1;
+          const veil = 1 - fade * (across * across + down * down) * 0.5;
+          const field = ground.map((channel) => channel * veil);
+          const towards = line.map((channel, at) => channel - field[at]);
+          const length = towards.reduce((sum, channel) => sum + channel * channel, 0) || 1;
+          const along = Math.min(
+            1,
+            Math.max(
+              0,
+              pixel.reduce((sum, channel, at) => sum + (channel - field[at]) * towards[at], 0) /
+                length,
+            ),
+          );
+
+          return pixel.reduce(
+            (sum, channel, at) => sum + Math.abs(channel - (field[at] + towards[at] * along)),
+            0,
+          );
         };
 
         requestAnimationFrame(() => {
@@ -85,12 +125,10 @@ export async function paintedShare(page, selector) {
             sampled += 1;
 
             const pixel = [pixels[at], pixels[at + 1], pixels[at + 2]];
-            const away =
-              Math.abs(pixel[0] - ground[0]) +
-              Math.abs(pixel[1] - ground[1]) +
-              Math.abs(pixel[2] - ground[2]);
+            const column = (at / 4) % canvas.width;
+            const row = Math.floor(at / 4 / canvas.width);
 
-            if (away <= drawn) {
+            if (fromPanel(pixel, column, row, canvas.width, canvas.height) <= panel) {
               continue;
             }
 
@@ -123,6 +161,6 @@ export async function paintedShare(page, selector) {
           resolve({ lit, sampled, ratio: lit / sampled, palette: found });
         });
       }),
-    { stage: selector, drawn: DRAWN, same: SAME_COLOUR, step: SAMPLE_EVERY },
+    { stage: selector, panel: PANEL, same: SAME_COLOUR, step: SAMPLE_EVERY },
   );
 }

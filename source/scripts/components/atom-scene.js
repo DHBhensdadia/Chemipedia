@@ -26,7 +26,8 @@
  *    read the token layer, and a model; the page owns everything else.
  */
 
-import { placeElectrons, PROTON } from "../lib/atom-model.js";
+import { PROTON } from "../lib/atom-model.js";
+import { placeElectrons } from "../lib/atom-orbit.js";
 import { createOrbitCamera } from "../lib/orbit-camera.js";
 import { rotationAbout } from "../lib/matrix4.js";
 
@@ -39,7 +40,7 @@ import { rotationAbout } from "../lib/matrix4.js";
  *
  * @param {{ number: (name: string) => number }} tokens
  * @returns {{ nucleonRadius: number, nucleusPacking: number, orbitBase: number, orbitStep: number,
- *   orbitSpeed: number }}
+ *   orbitSpread: number, orbitSpeed: number }}
  */
 export function atomScale(tokens) {
   return {
@@ -47,6 +48,7 @@ export function atomScale(tokens) {
     nucleusPacking: tokens.number("--atom-nucleus-packing"),
     orbitBase: tokens.number("--atom-orbit-base"),
     orbitStep: tokens.number("--atom-orbit-step"),
+    orbitSpread: tokens.number("--atom-orbit-spread"),
     orbitSpeed: tokens.number("--atom-orbit-speed"),
   };
 }
@@ -109,6 +111,7 @@ export function createAtomScene({ view, tokens, atom, speed = 1 }) {
   };
   const turn = {
     speed: tokens.number("--atom-spin"),
+    start: tokens.number("--atom-spin-start"),
     axis: tokens.list("--atom-spin-axis"),
     shakeSpeed: tokens.number("--atom-shake-speed"),
     shakeDecay: tokens.number("--atom-shake-decay"),
@@ -135,8 +138,10 @@ export function createAtomScene({ view, tokens, atom, speed = 1 }) {
   /** Seconds of orbiting the electrons have done: the scene's clock, not the wall's. */
   let orbited = 0;
 
-  /** How far the whole atom has turned, and how much of that is the shake's to give back. */
-  let angle = 0;
+  /** How far the whole atom has turned, and how much of that is the shake's to give back. The atom
+   * opens already tipped by its own token: a first frame drawn from an unturned atom is a picture of
+   * the axes rather than of the atom. */
+  let angle = turn.start;
   let shaken = 0;
 
   /**
@@ -174,13 +179,20 @@ export function createAtomScene({ view, tokens, atom, speed = 1 }) {
   }
 
   /**
-   * One ring per shell, each at the shell's own radius.
+   * One ring per shell, each at the shell's own radius and in the shell's own plane.
+   *
+   * The plane is the model's to decide and the layer's to draw: it is what keeps seven shells visibly
+   * seven rather than one circle drawn seven times over.
    *
    * @param {object} next a model
    * @returns {object[]}
    */
   function ringsFor(next) {
-    return next.shells.map((shell) => ({ radius: shell.radius, ...ring }));
+    return next.shells.map((shell) => ({
+      radius: shell.radius,
+      orientation: shell.orientation,
+      ...ring,
+    }));
   }
 
   /**

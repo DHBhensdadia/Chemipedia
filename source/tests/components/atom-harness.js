@@ -95,8 +95,24 @@ export function tokenReader() {
 export const VIEW_CONFIG = {
   sphere: { segments: 8, rings: 6 },
   pixelRatioLimit: 2,
-  lighting: { lightDirection: [10, 10, 5], lightStrength: 1, ambient: 0.35 },
+  lighting: {
+    lightDirection: [10, 10, 5],
+    lightStrength: 1,
+    ambient: 0.35,
+    skyColour: [1, 1, 1],
+    groundColour: [0.73, 0.73, 0.73],
+    roughness: 0.4,
+    metalness: 0.2,
+    specular: 0.5,
+  },
   clearColour: [0.03, 0.13, 0.12, 1],
+  grid: {
+    colour: [0.11, 0.26, 0.23],
+    pitch: 28,
+    major: 4,
+    majorStrength: 1.9,
+    fade: 0.55,
+  },
 };
 
 /**

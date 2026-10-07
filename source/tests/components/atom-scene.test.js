@@ -58,6 +58,7 @@ test("the scene reads the token layer for every value it needs, and they are all
       "--atom-shake-speed",
       "--atom-spin",
       "--atom-spin-axis",
+      "--atom-spin-start",
     ],
     "the tokens the scene reads, and no others",
   );
@@ -68,9 +69,10 @@ test("the scale the model is built with is the scale the scene draws it at", () 
 
   assert.deepEqual(atomScale(tokenReader()), {
     nucleonRadius: 0.2,
-    nucleusPacking: 1.5,
+    nucleusPacking: 0.9,
     orbitBase: 2,
     orbitStep: 1.2,
+    orbitSpread: 0.15,
     orbitSpeed: 0.9,
   });
 });
@@ -125,8 +127,7 @@ test("an electron is on its ring, in the ring's plane, and moves while its nucle
   const first = uploaded(gl).positions.slice(offset);
   const shell = atom.shells[0];
 
-  assert.ok(Math.abs(Math.hypot(first[0], first[2]) - shell.radius) < 1e-5);
-  assert.equal(first[1], 0);
+  assert.ok(Math.abs(Math.hypot(first[0], first[1], first[2]) - shell.radius) < 1e-5);
 
   scene.step(0.5);
 
@@ -143,9 +144,11 @@ test("an electron is on its ring, in the ring's plane, and moves while its nucle
   let apart = 0;
 
   for (let electron = 0; electron < atom.electrons; electron += 1) {
+    const at = electron * 3;
+
     apart = Math.max(
       apart,
-      Math.hypot(moved[electron * 3] - first[electron * 3], moved[electron * 3 + 2] - first[electron * 3 + 2]),
+      Math.hypot(moved[at] - first[at], moved[at + 1] - first[at + 1], moved[at + 2] - first[at + 2]),
     );
   }
 
@@ -167,6 +170,14 @@ test("the rings are one per occupied shell, at the shell's own radius", () => {
     assert.equal(rings[0].colour.length, 3, "a ring's colour is a colour, ready for the layer");
     assert.equal(rings[0].opacity, token("--atom-orbit-opacity"));
     assert.equal(rings[0].tube, token("--atom-orbit-tube"));
+
+    // And each ring is handed its own shell's plane, which is what keeps seven shells seven rings
+    // rather than seven radii drawn in one plane.
+    assert.deepEqual(
+      rings.map((ring) => ring.orientation),
+      atom.shells.map((shell) => shell.orientation),
+      `${protons}: ring planes`,
+    );
   }
 });
 

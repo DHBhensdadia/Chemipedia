@@ -41,6 +41,10 @@
   border-radius: var(--atom-bar-radius);
   background: var(--atom-bar-fill);
   backdrop-filter: blur(var(--atom-bar-blur));
+  /* The reference's panel carries a soft halo of its own accent rather than a drop shadow: it reads as
+     glass catching the light over the atom instead of a card floating above it. Ours is the electron's
+     hue, not the reference's cyan, for the same reason every other colour here is ours. */
+  box-shadow: 0 0 var(--atom-bar-glow-radius) var(--atom-bar-glow);
   color: var(--atom-bar-ink);
 }
 
@@ -75,10 +79,18 @@
   border: 0;
 }
 
-.at-bar__legend-title,
-.at-bar__control-label {
+.at-bar__legend-title {
   font-size: var(--step--1);
   color: var(--atom-bar-ink-dim);
+}
+
+/* A control's own label is bright and heavy where the legend's is dim, which is the reference's own
+   arrangement: the words beside a field are what a reader is looking for, and the shared vocabulary
+   underneath is not. */
+.at-bar__control-label {
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--atom-bar-ink);
 }
 
 .at-bar__stepper {

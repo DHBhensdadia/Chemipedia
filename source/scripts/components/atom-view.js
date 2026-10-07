@@ -17,17 +17,25 @@
  *    each instance carries its own offset, radius, colour and glow, so every particle in the atom is
  *    one draw call. The rings are at most seven and each has its own radius: each is its own small
  *    mesh, and instancing them would be machinery for no gain.
- * 3. **The orbits are blended and do not write depth.** A ring is a hint of a path, drawn at a
- *    fraction of full opacity; if it wrote depth it would hide the nucleons behind it, and without
- *    blending its transparency would be ignored and the shells would look like wire hoops.
+ * 3. **The orbits are blended, drawn last and do not write depth.** A ring is a hint of a path, drawn
+ *    at a fraction of full opacity; if it wrote depth it would hide the nucleons behind it, and without
+ *    blending its transparency would be ignored and the shells would look like wire hoops. Drawing them
+ *    after the particles is what lets the near half of an orbit cross in front of the nucleus as a
+ *    faint line while the far half of it is hidden behind — the depth cue that says the rings are
+ *    around the atom rather than drawn on it.
  * 4. **The loop is somebody else's business.** When to draw, how much time a frame carries and whether
  *    the page is even visible all live in `frame-loop.js`, injectable and tested without a canvas. This
  *    layer says what one frame does and nothing about when the next one comes.
  */
 
-import { createProgram, RING_PROGRAM, SPHERE_PROGRAM } from "./atom-shaders.js";
+import { drawField, fieldFor } from "./atom-field.js";
+import { createProgram, GRID_PROGRAM, RING_PROGRAM, SPHERE_PROGRAM } from "./atom-shaders.js";
 import { createRingShapes, createSphereInstances } from "./atom-meshes.js";
 import { createFrameLoop } from "./frame-loop.js";
+import { identity, transformDirection } from "../lib/matrix4.js";
+
+/** The turn that changes nothing, for a ring a caller declared no plane for. */
+const UNTURNED = identity();
 
 /**
  * @param {unknown} value
@@ -68,8 +76,13 @@ function asCount(value, name, least) {
  * @param {object} options
  * @param {{ segments: number, rings: number }} options.sphere how round the unit sphere is
  * @param {number} options.pixelRatioLimit the most pixels per CSS pixel the surface may use
- * @param {{ lightDirection: number[], lightStrength: number, ambient: number }} options.lighting
+ * @param {{ lightDirection: number[], lightStrength: number, ambient: number, skyColour: number[],
+ *   groundColour: number[], roughness: number, metalness: number, specular: number }} options.lighting
  * @param {number[]} [options.clearColour] what the stage is cleared to, with its alpha
+ * @param {{ colour: number[], pitch: number, major: number, majorStrength: number, fade: number }}
+ *   [options.grid] the field behind the atom: a line's colour, the CSS pixels between lines, how many
+ *   lines apart the stronger ones are, how much stronger they are, and how much darker the field goes
+ *   towards the corners. Without it the stage is the clear colour and nothing else.
  * @param {object} [options.loop] the clock, the scheduler and the visibility rule, as the frame loop
  *   takes them; the browser's own unless a caller says otherwise
  * @returns {object} the view
@@ -81,6 +94,7 @@ export function createAtomView(canvas, options) {
     pixelRatioLimit,
     lighting,
     clearColour = [0, 0, 0, 0],
+    grid = null,
     loop: loopOptions,
   } = options ?? {};
 
@@ -101,6 +115,11 @@ export function createAtomView(canvas, options) {
     direction: lighting?.lightDirection,
     strength: asNumber(lighting?.lightStrength, "lighting.lightStrength"),
     ambient: asNumber(lighting?.ambient, "lighting.ambient"),
+    sky: lighting?.skyColour,
+    ground: lighting?.groundColour,
+    roughness: asNumber(lighting?.roughness, "lighting.roughness"),
+    metalness: asNumber(lighting?.metalness, "lighting.metalness"),
+    specular: asNumber(lighting?.specular, "lighting.specular"),
   };
   const segments = asCount(sphere?.segments, "sphere.segments", 3);
   const ringBands = asCount(sphere?.rings, "sphere.rings", 2);
@@ -109,9 +128,20 @@ export function createAtomView(canvas, options) {
     throw new TypeError("lighting.lightDirection must be three numbers");
   }
 
+  for (const [name, colour] of [
+    ["lighting.skyColour", light.sky],
+    ["lighting.groundColour", light.ground],
+  ]) {
+    if (!Array.isArray(colour) || colour.length !== 3) {
+      throw new TypeError(`${name} must be three numbers`);
+    }
+  }
+
   if (!Array.isArray(clearColour) || clearColour.length !== 4) {
     throw new TypeError("clearColour must be four numbers");
   }
+
+  const field = fieldFor(grid);
 
   /** The context, or null when this machine cannot draw the atom. */
   let gl = null;
@@ -128,6 +158,7 @@ export function createAtomView(canvas, options) {
     gl = null;
   }
 
+  const gridSlot = { program: null, attribs: {}, uniforms: {} };
   const sphereSlot = { program: null, attribs: {}, uniforms: {} };
   const ringSlot = { program: null, attribs: {}, uniforms: {} };
   let particleMesh = null;
@@ -142,8 +173,12 @@ export function createAtomView(canvas, options) {
   const view = new Float32Array(16);
   const model = new Float32Array(16);
   const direction = new Float32Array(3);
+  const sky = new Float32Array(3);
+  const ground = new Float32Array(3);
   const tint = new Float32Array(3);
+  const turn = new Float32Array(16);
   const background = new Float32Array(4);
+
 
   /**
    * Compile and link one program, and look up every name it declares.
@@ -172,6 +207,7 @@ export function createAtomView(canvas, options) {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
+    buildProgram(gridSlot, GRID_PROGRAM);
     buildProgram(sphereSlot, SPHERE_PROGRAM);
     buildProgram(ringSlot, RING_PROGRAM);
 
@@ -197,7 +233,7 @@ export function createAtomView(canvas, options) {
 
     ringsDrawn = [];
 
-    for (const slot of [sphereSlot, ringSlot]) {
+    for (const slot of [gridSlot, sphereSlot, ringSlot]) {
       if (slot.program) {
         gl.deleteProgram(slot.program);
         slot.program = null;
@@ -288,14 +324,15 @@ export function createAtomView(canvas, options) {
     },
 
     /**
-     * Declare the rings: one per shell, each with its own radius, colour and transparency.
+     * Declare the rings: one per shell, each with its own radius, plane, colour and transparency.
      *
      * The meshes are resolved here rather than inside a frame, because a mesh built mid-draw is a hitch
      * the reader feels at exactly the wrong moment. A ring whose numbers are not a ring is refused here
      * too, which is the earliest moment anyone can be told.
      *
      * @param {{ radius: number, tube: number, segments: number, tubeSegments: number,
-     *   colour: number[], opacity: number }[]} list
+     *   colour: number[], opacity: number, orientation?: number[] }[]} list a ring without an
+     *   orientation is one in the plane the ring is built in
      * @returns {void}
      * @throws {TypeError} when a ring's geometry is not a ring
      */
@@ -316,33 +353,22 @@ export function createAtomView(canvas, options) {
 
       const aspect = Math.max(1, canvas.width) / Math.max(1, canvas.height);
 
+      const seenBy = camera.viewMatrix();
+
       projection.set(camera.projectionMatrix(aspect));
-      view.set(camera.viewMatrix());
+      view.set(seenBy);
       model.set(matrix);
-      direction.set(light.direction);
+      direction.set(transformDirection(seenBy, light.direction));
+      sky.set(light.sky);
+      ground.set(light.ground);
       background.set(clearColour);
 
       gl.clearColor(...background);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-      if (ringsDrawn.length > 0) {
-        gl.useProgram(ringSlot.program);
-        gl.uniformMatrix4fv(ringSlot.uniforms.uProjection, false, projection);
-        gl.uniformMatrix4fv(ringSlot.uniforms.uView, false, view);
-        gl.uniformMatrix4fv(ringSlot.uniforms.uModel, false, model);
-        gl.uniform3fv(ringSlot.uniforms.uLightDirection, direction);
-        gl.uniform1f(ringSlot.uniforms.uLightStrength, light.strength);
-        gl.uniform1f(ringSlot.uniforms.uAmbient, light.ambient);
-        gl.depthMask(false);
-
-        for (const ring of ringsDrawn) {
-          tint.set(ring.colour);
-          gl.uniform3fv(ringSlot.uniforms.uColour, tint);
-          gl.uniform1f(ringSlot.uniforms.uOpacity, ring.opacity);
-          ringShapes.draw(ring.shape);
-        }
-
-        gl.depthMask(true);
+      // The field first, and in front of nothing: it *is* the stage everything after it is drawn on.
+      if (field) {
+        drawField(gl, gridSlot, { canvas, field, stage: background });
       }
 
       if (particleCount > 0) {
@@ -352,8 +378,37 @@ export function createAtomView(canvas, options) {
         gl.uniformMatrix4fv(sphereSlot.uniforms.uModel, false, model);
         gl.uniform3fv(sphereSlot.uniforms.uLightDirection, direction);
         gl.uniform1f(sphereSlot.uniforms.uLightStrength, light.strength);
+        gl.uniform3fv(sphereSlot.uniforms.uSkyColour, sky);
+        gl.uniform3fv(sphereSlot.uniforms.uGroundColour, ground);
         gl.uniform1f(sphereSlot.uniforms.uAmbient, light.ambient);
+        gl.uniform1f(sphereSlot.uniforms.uRoughness, light.roughness);
+        gl.uniform1f(sphereSlot.uniforms.uMetalness, light.metalness);
+        gl.uniform1f(sphereSlot.uniforms.uSpecular, light.specular);
         particleMesh.draw(particleCount);
+      }
+
+      if (ringsDrawn.length > 0) {
+        gl.useProgram(ringSlot.program);
+        gl.uniformMatrix4fv(ringSlot.uniforms.uProjection, false, projection);
+        gl.uniformMatrix4fv(ringSlot.uniforms.uView, false, view);
+        gl.uniformMatrix4fv(ringSlot.uniforms.uModel, false, model);
+        gl.uniform3fv(ringSlot.uniforms.uSkyColour, sky);
+        gl.uniform3fv(ringSlot.uniforms.uGroundColour, ground);
+
+        // The rings are the one thing a frame draws in front of something it has already drawn: with the
+        // depth buffer holding the atom, a ring's near half crosses it and its far half does not.
+        gl.depthMask(false);
+
+        for (const ring of ringsDrawn) {
+          tint.set(ring.colour);
+          turn.set(ring.orientation ?? UNTURNED);
+          gl.uniformMatrix4fv(ringSlot.uniforms.uOrientation, false, turn);
+          gl.uniform3fv(ringSlot.uniforms.uColour, tint);
+          gl.uniform1f(ringSlot.uniforms.uOpacity, ring.opacity);
+          ringShapes.draw(ring.shape);
+        }
+
+        gl.depthMask(true);
       }
 
       gl.bindVertexArray(null);
