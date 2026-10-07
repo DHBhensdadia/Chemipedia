@@ -86,9 +86,9 @@ published, and four gates green — 0 accessibility defects across 19 pages, 76 
 combinations fitting their viewport, a worst layout shift of 0, and Lighthouse at 100 for
 accessibility, best-practices and SEO.
 
-**The atom viewer is the next release**, built in four more phases on `feature/atom-3d`: the page above,
-plus the hand-written WebGL2 underneath it (ADR-007). On that branch the build writes **563 routes**, the
-suite holds **658 tests**, the sidebar numbers are **0 defects across 20 pages** and **80 of 80**
+**The atom viewer is the last release**, published as `v1.1.0` after four more phases: the page above,
+plus the hand-written WebGL2 underneath it (ADR-007). The build writes **563 routes**, the
+suite holds **681 tests**, the sidebar numbers are **0 defects across 20 pages** and **80 of 80**
 page-and-width combinations, and the page holds the browser's 16.70 ms frame cadence with the heaviest
 atom the controls allow turning. The evidence behind every number is in
 `workspace/progress/PHASE_LOG.md`; `workspace/RUN_STATE.md` is where to resume.

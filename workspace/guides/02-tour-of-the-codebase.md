@@ -1,8 +1,9 @@
 # Guide 2 — Tour of the codebase
 
 > **This describes the repository as it ships.** ADR-001 settled on the zero-dependency Node static
-> site generator, every folder below exists, and `v1.0.1` closed the last phase of the site; the atom
-> viewer on `feature/atom-3d` adds the four `atom-*` components, the `atom-*` lib modules and one page
+> site generator, every folder below exists, and `v1.1.0` closed the last phase of the feature: `v1.0.0`
+> published the site and `v1.1.0` added the atom viewer — the four `atom-*` components, the `atom-*` lib
+> modules and one page
 > family. Where a name here and
 > the code disagree, the code is right and this guide is a defect — fix it in the same commit.
 
@@ -181,7 +182,7 @@ source/
 │   ├── build-data.js          fetches the open datasets and emits normalised JSON
 │   └── data-sources/          the transforms: pubchem.js, wikidata.js, layout.js, configuration.js
 │
-└── tests/                     Node's built-in test runner. No dependencies. 658 tests.
+└── tests/                     Node's built-in test runner. No dependencies. 681 tests.
     └── brand/  components/  data/  lib/  pages/  router/  tools/
 ```
 

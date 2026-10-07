@@ -9,7 +9,7 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**Complete at `v1.0.1`**, and published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and
+**Complete at `v1.1.0`**, and published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and
 redeployed by `.github/workflows/pages.yml` on every push to `main`.
 
 Twelve phases built the site, and the last of them measured it: 562 routes plus a not-found page, every
@@ -21,17 +21,16 @@ reachable from every element page — draws the chosen element as a three-dimens
 protons and neutrons, electrons orbiting on their shells, a camera a reader can swing, and a
 translucent bar driving it. It is hand-written WebGL2 (`docs/ARCHITECTURE.md`, ADR-007), it adds no
 dependency and no data, and it degrades to the element's own shell diagram rather than to a blank
-stage. **It is on `feature/atom-3d` until the author merges it**; everything below is measured on that
-branch.
+stage. **It is published in `v1.1.0`**; everything below is measured on the released commit.
 
 | | |
 |---|---|
 | Published at | <https://dhbhensdadia.github.io/Chemipedia/> — a GitHub Pages project site, so served from the path `/Chemipedia/` rather than from a domain root |
 | Routes the build writes | 563, plus `404.html` |
-| Tests | `node --test source/tests` — 658 passing, 0 failing, with nothing installed |
+| Tests | `node --test source/tests` — 681 passing, 0 failing, with nothing installed |
 | Accessibility | 0 defects across 20 pages from our own sweep; Lighthouse 100 on eight sampled pages |
 | Responsive | 80 of 80 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
-| Performance | worst layout shift 0, slowest cold load 25–41ms across the recorded runs, no long task on any page, and `/atoms/` holds the browser's 16.70ms frame cadence with its heaviest atom turning |
+| Performance | worst layout shift 0, slowest cold load 25–41ms across the recorded runs (38ms on the release build), no long task on any page, and `/atoms/` holds the browser's 16.70ms frame cadence with its heaviest atom turning |
 | SEO | Lighthouse 100: canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` |
 
 | | |
@@ -90,7 +89,7 @@ The individual steps, if you want them separately:
 git clone <this repository> && cd chemipedia
 node source/tools/build.js     # render every route into dist/   -> "Built 563 routes and the not-found page"
 node source/tools/serve.js     # serve dist/ locally
-node --test source/tests       # run the test suite             -> "tests 658 · pass 658 · fail 0"
+node --test source/tests       # run the test suite             -> "tests 681 · pass 681 · fail 0"
 ```
 
 The same three commands are available as `npm run build`, `npm start` and `npm test`. The built

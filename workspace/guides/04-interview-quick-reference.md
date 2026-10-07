@@ -1,6 +1,6 @@
 # Guide 4 — Interview quick reference
 
-> **Complete as of `v1.0.1`, with the atom viewer on `feature/atom-3d`.** Every row names a real file
+> **Complete as of `v1.1.0`, the release that added the atom viewer.** Every row names a real file
 > and a real function, and the function name is the one the code actually exports. If a row here and
 > the code disagree, the code is right and this file is a defect — fix it in the same commit.
 
@@ -22,7 +22,7 @@ explain it without the file.
 > isolated in pure modules with unit tests. There are 482 tests, and four browser sweeps behind the
 > accessibility, responsive, performance and Lighthouse numbers.
 >
-> On the branch that adds it: **563 pages and 658 tests**, and one more page — `/atoms/`, which draws
+> The release adds one more page and 199 tests: **563 pages and 681 tests**, and that page — `/atoms/`, which draws
 > any element's atom in three dimensions. That one is hand-written WebGL2: matrices, a spherical
 > camera, mesh generation and a point distribution, all under `lib/` so they are testable in Node,
 > and a drawing layer proved by reading the pixels back out of the canvas. No library, still no
@@ -125,7 +125,7 @@ ceiling is **derived** from the eleven group fills by `lowestAlphaForAA()` rathe
 test holds every fading token above it — because 0.9 of the ink felt fine and was 4.32:1.
 
 **"How do you test something visual?"**
-Unit tests cover the logic: 482 on the published site, 658 on the branch that adds the atom viewer,
+Unit tests cover the logic: 482 on the published site, 681 on the release that adds the atom viewer,
 with nothing installed. Structure and appearance are checked by sweeps in `workspace/tools/visual`,
 which drive the real Chrome through Playwright: an accessibility sweep over 20 pages, a responsive
 sweep at 375 / 768 / 1024 / 1440, a performance sweep that measures layout shift and long tasks on a
