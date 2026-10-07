@@ -343,3 +343,27 @@ test("a malformed record is refused rather than guessed at", () => {
   );
 });
 
+test("an atom with no protons and no neutrons is empty rather than an error", () => {
+  // The controls let a reader reach this: protons, neutrons and electrons are all free counts, and the
+  // only honest picture of nothing is an empty stage. A refusal here would be a reader's zero turning
+  // into a thrown error on a page.
+  const empty = buildAtom({ record: null, protons: 0, neutrons: 0, electrons: 0, scale: SCALE });
+
+  assert.equal(empty.nucleonCount, 0);
+  assert.equal(empty.particleCount, 0);
+  assert.equal(empty.nucleusRadius, 0);
+  assert.equal(empty.nucleons.positions.length, 0);
+  assert.equal(empty.nucleons.kinds.length, 0);
+  assert.deepEqual(empty.shells, [], "no electrons, no rings");
+  assert.equal(empty.orbitInner, SCALE.orbitBase, "the rings it would have had still start at the base");
+  assert.equal(empty.labels.kind, "no-protons");
+  assert.match(empty.labels.note, /not an atom of any element/);
+
+  // And with neutrons but no protons it is a cluster of them with nowhere for electrons to be.
+  const neutronsOnly = buildAtom({ record: null, protons: 0, neutrons: 12, electrons: 0, scale: SCALE });
+
+  assert.equal(neutronsOnly.nucleonCount, 12);
+  assert.equal(neutronsOnly.labels.kind, "no-protons");
+  assert.ok(neutronsOnly.nucleusRadius > 0, "neutrons still make a nucleus");
+  assert.equal(neutronsOnly.nucleons.kinds.every((kind) => kind === NEUTRON), true);
+});

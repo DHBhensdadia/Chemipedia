@@ -10,7 +10,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { PROTON } from "../../scripts/lib/atom-model.js";
+import { buildAtom, PROTON } from "../../scripts/lib/atom-model.js";
 import { atomScale } from "../../scripts/components/atom-scene.js";
 import { callsOf } from "./webgl-stub.js";
 import {
@@ -185,4 +185,22 @@ test("the scene hands the layer the whole atom in the two lists it takes", () =>
   assert.equal(seen.resizes, 1, "and the surface follows the canvas' box every frame");
   assert.equal(seen.frames[0].camera, scene.camera());
   assert.equal(seen.frames[0].model.length, 16, "a frame carries a 4x4 matrix");
+});
+test("an atom with nothing in it draws an empty stage rather than throwing", () => {
+  // The extreme a reader reaches by typing zero into all three fields: a stage with nothing on it is
+  // the honest picture, and the layer is never asked to draw a buffer that is not there.
+  const empty = buildAtom({
+    record: null,
+    protons: 0,
+    neutrons: 0,
+    electrons: 0,
+    scale: atomScale(tokenReader()),
+  });
+  const { scene, gl } = sceneFor({ atom: empty });
+
+  assert.equal(scene.step(1 / 60), true);
+  assert.equal(scene.atom().particleCount, 0);
+  assert.deepEqual(callsOf(gl, "drawElementsInstanced"), [], "no particles, no instanced draw");
+  assert.deepEqual(callsOf(gl, "drawElements"), [], "no shells, no ring drawn at all");
+  assert.equal(scene.atom().labels.kind, "no-protons");
 });

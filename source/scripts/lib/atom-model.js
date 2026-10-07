@@ -249,7 +249,12 @@ export function buildAtom({ record = null, protons, neutrons, electrons, scale }
   // radius rises with its cube root, and the packing factor is what makes the cluster look like
   // touching spheres rather than a dust of them.
   const nucleusRadius = nucleonRadius * Math.cbrt(nucleonCount) * nucleusPacking;
-  const positions = pointSphere({ count: nucleonCount, radius: nucleusRadius });
+
+  // A nucleus with nothing in it is an empty set of points rather than a sphere of radius zero: the
+  // controls can reach a state with no protons and no neutrons at all, and a stage that goes empty is
+  // the honest answer where a refusal would be an error a reader caused by typing zero in a field.
+  const positions =
+    nucleonCount === 0 ? new Float32Array(0) : pointSphere({ count: nucleonCount, radius: nucleusRadius });
   const kinds = new Uint8Array(nucleonCount);
 
   for (let index = 0; index < nucleonCount; index += 1) {

@@ -1,8 +1,8 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-07 · **By:** the session that built and proved the atom viewer's renderer on
-`feature/atom-3d` — Phase 12 of the feature, and the first browser evidence of it · **After commit:**
-`cb570b3` on `feature/atom-3d`
+**Written:** 2026-10-07 · **By:** the session that built the atom model and its live scene on
+`feature/atom-3d` — Phase 13 of the feature, and the first picture of a real element · **After commit:**
+the close-out commit on `feature/atom-3d`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
@@ -13,15 +13,22 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 **The plan is delivered and the site is live** at <https://dhbhensdadia.github.io/Chemipedia/>, and
 **a new feature is under way**: the atom viewer, as Phases 12–15 on the branch `feature/atom-3d` (cut
-from `main` at `a22c0d2`). **Phase 12 — the renderer — is complete and proved in a browser**; phases
-13–15 (the atom model, the page and its bar, the delivery) are not started. Nothing is merged or pushed.
+from `main` at `a22c0d2`). **Phases 12 and 13 — the renderer, and the atom model and its
+scene — are complete and proved in a browser**; phases 14 and 15 (the page with its bar, then the
+delivery) are not started. Nothing is merged or pushed.
 
 - The renderer exists and draws: `source/scripts/components/atom-view.js` and the three modules under
-  it, driven on `/styleguide/` by `source/styleguide/atom-demo.js`, with its measured numbers recorded
-  in `docs/research/05-atom-renderer-measurements.md` — 4 draw calls for 43 particles and 3 orbits,
-  8 for 125 and 7, at 0.10–0.20 ms in the layer against a 16.70 ms vsync-bound frame.
+  it, with its numbers recorded in `docs/research/05-atom-renderer-measurements.md` — 4 draw calls for
+  43 particles and 3 orbits in its own Phase 12 reading, 8 for 382 particles and 7 rings in this
+  phase's, at 0.10–0.30 ms of the scene's own work against a 16.70 ms vsync-bound frame.
+- The atom itself exists and moves: `source/scripts/lib/point-sphere.js`, `source/scripts/lib/
+  atom-model.js` and `source/scripts/components/atom-scene.js`, driven on `/styleguide/` by a picker over
+  all 118 records with three free count fields, a speed, a shake and a reset. The heaviest atom the
+  feature allows — 382 particles, 7 rings, 8 draw calls — costs **0.258 ms a frame** at 1280 × 800
+  against a 16.70 ms cadence, and all 118 records draw as themselves. Both readings, and the run's full
+  output, are in the same file.
 - No page uses any of it yet: there is no `/atoms/` route, template, sheet or behaviour.
-- `node --test source/tests` → **577 passing, 0 failing**, with nothing installed.
+- `node --test source/tests` → **636 passing, 0 failing**, with nothing installed.
 - `node source/tools/build.js` → **562 routes** plus the not-found page, **0 waiting**.
 - Every page is rendered at build time; the browser only attaches behaviour to markup it finds.
 - Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD; the
@@ -40,11 +47,12 @@ from `main` at `a22c0d2`). **Phase 12 — the renderer — is complete and prove
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. **You are on `feature/atom-3d` unless someone has merged it.** Phase 12 is closed (see its entry in
-   `progress/PHASE_LOG.md` and the numbers in `docs/research/05`). Start **Phase 13** in
-   `docs/IMPLEMENTATION_PLAN.md` §3: `scripts/lib/point-sphere.js`, its tests, then
-   `scripts/lib/atom-model.js`, then `scripts/components/atom-scene.js`. The work item boundaries are
-   the commits.
+2. **You are on `feature/atom-3d` unless someone has merged it.** Phases 12 and 13 are closed (see their
+   entries in `progress/PHASE_LOG.md` and the numbers in `docs/research/05`). Start **Phase 14** in
+   `docs/IMPLEMENTATION_PLAN.md` §3: the route `/atoms/` with `nav: { label: "Atoms", order: 2 }`, the
+   page family with its `atomsPageValues` and `startAtoms` halves, its template and sheets, and the
+   translucent bar pinned to the bottom centre with the element card, the three steppers, the speed and
+   the legend. **The scene it drives is finished and measured** — do not rebuild it, drive it.
 3. Anything about the feature that the plan does not settle is a decision for the author — the
    stage's look, the bar's contents and the page's copy were all asked about once already and are
    recorded; do not re-open them silently.
@@ -68,7 +76,7 @@ from `main` at `a22c0d2`). **Phase 12 — the renderer — is complete and prove
   change how a colour is applied, check the sweep still models it.
 - **The atom viewer adds the project's only WebGL, and it is written by hand (ADR-004).** Almost all
   of it is arithmetic under `source/scripts/lib/` — matrices, the camera, the sphere's buffers, the
-  frame loop, and, next, the point distribution and the atom model — and that is deliberate: those
+  frame loop, the point distribution and the atom model — and that is deliberate: those
   modules are testable in Node and are where the feature's tests live. Only the drawing calls need a
   browser, and they are proved on `/styleguide/` before `/atoms/` exists.
 - **A draw call that succeeds can paint nothing, and a transcript cannot see it.** This happened here:
@@ -78,6 +86,18 @@ from `main` at `a22c0d2`). **Phase 12 — the renderer — is complete and prove
   browser and classifying its pixels against the token colours (`tools/visual/atom-pixels.mjs`).
   **When you add to the scene, ask what the pixels say, not what the calls say** — and keep the
   regression test that now holds each draw to one vertex array carrying everything it reads.
+- **The scene owns the clock, not the model.** An electron's place is its ring's phase plus that ring's
+  angular speed times a time the **scene** accumulates, so a speed change scales an accumulation and
+  nothing jumps to a different moment. Keep it that way: a model that knew what time it is could not be
+  drawn at two speeds.
+- **A reader's zero is not an error.** All three counts can reach zero in the controls, and the extreme
+  found a real defect: `buildAtom` with no protons and no neutrons asked `pointSphere` for a cluster of
+  radius zero and threw, so a reader's own zero would have been an error on a page. An empty atom is now
+  an empty set of points and the scene draws a stage with nothing on it — no instanced call, no ring. No
+  unit test had ever asked for nothing, which is the lesson: **run a new control at its ends.**
+- **The readout describes drawn frames only.** Changing the atom does not report, because the new atom's
+  particle and ring counts beside the previous frame's draw-call count is a number that was never true.
+  The renderer audit's `calls = orbits + 1` claim caught exactly that, one frame wide.
 - **The scene's palette comes from `tokens.css` at runtime.** The renderer reads its colours through
   `getComputedStyle` rather than carrying hex literals, because the one law that has held since
   Phase 1 is that a literal design value exists in exactly one file. A dark stage inside a paper-light
@@ -144,11 +164,11 @@ Nothing is half-done in the tree, and the site is published. `v1.0.0` stays on `
 release whose publication exposed the subpath defect — and `v1.0.1` is on `bd338dd`, which fixes it;
 neither tag was moved, because a pushed tag is a statement the history has already made.
 
-The atom viewer is built at the renderer and nothing above it: on `feature/atom-3d`, the plan, the
-reference audit and Phase 12 are committed — the whole drawing layer, its tests, the style-guide
-demonstration and the recorded measurements — and no page uses it. Phases 13–15 remain: the atom
-model and the live scene, the page with its bottom bar and its navigation entry, then the sweeps,
-the documentation and the delivery. The feature closes with a merge to `main` (`--no-ff`), a green
+The atom viewer is built from the record to the drawn frame and nothing above it: on `feature/atom-3d`,
+the plan, the reference audit and Phases 12 and 13 are committed — the whole drawing layer, the point
+distribution, the model, the scene, their tests, the style-guide demonstration and the recorded
+measurements — and **no page uses any of it**. Phases 14 and 15 remain: the page with its bottom bar
+and its navigation entry, then the sweeps, the documentation and the delivery. The feature closes with a merge to `main` (`--no-ff`), a green
 Pages run, the live page checked in a browser, and `v1.1.0` — none of which has happened.
 
 Two things are deliberately left, and both are recorded rather than forgotten: the Pages runs print

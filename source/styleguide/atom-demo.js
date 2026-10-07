@@ -5,28 +5,28 @@
  * built output, the sitemap and `robots.txt`. It exists so the one part of the site that draws in
  * three dimensions can be seen, timed and tuned before a page depends on it.
  *
- * **Why this is a module and not a script inside the guide's page.** The demonstration is a scene, a
- * camera, a readout and five controls — long enough that the guide would pass the project's line
- * ceiling with it inline, and it is the kind of code that deserves the same treatment as the site's
- * own: imports with no side effects, one exported entry point, and a file that can be read on its own.
+ * **Why this is a module and not a script inside the guide's page.** The demonstration is a scene, four
+ * model controls, a readout and five buttons — long enough that the guide would pass the project's line
+ * ceiling with it inline, and it deserves the treatment the site's own code gets: imports with no side
+ * effects, one exported entry point, a file that can be read on its own.
  *
- * **What is measured, and why it is measured rather than stated.** The readout under the stage reports
- * the draw calls the layer actually issued and how long a frame's work took on the machine reading the
- * page. The context is therefore asked for and wrapped *before* the layer acquires it — a canvas hands
- * back the same context to everybody who asks — so the count is what the layer did rather than what it
- * was expected to do. This is the "numbers recorded, not asserted from memory" the plan asks for, and
- * it is recorded on the page rather than in a commit message.
+ * **It drives the real thing.** Phase 12's proof put a throwaway field of spheres and one electron per
+ * orbit on this stage, which was enough to judge the layer. What runs here now is `atom-model.js` and
+ * `atom-scene.js` — the two modules a page will run — over the real records, fetched through the same
+ * repository every page reads: pick any of the 118 elements, or type the three counts, and the picture
+ * is built from that record's own shells.
  *
- * **What this is deliberately not.** The atom model. How many protons carbon has, where a nucleon
- * sits and how fast an electron moves are the next phase's subject, with a rule a test can hold; the
- * field below is a spiral of spheres and one electron per orbit, which is enough to prove the layer
- * and nothing more.
+ * **What is measured, and why.** The readout reports the draw calls the layer actually issued and what a
+ * frame's work cost on this machine. The context is asked for and wrapped *before* the layer acquires it —
+ * a canvas hands back the same context to everybody who asks — so the count is what the layer did rather
+ * than what it was expected to do: "numbers recorded, not asserted from memory".
  */
 
 import { channels } from "../scripts/lib/contrast.js";
+import { buildAtom } from "../scripts/lib/atom-model.js";
+import { atomScale, createAtomScene } from "../scripts/components/atom-scene.js";
 import { createAtomView } from "../scripts/components/atom-view.js";
-import { createOrbitCamera } from "../scripts/lib/orbit-camera.js";
-import { rotationAbout } from "../scripts/lib/matrix4.js";
+import { createElementsRepository } from "../scripts/data/elements-repository.js";
 
 /** How often the readout is rewritten, in frames. Reporting every frame would be part of the cost. */
 const REPORT_EVERY = 15;
@@ -34,12 +34,18 @@ const REPORT_EVERY = 15;
 /** How many frames the frame-time average covers: about a second at sixty a second. */
 const AVERAGE_OVER = 60;
 
+/** The heaviest atom this guide will build: 118 protons, and the neutrons of uranium's own weight. */
+const HEAVY = { protons: 118, neutrons: 146, electrons: 118 };
+
+/** The element the stage opens on, so the first frame is an atom rather than a bare nucleus. */
+const OPENS_ON = 6;
+
 /**
  * Read every value the scene needs out of the token layer.
  *
- * The renderer is the one component whose palette cannot arrive through a stylesheet, because a
- * graphics card is not CSS. This is the bridge: a custom property's text becomes the number, the
- * three numbers or the four floats the layer's own arguments take.
+ * The renderer's palette cannot arrive through a stylesheet, because a graphics card is not CSS: this is
+ * the bridge — a custom property's text becomes the number, the three numbers or the four floats the
+ * layer's own arguments take.
  *
  * @returns {{ number: (name: string) => number, colour: (name: string) => number[],
  *   list: (name: string) => number[], stage: () => number[] }}
@@ -58,73 +64,7 @@ function tokenReader() {
 }
 
 /**
- * Nucleons on a golden-angle spiral inside a cluster, and one electron on each orbit.
- *
- * @param {{ nucleons: number, shells: number }} counts
- * @param {object} value the token reader
- * @returns {object} the particle list the view takes
- */
-function field({ nucleons, shells }, value) {
-  const nucleonRadius = value.number("--atom-nucleon-radius");
-  const electronRadius = value.number("--atom-electron-radius");
-  const cluster = nucleonRadius * Math.cbrt(nucleons) * 1.5;
-  const golden = Math.PI * (3 - Math.sqrt(5));
-  const positions = [];
-  const radii = [];
-  const colours = [];
-  const glows = [];
-  const proton = value.colour("--atom-proton");
-  const neutron = value.colour("--atom-neutron");
-  const electron = value.colour("--atom-electron");
-
-  for (let index = 0; index < nucleons; index += 1) {
-    const height = 1 - (2 * (index + 0.5)) / nucleons;
-    const ring = Math.sqrt(Math.max(0, 1 - height * height));
-    const turn = index * golden;
-
-    positions.push(ring * Math.cos(turn) * cluster, height * cluster, ring * Math.sin(turn) * cluster);
-    radii.push(nucleonRadius);
-    colours.push(...(index % 2 === 0 ? proton : neutron));
-    glows.push(0);
-  }
-
-  for (let shell = 0; shell < shells; shell += 1) {
-    const distance = value.number("--atom-orbit-base") + value.number("--atom-orbit-step") * shell;
-
-    positions.push(distance, 0, 0);
-    radii.push(electronRadius);
-    colours.push(...electron);
-    glows.push(value.number("--atom-electron-glow"));
-  }
-
-  return { count: nucleons + shells, positions, radii, colours, glows };
-}
-
-/**
- * The orbits, one per shell, each at its own radius.
- *
- * @param {number} shells
- * @param {object} value the token reader
- * @returns {object[]}
- */
-function orbits(shells, value) {
-  const base = value.number("--atom-orbit-base");
-  const step = value.number("--atom-orbit-step");
-
-  return Array.from({ length: shells }, (unused, index) => ({
-    radius: base + step * index,
-    tube: value.number("--atom-orbit-tube"),
-    segments: value.number("--atom-ring-segments"),
-    tubeSegments: value.number("--atom-ring-tube-segments"),
-    colour: value.colour("--atom-orbit"),
-    opacity: value.number("--atom-orbit-opacity"),
-  }));
-}
-
-/**
- * Count the draw calls a context is asked for, by wrapping it.
- *
- * @param {WebGL2RenderingContext} gl
+ * @param {WebGL2RenderingContext} gl a context, wrapped so its draw calls can be counted
  * @returns {() => number} how many calls have been made since the last time it was read
  */
 function countDraws(gl) {
@@ -149,8 +89,49 @@ function countDraws(gl) {
   };
 }
 
+/**
+ * The neutrons of the isotope a record's own weight names: the rounded weight less the atomic number.
+ *
+ * A convenience for this guide, not a rule of the model — the model draws whatever counts it is
+ * handed. Its honest limits are worth writing down, because one element shows them: copper's weight
+ * rounds to 64, which is neither of its two isotopes, so it is drawn with 35 neutrons where Cu-63 has
+ * 34 and Cu-65 has 36.
+ *
+ * @param {object} record
+ * @returns {number}
+ */
+function neutronsFor(record) {
+  return Math.max(0, Math.round(record.atomicWeight) - record.atomicNumber);
+}
+
+/**
+ * The counts an element opens on: as many electrons as protons, and the weight's neutrons.
+ *
+ * @param {object} record
+ * @returns {{ protons: number, neutrons: number, electrons: number }}
+ */
+function countsFor(record) {
+  return { protons: record.atomicNumber, neutrons: neutronsFor(record), electrons: record.atomicNumber };
+}
+
+/**
+ * Fill the element picker from the records: every element, named by symbol, valued by atomic number.
+ *
+ * @param {object} elements the elements repository
+ * @param {HTMLSelectElement} picker
+ */
+function fillElementSelect(elements, picker) {
+  for (const element of elements.all()) {
+    const option = document.createElement("option");
+
+    option.value = String(element.atomicNumber);
+    option.textContent = `${element.symbol} \u00b7 ${element.name}`;
+    picker.append(option);
+  }
+}
+
 /** Drive the viewer on the style guide's stage, if the guide is on the page. */
-export function startAtomDemo() {
+export async function startAtomDemo() {
   const stage = document.querySelector("#atom-demo");
 
   if (!stage) {
@@ -159,20 +140,14 @@ export function startAtomDemo() {
 
   const canvas = stage.querySelector("#atom-demo-canvas");
   const readout = stage.querySelector("#atom-demo-readout");
+  const picker = document.querySelector("#atom-demo-element");
+  const fields = {
+    protons: document.querySelector("#atom-demo-protons"),
+    neutrons: document.querySelector("#atom-demo-neutrons"),
+    electrons: document.querySelector("#atom-demo-electrons"),
+  };
+  const speed = document.querySelector("#atom-demo-speed");
   const value = tokenReader();
-  const camera = createOrbitCamera({
-    distance: value.number("--atom-camera-distance"),
-    azimuth: value.number("--atom-camera-azimuth"),
-    polar: value.number("--atom-camera-polar"),
-    damping: value.number("--atom-camera-damping"),
-    fieldOfView: (value.number("--atom-camera-fov") * Math.PI) / 180,
-    near: value.number("--atom-camera-near"),
-    far: value.number("--atom-camera-far"),
-    minDistance: value.number("--atom-camera-min-distance"),
-    maxDistance: value.number("--atom-camera-max-distance"),
-    minPolar: value.number("--atom-camera-tilt-limit"),
-    maxPolar: Math.PI - value.number("--atom-camera-tilt-limit"),
-  });
   const probe = canvas.getContext("webgl2");
   const takeDraws = probe ? countDraws(probe) : () => 0;
   const view = createAtomView(canvas, {
@@ -190,40 +165,96 @@ export function startAtomDemo() {
     loop: { longestStep: value.number("--atom-longest-step") },
   });
 
-  let particles = field({ nucleons: 40, shells: 3 }, value);
-  let rings = orbits(3, value);
-  let angle = 0;
+  if (!view.available()) {
+    const note = document.createElement("p");
+
+    note.className = "atom-demo__fallback";
+    note.textContent =
+      "This browser gave no WebGL2 context, so the stage cannot be drawn here. The atom page falls " +
+      "back to the element's shell diagram.";
+    canvas.hidden = true;
+    stage.append(note);
+    readout.textContent = "No WebGL2 context: nothing was drawn.";
+    readout.dataset.calls = "0";
+    readout.dataset.frames = "0";
+
+    return;
+  }
+
+  let elements;
+
+  try {
+    elements = await createElementsRepository();
+  } catch (error) {
+    readout.textContent = `The element data could not be read, so there is nothing to draw: ${error.message}`;
+
+    return;
+  }
+
+  // One reader, one scale: a model built against one nucleon radius and drawn against another would be
+  // a nucleus of the wrong size in a cluster of the right one.
+  const scale = atomScale(value);
+  const counts = { ...countsFor(elements.byNumber(OPENS_ON)) };
+
+  /**
+   * The atom these counts make: the record when the proton count names one, and no record when it does
+   * not, which is `buildAtom`'s own rule rather than a second one written here.
+   *
+   * @returns {object}
+   */
+  function model() {
+    return buildAtom({
+      record: elements.byNumber(counts.protons),
+      protons: counts.protons,
+      neutrons: counts.neutrons,
+      electrons: counts.electrons,
+      scale,
+    });
+  }
+
+  fillElementSelect(elements, picker);
+
+  const scene = createAtomScene({ view, tokens: value, atom: model(), speed: Number(speed.value) });
   let calls = 0;
   let frameMs = 0;
   let frames = 0;
   const frameTimes = [];
 
-  /**
-   * Put a new particle list and a new ring list on the layer.
-   *
-   * @param {number} nucleons
-   * @param {number} shells
-   */
-  function load(nucleons, shells) {
-    particles = field({ nucleons, shells }, value);
-    rings = orbits(shells, value);
-    view.setParticles(particles);
-    view.setRings(rings);
-    frameTimes.length = 0;
+  /** Point every control at the counts, so the page and the picture cannot disagree. */
+  function settle() {
+    for (const [name, field] of Object.entries(fields)) {
+      field.value = String(counts[name]);
+    }
+
+    picker.value = String(counts.protons);
+
+    if (!picker.value) {
+      picker.selectedIndex = -1;
+    }
   }
 
   /** Write down what the last frames actually cost, on the page rather than in a comment. */
   function report() {
-    const average = frameTimes.reduce((total, spent) => total + spent, 0) / frameTimes.length;
+    const atom = scene.atom();
+    const average = frameTimes.length
+      ? frameTimes.reduce((total, spent) => total + spent, 0) / frameTimes.length
+      : 0;
+    const words = atom.labels.name ? `${atom.labels.name} \u00b7 ${atom.labels.isotope}` : "Not an element";
 
     readout.textContent =
-      `${particles.count} particles and ${rings.length} orbits \u00b7 ${calls} draw ` +
-      `${calls === 1 ? "call" : "calls"} \u00b7 ${frameMs.toFixed(2)} ms in the layer, ` +
+      `${words} \u00b7 ${atom.particleCount} particles and ${atom.shells.length} orbits \u00b7 ` +
+      `${calls} draw ${calls === 1 ? "call" : "calls"} \u00b7 ${frameMs.toFixed(2)} ms in the scene, ` +
       `${average.toFixed(2)} ms averaged`;
 
     Object.assign(readout.dataset, {
-      particles: String(particles.count),
-      orbits: String(rings.length),
+      element: atom.labels.symbol ?? "",
+      kind: atom.labels.kind,
+      charge: String(atom.labels.charge),
+      protons: String(atom.protons),
+      neutrons: String(atom.neutrons),
+      electrons: String(atom.electrons),
+      particles: String(atom.particleCount),
+      orbits: String(atom.shells.length),
       calls: String(calls),
       frameMs: frameMs.toFixed(3),
       averageMs: average.toFixed(3),
@@ -233,20 +264,32 @@ export function startAtomDemo() {
   }
 
   /**
-   * One frame: advance the scene, then draw it.
+   * Build the atom these controls describe and put it on the stage.
    *
-   * The time measured is the layer's own work — the camera, the resize check, the uploads and the draw
-   * — and not the browser's compositing, which this cannot see and does not own.
+   * It deliberately does not rewrite the readout: every number there describes a frame that was drawn,
+   * so reporting here would put the new counts beside the last frame's draw calls. The next frame does.
+   */
+  function show() {
+    settle();
+    scene.setAtom(model());
+    scene.setSpeed(Number(speed.value));
+    frames = 0;
+    frameTimes.length = 0;
+  }
+
+  /**
+   * One frame: the whole scene, then the measurement of what it cost.
+   *
+   * The time measured is the scene's own work — the camera, the electrons' places, the resize check,
+   * the uploads and the draw — and not the browser's compositing, which this cannot see and does not
+   * own.
    *
    * @param {number} delta seconds since the previous frame
    */
   function step(delta) {
     const started = performance.now();
 
-    angle += value.number("--atom-spin") * delta;
-    camera.update(delta);
-    view.resize();
-    view.draw({ model: rotationAbout([0, 1, 0], angle), camera });
+    scene.step(delta);
 
     calls = takeDraws();
     frameMs = performance.now() - started;
@@ -262,24 +305,11 @@ export function startAtomDemo() {
     }
   }
 
-  if (view.available()) {
-    load(40, 3);
-    view.start(step);
-  } else {
-    const note = document.createElement("p");
-
-    note.className = "atom-demo__fallback";
-    note.textContent =
-      "This browser gave no WebGL2 context, so the stage cannot be drawn here. The atom page falls " +
-      "back to the element's shell diagram.";
-    canvas.hidden = true;
-    stage.append(note);
-    readout.textContent = "No WebGL2 context: nothing was drawn.";
-    readout.dataset.calls = "0";
-  }
+  show();
+  view.start(step);
 
   // The camera behaves here as it will on the page: a drag swings the aim, the wheel brings the eye
-  // closer, and both move an aim that the damping then closes on rather than the view itself.
+  // closer, and both move an aim the damping then closes on rather than the view itself.
   let dragging = null;
   const sensitivity = value.number("--atom-drag-sensitivity");
   const zoomStep = value.number("--atom-zoom-step");
@@ -294,7 +324,7 @@ export function startAtomDemo() {
       return;
     }
 
-    camera.orbit({
+    scene.orbit({
       azimuth: (event.clientX - dragging.x) * sensitivity,
       polar: (event.clientY - dragging.y) * sensitivity,
     });
@@ -309,14 +339,45 @@ export function startAtomDemo() {
     "wheel",
     (event) => {
       event.preventDefault();
-      camera.zoom(event.deltaY > 0 ? zoomStep : 1 / zoomStep);
+      scene.zoom(event.deltaY > 0 ? zoomStep : 1 / zoomStep);
     },
     { passive: false },
   );
 
   // The controls sit beside the stage rather than inside it, so they are looked up on the document.
-  document.querySelector("#atom-demo-reset").addEventListener("click", () => camera.reset());
-  document.querySelector("#atom-demo-heavy").addEventListener("click", () => load(118, 7));
+  picker.addEventListener("change", () => {
+    Object.assign(counts, countsFor(elements.byNumber(Number(picker.value))));
+    show();
+  });
+
+  // On every keystroke rather than on blur: the atom is rebuilt in a few tenths of a millisecond, so
+  // there is nothing to gain by making a reader press Tab to see what they typed. A count has to be a
+  // whole number of zero or more, and a field holding anything else — a half typed away, or a minus
+  // sign — is left alone rather than handed to a model that would refuse it.
+  for (const [name, field] of Object.entries(fields)) {
+    field.addEventListener("input", () => {
+      const typed = Number(field.value);
+
+      if (!Number.isInteger(typed) || typed < 0) {
+        return;
+      }
+
+      counts[name] = typed;
+      show();
+    });
+  }
+
+  speed.addEventListener("input", () => {
+    scene.setSpeed(Number(speed.value));
+  });
+
+  document.querySelector("#atom-demo-reset").addEventListener("click", () => scene.resetView());
+  document.querySelector("#atom-demo-shake").addEventListener("click", () => scene.shake());
+
+  document.querySelector("#atom-demo-heavy").addEventListener("click", () => {
+    Object.assign(counts, HEAVY);
+    show();
+  });
 
   const pause = document.querySelector("#atom-demo-pause");
 
@@ -325,7 +386,7 @@ export function startAtomDemo() {
 
     pause.setAttribute("aria-pressed", held ? "false" : "true");
 
-    // The same step the loop was started with: a paused viewer resumes where it stopped rather than
+    // The same clock the loop was started with: a paused viewer resumes where it stopped rather than
     // with a second, quieter loop of its own.
     if (held) {
       view.start(step);

@@ -204,7 +204,7 @@ const beforeHeavy = await frameHash();
 
 await page.click("#atom-demo-heavy");
 await page.waitForFunction(
-  (selector) => document.querySelector(selector)?.dataset.particles === "125",
+  (selector) => document.querySelector(selector)?.dataset.particles === "382",
   READOUT,
   { timeout: 10000 },
 );
@@ -212,7 +212,10 @@ await page.waitForFunction(
 const heavy = await readout();
 const afterHeavy = await frameHash();
 
-check(Number(heavy.particles) === 125, "the heavy field holds 118 nucleons and 7 electrons");
+check(
+  Number(heavy.particles) === 382,
+  "the heaviest atom holds 118 protons, 146 neutrons and 118 electrons",
+);
 check(Number(heavy.orbits) === 7, "seven orbits are drawn for it");
 check(afterHeavy !== beforeHeavy, "a heavier atom is a different picture");
 check(
@@ -225,8 +228,8 @@ console.log(`\n  ${heavy.text}\n`);
 const heavier = await paintedShare(page, STAGE);
 
 check(
-  heavier.lit > drawn.lit * 1.5,
-  `three times the particles paint more of the stage (${heavier.lit} lit pixels against ${drawn.lit})`,
+  heavier.lit > drawn.lit * 2,
+  `twenty times the particles paint more of the stage (${heavier.lit} lit pixels against ${drawn.lit})`,
 );
 
 await page.click("#atom-demo-heavy");

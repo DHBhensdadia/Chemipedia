@@ -1557,6 +1557,102 @@ path checked by a page whose canvas refuses a context.
 
 ---
 
+## Phase 13 — The atom model and the live scene
+
+**Goal:** from an element record to a picture that moves, with the arithmetic kept apart from the
+drawing. Phase 12 built the layer and knew nothing about atoms; this phase is the atom — where every
+nucleon sits, how many rings it has, how fast each one turns — and the seam that drives the layer with
+it. Still on `feature/atom-3d`, still nothing merged or pushed, and still no page: this is what a page
+will run.
+
+**Three files, and the split between them.**
+
+- `scripts/lib/point-sphere.js` — the distribution a nucleus is built on: the golden-angle spiral with
+  equal-height bands rather than equal angles, then centred on the origin and rescaled so `radius` means
+  the cluster's **outer edge** rather than the sphere a point happened to land on. That last decision is
+  what lets the model above promise that no ring passes through the nucleus. Deterministic on purpose,
+  where the reference shuffles its nucleons and so cannot look the same twice.
+- `scripts/lib/atom-model.js` — a record plus three counts becomes every nucleon's place and kind, the
+  nucleus radius, one ring per shell taken from the record's own `shells`, and one stable phase per
+  electron. Pure: no stylesheet, no canvas, no clock; every size arrives as one of five scale numbers and
+  every count as an argument. Two rules are worth naming. The protons are spread **evenly through the
+  point order** rather than gathered into a half — the reference shuffles and can therefore draw a
+  lopsided nucleus — and an orbit's angular speed falls off as `r^(−3/2)`, which is Kepler's third law
+  rather than a number chosen to look nice. A shell past the record's own rings falls back on the
+  textbook `2n²`, which only matters to a reader who has pushed the electron count above anything the
+  element has.
+- `scripts/components/atom-scene.js` — the atom alive: one sphere per nucleon and electron and one ring
+  per shell as the two lists the layer takes, and then, once a frame, the electrons moved along their
+  rings, the atom turned, and a matrix handed over. Four decisions carry it. **The scene owns the clock,
+  not the model**, so a speed change scales an accumulation and the electrons cannot jump to a different
+  moment. A shake is an **impulse decaying as `e^(−decay · dt)`** — the reference's per-frame `× 0.99`,
+  made frame-rate independent. The particles are re-uploaded every frame, a few kilobytes bought for one
+  code path instead of two. And the scene never touches the document, never reads a token by a name of
+  its own, and never decides what a reader without WebGL sees.
+
+**What the guide became, and the dead control it exposed.** The style guide's stage was a throwaway field
+of spheres in Phase 12. It is now the real thing: a picker over all 118 records, fetched through the same
+repository every page reads; three free count fields; a speed, a shake and a reset; and a readout that
+reports what the last frames actually cost. All of it drives `atom-model.js` and `atom-scene.js` — the
+modules a page will run — so the guide is a rehearsal rather than a second implementation. The `Shake`
+button had been in the guide's markup since Phase 12 **wired to nothing**; it is wired now. That is the
+second time this feature has found that a control existing is not a control working.
+
+**The defect the extremes found.** Measuring in a browser found what the unit tests could not, and it was
+in the model rather than in the layer: `buildAtom` with no protons and no neutrons threw — "a sphere's
+radius must be a positive number" — because it asked `pointSphere` for a cluster of radius zero. A reader
+can reach that state by typing zero into all three fields, so a refusal there is a reader's own zero
+becoming an error on a page. The fix returns an **empty** set of points for an empty nucleus; the empty
+stage it makes draws no instanced call and no ring at all, and both halves are held by tests. The
+renderer's own audit found a second, smaller one the moment the guide stopped being a throwaway: the
+readout rewrote the new atom's particle and ring counts beside the **previous** frame's draw-call count,
+so its claim that the calls are the particles once plus the orbits once failed for exactly one frame. The
+readout now describes drawn frames only.
+
+**The exit criteria, measured rather than asserted.** `tools/visual/audit-atom-scene.mjs` asks 33
+questions and they all hold, with **0 console messages and 0 failed requests**: all 118 records through
+the guide's own picker, each held against the record read in Node as well as in the page (its symbol, one
+ring per shell it actually has, a particle per proton, neutron and electron, and the neutrons its weight
+names); hydrogen, carbon, iron, uranium and oganesson hashed before and after, five frames and five
+distinct; six neutrons to thirty, and then the electrons taken away, each a different frame; and every
+extreme the plan names — no protons and nothing at all, no neutrons, no electrons, one proton too many,
+and the guide's own ceilings. The heaviest atom the feature allows (382 particles, 7 rings, 8 draw calls)
+costs **0.258 ms a frame** at 1280 × 800 against a 16.70 ms median cadence, and the guide's own ceiling
+of 618 particles costs no more. The full run is recorded in `docs/research/05-atom-renderer-measurements.md`.
+
+**Phase 13 verification**
+
+```
+[✓] node --test source/tests ................ pass  636 pass, 0 fail (40 new across the three work items)
+[✓] node --check on every changed module .... pass  every module under source/, checked individually
+[✓] Brand scan .............................. PASS: neither reference's brand appears anywhere under source/
+[✓] Console/network on every touched page ... zero errors, zero failed requests — asserted, not observed:
+                                              audit-atom-scene.mjs and audit-atom-renderer.mjs both exit 0,
+                                              and each exits non-zero on any console message or failed request
+[✓] Every element and every extreme ......... 118 of 118 records drawn as themselves; five extremes rendered,
+                                              each a different frame from the one before it
+[✓] Frames compared, not code read .......... five elements hashed to five distinct frames; an element change
+                                              and two count changes each hashed a different frame
+[✓] Frame time recorded ..................... 0.258 ms a frame for the heaviest atom the feature allows at
+                                              1280 x 800, against a 16.70 ms browser cadence
+[—] Accessibility tree reviewed ............. not applicable: this phase adds no page. The guide's new controls
+                                              are native labels, selects and inputs, and the page's own tree is
+                                              Phase 14's
+[✓] Keyboard traversal ...................... every new control is a native select, number input, range or button
+[✓] Line ceiling ............................ every new file under 400 lines; the 689-line scene test was split
+                                              into three files over a shared harness rather than trimmed
+[—] 1280 / 768 / 375 px screenshot vs reference  not applicable: the layer is not a page and this phase
+                                              replicates no page. The appearance gate for the feature is Phase 15's
+[✓] Regression check on an earlier phase .... /styleguide/, /, /elements/hydrogen/, 19 pages in all
+                                              result: a11y 0 defects / 27 informational; responsive 76 of 76
+[✓] Deliberate deviations recorded .......... two, below
+[✓] docs/MIND_MAP.md updated ................ yes — every new file, in the same commit as the file
+[✓] RUN_STATE.md + HANDOFF.md updated ....... in this commit
+```
+
+**Commits.** `c3b2aaf` the point distribution · `7223652` the model · `b1e7761` the scene · and this one,
+which drives both on the guide, records the numbers and closes the phase.
+
 ---
 
 ## Blockers and deviations log
@@ -1584,6 +1680,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-05 | 5 | Deviation | **What still differs from the reference on an element page, and why it never will match exactly.** | Recorded rather than chased, each in the Phase 5 deviations table: the typeface and the copy (brand and provenance rules), two particle tiles instead of three and 27 property rows instead of 30 (both with reasons in the code), a visually hidden figure caption and a rule rather than a white fill on the current cell (accessibility and legibility), the masthead's reserved underline, and the reference's phone-only shift and square diagram asset. Every box that can be measured matches. |
 | 2026-10-05 | 6 | Data observation | **Two promises the data disagreed with.** The melting-point route's description said the ranking runs "from helium to tungsten", and the dataset's highest melting point is carbon's 3549.85 °C — tungsten's 3422 °C is second. Separately, the source orders its configuration terms by its own convention, so iron is `[Ar]4s2 3d6` and chromium `[Ar]3d5 4s1`. | The description was corrected to "from helium at the bottom of the scale to carbon at the top" in `44e3493`, and `tests/pages/ranking.test.js` now holds both rankings' extremes. The configuration strings are printed as the records hold them, recorded as a deviation above rather than normalised. |
 | 2026-10-05 | 6 | Fixed | **The new pages' tiles came out grey.** The key-to-colour map lives in `styles/components/periodic-table.css`, and the four routes this phase added declared their own sheets but not that one, so `--fill` resolved to nothing and every card's tile, every ranking chip and every configuration chip fell back to the sunken surface. | Fixed in `44e3493` by declaring the table's sheet on the four routes, as the element pages already do. Caught by measuring the computed background colour in a browser rather than by reading the markup, which is why the check is in the verification block. |
+| 2026-10-07 | 13 | Data observation | **The neutrons an element opens on are the rounded standard atomic weight less the atomic number, which is an approximation and one element shows it plainly:** copper's weight rounds to 64, and 64 is neither of its isotopes — Cu-63 has 34 neutrons and Cu-65 has 36, so the guide draws 35. | Recorded rather than hidden, and the guide's own docblock says it. The model takes whatever counts it is handed and the card's mass number is those counts rather than a claim about an isotope; the reader's default is Phase 14's to choose, and it can choose differently. |
+| 2026-10-07 | 13 | Scope decision | **The guide's count fields go past what the page will allow.** The author's decision is 0–118 protons with neutrons and electrons free; the guide's inputs offer protons up to 200, neutrons to 300 and electrons to 200, because a reader tuning the picture wants the headroom and the "not an element" states are only reachable through it. | Accepted: the guide is a development instrument, the page's own limits are Phase 14's rules, and the guide's ceiling is measured in the same recorded run for exactly this reason (618 particles, 8 rings, 0.245 ms). |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---
