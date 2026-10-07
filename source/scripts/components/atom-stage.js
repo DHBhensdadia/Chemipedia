@@ -5,7 +5,7 @@
  * happens after it, in the browser: the scene is built on the canvas, the diagram steps aside once
  * there is a frame to show, and every control in the bar is wired to the model.
  *
- * Four things are worth the reading:
+ * Five things are worth the reading:
  *
  *   1. **The page is finished before this runs.** The canvas is revealed by the first frame that is
  *      actually drawn, and not before: a reader whose browser gives no WebGL2 context, or whose script
@@ -21,6 +21,10 @@
  *      URL this file writes after the page has loaded, which is exactly the class of URL the build's
  *      rewriting cannot reach: correct at a domain root and 404 under the project path it is published
  *      at. `sitePath` is what keeps it inside the site.
+ *   5. **The fragment chooses the element.** `/atoms/#iron` is one document, and the fragment says
+ *      which atom that document opens on — the other half of the link every element page carries.
+ *      A fragment that names no element is not an error: the page opens on the element it was built
+ *      for, which is what a reader who arrived without one expects.
  */
 
 import { buildAtom } from "../lib/atom-model.js";
@@ -35,6 +39,33 @@ import { sitePath } from "../lib/site-path.js";
 /** What the stage says when the browser gives it no WebGL2 context. */
 const NO_CONTEXT =
   "This browser cannot draw the three-dimensional view, so the element's shells are shown instead.";
+
+/**
+ * The element a URL's fragment names, or `null` when it names none.
+ *
+ * The fragment is a slug — `#iron` — because the element pages already have one URL-safe name per
+ * element (`lib/slug.js`) and a second naming scheme is a second thing to keep in step. Anything
+ * else, including a fragment this site wrote and a later change of slug broke, answers `null`, and
+ * the caller falls back to the page's built state rather than failing: a stale bookmark should show
+ * a reader an atom, not an error.
+ *
+ * The repository is the argument rather than a list of records, and the question is put as
+ * `bySlug`: the page has a repository at this point anyway, and a list of records fetched out of it
+ * to be searched here is a second way of asking a question the repository already answers.
+ *
+ * @param {string | null | undefined} hash the document's fragment, with or without its `#`
+ * @param {{ bySlug: (slug: string) => object | null } | null | undefined} elements
+ * @returns {object | null}
+ */
+export function elementFromFragment(hash, elements) {
+  const slug = String(hash ?? "").replace(/^#/, "").trim().toLowerCase();
+
+  if (slug === "" || !elements) {
+    return null;
+  }
+
+  return elements.bySlug(slug) ?? null;
+}
 
 /**
  * The token layer, as `getComputedStyle` hands it over on the page.
@@ -161,7 +192,11 @@ export async function startAtomStage(doc = document) {
   }
 
   const scale = atomScale(tokens);
-  let counts = countsIn(fields);
+  const named = elementFromFragment(doc.defaultView.location.hash, elements);
+  // The built page arrives showing one element, and a fragment naming another replaces it outright:
+  // the counts, the fields, the picker and the card are all written from the record, so a reader who
+  // followed `/atoms/#iron` sees iron and not carbon with iron's protons.
+  let counts = named ? countsFor(named) : countsIn(fields);
   const record = () => elements.byNumber(counts.protons);
   const model = () =>
     buildAtom({

@@ -23,9 +23,12 @@
  * tabbing through a page should meet the 118 elements in the index, not in a diagram on the way
  * past.
  *
- * The one block that looks outward is the glossary's: the terms this element's entry mentions,
- * linked to their definitions. It is the other end of the relation a term page shows, and both ends
- * are one rule, held in `lib/glossary-links.js`.
+ * Two blocks look outward. The glossary's lists the terms this element's entry mentions, linked to
+ * their definitions — the other end of the relation a term page shows, both ends one rule, held in
+ * `lib/glossary-links.js`. And the orbital figure carries one link into the three-dimensional
+ * viewer, so the atom drawn flat in the aside is one click from the atom drawn moving. The second is
+ * a fragment on a page rather than this element's own URL, which is why it is the viewer that reads
+ * it: `/atoms/#iron` is one page, and the fragment is which element it opens on.
  */
 
 import { faqBlock } from "../components/faq-block.js";
@@ -204,7 +207,24 @@ ${discoveryList({ element })}
 }
 
 /**
- * The orbital figure: the shell diagram and the configuration it draws.
+ * The one link from an element page into the three-dimensional viewer.
+ *
+ * The diagram above it is the same atom drawn still: a reader who has read the shells has already
+ * asked the question this answers, and the link is placed where they are looking rather than in the
+ * navigation, where it would be one page out of many. It carries a fragment — `/atoms/#iron` — and
+ * the viewer opens on the element the fragment names, so the destination is this element and not
+ * whichever one the page happens to default to.
+ *
+ * @param {{ element: object }} options
+ * @returns {string}
+ */
+export function elementViewerLink({ element }) {
+  return `<a class="el-orbital__viewer" href="/atoms/#${escapeHtml(element.slug)}">See ${escapeHtml(element.name)} in three dimensions</a>`;
+}
+
+/**
+ * The orbital figure: the shell diagram and the configuration it draws, and the way from it into the
+ * viewer.
  *
  * @param {{ element: object }} options
  * @returns {string}
@@ -222,7 +242,8 @@ export function elementOrbital({ element }) {
   return `<figure class="el-orbital">
 ${diagram}
 <figcaption class="el-orbital__caption">Electron configuration — ${escapeHtml(element.electronConfiguration ?? UNKNOWN)}</figcaption>
-</figure>`;
+</figure>
+${elementViewerLink({ element })}`;
 }
 
 /**

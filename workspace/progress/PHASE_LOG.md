@@ -28,6 +28,8 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 11 | Quality, accessibility, performance, delivery | `COMPLETE` | `f1cef8e`..`ec80c43`, plus the close-out commit; tagged `v1.0.0` |
 | Publish | The push, and the deployment it corrected | `COMPLETE` | `e035c6f` pushed as the release, then `bd338dd` (the fix), plus the close-out commits; tagged `v1.0.1` |
 | 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
+| 13 | The atom model and the live scene (feature branch) | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`; not merged, not pushed |
+| 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d` and the close-out commit on `feature/atom-3d`; not merged, not pushed |
 
 ---
 
@@ -1655,6 +1657,134 @@ of 618 particles costs no more. The full run is recorded in `docs/research/05-at
 **Commits.** `c3b2aaf` the point distribution · `7223652` the model · `b1e7761` the scene · `3cf6661`,
 which drives both on the guide, records the numbers and closes the phase.
 
+## Phase 14 — The page, the bar and the navigation
+
+**Goal:** the feature a reader can reach — one navbar item, one page, and the translucent bar the author
+asked for by name — driving the scene Phase 13 finished and measured. Still on `feature/atom-3d`; nothing
+merged, nothing pushed.
+
+**14.1 — the route and the navbar item.** `/atoms/` is declared in the manifest as template `atoms` with
+`nav: { label: "Atoms", order: 2 }`. *Periodic Table* keeps 1 and *Elements*, *Glossary* and *Calculators*
+move to 3, 4 and 5, which `tests/router/navigation.test.js` now holds as the author's order rather than as
+an accident of insertion. The build renders 563 routes.
+
+**14.2 — the page, the bar, and the three paths that are not the scene.** `pages/atoms.js` writes the whole
+page at build time: the hero, the element's shell diagram through the component the element pages already
+use, the counts as a sentence, and the entire bar. `components/atom-stage.js` replaces the diagram with the
+canvas **only once a frame has actually been drawn**, so a reader with no WebGL2, no scripting or a
+reduced-motion preference is looking at a finished page rather than a blank stage — and the last of those
+still gets one still frame and a Play control, because a preference is a default rather than a veto.
+`components/atom-bar.js` is the markup and `lib/atom-words.js` is the sentences both halves read, so the
+diagram's caption, the canvas' accessible name and the live region cannot describe one atom three ways.
+Protons stop at 118 — the last element — while neutrons and electrons run past anything an element has; a
+count that is not an element says so, in the model, in the words and on the card, instead of inventing a
+symbol.
+
+The bar is the site's one piece of glass: translucent, pinned to the bottom centre of the stage, and every
+control in it a native control — a select, three number fields with their own step buttons, a range, and
+four buttons. Nothing in it knows what time it is: the scene owns the clock, as Phase 13 left it.
+
+**14.3 — the way in, the fragment, and the two site-wide sweeps.** Every element page carries one link into
+the viewer, under the shell diagram it is the still version of: *See Iron in three dimensions*, at
+`/atoms/#iron`. The page reads that fragment at start-up and opens on the element it names, falling back to
+the element it was built for when a fragment names none — and the built element is still carbon, which is
+what a reader who arrived without one expects. `/atoms/` then joined the two sweeps that measure every page
+of the site, so the new page is held to the site's own standards rather than to its own.
+
+**Three defects, each a different class, and not one of them findable by reading the code.**
+
+- **A repository is not a list of records.** `elementFromFragment` was written to take a list and handed the
+  elements repository instead, so the page's own arithmetic threw, the canvas never appeared, and **the unit
+  test passed** — it was handed the same wrong thing. What failed was the browser claim: open
+  `/atoms/#uranium` and wait for a drawn frame, which timed out after twenty seconds. The function now takes
+  the repository and asks it `bySlug`, and the test builds a **real** repository off disk the way
+  `element-search.test.js` does, so the two callers cannot disagree about what the argument is. This is the
+  third time this feature has been taught that a passing test is not a working page.
+- **A link's colour is not its parent's.** The accessibility sweep's first run over the new page reported
+  **1.47:1** for the card's element symbol. `.at-bar` sets the light ink and the rest of the bar reads it,
+  but the symbol is an `<a>` and a link's colour is the site's — off-white text on dark glass in theory, the
+  site's dark ink on dark glass in fact. One token on the rule fixed it, the bar's own header now says why,
+  and the sweep reports 0 defects over 20 pages.
+- **A 400-line ceiling crossed by the manifest itself.** Adding the atoms route took
+  `scripts/router/routes.js` from 384 lines to 401. The working agreement asks for a split by
+  responsibility rather than a trim, so the stylesheet sets two or more routes share — the four table
+  views', the group pages' and their index's, and the glossary's — moved to `scripts/router/route-sheets.js`.
+  A route says *which* sheets; the new file says *which sheets those are*. Nothing else changed: the same
+  563 routes, the same sheets, and the same 658 green tests.
+
+**The exit criteria, measured rather than asserted.** `tools/visual/audit-atom.mjs` now asks **54 questions**
+and they all hold, with **0 console messages and 0 failed requests**: the stage paints in the token layer's
+own colours; the steppers, the three fields, the picker, the speed, the drag and the wheel each change the
+render, by pixel hash; the bar is walked **by the keyboard alone** — fifteen controls in the document's own
+order, forwards and backwards, the focused one wearing the stage's 2 px `#ffd9a0` ring rather than the site's
+ink, and a count typed and submitted turning the stage into iron with the live region and the canvas' name
+following it; a paused loop is byte-identical frame to frame and its control offers to start it again; a
+reduced-motion reader gets a still frame and a Play control that works; a reader with no WebGL2 keeps the
+diagram, the counts and the reason; a reader with no scripting keeps the whole built bar (118 options, 6 step
+buttons, 4 legend items); `/atoms/#uranium` opens on uranium with its own counts; the one link an element
+page's content carries into the viewer is followed **through the router, by a real click**, and lands on that
+element; and three widths fit with no overflow at any of them.
+
+The two site-wide sweeps were re-run with the page in their lists: accessibility **0 defects and 29
+informational lines across 20 pages**, responsive **80 of 80 page-and-width combinations**. The scene's own
+audit was re-run unchanged against the built page — 33 claims held — and the brand scan is clean: neither
+reference's name appears anywhere under `source/`.
+
+**One ledger number corrected.** The Phase 14 rows claimed the earlier `audit-atom.mjs` asked 27 questions;
+counting the run's own output shows 38 lines from the committed file. The number was an undercount from the
+session that wrote it, and it is corrected here rather than carried forward — a count in a ledger is a claim
+like any other.
+
+**Phase 14 verification**
+
+```
+[✓] node --test source/tests ................ pass  658 pass, 0 fail (2 new: the fragment, and the link on
+                                              every element page)
+[✓] node --check on every changed module .... pass  every module under source/, checked individually
+[✓] Brand scan .............................. PASS: neither reference's brand appears anywhere under source/
+[✓] Console/network on every touched page ... zero errors, zero failed requests — asserted, not observed:
+                                              audit-atom.mjs exits non-zero on any console message or
+                                              failed request, and it exits 0
+[✓] The page at 1280 / 768 / 375 px ......... no console error, no failed request, 0px of overflow at each,
+                                              and the bar inside the stage at each (40–335, 40–728,
+                                              106–1174 before the viewport was resized)
+[✓] The navbar item sits between the two ..... Periodic Table, Atoms, Elements, Glossary, Calculators —
+                                              held by tests/router/navigation.test.js and read back out of
+                                              the built document
+[✓] The bar is usable with the keyboard alone  measured, not assumed: 15 controls in document order forwards
+                                              and backwards, a visible ring on the dark stage, and a count
+                                              typed and submitted with no mouse involved
+[✓] The no-script and no-WebGL paths ......... with scripting off: the diagram, the counts, 118 picker
+                                              options, 6 step buttons and 4 legend items, all built;
+                                              with no WebGL2: the diagram, the counts, and a line saying why
+[✓] The reduced-motion path .................. two screenshots byte-identical, and a Play control that
+                                              starts it
+[✓] Accessibility sweep ...................... 0 defects / 29 informational across 20 pages, exit 0 — one
+                                              defect found and fixed: the bar's symbol link at 1.47:1
+[✓] Responsive sweep ......................... 80 of 80 page-and-width combinations fit, exit 0
+[✓] Scene regression ......................... audit-atom-scene.mjs re-run after the page landed: 33 claims
+                                              held, exit 0, unchanged from Phase 13
+[✓] Line ceiling ............................. every file created under 400 lines; the one file this phase
+                                              pushed over it — the route manifest at 401 — is split, and
+                                              the four files that predate this feature and exceed it are
+                                              recorded below rather than quietly kept
+[—] Frame time of the page itself ............ not measured in this phase. The page runs the same two modules
+                                              Phase 13 measured (0.258 ms a frame for the heaviest atom
+                                              the controls allow), and the page's own budget is a Phase 15
+                                              deliverable
+[✓] Deliberate deviations recorded ............ two, below
+[✓] docs/MIND_MAP.md updated .................. yes — the nine rows whose files changed describe the link,
+                                              the fragment and the bar's ink, and the new sheet-set
+                                              module has a row of its own. Completeness re-checked:
+                                              214 files under source/, all four missing ones are macOS
+                                              `.DS_Store`
+[✓] RUN_STATE.md + HANDOFF.md updated ......... in this commit
+```
+
+**Commits.** `861307d` the route, the page and the bar · and this work item's commit, which adds the link
+from every element page into the viewer, the fragment it lands on, the keyboard and fragment claims in the
+browser audit, the two site-wide sweeps, and the split the line ceiling forced.
+
 ---
 
 ## Blockers and deviations log
@@ -1684,6 +1814,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-05 | 6 | Fixed | **The new pages' tiles came out grey.** The key-to-colour map lives in `styles/components/periodic-table.css`, and the four routes this phase added declared their own sheets but not that one, so `--fill` resolved to nothing and every card's tile, every ranking chip and every configuration chip fell back to the sunken surface. | Fixed in `44e3493` by declaring the table's sheet on the four routes, as the element pages already do. Caught by measuring the computed background colour in a browser rather than by reading the markup, which is why the check is in the verification block. |
 | 2026-10-07 | 13 | Data observation | **The neutrons an element opens on are the rounded standard atomic weight less the atomic number, which is an approximation and one element shows it plainly:** copper's weight rounds to 64, and 64 is neither of its isotopes — Cu-63 has 34 neutrons and Cu-65 has 36, so the guide draws 35. | Recorded rather than hidden, and the guide's own docblock says it. The model takes whatever counts it is handed and the card's mass number is those counts rather than a claim about an isotope; the reader's default is Phase 14's to choose, and it can choose differently. |
 | 2026-10-07 | 13 | Scope decision | **The guide's count fields go past what the page will allow.** The author's decision is 0–118 protons with neutrons and electrons free; the guide's inputs offer protons up to 200, neutrons to 300 and electrons to 200, because a reader tuning the picture wants the headroom and the "not an element" states are only reachable through it. | Accepted: the guide is a development instrument, the page's own limits are Phase 14's rules, and the guide's ceiling is measured in the same recorded run for exactly this reason (618 particles, 8 rings, 0.245 ms). |
+| 2026-10-07 | 14 | Fixed | **The bar's one link was unreadable on the stage, and only a browser could see it.** The accessibility sweep's first run over the new page reported the card's element symbol at **1.47:1**: `.at-bar` sets the light ink and every other control reads it, but the symbol is an `<a>` — and a link's colour is the site's own dark ink, which the glass's light ink never overrode. Off-white on dark glass in the stylesheet, dark on dark in the composited page. | Fixed by naming the token on the rule; the bar's own header now records the rule, because the next colour added to a dark surface will meet the same trap. Sweep after: 0 defects across 20 pages. |
+| 2026-10-07 | 14 | Deviation | **The 400-line ceiling: the file this phase pushed over was split, the ten that were already over are recorded rather than kept quiet.** `scripts/router/routes.js` went from 384 to 401 when the atoms route joined the inventory, and is now 362 plus the new `router/route-sheets.js` at 64 — a split by responsibility, as the working agreement asks. Ten files are still over the ceiling and untouched by intent — seven under `source/`: `styles/tokens.css` (795, the one file where every design value is declared), `styles/pages/element-detail.css` (**500 before this phase, 520 after**; this phase's one link into the viewer is about twenty of those lines), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457), `tests/components/periodic-table.test.js` (444), `tests/router/router.test.js` (427) and `scripts/components/periodic-table.js` (418); and three workspace tools that no page ships (`workspace/tools/visual/compare.mjs` 505, `audit-atom.mjs` 502 — it grew in this work item — and `audit-atom-scene.mjs` 424). | Recorded. Splitting the element detail sheet properly is a two-file refactor with a route-manifest change — larger than the link that touched it, and not this phase's work; it is named as the next candidate rather than left as an undocumented violation. |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---

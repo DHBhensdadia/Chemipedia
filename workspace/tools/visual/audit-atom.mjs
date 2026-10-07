@@ -18,7 +18,14 @@
  *   4. **Paused is paused.** With the loop stopped, two frames are byte-identical.
  *   5. **A reduced-motion reader gets a still frame and a Play control** — and pressing Play animates.
  *   6. **A reader with no WebGL2 gets the diagram**, the counts, and a line saying why.
- *   7. **Three widths, no console message and no failed request** at any of them.
+ *   7. **The bar is usable by the keyboard alone.** Tabbed through and asked where it went: every
+ *      control in the bar receives focus in document order, the focused control carries the stage's
+ *      own ring rather than the site's ink, and a reader can type a count and watch the atom become
+ *      that element without touching a mouse.
+ *   8. **The fragment chooses the element, and the element pages lead here.** `/atoms/#uranium`
+ *      opens on uranium with its counts, and the one link an element page carries opens the viewer
+ *      on that element — followed with a real click, through the router, the way a reader does it.
+ *   9. **Three widths, no console message and no failed request** at any of them.
  *
  * Usage: with a dev server running, `BASE=http://127.0.0.1:4188 node audit-atom.mjs`.
  * It exits non-zero on a failed claim, a console error or a failed request.
@@ -303,6 +310,178 @@ check(built.bar === 118 && built.steppers === 6, `the whole bar is built too (${
 check(built.legend === 4, "and the legend with it");
 await bare.screenshot({ path: "/tmp/atoms-no-script.png", fullPage: true });
 await scriptless.close();
+
+console.log("\nThe keyboard alone\n");
+
+/** What the document says has focus, named the way this page names its own controls. */
+async function focused() {
+  return page.evaluate(() => {
+    const active = document.activeElement;
+
+    if (!active || active === document.body) {
+      return "body";
+    }
+
+    if (active.id) {
+      return `#${active.id}`;
+    }
+
+    if (active.dataset?.atomStep) {
+      return `${active.dataset.atomStep}${Number(active.dataset.atomBy) > 0 ? "+" : "\u2212"}`;
+    }
+
+    return active.tagName.toLowerCase();
+  });
+}
+
+// The bar's own controls, in the order the built page puts them in.
+const BAR_ORDER = [
+  "#atom-element-link",
+  "protons\u2212",
+  "#atom-protons",
+  "protons+",
+  "neutrons\u2212",
+  "#atom-neutrons",
+  "neutrons+",
+  "electrons\u2212",
+  "#atom-electrons",
+  "electrons+",
+  "#atom-speed",
+  "#atom-shake",
+  "#atom-reset",
+  "#atom-motion",
+  "#atom-picker",
+];
+
+await page.goto(PAGE, { waitUntil: "networkidle" });
+await page.waitForSelector(`${STAGE}:not([hidden])`, { timeout: 20000 });
+await page.waitForTimeout(200);
+
+const walked = [];
+
+await page.keyboard.press("Tab");
+
+for (let press = 0; press < 40 && !walked.includes("#atom-picker"); press += 1) {
+  walked.push(await focused());
+  await page.keyboard.press("Tab");
+}
+
+const inBar = walked.slice(walked.indexOf("#atom-element-link"));
+
+check(inBar.includes("#atom-element-link"), "the keyboard reaches the bar at all");
+check(
+  JSON.stringify(inBar) === JSON.stringify(BAR_ORDER),
+  `every control in the bar is reached, in the order the page puts them (${inBar.length} of ${BAR_ORDER.length})`,
+);
+
+// Backwards, to be sure the order is the document's and not a one-way street — and to sit on a
+// control in the bar for the ring check below, since the bar is the surface that has the problem.
+await page.keyboard.press("Shift+Tab");
+
+const back = await focused();
+
+check(back === "#atom-picker", `and Shift+Tab walks the same order backwards (to ${back})`);
+
+// The ring has to be the stage's own: the site's is the ink, which is invisible on this surface.
+const ring = await page.evaluate(() => {
+  const style = getComputedStyle(document.activeElement);
+
+  return {
+    style: style.outlineStyle,
+    width: style.outlineWidth,
+    colour: style.outlineColor,
+    ink: getComputedStyle(document.querySelector(".at-stage")).color,
+  };
+});
+
+check(
+  ring.style !== "none" && ring.width !== "0px" && ring.colour !== ring.ink,
+  `the focused control carries a ring a reader can see (${ring.width} ${ring.colour})`,
+);
+
+// And the keyboard does not only move focus: it changes the atom. Twelve presses back from the
+// chooser is the protons field, which is also where the order in the other direction is checked.
+let presses = 0;
+
+while ((await focused()) !== "#atom-protons" && presses < 40) {
+  await page.keyboard.press("Shift+Tab");
+  presses += 1;
+}
+
+check((await focused()) === "#atom-protons", "the protons field can be reached with the keyboard alone");
+
+await page.keyboard.press("Meta+a");
+await page.keyboard.type("26");
+await page.keyboard.press("Enter");
+await page.waitForTimeout(300);
+
+const ironed = await said();
+
+check(/Iron/.test(ironed.name), `typing 26 and pressing Enter turns the stage into iron (${ironed.name})`);
+check(/Iron/.test(ironed.announce), "and the live region says so");
+check(/Iron/.test(ironed.label), "and the canvas' name follows it");
+
+await page.keyboard.press("Tab");
+await page.keyboard.press("Enter");
+await page.waitForTimeout(300);
+
+check(/Cobalt/.test((await said()).name), "and the step buttons work from the keyboard too");
+
+console.log("\nThe fragment, and the way in from an element page\n");
+const linked = await context.newPage();
+
+linked.on("console", (message) => {
+  if (message.type() === "error" || message.type() === "warning") {
+    trouble.push(`element page console ${message.type()}: ${message.text()}`);
+  }
+});
+linked.on("pageerror", (error) => trouble.push(`element page error: ${error.message}`));
+linked.on("requestfailed", (request) => failures.push(`${request.url()} — ${request.failure()?.errorText}`));
+
+await linked.goto(`${PAGE}#uranium`, { waitUntil: "networkidle" });
+await linked.waitForSelector(`${STAGE}:not([hidden])`, { timeout: 20000 });
+await linked.waitForTimeout(200);
+
+const deep = await linked.evaluate(() => ({
+  name: document.querySelector("#atom-name").textContent,
+  readout: document.querySelector("#atom-readout").textContent,
+  protons: document.querySelector("#atom-protons").value,
+  picker: document.querySelector("#atom-picker").value,
+}));
+
+check(/Uranium/.test(deep.name), `a fragment opens the page on that element (${deep.name})`);
+check(deep.protons === "92" && deep.picker === "92", "and the counts and the picker are set to it");
+
+await linked.goto(`${BASE}/elements/iron/`, { waitUntil: "networkidle" });
+
+// The masthead links to the viewer too, because it is a page of the site. The claim is about the
+// content: one link from the element a reader is reading into that element's own atom.
+const viewer = await linked.evaluate(() => {
+  const links = [...document.querySelectorAll("main a")].filter((anchor) =>
+    (anchor.getAttribute("href") ?? "").startsWith("/atoms/"),
+  );
+
+  return { count: links.length, href: links[0]?.getAttribute("href"), text: links[0]?.textContent };
+});
+
+check(viewer.count === 1, `the element's content carries one link into the viewer (${viewer.count})`);
+check(viewer.href === "/atoms/#iron", `and it names the element it is on (${viewer.href})`);
+
+await linked.click("main a[href^='/atoms/']");
+await linked.waitForSelector(`${STAGE}:not([hidden])`, { timeout: 20000 });
+await linked.waitForTimeout(200);
+
+const arrived = await linked.evaluate(() => ({
+  name: document.querySelector("#atom-name").textContent,
+  protons: document.querySelector("#atom-protons").value,
+  url: `${location.pathname}${location.hash}`,
+}));
+
+check(/Iron/.test(arrived.name), `following it opens iron, not the built element (${arrived.name})`);
+check(arrived.protons === "26", "with iron's own counts");
+check(arrived.url === "/atoms/#iron", `and the URL it landed on is the one it asked for (${arrived.url})`);
+await linked.screenshot({ path: "/tmp/atoms-from-iron.png" });
+await linked.close();
 
 if (trouble.length > 0) {
   console.log("\nConsole trouble\n");

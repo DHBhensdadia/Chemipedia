@@ -40,57 +40,18 @@
  *
  * The generated families — element detail pages, group pages and glossary terms — are appended by
  * the phases that introduce their data, each route carrying the values its template needs.
+ *
+ * The sheet sets that two or more routes share live in `route-sheets.js` and are re-exported here, so
+ * that a page's own sheets stay beside its template while the arrangement's sheets are written once.
  */
 
 import { plural } from "../lib/plural.js";
-
-/**
- * The stylesheets every one of the four table views needs, in cascade order.
- *
- * The tile sheet draws a tile and the legend sheet draws a chip, but neither decides a colour: they
- * consume `--fill` and `--on-fill`, and the periodic table's sheet is the one map that turns an
- * element's key into that pair. A view of 118 tiles that did not declare it is a view of 118 grey
- * tiles — which is exactly what the elements index shipped before Phase 6's browser pass caught it.
- *
- * The four views are one arrangement rather than four, so the list is written once and the
- * evolution view appends the timeline's own sheet to it.
- */
-const TABLE_VIEW_STYLES = [
-  "styles/components/element-tile.css",
-  "styles/components/legend-chips.css",
-  "styles/components/periodic-table.css",
-  "styles/pages/table-views.css",
-];
-
-/**
- * The stylesheets every group page needs, in cascade order.
- *
- * The three component sheets a group page draws the table with. Its own file is not listed: a
- * family's main template is named after the family, so the build appends `styles/pages/group.css`
- * for the group pages by itself, and naming it twice links the same sheet twice.
- *
- * The index page is the exception the other way round. Its cards are a category's colour on a
- * tile, and the only sheet that knows what a category's colour is happens to be the table's, so it
- * declares these three and adds the family's own file by hand.
- */
-const GROUP_STYLES = [
-  "styles/components/element-tile.css",
-  "styles/components/legend-chips.css",
-  "styles/components/periodic-table.css",
-];
-
-/** The group pages' own sheet, which the index page has to ask for by name. */
-const GROUP_PAGE_SHEET = "styles/pages/group.css";
-
-/**
- * The glossary's own sheet, declared by both of its templates.
- *
- * One file for the index and the 418 term pages, for the reason `group.css` is one file for the
- * eleven group pages: they are one arrangement, and the term page is the index's article. Neither
- * template is named `glossary`, so the build appends nothing for them by itself and both routes ask
- * for the file by name.
- */
-const GLOSSARY_STYLES = ["styles/pages/glossary.css"];
+import {
+  GLOSSARY_STYLES,
+  GROUP_PAGE_SHEET,
+  GROUP_STYLES,
+  TABLE_VIEW_STYLES,
+} from "./route-sheets.js";
 
 export const routes = [
   {

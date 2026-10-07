@@ -18,6 +18,10 @@
  *      finishes using.
  *   4. **Nothing here holds a design value.** Every colour, radius, space and duration is a token;
  *      the only literals are the three breakpoints the project's law allows.
+ *   5. **Every control says its own colour.** Most of the bar sets one, but the card's symbol is an
+ *      `<a>`, and a link's colour is the site's ink by default — which on this dark glass is the
+ *      one thing in the bar a reader cannot read. The sweep measured it at 1.47:1 before the token
+ *      was set here, which is what `tools/visual/audit-a11y.mjs` is for.
  */
 
 .at-bar {
@@ -47,9 +51,14 @@
 }
 
 .at-bar__symbol {
+  color: var(--atom-bar-ink);
   font-size: var(--step-2);
   font-weight: 600;
   line-height: 1;
+}
+
+.at-bar__symbol:hover {
+  text-decoration: underline;
 }
 
 .at-bar__name {

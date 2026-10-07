@@ -6,8 +6,9 @@
 > **It is not sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-07 (the session that built the atom model — Phase 13 work item 13.2 — on
-`feature/atom-3d`, after Phase 12's renderer and the planning session that opened the feature)
+**Last updated:** 2026-10-07 (the session that closed **Phase 14** — the page, the bar, the way in
+from every element page, and the two site-wide sweeps — on `feature/atom-3d`; Phases 12, 13 and 14
+are `COMPLETE`, and Phase 15, the delivery, has not started)
 
 ---
 
@@ -15,15 +16,15 @@
 
 | Field | Value |
 |---|---|
-| **Phase** | **Phases 12 and 13 are `COMPLETE`**, and **Phase 14 — The page, the bar and the navigation — is `IN_PROGRESS`**: the route, the navbar item and the page itself are in, and what remains is the link from each element page into the viewer, the two site-wide sweeps over the new page, and the close-out documentation. The atom viewer's four phases (12–15) are planned in `docs/IMPLEMENTATION_PLAN.md` §3; phases 0–11 are `COMPLETE`, and the site is published |
+| **Phase** | **Phases 12, 13 and 14 are `COMPLETE`** — the renderer, the model and its scene, and the page a reader can reach — and **Phase 15 — Quality, delivery and the second reference's line — is `NOT_STARTED`**. What remains is the four gates over the new page (accessibility, responsive, performance and Lighthouse, three of which have already been re-run by hand with `/atoms/` in their lists), the documentation the plan names (`DESIGN_SYSTEM.md`, `ARCHITECTURE.md`'s **ADR-007**, `BRAND_GUIDELINES.md`, `DATA_SOURCES.md`, the guides and the README's route count), and the delivery itself: a `--no-ff` merge to `main`, a push, a green Pages run, a live check of `/atoms/` and the `v1.1.0` tag — none of which has happened. The atom viewer's four phases (12–15) are planned in `docs/IMPLEMENTATION_PLAN.md` §3; phases 0–11 are `COMPLETE`, and the site is published |
 | **Branch** | `feature/atom-3d`, cut from `main` at `a22c0d2`, with the plan itself as its first commits. Nothing is merged or pushed yet. `main` is untouched by the feature |
 | **Objective (this feature)** | A page at `/atoms/`, in the navigation as **Atoms** between *Periodic Table* and *Elements*, that draws the chosen element as a three-dimensional atom: a nucleus of protons and neutrons, electrons orbiting on rings, free counts on all three particles, a speed control, a shake and a reset — and a translucent bar pinned to the bottom centre carrying the element card, the three steppers, the speed and the legend. Hand-written WebGL2 (ADR-004), a deep pine stage inside a paper-light page (ADR-006), the element's shell diagram built at build time as the fallback, and a new token group in `tokens.css` as the only place any of its values live. The reference it replicates, and what we deliberately leave behind, are measured in `docs/research/04-reference-atom-viewer-audit.md` |
 | **Work item (previous phase)** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`**, and the deployment the plan asked for is now **live** at `https://dhbhensdadia.github.io/Chemipedia/` — the author's one-time push ran on request, the live address then exposed a defect no local run could (`bd338dd`), and the corrected build was redeployed and verified |
-| **Status (this feature)** | **Phase 13 is `COMPLETE`**: the point distribution, the model and the scene are committed and green, and the phase's exit criteria are measured rather than asserted — `tools/visual/audit-atom-scene.mjs` puts all 118 records through the guide's own picker, hashes frames across an element change and a count change, renders every extreme the plan names, classifies the stage's pixels against the token layer's colours, and records the heaviest atom the feature allows at 1280 x 800: 382 particles and 7 rings in 8 draw calls at **0.258 ms** a frame against a 16.70 ms cadence, with 0 console messages and 0 failed requests. Neither the model nor the scene is on a page yet. Phase 13's pure half is in and proved: `scripts/lib/point-sphere.js` (the golden-angle spiral, deterministic, centred, rescaled so the radius asked for is the cluster's outer edge) and `scripts/lib/atom-model.js` — a record plus three counts becomes every nucleon's place and kind, a nucleus radius, one ring per shell taken from the record's own `shells`, and each electron's phase — 27 tests over the real 118 records and the scale read out of `tokens.css`. On top of it `scripts/components/atom-scene.js` brings the model to life: one instanced draw for the whole atom, one ring per shell, the electrons on the scene's own clock so a speed change cannot make them jump, an impulse shake with an exponential decay, and 19 tests through a recording canvas. What is left of the phase is the style guide driving it and the recorded frame time. Phase 12 is `COMPLETE` and **proved in a browser rather than in a stub**: the layer draws a moving frame on the style guide's stage with **0 console messages and 0 failed requests**, and its own numbers are recorded in `docs/research/05-atom-renderer-measurements.md` — 43 particles and 3 orbits in **4 draw calls** at 0.10 ms in the layer, 125 and 7 in **8 draw calls** at 0.20 ms, against a 16.70 ms vsync-bound cadence on an Apple M4 through ANGLE. The suite is **577 pass, 0 fail**; the accessibility sweep still reports **0 defects across 19 pages** and the responsive sweep **76 of 76**. Measuring found the one defect no unit test could: the particle draw used a vertex array that left the sphere's own attributes unbound, so every sphere collapsed to a point at its centre and the frame showed only the orbits — and the fix carries a regression test that was run against the defective revision and failed there. No page uses the layer yet |
-| **Objective achieved** | The replica is a finished product. Every page is rendered at build time rather than assembled by the browser, so a crawler and a reader whose script did not run both see the site. Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD, and the build writes `sitemap.xml` from the routes it actually wrote plus a `robots.txt` naming it. Nineteen pages pass an accessibility sweep with 0 defects, all 76 page-and-width combinations fit their viewport, the worst layout shift on any page is 0, and Lighthouse scores accessibility, best-practices and SEO at 100 across seven sampled pages |
-| **Status** | `COMPLETE` and **published**. The live site answers 200 for `/`, a stylesheet, a module, the icon, `data/elements.json`, an element page, `sitemap.xml` and `robots.txt`, all under `/Chemipedia/`, and the domain root answers 404 — which is the point of the path. Locally: `node --test source/tests` → **497 pass, 0 fail**. The build writes **562 routes** plus the not-found page and reports **0 waiting**. The four gates all exit 0: accessibility **0 defects / 27 informational lines across 19 pages**; responsive **76 of 76**; performance **worst shift 0, slowest cold load 38–41ms, 0 long tasks**; Lighthouse **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
-| **Current commit** | on `feature/atom-3d`: the plan first — the second reference's audit, then the four phases with the checkpoint and the handoff — and then Phase 12 in five commits: the arithmetic `e748de5`, the camera `19bc719`, the meshes `f557ea3`, the four modules the layer is `adcbbe5`, and the browser proof with its recorded numbers `cb570b3`. `main` is at `a22c0d2`, which is the publish close-out: the deployment fix `bd338dd` (every URL the site writes stays inside the path it is published under), tagged `v1.0.1`, plus its documentation. `v1.0.0` stays where it is, on `e035c6f` — the release whose publication exposed the defect |
-| **Next action** | **Work item 14.3**: add the one link from each element page into the viewer (`/atoms/#<slug>`, and the page opening on that element), then run the accessibility and responsive sweeps with `/atoms/` in their page lists, and close the phase's documentation out |
+| **Status (this feature)** | **Phase 14 is `COMPLETE`**, and the feature is now a page a reader can reach. `/atoms/` is declared with `nav: { label: "Atoms", order: 2 }` — *Periodic Table*, **Atoms**, *Elements*, *Glossary*, *Calculators* — the build writes 563 routes, and the page arrives finished before any script runs: the hero, the element's shell diagram, the counts in words and the whole bar, with the canvas replacing the diagram only once a frame has actually been drawn. `tools/visual/audit-atom.mjs` asks **54 questions** and they all hold with **0 console messages and 0 failed requests** — the stage paints in the token layer's colours, every control changes the render by pixel hash, the bar is walked **by the keyboard alone** (15 controls in document order, forwards and backwards, a visible ring on the dark stage, and a count typed and submitted turning the stage into iron), a paused loop is byte-identical frame to frame, a reduced-motion reader gets a still frame and a working Play, a reader with no WebGL2 keeps the diagram and the reason, a reader with no scripting keeps the whole built bar, `/atoms/#uranium` opens on uranium, and the one link an element page carries into the viewer is followed by a real click and lands on that element. Every element page now carries that link — *See Iron in three dimensions* at `/atoms/#iron` — and `/atoms/` has joined the two site-wide sweeps: **0 defects and 29 informational lines across 20 pages**, and **80 of 80** page-and-width combinations fit. Three defects were found by measuring rather than by reading: a repository passed where a list was expected (which the unit test could not see because it was handed the same wrong thing), the bar's one link at **1.47:1** on the dark glass, and the route manifest crossing the project's 400-line ceiling — the last split into `router/routes.js` (362) and `router/route-sheets.js` (64). Suite: **658 pass, 0 fail**. Phase 13 is `COMPLETE`: the point distribution, the model and the scene are committed and green, and the phase's exit criteria are measured rather than asserted — `tools/visual/audit-atom-scene.mjs` puts all 118 records through the guide's own picker, hashes frames across an element change and a count change, renders every extreme the plan names, classifies the stage's pixels against the token layer's colours, and records the heaviest atom the feature allows at 1280 x 800: 382 particles and 7 rings in 8 draw calls at **0.258 ms** a frame against a 16.70 ms cadence, with 0 console messages and 0 failed requests. Neither the model nor the scene is on a page yet. Phase 13's pure half is in and proved: `scripts/lib/point-sphere.js` (the golden-angle spiral, deterministic, centred, rescaled so the radius asked for is the cluster's outer edge) and `scripts/lib/atom-model.js` — a record plus three counts becomes every nucleon's place and kind, a nucleus radius, one ring per shell taken from the record's own `shells`, and each electron's phase — 27 tests over the real 118 records and the scale read out of `tokens.css`. On top of it `scripts/components/atom-scene.js` brings the model to life: one instanced draw for the whole atom, one ring per shell, the electrons on the scene's own clock so a speed change cannot make them jump, an impulse shake with an exponential decay, and 19 tests through a recording canvas. What is left of the phase is the style guide driving it and the recorded frame time. Phase 12 is `COMPLETE` and **proved in a browser rather than in a stub**: the layer draws a moving frame on the style guide's stage with **0 console messages and 0 failed requests**, and its own numbers are recorded in `docs/research/05-atom-renderer-measurements.md` — 43 particles and 3 orbits in **4 draw calls** at 0.10 ms in the layer, 125 and 7 in **8 draw calls** at 0.20 ms, against a 16.70 ms vsync-bound cadence on an Apple M4 through ANGLE. The suite is **577 pass, 0 fail**; the accessibility sweep still reports **0 defects across 19 pages** and the responsive sweep **76 of 76**. Measuring found the one defect no unit test could: the particle draw used a vertex array that left the sphere's own attributes unbound, so every sphere collapsed to a point at its centre and the frame showed only the orbits — and the fix carries a regression test that was run against the defective revision and failed there. No page uses the layer yet |
+| **Objective achieved** | The replica is a finished product. Every page is rendered at build time rather than assembled by the browser, so a crawler and a reader whose script did not run both see the site. Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD, and the build writes `sitemap.xml` from the routes it actually wrote plus a `robots.txt` naming it. Twenty pages now pass an accessibility sweep with 0 defects (nineteen at publish, before `/atoms/` existed) and all 80 page-and-width combinations fit their viewport (76 of 76 at publish), the worst layout shift on any page is 0, and Lighthouse scores accessibility, best-practices and SEO at 100 across seven sampled pages |
+| **Status** | `COMPLETE` and **published**. The live site answers 200 for `/`, a stylesheet, a module, the icon, `data/elements.json`, an element page, `sitemap.xml` and `robots.txt`, all under `/Chemipedia/`, and the domain root answers 404 — which is the point of the path. Locally, as the branch stands today: `node --test source/tests` → **658 pass, 0 fail** (497 when the site was published). The build writes **563 routes** plus the not-found page and reports **0 waiting** (562 at publish). Three of the four gates have been re-run with `/atoms/` in their page lists — accessibility **0 defects / 29 informational lines across 20 pages**, responsive **80 of 80**, and the performance and Lighthouse sweeps are Phase 15's to re-run; their publish-time readings were **worst shift 0, slowest cold load 38–41ms, 0 long tasks** and **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
+| **Current commit** | on `feature/atom-3d`, clean: the plan first — the second reference's audit, then the four phases with the checkpoint and the handoff — then Phase 12 in five commits (the arithmetic `e748de5`, the camera `19bc719`, the meshes `f557ea3`, the four modules the layer is `adcbbe5`, the browser proof `cb570b3`), Phase 13 in five (`c3b2aaf`..`86da30b`), and Phase 14 in two: the route, the page, the bar and the navbar item in `861307d`, and the close-out commit with the way in from every element page, the fragment, the keyboard and fragment claims, the two site-wide sweeps and the split the line ceiling forced. `main` is at `a22c0d2`, which is the publish close-out: the deployment fix `bd338dd` (every URL the site writes stays inside the path it is published under), tagged `v1.0.1`, plus its documentation. `v1.0.0` stays where it is, on `e035c6f` — the release whose publication exposed the defect |
+| **Next action** | **Phase 15, starting with the gates the plan names**: run `audit-performance.mjs` and `audit-lighthouse.mjs` with `/atoms/` in their page lists (accessibility and responsive have already been re-run with it — 0 defects over 20 pages, 80 of 80), then write the documentation (`DESIGN_SYSTEM.md`'s token group, `ARCHITECTURE.md`'s **ADR-007** — raw WebGL2, progressive enhancement, palette from tokens, no library —, `BRAND_GUIDELINES.md`'s line on the second reference, `DATA_SOURCES.md`'s "no new data and why", the guides and the README's 563 routes). Delivery is the author's: a `--no-ff` merge to `main`, a push, a green Pages run, a live check of `/atoms/` and `v1.1.0` — **do not merge, push or tag without being asked** |
 
 ## Files expected to change in the next work item
 
@@ -44,16 +45,24 @@ Phase 13  source/scripts/lib/point-sphere.js       ✅ even points on a sphere  
           source/scripts/components/atom-scene.js  ✅ the model, alive               b1e7761
           source/styleguide/atom-demo.js           ✅ the scene, driven on the guide  3cf6661
           workspace/tools/visual/audit-atom-scene.mjs ✅ 33 questions, all held       3cf6661
-Phase 14  source/pages/atoms.html                  new template
-          source/scripts/pages/atoms.js            new page family
-          source/styles/pages/atoms.css            new
-          source/styles/components/atom-*.css      new
-          source/styles/tokens.css                 §21 already holds the scene; the bar's glass joins it
-          source/scripts/router/routes.js          the route and nav order 2
-          source/scripts/router/navigation.js      no submenu for the section
-          source/scripts/app.js                    the behaviour entry
-Phase 15  workspace/tools/visual/audit-atom.mjs    new page sweep (atom-pixels.mjs is already there to reuse)
-          the four audits' page lists, all documentation, the tag
+Phase 14  source/pages/atoms.html                  ✅ the template                 861307d
+          source/scripts/pages/atoms.js            ✅ the page, as the build writes it 861307d
+          source/scripts/components/atom-bar.js    ✅ the bar's markup               861307d
+          source/scripts/components/atom-stage.js  ✅ the page in a browser          861307d
+          source/scripts/lib/atom-words.js         ✅ the sentences both halves read  861307d
+          source/styles/pages/atoms.css            ✅ the page's own sheet            861307d
+          source/styles/components/atom-*.css      ✅ the stage's and the bar's sheets 861307d
+          source/styles/tokens.css                 ✅ §21: the stage, the glass and the bar 861307d
+          source/scripts/router/routes.js          ✅ the route and nav 2; 401 → 362 lines, split  this commit
+          source/scripts/router/route-sheets.js    ✅ new: the sheet sets the routes share      this commit
+          source/scripts/app.js                    ✅ the behaviour entry             861307d
+          source/scripts/pages/element-detail.js   ✅ the one link into the viewer, on all 118   this commit
+          source/styles/pages/element-detail.css   ✅ the pill that link is drawn as            this commit
+          workspace/tools/visual/audit-atom.mjs    ✅ 54 questions, including the keyboard and the fragment
+          workspace/tools/visual/audit-{a11y,responsive}.mjs ✅ /atoms/ in the lists: 20 pages, 80 of 80
+Phase 15  the four gates over `/atoms/`           performance and Lighthouse still to run
+          the documentation, and the delivery      ADR-007, DESIGN_SYSTEM, BRAND, DATA_SOURCES, guides,
+                                                    README, then merge, push, Pages, live check, v1.1.0
 ```
 
 The plan is delivered end to end, and the site is live. If a later phase reopens a page, the pieces
@@ -97,9 +106,10 @@ checked against a deployment served from a path, not only against the developmen
 | 13.1 The point distribution a nucleus is built on | `COMPLETE` | `scripts/lib/point-sphere.js` and its 11 tests: the count asked for, an empty set at zero rather than an error, the furthest point on the radius with nothing outside it, the centroid on the origin, nearest-neighbour spacing even to within 14%, a mean distance above 0.97 so it is a ball and not a shell, and the refusals | `c3b2aaf` |
 | 13.2 The atom model | `COMPLETE` | `scripts/lib/atom-model.js` (348 lines) held by **28 tests** in `tests/lib/atom-model.test.js` and `tests/lib/atom-electrons.test.js` over the shared `tests/lib/atom-fixtures.js`: a nucleus of the count it was given with nothing outside its own radius, protons spread through the point order, an orbit clearing the nucleus from hydrogen to oganesson, one ring per shell with Kepler's three-halves asserted as a ratio, the textbook shell capacity as a fallback and the record's own value winning, the isotope and the charge in words and the honest sentence where neither applies, and the refusals. Suite: **636 pass, 0 fail**; `node --check` clean on every module | `7223652` |
 | 13.3 The atom, alive on the layer | `COMPLETE` | `scripts/components/atom-scene.js` (289 lines): the two lists the layer takes, one instanced draw a frame, the cells of `pointSphere`'s own scale, the electrons moved on the scene's clock, the atom's slow turn from `--atom-spin`, the shake as an impulse decaying as `e^(−decay · dt)`, and one token reader feeding both the model's scale and the draw, so a nucleus cannot be built at one size and drawn at another. **20 tests** in `tests/components/atom-scene.test.js`, `atom-motion.test.js` and `atom-camera.test.js` over the shared `tests/components/atom-harness.js`, which reads `tokens.css` itself: on a machine with no WebGL2 a scene draws nothing and still answers, a shake measured over one second turns the atom more than four times its idle rate and is back inside five per cent four seconds later, a speed of three moves the electrons three times as far, and changing the speed mid-flight does not move them at the instant it changes. Suite: **636 pass, 0 fail** | `b1e7761` |
-| 14.1 The route, the navbar item and the order | `COMPLETE` | `/atoms/` declared with `nav: { label: "Atoms", order: 2 }`; *Periodic Table* stays at 1 and *Elements*, *Glossary* and *Calculators* move to 3, 4 and 5, which `tests/router/navigation.test.js` now holds as the author's order. The build renders 563 routes | this commit |
-| 14.2 The page, the bar and the three fallbacks | `COMPLETE` | `pages/atoms.js` writes a finished page — hero, the element's shell diagram, the counts in words and the whole bar — and `components/atom-stage.js` replaces the diagram with the scene once a frame is drawn; `lib/atom-words.js` holds the sentences both halves use. Protons stop at 118 and the free counts go past every element, and the card names the element when the counts name one and says so plainly when they do not. `tools/visual/audit-atom.mjs` asks 27 questions and all hold with **0 console messages**: the stage paints in the token layer's colours, every control changes the render by pixel hash, the live region and the canvas' name follow the counts, a paused loop is still, a reduced-motion reader gets a still frame and a working Play control, a reader with no WebGL2 keeps the diagram and is told why, a reader with no scripting keeps the whole built bar, and three widths fit with no overflow. Suite: **656 pass, 0 fail** | this commit | `styleguide/atom-demo.js` drives the model and the scene from a picker over all 118 records, three free count fields, a speed, a shake and a reset; `tools/visual/audit-atom-scene.mjs` asks 33 questions and they all hold with **0 console messages and 0 failed requests** — all 118 elements drawn as themselves, five elements and three count changes proved to be different frames by hash, every extreme the plan names, and the heaviest atom the feature allows (382 particles, 7 rings, 8 draw calls) at **0.258 ms** a frame against a 16.70 ms cadence at 1280 x 800. The run is recorded in `docs/research/05`. Measuring found a defect the unit tests could not: `buildAtom` with no protons and no neutrons asked `pointSphere` for a cluster of radius zero and threw, so a reader's three zeros were an error on a page — fixed with an empty point set, held by a model test and a scene test. Suite: **636 pass, 0 fail** | `3cf6661` |
-
+| 13.4 The style guide driving the model, and the scene's numbers recorded | `COMPLETE` | `styleguide/atom-demo.js` drives the model and the scene from a picker over all 118 records, three free count fields, a speed, a shake and a reset; `tools/visual/audit-atom-scene.mjs` asks 33 questions and they all hold with **0 console messages and 0 failed requests** — all 118 elements drawn as themselves, five elements and three count changes proved to be different frames by hash, every extreme the plan names, and the heaviest atom the feature allows (382 particles, 7 rings, 8 draw calls) at **0.258 ms** a frame against a 16.70 ms cadence at 1280 x 800. The run is recorded in `docs/research/05`. Measuring found a defect the unit tests could not: `buildAtom` with no protons and no neutrons asked `pointSphere` for a cluster of radius zero and threw, so a reader's three zeros were an error on a page — fixed with an empty point set, held by a model test and a scene test. Suite: **636 pass, 0 fail** | `3cf6661` |
+| 14.1 The route, the navbar item and the order | `COMPLETE` | `/atoms/` declared with `nav: { label: "Atoms", order: 2 }`; *Periodic Table* stays at 1 and *Elements*, *Glossary* and *Calculators* move to 3, 4 and 5, which `tests/router/navigation.test.js` now holds as the author's order. The build renders 563 routes | `861307d` |
+| 14.2 The page, the bar and the three fallbacks | `COMPLETE` | `pages/atoms.js` writes a finished page — hero, the element's shell diagram, the counts in words and the whole bar — and `components/atom-stage.js` replaces the diagram with the scene once a frame is drawn; `lib/atom-words.js` holds the sentences both halves use. Protons stop at 118 and the free counts go past every element, and the card names the element when the counts name one and says so plainly when they do not. `tools/visual/audit-atom.mjs` asks 38 questions and all hold with **0 console messages**: the stage paints in the token layer's colours, every control changes the render by pixel hash, the live region and the canvas' name follow the counts, a paused loop is still, a reduced-motion reader gets a still frame and a working Play control, a reader with no WebGL2 keeps the diagram and is told why, a reader with no scripting keeps the whole built bar, and three widths fit with no overflow. Suite: **656 pass, 0 fail** | `861307d` |
+| 14.3 The way in, the fragment, the two sweeps and the split | `COMPLETE` | Every element page carries one link into the viewer under its shell diagram — `/atoms/#<slug>`, named for the element — and `elementFromFragment` opens the page on the element a fragment names, falling back to the built element when it names none; both are held by tests, and the browser audit follows the link with a real click through the router. `/atoms/` joined the site-wide sweeps: **0 defects / 29 informational across 20 pages** and **80 of 80** page-and-width combinations, both exit 0. The page's own audit now asks **54** questions, all held, with 0 console messages and 0 failed requests — including the keyboard walk of the bar and the ring on the dark stage. Measuring found two defects (a repository passed where a list was expected; the bar's link at 1.47:1) and the working agreement found a third (`routes.js` at 401 lines, split into 362 + `router/route-sheets.js`). Suite: **658 pass, 0 fail** | this commit |
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
 
@@ -135,16 +145,38 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 
 ## Deliberately unfinished
 
-**Nothing on the plan.** All twelve phases are `COMPLETE` and the working tree is clean at the
-close-out commit, tagged `v1.0.0`.
+**The site's twelve phases are all `COMPLETE`**, and the published site is untouched by this branch.
+**The feature's last phase is not**: Phases 12, 13 and 14 are `COMPLETE` and the working tree is clean
+at Phase 14's close-out commit, and **Phase 15 — the four gates over `/atoms/`, the documentation and
+the delivery — has not been started**.
 
-Three deferrals stand, each recorded where it belongs:
+What that leaves, in the order the plan asks for it:
+
+1. **The performance and Lighthouse sweeps over the new page**, and `/atoms/` added to their page
+   lists first. The accessibility and responsive sweeps already cover it.
+2. **The documentation the plan names**: `DESIGN_SYSTEM.md` (the token group and the stage's rules),
+   `ARCHITECTURE.md`'s **ADR-007** (raw WebGL2, progressive enhancement, the palette read from tokens,
+   no library), `BRAND_GUIDELINES.md` (the second reference: what we take and what never enters the
+   repository), `DATA_SOURCES.md` (no new data, and why), the guides, and the README's route count.
+3. **The delivery**, which is the author's: a `--no-ff` merge to `main`, a push, a green Pages run, a
+   live check of `/atoms/` in a browser, and `v1.1.0`. **Nothing is pushed, merged or tagged.**
+
+Four deferrals stand, each recorded where it belongs:
 
 1. **The plan's "expanded explanation" on a term page** — not delivered in Phase 9, because 418
    paragraphs would have no source to audit them against.
 2. **Two schema fields** that no acceptable source supplies (`covalentRadius`, `latticeParameters`) —
    see `docs/DATA_SOURCES.md`.
 3. **The typeface** — not the reference's, recorded as a Phase 1 deviation.
+4. **Ten files over the 400-line ceiling, inherited rather than fixed.** Seven under `source/`:
+   `styles/tokens.css` (795), `styles/pages/element-detail.css` (520, of which this feature's link is
+   about twenty lines), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css`
+   (457), `tests/components/periodic-table.test.js` (444), `tests/router/router.test.js` (427) and
+   `scripts/components/periodic-table.js` (418). Three more in `workspace/tools/visual/`, which ships
+   to no page: `compare.mjs` (505), `audit-atom.mjs` (502) and `audit-atom-scene.mjs` (424). Phase 14
+   split the one file it pushed over the ceiling (`router/routes.js`, now 362 lines plus
+   `router/route-sheets.js` at 64); the rest is a two-file refactor each, and they are recorded in
+   `progress/PHASE_LOG.md` rather than quietly kept.
 
 The one-time push is no longer on this list: it ran on the author's instruction on 2026-10-06, and
 the site it published is live.
@@ -155,8 +187,8 @@ the site it published is live.
 git log --oneline -20             # what has actually been committed
 git status --short                # anything half-done?
 cat workspace/RUN_STATE.md        # this file
-node --test source/tests          # is the last checkpoint real?  expect: 636 passing
-node source/tools/build.js        # renders 562 routes, 0 waiting
+node --test source/tests          # is the last checkpoint real?  expect: 658 passing
+node source/tools/build.js        # renders 563 routes, 0 waiting
 SITE_ORIGIN=https://<owner>.github.io/<repo> node source/tools/build.js   # the deployed shape
 node source/tools/serve.js --port 4180   # the site
 ```
@@ -166,13 +198,25 @@ the same 562 routes for an address that is not a domain root, and a document tha
 root instead of its own path is visible in the output with one `grep`. The live site is
 <https://dhbhensdadia.github.io/Chemipedia/>.
 
-And the four gates, from `workspace/tools/visual` after `npm install`:
+And the four gates, from `workspace/tools/visual` after `npm install` (the first two were re-run with
+`/atoms/` in their lists in Phase 14; the last two are Phase 15's to re-run, and `/atoms/` has to be
+added to their lists before they are believed):
 
 ```bash
-node audit-a11y.mjs         # 0 defects across 19 pages
-node audit-responsive.mjs   # 76 of 76 fit
+node audit-a11y.mjs         # 0 defects across 20 pages
+node audit-responsive.mjs   # 80 of 80 fit
 node audit-performance.mjs  # shift 0, load 38–41ms, no long task
 node audit-lighthouse.mjs   # accessibility 100, best-practices 100, seo 100
 ```
 
-Then open `workspace/progress/PHASE_LOG.md` at Phase 11 for the evidence behind each number.
+Then open `workspace/progress/PHASE_LOG.md` at Phase 11 for the evidence behind each number, and at
+Phase 14 for the feature's.
+
+The atom viewer's own audits run the same way, against a server on 4188:
+
+```bash
+node source/tools/build.js                 # the page is served from dist/
+node source/tools/serve.js --port 4188     # in another shell (background it)
+BASE=http://127.0.0.1:4188 node audit-atom.mjs        # 54 claims, the page itself
+BASE=http://127.0.0.1:4188 node audit-atom-scene.mjs  # 33 claims, the style guide driving the scene
+```

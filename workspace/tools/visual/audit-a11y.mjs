@@ -23,6 +23,7 @@ const PAGES = [
   "/elements/",
   "/elements/hydrogen/",
   "/elements/uranium/",
+  "/atoms/",
   "/properties/melting-point/",
   "/properties/orbital-configuration/",
   "/periodic-table/properties-and-states/",
