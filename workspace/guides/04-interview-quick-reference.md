@@ -1,8 +1,8 @@
 # Guide 4 — Interview quick reference
 
-> **Complete as of `v1.0.0`.** Every row names a real file and a real function, and the function name
-> is the one the code actually exports. If a row here and the code disagree, the code is right and
-> this file is a defect — fix it in the same commit.
+> **Complete as of `v1.0.1`, with the atom viewer on `feature/atom-3d`.** Every row names a real file
+> and a real function, and the function name is the one the code actually exports. If a row here and
+> the code disagree, the code is right and this file is a defect — fix it in the same commit.
 
 Two ways to use this. **Before an interview**, read the "Thirty-second pitch" and the top ten rows.
 **During preparation**, pick a question, open the file it names, and read the code until you can
@@ -20,7 +20,13 @@ explain it without the file.
 > markup that is already there. The trickiest parts — computing where each element sits, mapping a
 > numeric property onto a colour scale, and stepping a focus ring across a 118-cell grid — are
 > isolated in pure modules with unit tests. There are 482 tests, and four browser sweeps behind the
-> accessibility, responsive, performance and Lighthouse numbers."
+> accessibility, responsive, performance and Lighthouse numbers.
+>
+> On the branch that adds it: **563 pages and 658 tests**, and one more page — `/atoms/`, which draws
+> any element's atom in three dimensions. That one is hand-written WebGL2: matrices, a spherical
+> camera, mesh generation and a point distribution, all under `lib/` so they are testable in Node,
+> and a drawing layer proved by reading the pixels back out of the canvas. No library, still no
+> dependency, and the page a reader without WebGL sees is the element's own shell diagram."
 
 ## If asked "walk me through your architecture"
 
@@ -61,6 +67,13 @@ both. Full detail in `workspace/guides/02-tour-of-the-codebase.md`.
 | Where's the canonical address built? | `source/tools/site-origin.js` | `absoluteUrl(path)` over `SITE_ORIGIN`, defaulting to a reserved `.example` address |
 | Where are the design tokens? | `source/styles/tokens.css` | the only file allowed a literal colour, size, radius or duration |
 | Why is there only one theme? | `workspace/docs/ARCHITECTURE.md` | ADR-006 — light only, by decision |
+| Where is the 3D renderer? | `source/scripts/components/atom-view.js` | `createAtomView(canvas, options)` → `available()`, `setParticles()`, `setRings()`, `draw()`, `start()`, `stop()` |
+| Where is the 3D maths? | `source/scripts/lib/{matrix4,orbit-camera,primitive-geometry,point-sphere}.js` | `multiply`, `createOrbitCamera`, `sphereGeometry`, `ringGeometry`, `pointSphere` |
+| Where does an element become an atom? | `source/scripts/lib/atom-model.js` | `buildAtom({ record, protons, neutrons, electrons, scale })`, `neutronsFor(record)`, `placeElectrons()` |
+| What moves the electrons? | `source/scripts/components/atom-scene.js` | `createAtomScene({ view, tokens, atom, speed })` — the scene owns the clock, not the model |
+| Where does the atom viewer get its colours? | `source/styles/tokens.css` §21 via `getComputedStyle` | `atomScale(tokens)` and `tokenReader(doc)` in `components/atom-stage.js` |
+| How does an element page reach the viewer? | `source/scripts/pages/element-detail.js`, `components/atom-stage.js` | `elementViewerLink({ element })` writes `/atoms/#<slug>`; `elementFromFragment(hash, repository)` opens on it |
+| Why is the 3D written by hand? | `workspace/docs/ARCHITECTURE.md` | ADR-007 — raw WebGL2, no library, tokens as the palette |
 | Where's the dev server? | `source/tools/serve.js` | — |
 | Where does the data build script live? | `source/tools/build-data.js` | fetches, merges, verifies, **then** writes |
 | How do I find any file in this project? | `workspace/docs/MIND_MAP.md` | — |
@@ -112,13 +125,25 @@ ceiling is **derived** from the eleven group fills by `lowestAlphaForAA()` rathe
 test holds every fading token above it — because 0.9 of the ink felt fine and was 4.32:1.
 
 **"How do you test something visual?"**
-Unit tests cover the logic: 482, with nothing installed. Structure and appearance are checked by four
-sweeps in `workspace/tools/visual`, which drive the real Chrome through Playwright: an accessibility
-sweep over 19 pages, a responsive sweep at 375 / 768 / 1024 / 1440, a performance sweep that
-measures layout shift and long tasks on a cold cache, and Lighthouse over seven pages. Each exits
-non-zero on the defect it owns, so a phase can gate on them. That is how both of the defects I am
-proudest of finding were found — by measurement, not by looking. The full procedure is in
+Unit tests cover the logic: 482 on the published site, 658 on the branch that adds the atom viewer,
+with nothing installed. Structure and appearance are checked by sweeps in `workspace/tools/visual`,
+which drive the real Chrome through Playwright: an accessibility sweep over 20 pages, a responsive
+sweep at 375 / 768 / 1024 / 1440, a performance sweep that measures layout shift and long tasks on a
+cold cache, and Lighthouse over eight pages. Each exits non-zero on the defect it owns, so a phase can
+gate on them. That is how both of the defects I am proudest of finding were found — by measurement,
+not by looking. The viewer adds three of its own: they read the drawing buffer back out of the canvas
+and classify its pixels against the same tokens the renderer was handed. The full procedure is in
 `docs/TESTING_STRATEGY.md`.
+
+**"How do you test a WebGL renderer, then?"**
+By splitting it so that almost nothing needs a browser. Every awkward part — 4×4 matrices, the
+spherical camera, generating a sphere and a ring, spreading points evenly on a sphere, turning a
+record and three counts into positions — is a pure module under `lib/`, and each has unit tests that
+run in Node. What is left is the drawing layer, and that is where the interesting failure lives: a
+particle draw once used a vertex array that carried the per-particle buffers but not the sphere's own
+attributes, so every sphere collapsed to a point at its centre — **and every unit test passed**,
+because the calls were issued exactly as designed. Reading the pixels back found it. The lesson is in
+the tests now: the stub canvas holds the call sequence, and a browser audit holds the picture.
 
 **"What's the hardest bug you hit?"**
 Two, and both are specific. **The home page's 0.315 layout shift**: the shipped document held four
@@ -156,7 +181,7 @@ the 443 contrast failures it found had been in the palette since the design syst
 
 ## Things to be able to demonstrate live
 
-Four, in this order, because each one gets harder than the last:
+Five, in this order, because each one gets harder than the last:
 
 1. **Hover a legend chip** on the home page — the group isolates in the table. One attribute on one
    element; the sheet does the rest, and it dims the fill rather than the text so the labels stay
@@ -169,3 +194,8 @@ Four, in this order, because each one gets harder than the last:
 4. **Turn the script off and reload the home page**, then turn it back on and resize to 375px and
    scroll the table, then enable reduced motion. Shows the build-time rendering, the responsive work
    and the accessibility work — which is usually where a student project stops.
+5. **Open `/atoms/#uranium`**, drag the stage, then open `atom-view.js` and `atom-model.js` beside it.
+   Shows a real 3D renderer written without a library — one instanced draw call for the whole atom,
+   and the matrices, the camera and the geometry generation all as pure modules with tests. Then turn
+   the script off and reload: the same page is still a finished one, with the element's shell diagram
+   in place of the scene. That is the answer to "what happens when it does not work?"

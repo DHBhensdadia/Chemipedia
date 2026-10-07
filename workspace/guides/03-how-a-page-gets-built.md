@@ -15,7 +15,7 @@
    chrome and a placeholder for the page-specific content.
 4. **Build** — a plain Node script walks a list of routes. For each one it calls the family's
    `*Values()` function, fills the template's slots with the result, and writes a finished `.html`
-   file — 562 of them.
+   file — 563 of them.
 5. **Browser** — on the pages that have behaviour at all, the shipped JavaScript attaches it to the
    finished HTML: the table and its colour modes, the finder, the keyboard navigation. The markup is
    already there either way.
@@ -214,11 +214,42 @@ The table is the one component with real algorithmic content, so it is worth its
    a keypress lands. `lib/keyboard.js` itself is pure — no DOM — which is why the stepping is
    testable without a browser.
 
-### Step 8 — Verifying it
+### Step 8 — The one page that draws
+
+`/atoms/` is the only page whose content is a picture rather than text, and it keeps the same split:
+
+1. **At build time**, `atomsPageValues({ elements })` writes a finished page — a hero, the chosen
+   element's shell diagram from the component above, the counts in a sentence, and the whole bar: the
+   element chooser, three count fields with their own steppers, a speed, Shake, Reset view, Pause and
+   the legend. A reader with no scripting has the page; a reader with no WebGL2 keeps the diagram and is
+   told why; a reader who asked for reduced motion gets one still frame and a working Play control.
+   Nothing in that half knows what a shader is.
+2. **In the browser**, `startAtomStage(doc)` builds the scene: `createAtomView(canvas, …)` takes a WebGL2
+   context and compiles the two programs, `atom-scene.js` asks `atom-model.js` where every particle is
+   this frame, and the canvas is revealed by the first frame that is **actually drawn** — the diagram
+   steps aside only then.
+3. **The arithmetic is under `lib/`** — `matrix4.js`, `orbit-camera.js`, `primitive-geometry.js`,
+   `point-sphere.js`, `atom-model.js` — and none of it touches the DOM, which is why it is tested in
+   Node. The drawing modules can only be proved in a browser, so they are: `audit-atom.mjs` reads the
+   pixels the page painted and compares them with the token colours the renderer was handed, and the
+   scene audit does the same for all 118 elements on the style guide.
+4. **The fragment chooses the element.** `/atoms/#iron` is one document with an element named in it, so
+   the page reads `location.hash` at start-up — which is how every element page's one link into the
+   viewer lands on that element. A fragment naming no element leaves the page on the element it was
+   built for.
+5. **Its values are tokens, not literals.** The renderer reads `--atom-*` out of `tokens.css` at
+   runtime through `getComputedStyle`, because a graphics card cannot read a stylesheet. How the atom
+   looks is therefore a change to that one file.
+
+The rule this page exists to prove: an enhancement is allowed to be the most interesting code on the
+site, as long as the page without it is already a finished one.
+
+### Step 9 — Verifying it
 
 Per `workspace/docs/TESTING_STRATEGY.md`: run the unit tests (`node --test source/tests`), then run
-the four sweeps in `workspace/tools/visual` — accessibility over 19 pages, responsive at
-375 / 768 / 1024 / 1440, performance on a cold cache, and Lighthouse over seven pages — and compare
+the four sweeps in `workspace/tools/visual` — accessibility over 20 pages, responsive at
+375 / 768 / 1024 / 1440, performance on a cold cache, and Lighthouse over eight pages — plus the atom
+viewer's own three (`audit-atom.mjs`, `audit-atom-scene.mjs`, `audit-atom-renderer.mjs`), and compare
 against the reference at the widths that matter. Check the console. Then write down what you saw; each
 sweep exits non-zero on the defect it owns, so "it passed" is a measurement and not an impression.
 A page that has not been measured has not been verified — and the two defects this project is

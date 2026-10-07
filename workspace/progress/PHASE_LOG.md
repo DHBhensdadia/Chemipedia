@@ -30,6 +30,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
 | 13 | The atom model and the live scene (feature branch) | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`; not merged, not pushed |
 | 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`; not merged, not pushed |
+| 15 | Quality, delivery and the second reference's line (feature branch) | `IN_PROGRESS` | The gates and the documentation are done and committed; **the delivery — merge, push, Pages, live check, `v1.1.0` — is the author's step and has not happened** |
 
 ---
 
@@ -1784,6 +1785,124 @@ like any other.
 **Commits.** `861307d` the route, the page, the bar and the navbar item · `190a08b` the link from every
 element page into the viewer, the fragment it lands on, the keyboard and fragment claims in the browser
 audit, the two site-wide sweeps, and the split the line ceiling forced.
+
+## Phase 15 — Quality, delivery and the second reference's line
+
+**Goal:** close the feature the way Phase 11 closed the site — measured, documented, deployed, tagged.
+The measurement and the documentation are done; **the delivery is the author's step and has not
+happened.** Still on `feature/atom-3d`; nothing merged, nothing pushed, no tag.
+
+**15.1 — the last two gates, with the new page in their lists.** The accessibility and responsive
+sweeps took `/atoms/` in Phase 14; this phase added it to the other two and re-ran them.
+
+```
+page                                     accessibility  best-practices  performance  seo  (0–100)
+/atoms/                                            100             100           78  100
+Mean over 8 pages: accessibility 100, best-practices 100, performance 89, seo 100.
+
+Cold load, 1280px: worst layout shift 0, slowest load 35ms, 0 long task(s) in total.
+/atoms/      response 1  paint 44  DCL 24  load 25 ms  428 KB  shift 0  longtasks —
+```
+
+The page's performance score is the lowest of the eight sampled, and its diagnostics name the project's
+standing costs rather than the page: 92 KiB of unminified JavaScript, 41 KiB of unminified CSS and a
+chain of twelve stylesheets — the price of readable source with no bundler and one request per module
+(ADR-004), which the home page pays at 85 too. What the page's own code controls is clean: **total
+blocking time 0 ms, cumulative layout shift 0**, and a cold load of 25 ms. Performance stays recorded
+rather than gated, which is Phase 11's decision and stands.
+
+**15.2 — the page's own frame time, and what it is measured against.** The plan's last deliverable for
+`audit-atom.mjs` was the frame-time budget, and the honest way to measure a page is not against a
+number chosen in advance. The audit now takes the browser's own `requestAnimationFrame` timings over
+ninety frames **twice**: with the heaviest atom the published controls allow turning (oganesson, 413
+particles, 7 rings) and with the same page held still, counting long tasks in both windows.
+
+```
+  oganesson, 1280 x 800: median 16.70 ms, mean 16.61 ms, worst 16.80 ms over 90 frames, 0 long task(s)
+  the same page held still: median 16.70 ms, worst 16.70 ms
+```
+
+The page is vsync-bound and stays vsync-bound: the median frame with the heaviest atom turning is the
+median frame with nothing moving, and the worst frame in ninety is a tenth of a millisecond over it.
+That is a statement about the page, and deliberately not a re-measurement of the scene's own 0.258 ms
+(Phase 13). The audit now asks **57 questions**, and the run is recorded in `docs/research/05`.
+
+**15.3 — the documentation the plan names, and a second brand put under the scan.** `ARCHITECTURE.md`
+gains **ADR-007**: the options (a 3D library, a painted Canvas 2D, hand-written WebGL2), the choice,
+and the four rules that carry it — no library and no dependency; progressive enhancement with the
+canvas revealed only by a frame that was actually drawn; the palette read out of `tokens.css` at
+runtime because a graphics card cannot read a stylesheet; and the model pure while the scene owns the
+clock. Its consequences are stated where they belong, including the one that cost real time: **the
+drawing layer cannot be verified in Node**, which is why the feature carries three browser audits that
+read pixels back.
+
+`DESIGN_SYSTEM.md` gains the token group (§1.7 — 53 `--atom-*` values, and why a scene's palette is in
+the design system at all) and **§7, the rules for a dark stage inside a light page**: the stage owns the
+dark and nothing else does; nothing on it inherits a colour, because a link's colour is the site's ink
+and the site's ink is invisible here; the glass shows the scene behind it; and the stage is sized by
+the page rather than by the viewport. `BRAND_GUIDELINES.md` gains **§9**, the second reference — what
+we took (the idea of the page, the bar's placement, its parameters as numbers to compare against) and
+what never enters the repository (its palette, copy, dataset, assets, its other two pages, and its
+name). `DATA_SOURCES.md` gains **§7**: the viewer adds no data at all, and the one number it derives —
+the neutrons an element opens on — is an approximation with copper as its visible exception, tabulated
+with the isotopes' own counts beside it.
+
+All four guides and the codebase tour were audited against the source and corrected: the product
+summary now names the viewer, the tour's tree lists the four drawing modules and the page, the trace
+gains **Step 8 — the one page that draws**, the interview reference gains six rows and a fifth live
+demonstration (`/atoms/#uranium`, then the script off), and every stale count moved to the branch's
+own numbers. The verification for this is the same one Phase 11 used and it is mechanical: every file
+named in the guides, the README and the mind map is resolved against the tree, and the one name that
+resolves nowhere is `styles/theme.css` — which ADR-006 names as the file that deliberately does *not*
+exist.
+
+**And the second reference's brand is now under the scan.** Phase 14 verified by hand that the second
+reference's name appears nowhere under `source/`. `tests/brand/brand.test.js` now holds **both** names
+(the second's spellings folded into one loose pattern), so the check that says "we verified it" is the
+same check that runs before every commit — which is what the first reference's name has had since
+Phase 2, and the asymmetry was a defect waiting to happen.
+
+**15.4 — the delivery. Not done, and not this agent's to do.** Merging to `main`, pushing, the Pages
+run, the live check and `v1.1.0` are the author's step (`docs/GIT_WORKFLOW.md` §8), and the phase's
+exit criteria are met only by the order the plan gives: the merge `--no-ff` from `feature/atom-3d`, the
+push, a green Pages run, the live `/atoms/` verified in a browser rather than by `curl`, and the tag on
+the close-out commit. **Everything needed for that is committed and green; the author's word is what
+is outstanding.**
+
+**Phase 15 verification (so far)**
+
+```
+[✓] node --test source/tests ................ pass  658 pass, 0 fail — including the brand scan over
+                                              both references' names
+[✓] node --check on every changed module .... pass  every module under source/, checked individually
+[✓] All four gates with the new page in them  pass  accessibility 0 defects / 29 informational across
+                                              20 pages; responsive 80 of 80; performance worst shift 0,
+                                              slowest load 35 ms, 0 long tasks; Lighthouse 100 / 100 /
+                                              100 with performance 78 recorded and not gated
+[✓] Frame time recorded ..................... the heaviest atom the published controls allow holds the
+                                              browser's 16.70 ms cadence exactly, worst frame 16.80 ms
+                                              over ninety, no long task — measured against the same
+                                              page held still, exit 0
+[✓] The mind map has no missing file ........ 214 files under source/, the only unlisted ones are macOS
+                                              .DS_Store; every path named in the guides, the README
+                                              and the mind map resolves to a real file
+[✓] No document contradicts another .......... the counts in the README, the guides, the phase log and
+                                              this state file were all re-read against the build's own
+                                              output (563 routes) and the suite's own count (658)
+[✓] Deliberate deviations recorded ............ none added in this phase; the four standing deferrals and
+                                              the over-ceiling files are where they were
+[✓] docs/MIND_MAP.md updated .................. six rows: the brand scan, the four documents that grew
+                                              a section, the measurements file and the map's own answer
+                                              table
+[—] The live page verified in a browser ...... **not done — it cannot be, until the branch is merged
+                                              and pushed.** Recorded as outstanding rather than as
+                                              passed
+[—] v1.1.0 tagged ............................ **not done, by design.** The tag belongs on the close-out
+                                              commit of the delivery, after the live check
+[✓] RUN_STATE.md + HANDOFF.md updated ......... in this commit
+```
+
+**Commits.** This work item's commit, and the delivery commits the author makes after it.
 
 ---
 

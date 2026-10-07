@@ -9,7 +9,10 @@ element has its own page: what it is, how it is pronounced, its properties, wher
 what we use it for, where it came from, and who found it. Around that centrepiece sit four alternate
 views of the same table (states, orbital blocks, electronegativity, and the history of when elements
 were discovered), a searchable index of all 118 elements, eleven group pages, a glossary of 418
-terms, and a live temperature converter.
+terms, a live temperature converter, and **an atom viewer**: `/atoms/` draws the chosen element in
+three dimensions — a nucleus of protons and neutrons, electrons orbiting on their shells, a camera you
+can swing — with a translucent bar at the bottom of the stage driving it, and each element page linking
+straight to its own atom.
 
 That is the whole product. There is nothing else, and that is on purpose.
 
@@ -38,6 +41,13 @@ favicon, its own prose, and its own data. The result is intended to read as a si
 design language* with the reference, not as a copy of it. The boundary is written down explicitly in
 `workspace/docs/BRAND_GUIDELINES.md` §2, and enforced automatically — a brand scan runs before every
 phase-completion commit and a single match blocks it.
+
+**One page comes from a second source.** The atom viewer was asked for against a different site, whose
+whole subject is a three-dimensional atom. What that site does — its scene parameters, its palette, its
+bar's geometry — was measured and recorded in `workspace/docs/research/04-reference-atom-viewer-audit.md`,
+and the rule is the same one: **measure at will, ship nothing.** Its palette, copy, data and assets are
+not here, its `/periodic-table` and `/statistics` pages were explicitly out of scope, and its name is
+now in the same brand scan that forbids the first reference's — see `BRAND_GUIDELINES.md` §9.
 
 ## Two sections that are deliberately missing
 
@@ -71,8 +81,14 @@ a laptop, with a keyboard only, and with reduced motion enabled.
 Every one of those journeys is checked before the project closes. The checklist is in
 `workspace/docs/TESTING_STRATEGY.md` §7.
 
-**It is delivered.** `v1.0.0` closes all twelve phases: 562 pages built, 482 tests passing with
-nothing installed, and four gates green — 0 accessibility defects across 19 pages, 76 of 76
-page-and-width combinations fitting their viewport, a worst layout shift of 0, and Lighthouse at 100
-for accessibility, best-practices and SEO. The evidence behind every number is in
+**It is delivered.** `v1.0.1` closes all twelve phases of the site: 562 pages built when it was
+published, and four gates green — 0 accessibility defects across 19 pages, 76 of 76 page-and-width
+combinations fitting their viewport, a worst layout shift of 0, and Lighthouse at 100 for
+accessibility, best-practices and SEO.
+
+**The atom viewer is the next release**, built in four more phases on `feature/atom-3d`: the page above,
+plus the hand-written WebGL2 underneath it (ADR-007). On that branch the build writes **563 routes**, the
+suite holds **658 tests**, the sidebar numbers are **0 defects across 20 pages** and **80 of 80**
+page-and-width combinations, and the page holds the browser's 16.70 ms frame cadence with the heaviest
+atom the controls allow turning. The evidence behind every number is in
 `workspace/progress/PHASE_LOG.md`; `workspace/RUN_STATE.md` is where to resume.
