@@ -1638,7 +1638,9 @@ of 618 particles costs no more. The full run is recorded in `docs/research/05-at
 [—] Accessibility tree reviewed ............. not applicable: this phase adds no page. The guide's new controls
                                               are native labels, selects and inputs, and the page's own tree is
                                               Phase 14's
-[✓] Keyboard traversal ...................... every new control is a native select, number input, range or button
+[✓] Keyboard traversal ...................... measured rather than assumed: tabbing through the guide reaches all
+                                              nine controls in document order, and typing 26 into the protons field
+                                              turns the stage into iron (38 particles, 2 rings, no mouse involved)
 [✓] Line ceiling ............................ every new file under 400 lines; the 689-line scene test was split
                                               into three files over a shared harness rather than trimmed
 [—] 1280 / 768 / 375 px screenshot vs reference  not applicable: the layer is not a page and this phase
