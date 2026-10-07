@@ -2,9 +2,9 @@
 
 **Written:** 2026-10-07 · **By:** the session that answered the author's review of the built atom page —
 a second, closer reading of the reference's own scene graph, and the geometry and light that came out of
-it, the defect the author found by using the site, and the field they then asked for — on
-`feature/atom-3d` · **After commit:** `c3ff53a` (the atom and its stage are `cd18435`), with the
-author's authorized delivery in flight
+it, the defect the author found by using the site, the field they then asked for, and **the delivery
+itself** · **After commit:** the release close-out, tagged `v1.1.0` (`ad58ee2` is the merge, `cd18435`
+the atom and its stage, `c3ff53a` the head a swap used to leave behind)
 
 Rewrite this file at the end of every session. It must never be older than the last commit. The two
 sections below were rewritten after the author's second review — the navigation defect and the stage's
@@ -15,9 +15,9 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What exists right now
 
-**The site is live** at <https://dhbhensdadia.github.io/Chemipedia/> and is untouched by this branch.
-**The atom viewer is finished, measured and documented, and it is not delivered** — it lives on
-`feature/atom-3d`, and the delivery is the author's step.
+**The site is live at `v1.1.0`** — <https://dhbhensdadia.github.io/Chemipedia/> — and the atom viewer
+is published in it: merged, pushed, deployed, verified in a browser and tagged. `feature/atom-3d` is
+deleted; `main` is the released line.
 
 - `/atoms/` draws any element's atom in three dimensions: a nucleus, electrons on their shells, a
   camera a reader can swing, and a translucent bar pinned to the bottom of the stage driving it. It is
@@ -62,15 +62,14 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. **The work is committed; the delivery is what remains, and the author authorized it in this
-   session.** In the plan's order: merge `feature/atom-3d` into `main` with `--no-ff`, push, watch the
-   Pages run go green, verify `/atoms/` **in a browser** at
-   <https://dhbhensdadia.github.io/Chemipedia/atoms/> with the same checks the publish entry used, and
-   tag `v1.1.0` on the close-out commit. **A later delivery still waits for the author's word**, and
-   never move an existing tag.
-3. If the author asks for something else, the feature's own state is in `RUN_STATE.md`, and the phase
-   log's Phase 15 entry records what was measured and what was not.
-4. Before believing anything about the deployment, build for the address it actually lives at:
+2. **Nothing is outstanding on the plan.** The feature's four phases are `COMPLETE`, the site is
+   published at `v1.1.0`, the Pages run was green and the live page was verified in a browser. The
+   next work item is whatever the author asks for; the known remainder is the standing deferrals and
+   the over-ceiling files below.
+3. **A later delivery still waits for the author's word** (`docs/GIT_WORKFLOW.md` §8), and an existing
+   tag is never moved: `v1.1.0` is on the close-out commit, `v1.0.1` on `bd338dd`, `v1.0.0` on
+   `e035c6f`.
+4. Before believing anything about a deployment, build for the address it actually lives at:
    `SITE_ORIGIN=https://dhbhensdadia.github.io/Chemipedia node source/tools/build.js`, then grep
    `dist/` for a `href="/` that is not `href="/Chemipedia/`. A local root build cannot catch this class
    of defect, which is why it reached production once.
@@ -130,16 +129,15 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 - **Attribution.** Identity is `Devansh <dhbhensdadia@gmail.com>`. Never add a co-author or a
   generated-with footer. Commit with `git commit -F -` and a heredoc, and stage by explicit path.
 - **A file that is added or renamed must appear in `docs/MIND_MAP.md` in the same commit.** The last
-  completeness check found **214** files under `source/`, with only macOS `.DS_Store` unlisted —
+  completeness check found **216** files under `source/`, 0 unlisted —
   `scripts/router/page-head.js`, `scripts/components/atom-field.js` and their tests are the newest
   entries.
 
 ## Anything deliberately left in a half state
 
-One thing. **The delivery is in flight** — merging, pushing, the Pages run, the live check and `v1.1.0`
-were authorized by the author in this session and are the last step; the plan's exit criteria for the
-last phase are met only by that order. Nothing else on the plan is outstanding, and no half-finished
-code is left in the tree.
+**Nothing is half done.** The tree is clean, the branch is merged into `main` and deleted, the site is
+published at `v1.1.0`, and the working tree holds no uncommitted change. The deferrals and the
+over-ceiling files below are recorded rather than in flight.
 
 `v1.0.0` stays on `e035c6f` — the release whose publication exposed the subpath defect — and `v1.0.1`
 is on `bd338dd`, which fixes it; neither tag was moved.

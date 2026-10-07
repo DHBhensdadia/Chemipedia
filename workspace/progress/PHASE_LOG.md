@@ -27,10 +27,10 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 10 | Calculators and secondary pages | `COMPLETE` | `df4d60e`..`b9999d3`, plus the close-out commit |
 | 11 | Quality, accessibility, performance, delivery | `COMPLETE` | `f1cef8e`..`ec80c43`, plus the close-out commit; tagged `v1.0.0` |
 | Publish | The push, and the deployment it corrected | `COMPLETE` | `e035c6f` pushed as the release, then `bd338dd` (the fix), plus the close-out commits; tagged `v1.0.1` |
-| 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
-| 13 | The atom model and the live scene (feature branch) | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`; not merged, not pushed |
-| 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`; not merged, not pushed |
-| 15 | Quality, delivery and the second reference's line (feature branch) | `IN_PROGRESS` | The gates and the documentation are done and committed, as is the work the author's review asked for; **the delivery — merge, push, Pages, live check, `v1.1.0` — was authorized by the author on 2026-10-07 and is in flight** |
+| 12 | The renderer: WebGL2 without a library | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
+| 13 | The atom model and the live scene | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
+| 14 | The page, the bar and the navigation | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
+| 15 | Quality, delivery and the second reference's line | `COMPLETE` | `cd18435`, `c3ff53a`, `529fbe0` on `feature/atom-3d`, merged into `main` as `ad58ee2` and pushed; Pages `37638178700` green; the live page verified in a browser; tagged `v1.1.0` |
 
 ---
 
@@ -1790,8 +1790,8 @@ audit, the two site-wide sweeps, and the split the line ceiling forced.
 
 **Goal:** close the feature the way Phase 11 closed the site — measured, documented, deployed, tagged.
 The measurement and the documentation are done, as is the review change, the swap's head fix and the
-field; **the delivery was authorized by the author on 2026-10-07 and is in flight.** Still on
-`feature/atom-3d`; nothing merged, nothing pushed, no tag yet.
+field, and **the delivery is done** on 2026-10-07: merged, pushed, deployed, verified live in a browser
+and tagged `v1.1.0`. The branch is deleted; `main` is the released line.
 
 **15.1 — the last two gates, with the new page in their lists.** The accessibility and responsive
 sweeps took `/atoms/` in Phase 14; this phase added it to the other two and re-ran them.
@@ -1909,13 +1909,36 @@ accessibility defects across 20 pages, 80 of 80 responsive checks, worst layout 
 pass, 0 fail** (six new: the packing against every record, the ring spread, the two planes, and the two
 new matrix helpers).
 
-**15.4 — the delivery. Authorized, and in flight.** Merging to `main`, pushing, the Pages run, the live
-check and `v1.1.0` were withheld until the author asked for them (`docs/GIT_WORKFLOW.md` §8), and the
-word was given on 2026-10-07 after the author had seen the page and asked twice more for it to look
-like the reference. The phase's exit criteria are met only by the order the plan gives: the merge
-`--no-ff` from `feature/atom-3d`, the push, a green Pages run, the live `/atoms/` verified in a browser
-rather than by `curl`, and the tag on the close-out commit. **Everything needed for that is committed
-and green** — `cd18435` the atom and its stage, `c3ff53a` the head a swap used to leave behind.
+**15.4 — the delivery. Done, on the author's word.** Merging to `main`, pushing, the Pages run, the
+live check and `v1.1.0` were withheld until the author asked for them (`docs/GIT_WORKFLOW.md` §8); the
+word was given on 2026-10-07, after the author had seen the page and asked twice more for it to look
+like the reference. The order the plan gives was followed: `feature/atom-3d` merged `--no-ff` into
+`main` as `ad58ee2`, pushed (`a22c0d2..ad58ee2`), the Pages workflow **`37638178700` succeeded** — build
+and deploy, with the two already-recorded Node 20 deprecation notices and nothing else — and the branch
+was deleted (`GIT_WORKFLOW.md` §6).
+
+**Verified before it was pushed, for the address it actually lives at.** The delivery build was
+rendered with `SITE_ORIGIN=https://dhbhensdadia.github.io/Chemipedia` and then swept: every `href`,
+`src`, `action`, `content` and CSS `url()` in **564 documents and 32 stylesheets** was checked, and
+**0 URLs point outside `/Chemipedia/`** — the class of defect that reached production once, which is
+why the sweep is a step rather than a hope. Six browser audits on that same build held: the page's own
+**57** claims, the scene's **33**, the renderer's **25**, accessibility **0 defects and 29 informational
+lines across 20 pages**, responsive **80 of 80**, and performance **worst layout shift 0, 38 ms slowest
+cold load, 0 long tasks**, with `/atoms/` at 463 KB and 28 ms. Lighthouse, run for the record:
+**accessibility 100, best-practices 100, SEO 100 on all eight pages, performance mean 87** — `/atoms/`
+recorded at 68 on this run against 78 on the earlier one, which is the run-to-run spread this project
+has recorded since Phase 11 and not a gate.
+
+**And live, in a browser, on the published site.** `/atoms/` answers 200 under `/Chemipedia/`; the
+canvas replaces the shell diagram and is not hidden; the accessible name on it states the atom —
+*Carbon-12: 6 protons, 6 neutrons and 6 electrons, with no charge* — with the counts in words beside
+it; 12 stylesheets and one head script arrive; and the console and the network are clean, **0 console
+messages and 0 failed or 4xx requests**. The fix the author asked for last was verified the way the
+defect was found: a real click from `/periodic-table/properties-and-states/` to `/elements/` leaves the
+leaving page's three sheets behind, adds the two the arriving page declares, and lands on the **same
+11 stylesheets, the same measured styles** — a four-column grid, the card link flex in white at a 2px
+radius, the symbol at 23.2px and weight 700 — **and the same screenshot** as a full load of that page:
+one hash, `757dc410977ae08e`, for both.
 
 **Phase 15 verification (so far)**
 
@@ -1931,26 +1954,29 @@ and green** — `cd18435` the atom and its stage, `c3ff53a` the head a swap used
                                               browser's 16.70 ms cadence exactly, worst frame 16.80 ms
                                               over ninety, no long task — measured against the same
                                               page held still, exit 0
-[✓] The mind map has no missing file ........ 214 files under source/, the only unlisted ones are macOS
-                                              .DS_Store; every path named in the guides, the README
-                                              and the mind map resolves to a real file
+[✓] The mind map has no missing file ........ 216 files under source/, 0 unlisted; every path named in
+                                              the guides, the README and the mind map resolves to a
+                                              real file
 [✓] No document contradicts another .......... the counts in the README, the guides, the phase log and
                                               this state file were all re-read against the build's own
-                                              output (563 routes) and the suite's own count (658)
-[✓] Deliberate deviations recorded ............ none added in this phase; the four standing deferrals and
-                                              the over-ceiling files are where they were
-[✓] docs/MIND_MAP.md updated .................. six rows: the brand scan, the four documents that grew
-                                              a section, the measurements file and the map's own answer
-                                              table
-[—] The live page verified in a browser ...... **not done — it cannot be, until the branch is merged
-                                              and pushed.** Recorded as outstanding rather than as
-                                              passed
-[—] v1.1.0 tagged ............................ **not done, by design.** The tag belongs on the close-out
-                                              commit of the delivery, after the live check
+                                              output (563 routes) and the suite's own count (681)
+[✓] Deliberate deviations recorded ............ the two the field and the review added, plus the four
+                                              standing deferrals and the over-ceiling files
+[✓] docs/MIND_MAP.md updated .................. six rows for the six new files, plus the rows for the
+                                              modules they came out of and the brand scan
+[✓] The delivery build holds the URL law ..... 564 documents and 32 stylesheets, 0 URLs outside
+                                              /Chemipedia/
+[✓] The live page verified in a browser ....... /atoms/ answers, draws, and is clean; a live click from
+                                              the table view to the elements index lands on the same
+                                              11 sheets, the same styles and the same screenshot as a
+                                              full load (hash 757dc410977ae08e)
+[✓] v1.1.0 tagged ............................ on the close-out commit, after the live check
 [✓] RUN_STATE.md + HANDOFF.md updated ......... in this commit
 ```
 
-**Commits.** This work item's commit, and the delivery commits the author makes after it.
+**Commits.** `cd18435` the atom and its stage · `c3ff53a` the head a swap used to leave behind ·
+`529fbe0` the documentation · `ad58ee2` the merge into `main`, pushed · the close-out commit, tagged
+`v1.1.0`.
 
 ---
 
