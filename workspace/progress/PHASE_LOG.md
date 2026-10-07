@@ -1650,7 +1650,7 @@ of 618 particles costs no more. The full run is recorded in `docs/research/05-at
 [✓] RUN_STATE.md + HANDOFF.md updated ....... in this commit
 ```
 
-**Commits.** `c3b2aaf` the point distribution · `7223652` the model · `b1e7761` the scene · and this one,
+**Commits.** `c3b2aaf` the point distribution · `7223652` the model · `b1e7761` the scene · `3cf6661`,
 which drives both on the guide, records the numbers and closes the phase.
 
 ---

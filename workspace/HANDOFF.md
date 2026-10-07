@@ -2,7 +2,7 @@
 
 **Written:** 2026-10-07 · **By:** the session that built the atom model and its live scene on
 `feature/atom-3d` — Phase 13 of the feature, and the first picture of a real element · **After commit:**
-the close-out commit on `feature/atom-3d`
+`3cf6661` on `feature/atom-3d`
 
 Rewrite this file at the end of every session. It must never be older than the last commit.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
