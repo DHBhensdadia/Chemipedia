@@ -348,6 +348,35 @@ nothing about a machine other than this one. It also says nothing about *feel* �
 at a pleasant rate is a judgement, and the recorded answer is the token (`--atom-orbit-speed`), not a
 number here.
 
+## After the review — the same three audits, re-run
+
+The author's review of the built page asked for a closer copy of the reference, which changed the
+picture's geometry and its shading (the numbers are `docs/research/04` §6). What matters *here* is that
+the drawing did not get slower: the sphere shader gained a hemisphere light, a specular highlight and a
+rim, the rings gained a matrix of their own per shell, and the rings are now drawn after the particles
+rather than before them.
+
+```
+  Carbon · C-12 · 18 particles and 2 orbits · 3 draw calls · 0.10 ms in the layer, 0.17 ms averaged
+  Oganesson · Og-264 · 382 particles and 7 orbits · 8 draw calls · 0.10 ms in the layer, 0.10 ms averaged
+  browser frames: median 16.70 ms, mean 16.50 ms, worst 16.80 ms over 90 frames
+  ok   twenty times the particles paint more of the stage (17041 lit pixels against 1919)
+```
+
+The call counts are unchanged — one instanced call for every particle and one per ring, eight for the
+heaviest atom under the reference's controls — and the layer's own last-frame cost is still a tenth of a
+millisecond. The lit-pixel counts moved a great deal — this reading says 17041 against 1919, where Phase 13's
+recorded 7848 against 2953 — and that is the *picture* changing rather than the cost: a bigger atom on a
+closer camera, an electron that now carries a glow, and a sky over a ground instead of one flat floor of
+light.
+
+**The three browser audits, after the change.** `audit-atom.mjs` **57 claims held, exit 0, 0 console
+messages**; `audit-atom-scene.mjs` **33 held**; `audit-atom-renderer.mjs` **25 held, "every claim
+held"**. The site-wide sweeps in the same build: accessibility **0 defects** across 20 pages, responsive
+**80 of 80**, and a cold load of 40 ms at 1280 px with a worst layout shift of 0. Those are the
+readings of the build the branch ends on, taken again after the last change to the layer — the split of
+`atom-orbit.js` out of `atom-model.js`, which is code motion and a module the page fetches.
+
 **The site's own sweeps, with the page in them.** The four gates Phase 11 built now cover `/atoms/`,
 and the numbers are recorded because a gate is only a gate with its readings written down:
 
@@ -355,10 +384,10 @@ and the numbers are recorded because a gate is only a gate with its readings wri
 |---|---|---|
 | Accessibility (own sweep) | — | 0 defects, 29 informational lines across **20** pages |
 | Responsive | — | **80 of 80** page-and-width combinations at 375 / 768 / 1024 / 1440 |
-| Performance (cold load) | response 1 ms, paint 44 ms, DCL 24 ms, load 25 ms, 428 KB, layout shift **0**, 0 long tasks | worst shift 0, slowest load 35 ms across seven pages |
+| Performance (cold load) | response 1 ms, paint 40 ms, DCL 29 ms, load 29 ms, 442 KB, layout shift **0**, 0 long tasks | worst shift 0, slowest load 40 ms across seven pages |
 | Lighthouse | accessibility **100**, best-practices **100**, SEO **100**, performance **78** | mean over eight pages: 100 / 100 / 100 / 89 |
 
-The 428 KB is the largest payload of any sampled page and it is the element data the bar's chooser
+The 442 KB is the largest payload of any sampled page and it is the element data the bar's chooser
 reads — 118 records, fetched once, the same file every other page reads (`docs/DATA_SOURCES.md` §7:
 the feature added no data of its own). Lighthouse's performance score for the page is **78**, the
 lowest of the eight, and its diagnostics name the reasons rather than the page: 92 KiB of unminified

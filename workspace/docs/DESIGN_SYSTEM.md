@@ -208,18 +208,24 @@ this keeps is the project's oldest one, applied where it is hardest: how the ato
 this file and never to a shader, a buffer or a page.
 
 ```css
---atom-stage: #08211f;        /* deep pine: darker than --ink, so the page around it reads as paper */
+--atom-stage: #0d2b28;        /* deep pine: darker than --ink, so the page around it reads as paper */
 --atom-stage-height: 34rem;
+--atom-grid-line: #1c423b;  --atom-grid-pitch: 28;  --atom-grid-major: 4;   /* the field's grid */
+--atom-grid-major-strength: 1.9;  --atom-grid-fade: 0.55;
 --atom-proton:  #e57860;      /* the table's noble-gas coral, tuned for a dark ground */
 --atom-neutron: #cfc5bc;      /* the site's own warm rule grey */
---atom-electron:#a6c6d5;      /* the non-metals' pale blue */
+--atom-electron:#7fd2e8;      /* the non-metals' pale blue, raised to carry a glow */
 --atom-orbit: #d7e6e2;  --atom-orbit-opacity: 0.18;  --atom-orbit-tube: 0.007;
---atom-nucleon-radius: 0.2;   --atom-nucleus-packing: 1.5;   --atom-electron-radius: 0.1;
---atom-orbit-base: 2;         --atom-orbit-step: 1.2;        --atom-orbit-speed: 0.9;
+--atom-nucleon-radius: 0.2;   --atom-nucleus-packing: 0.9;   --atom-electron-radius: 0.1;
+--atom-orbit-base: 2;  --atom-orbit-step: 1.2;  --atom-orbit-spread: 0.15;  --atom-orbit-speed: 0.9;
 --atom-spin: 0.16;  --atom-shake-speed: 6;  --atom-shake-decay: 1.6;
---atom-camera-distance: 17;   --atom-camera-fov: 50;         --atom-drag-sensitivity: 0.01;
---atom-bar-fill: rgba(8, 33, 31, 0.62);  --atom-bar-blur: 14px;  --atom-bar-radius: 1.25rem;
---atom-bar-ink: #eef4f2;  --atom-on-particle: #10201f;  --atom-focus: #ffd9a0;  /* …53 in all */
+--atom-light-direction: 10 10 5;   --atom-light-strength: 0.85;
+--atom-light-sky: #ffffff;  --atom-light-ground: #bbbbbb;  --atom-ambient: 0.75;
+--atom-light-roughness: 0.4;  --atom-light-metalness: 0.2;  --atom-light-specular: 0.5;
+--atom-camera-distance: 13.1;  --atom-camera-fov: 50;  --atom-drag-sensitivity: 0.01;
+--atom-bar-fill: rgba(9, 34, 31, 0.55);  --atom-bar-blur: 15px;  --atom-bar-radius: 0.75rem;
+--atom-bar-glow: rgba(127, 210, 232, 0.06);  --atom-bar-glow-radius: 40px;
+--atom-bar-ink: #eef4f2;  --atom-on-particle: #10201f;  --atom-focus: #ffd9a0;  /* …67 in all */
 ```
 
 The three particle colours are this design system's own family rather than a new palette: the coral
@@ -228,10 +234,30 @@ the scene and tuned for a dark ground, where a pale group colour that earns its 
 either mud or a glare. The second reference's own values are recorded in
 `docs/research/04-reference-atom-viewer-audit.md` precisely so that they are not shipped by accident.
 
+**The light is three tokens and not one.** A surface takes a sky over a ground (`--atom-light-sky`,
+`--atom-light-ground`, `--atom-ambient`) plus one directional light (`--atom-light-strength`,
+`--atom-light-direction`), and its highlight's width and tint come from a roughness and a metalness the
+same way a physical material's would. The reason is the same one the rest of this system runs on: the
+difference between a sphere that looks like a dark disc with a bright side and one that looks like a
+sphere *is* a design decision, so it is declared here — at 0.4 roughness and 0.2 metalness, which are
+the reference's own numbers — rather than buried in a shader.
+
+**The field is five tokens, and it is drawn rather than styled.** `--atom-grid-line` is the line's colour
+written as it comes out of the shader rather than as a line over the field, because the renderer mixes
+towards one colour and because the pixel audits have to be able to name a pixel as the panel's rather
+than the scene's; `--atom-grid-pitch` is CSS pixels between lines, multiplied by the surface's own ratio
+in the pass so the grid is the same size on any display; `--atom-grid-major` and
+`--atom-grid-major-strength` are the stronger rule every fourth line; and `--atom-grid-fade` is how much
+darker the field goes towards the corners. The reference draws the same idea as a page pattern behind a
+transparent canvas; ours is the scene's own first draw, because a canvas transparent enough to show a
+stylesheet through it cannot also blend a translucent ring into the field — which is measured, and is
+recorded in `docs/research/05-atom-renderer-measurements.md`.
+
 The rest of the group is geometry, motion and glass in the units the renderer works in — radii and
 orbit distances in the atom's own scale, angles in radians, mesh detail as segment counts — followed by
 the bar's measured glass values. Nothing here is a colour chosen twice: the bar's fill **is** the
-stage's colour carried as an alpha, so the glass shows the scene behind it.
+stage's colour carried as an alpha, so the glass shows the scene behind it, and its halo is the
+electron's own hue at six percent rather than the reference's cyan.
 
 ## 2. Base layer — `source/styles/base.css`
 

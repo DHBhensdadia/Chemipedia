@@ -31,20 +31,23 @@ The scene's configuration, read from the bundle that declares it:
 
 | Parameter | Value |
 |---|---|
-| Model scale | `1.35`; the whole model group is scaled by it |
+| Model scale | `1.35`, and it is **baked into every radius** rather than carried by the group: the nucleon's sphere is `0.2 × 1.35`, the electron's `0.1 × 1.35`, the ring's tube `0.005 × 1.35`, the ring's radius `shellDistance × 1.35`. The model group itself carries a rotation and no scale |
 | Nucleon placement | Points on a **Fibonacci sphere** (golden angle `π(3−√5)`), one point per proton and neutron, at radius `clusterRadius`; the order is shuffled so the two colours are mixed rather than split into halves |
+| Cluster radius | `0.2 × 1.35 × ∛(nucleonCount) × 0.9` — that is, **0.9 nucleon radii per cube root of the count**, so the nucleons *overlap* rather than merely touching: on a shell of `3.27 r` with 48 spheres of radius `r`, each sphere's share of the surface is a circle of `0.94 r` |
 | Nucleon radius | `0.2 × modelScale` = `0.27`, a 32-segment sphere |
 | Nucleon material | Standard, roughness `0.4`, metalness `0.2` |
 | Proton colour | `#ff554d` (red-orange) |
 | Neutron colour | `#aaaaaa` (grey) |
-| Nucleus scale factor | `0.9` |
-| Orbit rings | One torus per shell, radius = the shell's distance, tube `0.005 × modelScale`, basic material, white at `opacity 0.15` |
-| Shell distances | `[2, 3.2, 4.4, 5.6, 6.8, 8, 9.2]` — seven, evenly spaced by `1.2`, matching the seven shells the data's electron configurations reach |
+| Nucleus scale factor | `0.9`, and it scales the *cluster's own radius* and nothing else |
+| Orbit rings | One torus per shell, in the shell's own plane: `torusGeometry(ringRadius, 0.005 × 1.35, 16, 64)` — sixteen segments around the tube, sixty-four around the ring — in `meshBasicMaterial`, white, double-sided, `opacity 0.15`. **Basic means unlit**: the rings take no light at all and are the same brightness everywhere |
+| Ring radius | `shellDistance × modelScale × (1 + 0.15 × clusterRadius)` — the whole ladder is carried outward by a share of the nucleus' own radius, which is how a heavier atom's rings stay around its heavier nucleus |
+| Shell distances | `[2, 3.2, 4.4, 5.6, 6.8, 8, 9.2]` — seven, evenly spaced by `1.2`, matching the seven shells the data's electron configurations reach; past the seventh, each next ring is `1.2 ×` the last rather than `+ 1.2` |
+| Shell planes | **One plane per shell.** Each shell is a group with its own rotation, holding its ring and its electrons: shell 1 `(π/2, 0, 0)`, shell 2 `(0, 0, 0)`, shell 3 `(π/4, π/4, 0)`, and shell *k* from the fourth on `((k−3)g, (k−3)g/2, (k−3)g/4)` with `g` the golden angle. Rings in one plane read as a plate with dots on it; these read as an atom |
 | Electron | Sphere of `0.1 × modelScale` = `0.135`, 16 segments, emissive `#33ccff` at intensity `0.5` |
-| Electron motion | Each electron sits in *its ring's plane* at `(cos θ, sin θ, 0)` and advances `Δ × speed` per frame; the phase is randomised once per mount |
-| Camera | Perspective, `fov 50`, at `(0, 5.6, 16.8)`, orbit controls with damping |
-| Lights | Hemisphere light, sky white / ground `#bbbbbb`, intensity `1`; one directional light, intensity `1`, at `(10, 10, 5)` |
-| Model rotation | Rotated on an axis by a velocity that decays `× 0.99` per frame — which is what "Shake Atom" feeds |
+| Electron motion | Each electron sits in *its ring's plane* at `(cos θ, sin θ, 0)` — the plane the torus is generated in — and advances `Δ × speed` per frame; the phase is randomised once per mount, and the ring's own angular speed falls off as `1/(k)` down the shells |
+| Camera | Perspective, `fov 50`, at `(0, 5.6, 16.8)` — `17.71` from the target, and half the frame's height at the target's depth is `17.71 · tan 25° = 8.258` — with orbit controls and damping |
+| Lights | Hemisphere light, sky white / ground `#bbbbbb`, intensity `1`; one directional light, intensity `1`, at `(10, 10, 5)`. three.js carries a hemisphere light's up direction *into the camera's frame*, so the sky is the top of the picture rather than the top of the world |
+| Model rotation | The group opens at `Euler(π/4, π/0.6, 0)`, which as a single turn is about `(0.5525, −0.7701, −0.3190)` by `1.2867` radians. It then turns only while a velocity lasts, decaying `× 0.99` per frame — which is what "Shake Atom" feeds (a shake sets a random axis and `10 + 8·random` radians a second) |
 | Speed | A slider over `1…100` whose midpoint (`50`) is the reference's normal speed; `speedConstant: 1.5π` scales it |
 
 **What this tells us.** The model is a Bohr-style picture, not a quantum one: shells are rings, one
@@ -115,3 +118,89 @@ shell diagram the element pages already draw, built at build time, so the page i
 - The palette lives in `tokens.css` like every other design value, and the renderer **reads it from
   the token layer at runtime** rather than carrying hex literals of its own. That keeps the one law
   that has held since Phase 1: a literal colour exists in exactly one file in the project.
+
+## 6. The second reading, and what it changed
+
+**Recorded 2026-10-07, after the author reviewed the built page and asked for a closer copy of this one.**
+Three things were named: too much gap between the nucleons, a nucleus that looked too large, and a scene
+that read as "electrons wandering around" rather than as the reference's. All three were measurable,
+and all three are the *same* class of mistake — our first reading had taken the reference's colours and
+counts and skipped its geometry.
+
+**What was read again.** The page's own bundle, this time for the scene graph rather than the palette:
+the cluster radius' formula, the ring radius' formula, the per-shell rotations, the initial rotation, the
+light's frame, and the materials. §2's table above carries all of it now.
+
+**What the numbers said, in nucleon radii and in fractions of the frame.** Every figure below is either
+the reference's own arithmetic or a pixel measurement of both pages in the same browser at the same
+viewport (the reference at 1280×800, ours at 1100×544, ours opening on titanium to match the reference's
+own default element):
+
+| | Reference | Ours, before | Ours, now |
+|---|---|---|---|
+| Cluster radius (per nucleon radius) | `0.9 · ∛N` | `1.5 · ∛N` | `0.9 · ∛N` |
+| Iron's nucleons, centre to nearest centre | `0.76` diameters | `1.27` diameters | `0.76` |
+| Oganesson's nucleons | `0.59` | `0.98` | `0.59` |
+| Nucleus width, measured, as a share of the frame's height | 0.1237 | **0.1599** | **0.1360** |
+| The atom's whole width, measured, same share (the electron box) | 0.5863 | 0.4430 | 0.6710 |
+| Nucleus ÷ the atom around it | 0.211 | **0.361** | **0.203** |
+| Rings' planes | one per shell | one plane for all of them | one per shell |
+| Innermost ring ÷ half the frame's height (titanium) | 0.370 | 0.252 | 0.360 |
+| Nucleus + a nucleon ÷ the same half-height (titanium) | 0.1396 | 0.1700 | 0.1399 |
+| Proton pixels, mean brightness ÷ their own colour | 0.62 | 0.52 | 0.51 |
+| Proton pixels, brightest ÷ their own colour | 1.09 | 1.22 | 0.87 |
+
+**The fixes, in the order the complaints came.**
+
+1. **The gaps.** The cluster radius is the reference's `0.9 ∛N` now, and the mean distance from a nucleon
+to its nearest neighbour is under one diameter for every element but helium — for iron it is `0.76`,
+where before it was `1.27`, which is a fifth of a sphere's width of daylight at every contact. Held by
+`tests/lib/atom-model.test.js` against all 118 records rather than asserted in a sentence.
+2. **The size.** Two things were wrong. The nucleus was packed too loosely *and* the rings were placed
+against a fixed base radius that never grew, so a heavy nucleus swelled inside a cage that stayed put:
+uranium's first ring stood at 2 units and its nucleus at 1.35, where the reference's ratio is roughly
+three to one. The rings now carry the reference's own spread (`1 + 0.15 · clusterRadius`), and the camera
+stands `13.1` from the origin rather than `17` — the reference's own `17.71 ÷ 1.35`, since our radii are
+its radii before its model scale. The measured nucleus went from 0.36 of the atom around it to 0.20,
+against the reference's 0.211.
+3. **The look.** The rings lie in a plane each, which is the single biggest change and the one that makes
+the picture read as an atom rather than as a disc. The light gained a hemisphere (a sky over a ground,
+which gives every sphere a lit crown and a dark underside) and a specular highlight whose width is
+`--atom-light-roughness` — the reference's own `0.4` — with `metalness 0.2` tinting that highlight and
+taking 20% of the colour out of the diffuse. The spheres went from 24 to 32 segments. The electron's own
+colour was raised from a pale blue to a clear one and its glow now peaks at its rim.
+
+**What is still not the same, and why.**
+
+| Still different | Why it stays |
+|---|---|
+| Our palette: `#e57860`, `#cfc5bc`, `#7fd2e8` | The reference's `#ff554d`, `#aaaaaa` and `#33ccff` are recorded here and shipped nowhere. The electron was *raised* toward its family — a same-hue, brighter, more saturated blue — rather than replaced by its colour. |
+| Our rings carry a sky-over-ground tint; theirs are flat white | Theirs is an unlit material and a hairline; ours takes the same ambient the particles do, so a ring is a little brighter where its own tube faces up. A deliberate effect, and the one shading difference that survives. |
+| Our electron's glow is stronger at its rim | A rim is not a thing the reference has; it is what makes a 9-pixel sphere read as a point of light on a 544-pixel stage. |
+| The atom turns on its own | The reference's atom is still until it is shaken. A slow turn is ours, and the first frame now opens in the reference's *own* orientation, so the still picture is theirs and only the movement is not. |
+| The stage is a 34rem panel inside a page | This site's pages are pages; a full-viewport canvas would be a different site. Recorded in Phase 14's deviations. |
+
+## 7. The stage's own background, as measured
+
+The author asked for the reference's grid behind our scene, so it was measured the same way everything
+else here was: the live page's computed styles, then the pattern's own pixels with the canvas hidden.
+
+| Property | Measured value |
+|---|---|
+| The field | `background: rgb(26, 31, 38)` — `#1a1f26`, a dark blue-grey, on the `<main>` element, **behind** the canvas |
+| The canvas | `background: rgba(0, 0, 0, 0)` in the DOM and cleared transparent in GL, which is what lets the field show through it |
+| The pattern | An inline SVG data URI on the same element: a 100 × 100 tile, `fill='#9C92AC'` at `fill-opacity='0.03'`, the graph-paper path from Hero Patterns — a 1px rule every 10px, and one heavier rule every 100px |
+| The rule's own colour | Sampled from a screenshot with the canvas hidden: the field reads `rgb(30, 34, 42)` and a rule `rgb(30, 37, 46)` — **three to four units per channel**, which is a line a reader sees only because nothing else on the page competes with it |
+
+**What we did with it, and why it is not a stylesheet here.** Our stage is a panel inside a page rather
+than a full viewport, so the grid is drawn at the panel's scale — 28 CSS pixels between lines, every
+fourth one stronger — and it is drawn **by the scene**, as its own first pass, rather than as a page
+pattern behind a transparent canvas. That is a measured decision and not a preference: the canvas here
+is opaque because a translucent ring blended into a transparent buffer and composited afterwards comes
+out at a third of the opacity it was asked for, and the rings' opacity is one of the numbers recorded in
+`05-atom-renderer-measurements.md`. The reference can afford a transparent canvas because its rings are
+flat and unlit; ours is lit, and it is measured.
+
+The field is ours rather than the reference's `#1a1f26`: a lifted deep pine, so the page around the
+panel still reads as paper and the grid has somewhere to sit. Its numbers are five tokens in
+`tokens.css` §21, and the measurements in this section are why they are those numbers.

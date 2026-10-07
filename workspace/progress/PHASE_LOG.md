@@ -30,7 +30,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 12 | The renderer: WebGL2 without a library (feature branch) | `COMPLETE` | `e748de5`..`cb570b3` on `feature/atom-3d`; not merged, not pushed |
 | 13 | The atom model and the live scene (feature branch) | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`; not merged, not pushed |
 | 14 | The page, the bar and the navigation (feature branch) | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`; not merged, not pushed |
-| 15 | Quality, delivery and the second reference's line (feature branch) | `IN_PROGRESS` | The gates and the documentation are done and committed; **the delivery — merge, push, Pages, live check, `v1.1.0` — is the author's step and has not happened** |
+| 15 | Quality, delivery and the second reference's line (feature branch) | `IN_PROGRESS` | The gates and the documentation are done and committed, as is the work the author's review asked for; **the delivery — merge, push, Pages, live check, `v1.1.0` — was authorized by the author on 2026-10-07 and is in flight** |
 
 ---
 
@@ -1789,8 +1789,9 @@ audit, the two site-wide sweeps, and the split the line ceiling forced.
 ## Phase 15 — Quality, delivery and the second reference's line
 
 **Goal:** close the feature the way Phase 11 closed the site — measured, documented, deployed, tagged.
-The measurement and the documentation are done; **the delivery is the author's step and has not
-happened.** Still on `feature/atom-3d`; nothing merged, nothing pushed, no tag.
+The measurement and the documentation are done, as is the review change, the swap's head fix and the
+field; **the delivery was authorized by the author on 2026-10-07 and is in flight.** Still on
+`feature/atom-3d`; nothing merged, nothing pushed, no tag yet.
 
 **15.1 — the last two gates, with the new page in their lists.** The accessibility and responsive
 sweeps took `/atoms/` in Phase 14; this phase added it to the other two and re-ran them.
@@ -1862,18 +1863,65 @@ reference's name appears nowhere under `source/`. `tests/brand/brand.test.js` no
 same check that runs before every commit — which is what the first reference's name has had since
 Phase 2, and the asymmetry was a defect waiting to happen.
 
-**15.4 — the delivery. Not done, and not this agent's to do.** Merging to `main`, pushing, the Pages
-run, the live check and `v1.1.0` are the author's step (`docs/GIT_WORKFLOW.md` §8), and the phase's
-exit criteria are met only by the order the plan gives: the merge `--no-ff` from `feature/atom-3d`, the
-push, a green Pages run, the live `/atoms/` verified in a browser rather than by `curl`, and the tag on
-the close-out commit. **Everything needed for that is committed and green; the author's word is what
-is outstanding.**
+**The review — a closer copy of the reference, asked for by the author after looking at the built page.**
+Three things were named: the nucleons sat too far apart, the nucleus looked too large, and the whole
+scene read as *electrons wandering around* rather than as the reference's. All three were measurable,
+and the fix was a second reading of the reference's own bundle — this time for the scene graph rather
+than the palette — rather than a guess. **Nothing above changes: this is geometry and shading in the
+same four modules, and it is `docs/research/04` §6 that records it.**
+
+The numbers, before and after, measured in a browser against the reference at the same viewport:
+
+| | Reference | Before | After |
+|---|---|---|---|
+| Cluster radius, in nucleon radii | `0.9 · ∛N` | `1.5 · ∛N` | **`0.9 · ∛N`** |
+| Iron's nucleons, nearest neighbour | `0.76` diameters | `1.27` | **`0.76`** |
+| Nucleus width ÷ the frame's height | 0.1237 | 0.1599 | **0.1360** |
+| Nucleus ÷ the atom around it | 0.211 | 0.361 | **0.203** |
+| Rings' planes | one per shell | one for all | **one per shell** |
+
+Four changes carried it. **The packing** is the reference's own nucleus scale factor (`0.9`), so a
+nucleus is a clump whose spheres overlap — held by a test that walks all 118 records and measures the
+distance from each nucleon to its nearest, rather than by a sentence. **The rings now stand off the
+nucleus**, by the reference's own share of it (`1 + 0.15 · clusterRadius`), so a heavier atom's rings
+reach past a heavier nucleus instead of a heavy nucleus swelling inside a cage that stays put; and the
+camera came in from `17` to `13.1`, which is the reference's own distance divided by the model scale
+its radii already carry. **Each shell lies in its own plane** — the reference's rule, kept as it is:
+one upright, one flat, one diagonal, and the rest turned by the golden angle on all three axes — which
+is the single change that stops the picture reading as a disc with dots on it. And **the light became a
+light**: a sky over a ground instead of one flat floor, a specular highlight whose width is a roughness
+and whose tint is a metalness (the reference's `0.4` and `0.2`), a brighter electron whose glow peaks at
+its rim, and spheres at 32 segments instead of 24. The rings gained a matrix of their own — the frame's
+one model matrix still means one thing — and are now drawn *after* the particles, so a ring's near half
+crosses the nucleus and its far half is behind it.
+
+What was deliberately **not** taken is recorded in the same place: the reference's palette (`#ff554d`,
+`#aaaaaa`, `#33ccff`) is still nowhere in the repository — the electron was raised to a brighter blue
+of our own hue — the rings keep a sky-over-ground tint where theirs are flat, the atom still turns on
+its own where theirs is still, and the first frame now opens in the reference's *own* orientation
+(`Euler(π/4, π/0.6, 0)`, written as one turn about `(0.5525, −0.7701, −0.3190)` by `1.2867` radians, the
+fourth decimal verified against their matrix).
+
+The cost of all of it is nil where it counts: the three atom audits hold (**57**, **33** and **25**
+claims, all `exit 0`), the layer's own last frame is still 0.10 ms and the heaviest atom still holds the
+browser's 16.70 ms cadence with no long task, and the three site-wide sweeps are unchanged — 0
+accessibility defects across 20 pages, 80 of 80 responsive checks, worst layout shift 0. Suite: **664
+pass, 0 fail** (six new: the packing against every record, the ring spread, the two planes, and the two
+new matrix helpers).
+
+**15.4 — the delivery. Authorized, and in flight.** Merging to `main`, pushing, the Pages run, the live
+check and `v1.1.0` were withheld until the author asked for them (`docs/GIT_WORKFLOW.md` §8), and the
+word was given on 2026-10-07 after the author had seen the page and asked twice more for it to look
+like the reference. The phase's exit criteria are met only by the order the plan gives: the merge
+`--no-ff` from `feature/atom-3d`, the push, a green Pages run, the live `/atoms/` verified in a browser
+rather than by `curl`, and the tag on the close-out commit. **Everything needed for that is committed
+and green** — `cd18435` the atom and its stage, `c3ff53a` the head a swap used to leave behind.
 
 **Phase 15 verification (so far)**
 
 ```
-[✓] node --test source/tests ................ pass  658 pass, 0 fail — including the brand scan over
-                                              both references' names
+[✓] node --test source/tests ................ pass  681 pass, 0 fail — including the brand scan over
+                                              both references' names (673 at the atom commit alone)
 [✓] node --check on every changed module .... pass  every module under source/, checked individually
 [✓] All four gates with the new page in them  pass  accessibility 0 defects / 29 informational across
                                               20 pages; responsive 80 of 80; performance worst shift 0,
@@ -1935,6 +1983,10 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-07 | 13 | Scope decision | **The guide's count fields go past what the page will allow.** The author's decision is 0–118 protons with neutrons and electrons free; the guide's inputs offer protons up to 200, neutrons to 300 and electrons to 200, because a reader tuning the picture wants the headroom and the "not an element" states are only reachable through it. | Accepted: the guide is a development instrument, the page's own limits are Phase 14's rules, and the guide's ceiling is measured in the same recorded run for exactly this reason (618 particles, 8 rings, 0.245 ms). |
 | 2026-10-07 | 14 | Fixed | **The bar's one link was unreadable on the stage, and only a browser could see it.** The accessibility sweep's first run over the new page reported the card's element symbol at **1.47:1**: `.at-bar` sets the light ink and every other control reads it, but the symbol is an `<a>` — and a link's colour is the site's own dark ink, which the glass's light ink never overrode. Off-white on dark glass in the stylesheet, dark on dark in the composited page. | Fixed by naming the token on the rule; the bar's own header now records the rule, because the next colour added to a dark surface will meet the same trap. Sweep after: 0 defects across 20 pages. |
 | 2026-10-07 | 14 | Deviation | **The 400-line ceiling: the file this phase pushed over was split, the ten that were already over are recorded rather than kept quiet.** `scripts/router/routes.js` went from 384 to 401 when the atoms route joined the inventory, and is now 362 plus the new `router/route-sheets.js` at 64 — a split by responsibility, as the working agreement asks. Ten files are still over the ceiling and untouched by intent — seven under `source/`: `styles/tokens.css` (795, the one file where every design value is declared), `styles/pages/element-detail.css` (**500 before this phase, 520 after**; this phase's one link into the viewer is about twenty of those lines), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457), `tests/components/periodic-table.test.js` (444), `tests/router/router.test.js` (427) and `scripts/components/periodic-table.js` (418); and three workspace tools that no page ships (`workspace/tools/visual/compare.mjs` 505, `audit-atom.mjs` 502 — it grew in this work item — and `audit-atom-scene.mjs` 424). | Recorded. Splitting the element detail sheet properly is a two-file refactor with a route-manifest change — larger than the link that touched it, and not this phase's work; it is named as the next candidate rather than left as an undocumented violation. |
+| 2026-10-07 | 15 | Fixed | **Every client-side navigation arrived unstyled, and only a reload put it right.** Reported by the author as "it looks like only HTML until I refresh". Reproduced in a browser: on `/elements/` after clicking *Elements* from a periodic-table view, the head still held the **leaving** page's sheets — `/styles/components/element-card.css` and `/styles/pages/elements-index.css`, the two only that page declares, were never added — so the index's 118 cards were drawn with no card sheet and no index sheet. The router had swapped the body alone since Phase 5; Phase 6's per-route sheet sets are what made the gap visible, and no test or gate had ever asked what a swap does to the head. | Fixed by giving the head its own module, `scripts/router/page-head.js`: `prepareHead` adds the arriving page's sheets and waits for them (with a grace, so a sheet that never arrives cannot hold the reader), and `adoptHead` makes the head exactly the arriving document's — same sheets in the same order, same canonical link, same metadata, same structured-data record — with the shared sheet *elements* carried across rather than re-created, so nothing is re-fetched and the cascade is identical to a full load's. Scripts are still never adopted. Verified in a browser, four navigations across the site: the head's sheets are byte-identical to a full load's, **every element's computed style is identical**, and three of the four screenshots hash the same — the fourth is the atoms page, where the atom is turning. The remaining DOM difference is the `tabindex="-1"` the router has always put on `main` to hand focus over. Tests: `tests/router/page-head.test.js` (8) and `router.test.js` (now asserting the head as well as the body); 664 → **672** passing. |
+| 2026-10-07 | 15 | Deviation | **The 400-line ceiling after the field: eleven files under `source/`, and the one this change pushed over is named.** `tests/components/atom-view.test.js` went from 370 to **412** — the two new claims about the field's order in a frame are what crossed it — joining `styles/tokens.css` (824, seven more tokens), `styles/pages/element-detail.css` (520), `tests/lib/atom-model.test.js` (518), `tests/router/router.test.js` (**484**, up from 427: it now asserts what a swap does to the head as well as the body), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457), `tests/components/periodic-table.test.js` (444), `scripts/components/atom-view.js` (441), `scripts/lib/matrix4.js` (421) and `scripts/components/periodic-table.js` (418). Three workspace tools that no page ships stay as they were (`audit-atom.mjs` 596, `compare.mjs` 505, `audit-atom-scene.mjs` 424). | Recorded rather than kept quiet, as the phase before this one did with the ten. The seams are named for whoever splits them: `atom-view.test.js`'s frame claims belong beside `atom-field.test.js`, `matrix4.js`'s perspective-and-view half belongs beside `orbit-camera.js`, `router.test.js`'s head claims belong beside `page-head.test.js`, and `atom-view.js`'s draw is the next real split in the layer. |
+| 2026-10-07 | 15 | Work item | **The reference's grid, and the bar's glass brought to its measured values.** The author asked for the reference's grid behind the scene and a better field. The reference draws its own as an SVG graph-paper pattern (a 1px rule every 10px, one heavier rule every 100px, `#9C92AC` at 3%) on a `#1a1f26` field *behind a transparent canvas*; ours is the scene's own first pass instead, because the canvas here is opaque for a measured reason — a translucent ring blended into a transparent buffer and composited afterwards comes out at a third of the opacity it was asked for. So `GRID_PROGRAM` and `scripts/components/atom-field.js`: one full-screen triangle whose corners come from the vertex' own index (no buffer, no vertex array), lines placed from the fragment's own position and one pixel wide at any pixel ratio, every fourth line stronger, the field a shade darker towards the corners. Five tokens, and the bar's glass moved to the reference's own measured values (blur 14 → **15px**, radius 1.25rem → **0.75rem**, fill 0.62 → **0.55**, border 0.24 → **0.18**, plus the 40px halo of its own accent, in our electron's hue rather than its cyan); the field's own colour lifted from `#08211f` to `#0d2b28` so the grid has somewhere to sit. `atom-pixels.mjs` learned the panel is two colours now (field and line, both faded towards the corners) so the pixel audits keep measuring the scene rather than the panel: the light atom is back to **0.39%** of the stage. | Evaluated in a browser: the grid is 56 device pixels apart at a ratio of two (28 CSS), its lines are the token's exact colour, and the corner measures `(6, 20, 18)` — the shader's own formula to the unit. All 57 + 33 + 25 atom claims hold, the frame is still vsync-bound at 16.70 ms with 0 long tasks, and accessibility is 0 defects across 20 pages. Suite: 672 → **681**. |
+| 2026-10-07 | 15 | Deviation | **The review change's split, and the four files the second reading pushed over the ceiling.** The plane-and-placement half of the atom moved out of `scripts/lib/atom-model.js` — which came back **under** at 360 — into the new `scripts/lib/atom-orbit.js` at 121, a split along the picture's real seam (what an atom *is* against what *moves*). Four files crossed 400 for the first time: `scripts/lib/matrix4.js` (421, the three-axis turn and the direction transform the planes are built from), `scripts/components/atom-view.js` (425, the five light uniforms and the per-ring orientation upload), `tests/lib/atom-model.test.js` (**518**, the packing held against all 118 records) and `styles/tokens.css` (795 → **811**, the sky/ground/roughness/metalness/specular values and the ring spread). The over-ceiling list is now **ten under `source/`**: those four plus `styles/pages/element-detail.css` (520), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457), `tests/components/periodic-table.test.js` (444), `tests/router/router.test.js` (427) and `scripts/components/periodic-table.js` (418); and the same three workspace tools that no page ships (`audit-atom.mjs` 596, `compare.mjs` 505, `audit-atom-scene.mjs` 424). | Recorded rather than kept quiet. `matrix4.js` splits cleanly down the middle — its perspective-and-view half belongs beside `orbit-camera.js`, which is the only caller of it — and `atom-view.js`'s particle draw and ring draw are the next seam; both are named as candidates rather than left implicit, and neither is this change's work. |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
 
 ---

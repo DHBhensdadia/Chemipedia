@@ -1,11 +1,14 @@
 # HANDOFF.md — note to the next agent
 
-**Written:** 2026-10-07 · **By:** the session that took the atom viewer's last phase as far as it goes
-without the author — the two remaining gates, the page's own frame-time budget, ADR-007 and the
-documentation — on `feature/atom-3d` · **After commit:** this session's Phase 15 commit on
-`feature/atom-3d`
+**Written:** 2026-10-07 · **By:** the session that answered the author's review of the built atom page —
+a second, closer reading of the reference's own scene graph, and the geometry and light that came out of
+it, the defect the author found by using the site, and the field they then asked for — on
+`feature/atom-3d` · **After commit:** `c3ff53a` (the atom and its stage are `cd18435`), with the
+author's authorized delivery in flight
 
-Rewrite this file at the end of every session. It must never be older than the last commit.
+Rewrite this file at the end of every session. It must never be older than the last commit. The two
+sections below were rewritten after the author's second review — the navigation defect and the stage's
+grid — and both are committed.
 Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ---
@@ -23,13 +26,33 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
   `/atoms/#<slug>`.
 - **All four gates pass with the new page included**: accessibility 0 defects / 29 informational lines
   across **20** pages; responsive **80 of 80**; performance **worst layout shift 0, slowest cold load
-  35 ms, 0 long tasks** across seven pages; Lighthouse **100 / 100 / 100** for accessibility,
-  best-practices and SEO with performance **78** recorded and not gated.
+  35–40 ms, 0 long tasks** across seven pages (two runs, the second on the final build); Lighthouse
+  **100 / 100 / 100** for accessibility, best-practices  and SEO with performance **78** recorded and not gated.
+- **A client-side navigation no longer arrives unstyled.** It did until this session: the router swapped
+  the body and left the head, so a page reached by a click wore the page it came from's stylesheets —
+  the defect the author reported as "it looks like only HTML until I refresh". `router/page-head.js`
+  now puts the arriving page's sheets in place and waits for them before the swap, carries a shared
+  sheet across as the element it already is rather than re-fetching it, and takes the same canonical
+  link and metadata. Verified in a browser: identical sheets, identical computed styles on every
+  element, and identical screenshots on three of four navigations (the fourth is the atom turning).
+- **The stage has the reference's grid**, drawn by the scene rather than by a stylesheet: 28 CSS pixels
+  between lines, every fourth one stronger, the field a shade darker towards the corners. Five tokens,
+  and `audit-atom.mjs` still holds all 57 of its claims with the frame at 16.70 ms and 0 long tasks.
 - **The page keeps the browser's cadence on its heaviest atom**: median **16.70 ms** a frame with
   oganesson turning, the same as the same page held still, worst frame 16.80 ms over ninety, no long
   task. `audit-atom.mjs` asks **57** claims and they all hold with 0 console messages and 0 failed
   requests; the scene and renderer audits ask 33 and 25.
-- `node --test source/tests` → **658 passing, 0 failing**, with nothing installed.
+- **The page is now a measured copy of the reference's proportions rather than an impression of them.**
+  The author's review named three things — nucleons too far apart, a nucleus too large, a scene that read
+  as *electrons wandering around* — and all three turned out to be the same mistake: the first reading
+  had taken the reference's palette and counts and skipped its geometry. The cluster is packed at the
+  reference's own `0.9 ∛N` nucleon radii (iron's nucleons went from 1.27 diameters apart to 0.76), each
+  shell lies in a plane of its own, the rings stand off the nucleus by its own share, the camera came in
+  from 17 to 13.1, and the light is a sky over a ground with a roughness and a metalness. The nucleus
+  went from 0.36 of the atom around it to **0.20**, against the reference's **0.211** — measured in a
+  browser, both pages, `docs/research/04` §6.
+- `node --test source/tests` → **681 passing, 0 failing**, with nothing installed (673 at the atom
+  commit alone, 681 once the swap's eight head tests land).
 - `node source/tools/build.js` → **563 routes** plus the not-found page, **0 waiting**.
 - The documentation is closed out: **ADR-007**, `DESIGN_SYSTEM` §1.7 and §7, `BRAND_GUIDELINES` §9,
   `DATA_SOURCES` §7, all four guides, the README, the measurements file, the phase log and
@@ -39,11 +62,12 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 ## What to do first
 
 1. Follow the start sequence in `AGENTS.md` §0. Do not skip it.
-2. **The only work item left is the delivery, and it needs the author's word.** In the plan's order:
-   merge `feature/atom-3d` into `main` with `--no-ff`, push, watch the Pages run go green, verify
-   `/atoms/` **in a browser** at <https://dhbhensdadia.github.io/Chemipedia/atoms/> with the same
-   checks the publish entry used, and tag `v1.1.0` on the close-out commit. **Do not merge, push or
-   tag without being asked**, and never move an existing tag.
+2. **The work is committed; the delivery is what remains, and the author authorized it in this
+   session.** In the plan's order: merge `feature/atom-3d` into `main` with `--no-ff`, push, watch the
+   Pages run go green, verify `/atoms/` **in a browser** at
+   <https://dhbhensdadia.github.io/Chemipedia/atoms/> with the same checks the publish entry used, and
+   tag `v1.1.0` on the close-out commit. **A later delivery still waits for the author's word**, and
+   never move an existing tag.
 3. If the author asks for something else, the feature's own state is in `RUN_STATE.md`, and the phase
    log's Phase 15 entry records what was measured and what was not.
 4. Before believing anything about the deployment, build for the address it actually lives at:
@@ -53,6 +77,12 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 
 ## What is fragile or easy to get wrong
 
+- **"Close to the reference" is a measurement, not an impression.** The viewer shipped looking nothing
+  like it and every gate passed, because no gate asked a question the geometry could fail: the packing,
+  the ring spread and the planes were literal numbers nobody had compared. They are compared now — as
+  the distance from each nucleon to its nearest neighbour, as the nucleus' width against the atom's, and
+  as tokens whose comments say which of the reference's numbers they are. **A look is a set of numbers;
+  find them in the reference's own bundle rather than reproducing it by eye.**
 - **A test that passes is not a page that works.** The feature was taught this three times, and it
   wrote the third one down: a function written to take a list of records was handed the elements
   **repository**, so the page threw and the canvas never appeared — while the unit test passed, because
@@ -81,10 +111,15 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
   page reads it itself, through `elementFromFragment(hash, repository)` — which takes the repository,
   not a list.
 - **No literal values outside `tokens.css`** — colours, sizes, radii, durations; breakpoints are the one
-  recorded exception. Files stay under 400 lines, and ten of them do not: seven under `source/`
-  (including `styles/pages/element-detail.css` at 520 and `styles/tokens.css` at 795) and three
-  workspace tools. They are recorded in `progress/PHASE_LOG.md` rather than fixed. **Do not add a file
-  to that list; split or record instead.**
+  recorded exception. Files stay under 400 lines, and fourteen of them do not: **eleven under `source/`**
+  (`styles/tokens.css` 824, `styles/pages/element-detail.css` 520, `tests/lib/atom-model.test.js` 518,
+  `tests/router/router.test.js` 484, `tests/pages/glossary.test.js` 473,
+  `styles/components/periodic-table.css` 457, `tests/components/periodic-table.test.js` 444,
+  `scripts/components/atom-view.js` 441, `scripts/lib/matrix4.js` 421,
+  `tests/components/atom-view.test.js` 412, `scripts/components/periodic-table.js` 418) and three
+  workspace tools that no page ships (`audit-atom.mjs` 596, `compare.mjs` 505, `audit-atom-scene.mjs`
+  424). They are recorded in `progress/PHASE_LOG.md` rather than fixed, with a named seam for each.
+  **Do not add a file to that list; split or record instead.**
 - **`source/tests/brand/brand.test.js` fails the suite** if **either** reference's name appears
   anywhere under `source/`, comments included — the first reference's and the atom viewer's own. Call
   them "the reference" and "the second reference".
@@ -95,19 +130,21 @@ Keep it short. Detail belongs in `RUN_STATE.md` and `progress/PHASE_LOG.md`.
 - **Attribution.** Identity is `Devansh <dhbhensdadia@gmail.com>`. Never add a co-author or a
   generated-with footer. Commit with `git commit -F -` and a heredoc, and stage by explicit path.
 - **A file that is added or renamed must appear in `docs/MIND_MAP.md` in the same commit.** The last
-  completeness check found 214 files under `source/`, with only macOS `.DS_Store` unlisted.
+  completeness check found **214** files under `source/`, with only macOS `.DS_Store` unlisted —
+  `scripts/router/page-head.js`, `scripts/components/atom-field.js` and their tests are the newest
+  entries.
 
 ## Anything deliberately left in a half state
 
-One thing, and it is deliberate: **the delivery has not happened.** The feature is complete, committed
-and green on `feature/atom-3d`; merging, pushing, the Pages run, the live check and `v1.1.0` are the
-author's step, and the plan's exit criteria for the last phase are met only by that order. Nothing else
-on the plan is outstanding, and the working tree is clean.
+One thing. **The delivery is in flight** — merging, pushing, the Pages run, the live check and `v1.1.0`
+were authorized by the author in this session and are the last step; the plan's exit criteria for the
+last phase are met only by that order. Nothing else on the plan is outstanding, and no half-finished
+code is left in the tree.
 
 `v1.0.0` stays on `e035c6f` — the release whose publication exposed the subpath defect — and `v1.0.1`
 is on `bd338dd`, which fixes it; neither tag was moved.
 
 Three deferrals from earlier phases stand, plus the over-ceiling files: the "expanded explanation"
 Phase 9 left out, the two schema fields no acceptable source supplies (`covalentRadius`,
-`latticeParameters`), the typeface, which is not the reference's, and ten files over the 400-line
+`latticeParameters`), the typeface, which is not the reference's, and fourteen files over the 400-line
 ceiling — all recorded where they belong rather than forgotten.
