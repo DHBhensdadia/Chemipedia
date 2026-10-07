@@ -749,6 +749,25 @@
   --atom-zoom-step: 1.1; /* what one wheel notch multiplies the distance by */
   --atom-pixel-ratio-limit: 2; /* pixels per CSS pixel: beyond this a 3D stage costs more than it shows */
   --atom-longest-step: 0.1; /* the most time one frame may carry, after a tab has been backgrounded */
+
+  /* The bar: the one piece of glass on the site, and the only place a reader changes the atom. Its
+     fill is the stage's own colour carried as an alpha rather than a second surface colour, so the
+     glass shows the scene behind it; what is behind it is the stage. The geometry and the glass
+     values were measured off the reference's own bar, and the measurements are in
+     docs/research/04-reference-atom-viewer-audit.md. */
+  --atom-bar-fill: rgba(8, 33, 31, 0.62);
+  --atom-bar-border: rgba(215, 230, 226, 0.24);
+  --atom-bar-tint: rgba(215, 230, 226, 0.1); /* a control's own surface, one step up from the glass */
+  --atom-bar-blur: 14px;
+  --atom-bar-radius: 1.25rem;
+  --atom-bar-pad: 0.85rem;
+  --atom-bar-gap: 1.1rem;
+  --atom-bar-inset: 1rem; /* how far the bar floats above the stage's bottom edge */
+  --atom-bar-max: 68rem;
+  --atom-bar-ink: #eef4f2; /* the bar's own text: the page's ink is far too dark on the stage */
+  --atom-bar-ink-dim: #b6c6c2;
+  --atom-on-particle: #10201f; /* text on a particle-coloured chip; all three particles are light */
+  --atom-focus: #ffd9a0; /* the focus ring, because the site's own is the ink and the stage is dark */
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

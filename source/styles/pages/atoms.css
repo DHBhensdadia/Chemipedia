@@ -1,0 +1,51 @@
+/* The atoms page: a hero, one stage, and the words that say what a reader is looking at.
+ *
+ * The stage's own sheet and the bar's do the work; this file only places them and keeps the page's
+ * prose to the site's measure. It is deliberately short, because a page whose whole subject is one
+ * panel should not have a second layout competing with it.
+ */
+
+.at-hero {
+  padding-block: var(--sp-7) var(--sp-5);
+}
+
+.at-hero__name {
+  margin: 0;
+  font-size: var(--step-4);
+}
+
+.at-hero__lede {
+  max-inline-size: var(--measure);
+  margin-block-start: var(--sp-3);
+  color: var(--ink-body);
+}
+
+.at-body {
+  padding-block-end: var(--sp-7);
+}
+
+.at-notes {
+  max-inline-size: var(--measure);
+  margin-block-start: var(--sp-5);
+  color: var(--ink-soft);
+  font-size: var(--step--1);
+}
+
+.at-notes a {
+  color: var(--ink);
+}
+
+.at-notes__title {
+  font-size: var(--step-1);
+  color: var(--ink);
+}
+
+@media (max-width: 40rem) {
+  .at-hero {
+    padding-block: var(--sp-5) var(--sp-4);
+  }
+
+  .at-hero__name {
+    font-size: var(--step-3);
+  }
+}

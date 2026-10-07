@@ -1,0 +1,29 @@
+<section class="at-hero">
+  <div class="shell">
+    <h1 class="at-hero__name">Atoms</h1>
+    <p class="at-hero__lede">{{lede}}</p>
+  </div>
+</section>
+
+<div class="shell at-body">
+  <section class="at-stage" id="atom-stage" aria-labelledby="atom-stage-title">
+    <h2 class="visually-hidden" id="atom-stage-title">{{title}}</h2>
+    <canvas class="at-stage__canvas" id="atom-canvas" role="img" aria-label="{{canvasLabel}}"
+      hidden></canvas>
+    <div class="at-stage__fallback" id="atom-fallback">
+{{diagram}}
+      <p class="at-stage__counts">{{counts}}</p>
+    </div>
+    <p class="at-stage__readout" id="atom-readout" hidden></p>
+    <div class="at-bar" id="atom-bar" role="group" aria-label="The atom on the stage">
+{{bar}}
+    </div>
+  </section>
+
+  <p class="at-stage__announce" id="atom-announce" role="status" aria-live="polite"></p>
+
+  <section class="at-notes">
+    <h2 class="at-notes__title">What you are looking at</h2>
+{{note}}
+  </section>
+</div>

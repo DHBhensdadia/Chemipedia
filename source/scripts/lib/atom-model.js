@@ -122,6 +122,27 @@ function kindAt(index, protons, count) {
 }
 
 /**
+ * The neutrons of the isotope a record's own weight names: the rounded weight less the atomic number.
+ *
+ * A convenience for callers that have a record and want a sensible atom to open on, not a rule of the
+ * model — `buildAtom` draws whatever counts it is handed. Its honest limits belong beside it, because
+ * one element shows them plainly: copper's weight rounds to 64, and 64 is neither of its isotopes, so
+ * this answers 35 neutrons where Cu-63 has 34 and Cu-65 has 36.
+ *
+ * @param {{ atomicNumber: number, atomicWeight?: number }} record
+ * @returns {number} zero or more
+ */
+export function neutronsFor(record) {
+  const weight = Number(record?.atomicWeight);
+
+  if (!Number.isFinite(weight)) {
+    return 0;
+  }
+
+  return Math.max(0, Math.round(weight) - record.atomicNumber);
+}
+
+/**
  * Check the record the counts were matched against, or accept that there is none.
  *
  * A record that does not belong to these protons is worse than no record: it would draw carbon's

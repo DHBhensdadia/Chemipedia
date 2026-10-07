@@ -116,11 +116,28 @@ export const routes = [
     description:
       "Every element in the periodic table, ordered by atomic number, with its symbol, group, " +
       "atomic weight and state at room temperature.",
-    nav: { label: "Elements", order: 2 },
+    nav: { label: "Elements", order: 3 },
     section: "elements",
     // The periodic table's sheet carries the key-to-colour map every surface that shows a category
     // is painted by, so a page of cards names the same key the table does and gets the same colour.
     styles: ["styles/components/periodic-table.css", "styles/components/element-card.css"],
+  },
+  {
+    path: "/atoms/",
+    template: "atoms",
+    title: "Atoms — an element's atom in three dimensions",
+    description:
+      "See an element's atom drawn in three dimensions: a nucleus of protons and neutrons, with " +
+      "electrons orbiting in their shells, and the counts to explore any atom you like.",
+    nav: { label: "Atoms", order: 2 },
+    section: "atoms",
+    // The stage and the bar are the page's two large pieces and each owns its sheet; the scene's own
+    // values are all in `tokens.css` §21, because a graphics card cannot read a stylesheet.
+    styles: [
+      "styles/components/atom-scene.css",
+      "styles/components/atom-bar.css",
+      "styles/components/shell-diagram.css",
+    ],
   },
   {
     path: "/periodic-table/properties-and-states/",
@@ -218,7 +235,7 @@ export const routes = [
     description:
       "Convert temperatures between Celsius, Fahrenheit and Kelvin, with the notable reference " +
       "points listed alongside.",
-    nav: { label: "Calculators", order: 4 },
+    nav: { label: "Calculators", order: 5 },
     section: "tools",
   },
   {
@@ -228,7 +245,7 @@ export const routes = [
     description:
       "A glossary of the vocabulary of the periodic table and chemistry, from absolute zero to " +
       "the terms that only make sense once two elements sit next to each other.",
-    nav: { label: "Glossary", order: 3 },
+    nav: { label: "Glossary", order: 4 },
     section: "reference",
     styles: GLOSSARY_STYLES,
   },

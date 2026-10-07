@@ -23,7 +23,7 @@
  */
 
 import { channels } from "../scripts/lib/contrast.js";
-import { buildAtom } from "../scripts/lib/atom-model.js";
+import { buildAtom, neutronsFor } from "../scripts/lib/atom-model.js";
 import { atomScale, createAtomScene } from "../scripts/components/atom-scene.js";
 import { createAtomView } from "../scripts/components/atom-view.js";
 import { createElementsRepository } from "../scripts/data/elements-repository.js";
@@ -91,19 +91,6 @@ function countDraws(gl) {
 
 /**
  * The neutrons of the isotope a record's own weight names: the rounded weight less the atomic number.
- *
- * A convenience for this guide, not a rule of the model — the model draws whatever counts it is
- * handed. Its honest limits are worth writing down, because one element shows them: copper's weight
- * rounds to 64, which is neither of its two isotopes, so it is drawn with 35 neutrons where Cu-63 has
- * 34 and Cu-65 has 36.
- *
- * @param {object} record
- * @returns {number}
- */
-function neutronsFor(record) {
-  return Math.max(0, Math.round(record.atomicWeight) - record.atomicNumber);
-}
-
 /**
  * The counts an element opens on: as many electrons as protons, and the weight's neutrons.
  *
