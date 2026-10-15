@@ -1,0 +1,273 @@
+/* ==========================================================================
+   The living paper — the field every page is read on.
+
+   Four sheets hang behind everything, fixed to the frame: the wash (two
+   sheets — four blooms of the site's own group hues, and the pointer light
+   when there is one —), the lattice at the atom stage's own pitch, and grain
+   multiplied over the lot. Nothing here paints
+   above content, nothing here takes a pointer, and the only thing that moves
+   is two transforms on the compositor.
+
+   The numbers all live in tokens (§22), with their derivation in
+   docs/research/06-living-background-and-motion-audit.md; this file only
+   composes them. The order the browser paints them in is tree order among
+   equal z-index:
+
+     html::before   the wash's far sheet — the coral and the amber
+     body::before   the wash's near sheet — the pointer light, the family bloom and the pale blue
+     body::after    the lattice
+     html::after    the grain, on top, multiplied over all of it
+
+   The family bloom lives on a body sheet on purpose: a page family is a fact
+   about `body[data-page]`, and a custom property set there reaches a body
+   pseudo-element — and only that one. The hues it may wear, and the alpha
+   each hue's ceiling allows, are tokens §22; the map below is the whole of
+   the page-family styling.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   The sheets themselves.
+
+   All four are the same kind of thing: viewport-fixed, a negative z-index so
+   they sit above the canvas paper (html declares no background, so body's is
+   the canvas) and below every in-flow box, and deaf to pointers.
+   -------------------------------------------------------------------------- */
+html::before,
+html::after,
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* The two sheets that drift bleed past the frame so the drift can never open
+   an edge. Every position inside them is corrected for the bleed by the same
+   shape — (coordinate + bleed) / scale — which is what lands a coordinate
+   drawn against the frame after the box has grown around it. */
+html::before,
+body::before {
+  inset: calc(-1 * var(--field-sheet-bleed));
+}
+
+/* --------------------------------------------------------------------------
+   The wash — sheet one: the coral and the amber (html::before).
+
+   Blooms, not gradients-for-their-own-sake: each is a circle of one group
+   hue at its solved alpha, fading on a straight line to nothing over the
+   last stretch of its radius. The client never sees a colour that is not the
+   table's — the mix reads the very tokens the tiles read.
+   -------------------------------------------------------------------------- */
+html::before {
+  background-image:
+    radial-gradient(
+      circle var(--field-bloom-radius) at
+        calc((var(--field-bloom-2-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--field-bloom-2-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--field-bloom-2-hue) calc(var(--field-bloom-2-alpha) * var(--field-wash-focus) * 100%), transparent),
+      transparent var(--field-bloom-fade)
+    ),
+    radial-gradient(
+      circle var(--field-bloom-radius) at
+        calc((var(--field-bloom-4-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--field-bloom-4-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--field-bloom-4-hue) calc(var(--field-bloom-4-alpha) * var(--field-wash-focus) * 100%), transparent),
+      transparent var(--field-bloom-fade)
+    );
+}
+
+/* Sheet two: the family bloom and the pale blue (body::before). The family bloom's hue and alpha
+   are read straight from `--field-family-hue` / `--field-family-alpha` on this declaration — not
+   through an alias in the token layer — because that is the one place where a page family's
+   `body[data-page]` override is visible to substitution. See the note in tokens §22. */
+body::before {
+  background-image:
+    /* The pointer light, on top of the wash's near sheet (tokens §23). Its position and presence
+       are written by scripts/components/pointer-light.js; the declared defaults are the absent
+       light, which is what a reader without a script, without a fine pointer or asking for less
+       motion gets. It is drawn on this sheet's own coordinate shape, so the drift carries it like
+       everything else here, and it is white-based, so it can only raise what is beneath it. */
+    radial-gradient(
+      circle var(--pointer-light-size) at
+        calc((var(--pointer-light-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--pointer-light-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--surface) calc(var(--pointer-light-live) * var(--pointer-light-alpha) * 100%), transparent),
+      transparent var(--pointer-light-fade)
+    ),
+    radial-gradient(
+      circle var(--field-bloom-radius) at
+        calc((var(--field-bloom-1-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--field-bloom-1-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--field-family-hue) calc(var(--field-family-alpha) * var(--field-wash-focus) * 100%), transparent),
+      transparent var(--field-bloom-fade)
+    ),
+    radial-gradient(
+      circle var(--field-bloom-radius) at
+        calc((var(--field-bloom-3-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--field-bloom-3-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--field-bloom-3-hue) calc(var(--field-bloom-3-alpha) * var(--field-wash-focus) * 100%), transparent),
+      transparent var(--field-bloom-fade)
+    );
+}
+
+/* --------------------------------------------------------------------------
+   The drift.
+
+   Two sheets, one slow turn each, in counter-phase: while one leans away the
+   other leans in, so the pair is never still together and no reader can
+   catch which way they went. Transform and nothing else — this is the whole
+   of the motion at this stage of the programme, and it runs on the
+   compositor with the main thread none the wiser.
+   -------------------------------------------------------------------------- */
+@keyframes field-drift-a {
+  from {
+    transform: translate3d(calc(-1 * var(--field-drift-x)), calc(-1 * var(--field-drift-y)), 0);
+  }
+
+  to {
+    transform: translate3d(var(--field-drift-x), var(--field-drift-y), 0);
+  }
+}
+
+@keyframes field-drift-b {
+  from {
+    transform: translate3d(var(--field-drift-x), var(--field-drift-y), 0);
+  }
+
+  to {
+    transform: translate3d(calc(-1 * var(--field-drift-x)), calc(-1 * var(--field-drift-y)), 0);
+  }
+}
+
+/* The still composition is the default: without these rules the sheets sit at
+   the frame, which is exactly the field a reader who asked for less motion
+   gets, and exactly what the contrast derivation measured. */
+@media (prefers-reduced-motion: no-preference) {
+  html::before {
+    animation: field-drift-a var(--field-drift-duration-a) var(--field-drift-ease) infinite alternate;
+  }
+
+  body::before {
+    animation: field-drift-b var(--field-drift-duration-b) var(--field-drift-ease) infinite alternate;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   The lattice — the stage's grid brought up to the page (body::after).
+
+   Two hairlines crossing at the stage's own pitch, one ink tint for both.
+   The mask holds the grid at full strength through the reading column and
+   lets it thin towards the frame, so the paper's edge reads quieter than its
+   middle. Its bound, with the grain below, is in tokens §22.
+   -------------------------------------------------------------------------- */
+body::after {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--field-lattice-hue) calc(var(--field-lattice-alpha) * 100%), transparent) var(--rule-width),
+      transparent var(--rule-width)
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--field-lattice-hue) calc(var(--field-lattice-alpha) * 100%), transparent) var(--rule-width),
+      transparent var(--rule-width)
+    );
+  background-size: var(--field-lattice-pitch) var(--field-lattice-pitch);
+  mask-image: radial-gradient(
+    var(--field-lattice-mask-reach) at var(--field-lattice-mask-centre),
+    var(--ink) 0%,
+    var(--ink) var(--field-lattice-mask-hold),
+    color-mix(in srgb, var(--ink) calc(var(--field-lattice-mask-floor) * 100%), transparent) 100%
+  );
+}
+
+/* --------------------------------------------------------------------------
+   The grain — one tile of desaturated fractal noise (html::after).
+
+   Multiplied over everything beneath it: the paper, the wash, the lattice.
+   It sits below content, so it textures the field and never a glyph, and it
+   is as much noise as the derivation's model charged for — one percent of a
+   channel at its darkest.
+   -------------------------------------------------------------------------- */
+html::after {
+  background-image: var(--field-grain-image);
+  opacity: var(--field-grain-alpha);
+  mix-blend-mode: multiply;
+}
+
+/* --------------------------------------------------------------------------
+   The family fields.
+
+   One map, nine names: each page family lends the family bloom its hue (and
+   the alpha that hue's ceiling allows). Home, About, Contact and the missing
+   page keep the default pair, so the map is exhaustive by construction.
+   -------------------------------------------------------------------------- */
+body[data-page="element-detail"] {
+  --field-family-hue: var(--field-family-element-hue);
+  --field-family-alpha: var(--field-family-element-alpha);
+}
+
+body[data-page="elements-index"],
+body[data-page="element-groups-index"],
+body[data-page="group"] {
+  --field-family-hue: var(--field-family-table-hue);
+  --field-family-alpha: var(--field-family-table-alpha);
+}
+
+body[data-page="properties-and-states"] {
+  --field-family-hue: var(--field-family-states-hue);
+  --field-family-alpha: var(--field-family-states-alpha);
+}
+
+body[data-page="atoms"],
+body[data-page="orbitals"],
+body[data-page="orbital-configuration"] {
+  --field-family-hue: var(--field-family-scene-hue);
+  --field-family-alpha: var(--field-family-scene-alpha);
+}
+
+body[data-page="melting-point"],
+body[data-page="boiling-point"],
+body[data-page="electronegativity"] {
+  --field-family-hue: var(--field-family-ranking-hue);
+  --field-family-alpha: var(--field-family-ranking-alpha);
+}
+
+body[data-page="temperature-calculator"] {
+  --field-family-hue: var(--field-family-calculator-hue);
+  --field-family-alpha: var(--field-family-calculator-alpha);
+}
+
+body[data-page="glossary-index"],
+body[data-page="glossary-term"] {
+  --field-family-hue: var(--field-family-glossary-hue);
+  --field-family-alpha: var(--field-family-glossary-alpha);
+}
+
+body[data-page="evolution"] {
+  --field-family-hue: var(--field-family-evolution-hue);
+  --field-family-alpha: var(--field-family-evolution-alpha);
+}
+
+body[data-page="downloads"] {
+  --field-family-hue: var(--field-family-downloads-hue);
+  --field-family-alpha: var(--field-family-downloads-alpha);
+}
+
+/* --------------------------------------------------------------------------
+   Print.
+
+   A printed page is paper already; the field has nothing to add and must not
+   darken a sheet, so all four layers come off. The measured page counts of
+   the printables are the test of this rule.
+   -------------------------------------------------------------------------- */
+@media print {
+  html::before,
+  html::after,
+  body::before,
+  body::after {
+    display: none;
+  }
+}

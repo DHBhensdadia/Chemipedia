@@ -17,8 +17,62 @@
   position: sticky;
   top: 0;
   z-index: 20;
-  background: var(--bg);
   border-bottom: var(--rule-hairline);
+}
+
+/* The band's paper. At rest it is the page's own opaque ground; once the page has scrolled it
+   becomes the frost — paper at the derived minimum opacity (tokens §23) behind a small blur — so
+   the content passing under the band reads softened through it rather than covered by a lid.
+
+   It is painted by this pseudo-element rather than by the masthead itself because the whole paper
+   has to fade as one piece, and it sits at z-index -1 inside the masthead's own stacking context:
+   above the field and the page, below the lockup, the navigation and the search. */
+.masthead::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg);
+}
+
+/* The scroll-driven frost: the platform's own scroll timeline where one exists. A browser without
+   one, and a reduced-motion reader (to whom the platform deliberately gave no motion — see the
+   gate), get the same frost instantly from `.masthead.is-frosted`, toggled by
+   scripts/components/masthead-frost.js, and the two paths meet in the same tokens. The fade is a
+   transition only where motion is welcome; where the frost is instant there is nothing to watch. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .masthead::after {
+      animation: masthead-frost linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 var(--masthead-frost-range);
+    }
+  }
+}
+
+@keyframes masthead-frost {
+  from {
+    opacity: 1;
+    backdrop-filter: none;
+  }
+
+  to {
+    opacity: var(--masthead-frost-paper);
+    backdrop-filter: blur(var(--masthead-frost-blur));
+  }
+}
+
+.masthead.is-frosted::after {
+  opacity: var(--masthead-frost-paper);
+  backdrop-filter: blur(var(--masthead-frost-blur));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .masthead::after {
+    transition:
+      opacity var(--dur-base) var(--ease-out),
+      backdrop-filter var(--dur-base) var(--ease-out);
+  }
 }
 
 .masthead__inner {

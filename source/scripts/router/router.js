@@ -30,6 +30,14 @@
  * as it is. Anything else — a failed request, a server error — is not something to paper over: the
  * router hands the navigation back to the browser and lets a real load happen.
  *
+ * And the swap itself: where the platform can cross-fade documents — view transitions — and the
+ * reader has not asked for stillness, the body's replacement and the settling are wrapped in one,
+ * so a page change reads as a dissolve rather than a cut. Nothing else is wrapped: the fetch and
+ * the head's sheets have all happened first, which is deliberate — the arriving page is only ever
+ * shown in its own sheets — and nothing waits on the transition, so a reader is never held to
+ * watch a fade. A history move is left instant: the reader asked to go back, and immediate is what
+ * they expect. A browser without the API swaps exactly as it always did.
+ *
  * The decisions are separated from the plumbing so they can be tested in Node: `navigationFor` is
  * the whole of step 1 and returns a URL or null, with no DOM in it at all, and the head's own rules
  * live in `page-head.js` rather than in the middle of the swap.
@@ -215,6 +223,27 @@ export function createRouter({
   }
 
   /**
+   * The body's replacement and the reader's place in one task: the transition's update, or the
+   * swap itself where there is no transition.
+   */
+  function commit(next, top) {
+    swap(next);
+    settle(top);
+  }
+
+  /**
+   * Whether this move may be cross-faded: the platform must have view transitions, and the reader
+   * must not have asked for stillness. Read per navigation, so a preference turned on mid-reading
+   * is honoured from the next move rather than the next reload.
+   */
+  function mayFade() {
+    return (
+      typeof doc.startViewTransition === "function" &&
+      !win.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }
+
+  /**
    * Go to a URL by fetching its document, or hand the job back to the browser.
    *
    * @param {string | URL} destination
@@ -253,8 +282,15 @@ export function createRouter({
       await prepareHead(doc, arriving, { setTimer, clearTimer }).waited;
       adoptHead(doc, arriving);
 
-      swap(arriving);
-      settle(top);
+      // The cross-fade wraps the swap and the settle, and nothing else: the sheets are already in
+      // place, so the arriving snapshot is the arriving page in its own sheets. It is started and
+      // left — no reader waits for a fade, and a navigation during one replaces it.
+      if (history && mayFade()) {
+        doc.startViewTransition(() => commit(arriving, top));
+      } else {
+        commit(arriving, top);
+      }
+
       current = pageKey(url.href);
     } catch {
       // A real navigation is the honest fallback: the browser knows how to show an error, and a

@@ -167,6 +167,7 @@ body → `--step-0`; caption/badge → `--step--1`.
 --rule-dotted: 1px dotted var(--ink);
 --shadow-sm: 0 1px 2px  #15403d0f;
 --shadow-md: 0 4px 16px #15403d14;
+--shadow-lg: 0 10px 30px #15403d12;   /* the elevation ladder's third step — Phase 17 */
 ```
 
 ### 1.6 Motion
@@ -199,7 +200,7 @@ Character: short, decelerating, upward. Never bouncy, never longer than `--dur-s
 }
 ```
 
-### 1.7 The atom viewer — `tokens.css` §21, the last group in the file
+### 1.7 The atom viewer — `tokens.css` §21
 
 The one part of this layer that is not read by a browser's style engine alone. The atom viewer is
 hand-written WebGL2 (ADR-007), and **a graphics card cannot read a stylesheet** — so the renderer asks
@@ -258,6 +259,48 @@ orbit distances in the atom's own scale, angles in radians, mesh detail as segme
 the bar's measured glass values. Nothing here is a colour chosen twice: the bar's fill **is** the
 stage's colour carried as an alpha, so the glass shows the scene behind it, and its halo is the
 electron's own hue at six percent rather than the reference's cyan.
+
+### 1.8 The living paper — `tokens.css` §22–23, the file's two closing groups
+
+The programme that closes the site (ADR-008) treats the page's own field as a designed surface. The
+ground is still paper (`--bg`, §1.1); everything in §22 is weather on it — four blooms of the site's
+own group hues, anchored in the frame's outer tenth; the atom stage's lattice at hairline weight;
+grain — and two of the sheets drift on a slow compositor-only turn. §23 carries the motion: the
+pointer light, the masthead's frost and the reveal's travel.
+
+```css
+/* §22 — the field. Every hue resolves to a --g-* group token; every alpha was solved, not chosen. */
+--field-bloom-radius: 68vmax;   --field-bloom-fade: 72%;
+--field-bloom-2-hue: var(--g-noble-gases);      --field-bloom-2-alpha: 0.042;
+--field-family-element-hue: var(--g-actinides); --field-family-element-alpha: 0.048;  /* one pair per page family */
+--field-drift-duration-a: 180s; --field-drift-duration-b: 240s; --field-drift-x: 2.2%;
+--field-lattice-alpha: 0.011;   --field-lattice-pitch: 28px;    /* the stage's own pitch (§21) */
+--field-grain-alpha: 0.02;      --field-wash-focus: 1;          /* 0.88 on a narrow frame — the width query's one factor */
+
+/* §23 — the motion. */
+--pointer-light-size: 46vmax;   --pointer-light-alpha: 0.4;     /* white-based: it can only add */
+--pointer-light-damping: 8;     /* how fast it reaches the pointer — the camera's own rate (§21) */
+--masthead-frost-paper: 0.96;   --masthead-frost-blur: 8px;     --masthead-frost-range: 160px;
+--reveal-travel: 300px;         /* a rise, not a fade — the reveal spends no opacity */
+```
+
+**Every number here was solved, not chosen.** The book is `--ink-faint`'s shipped 4.99:1 on bare
+paper: under the whole field at its worst — grain at its darkest pixel, a lattice line under the
+text, every bloom stacked as the geometry allows — the conservative model's floor is 4.53:1, so no
+point of any page can leave AA (`docs/research/06-living-background-and-motion-audit.md` §6 holds
+the derivation). What a bloom may carry alone was computed per hue with the site's own
+`scripts/lib/contrast.js`: the deepest saturates at 5.35%, the light hues at 9.15–11.95%, and every
+shipped alpha sits at least 15% under its hue's own ceiling. The washes mix from the very tokens the
+table paints its tiles with, so a group's colour is one fact about the data and not two; a test
+(`source/tests/lib/backdrop.test.js`) re-derives the ceilings from this file, and the browser audit
+(`workspace/tools/visual/audit-atmosphere.mjs`) re-measures the composite in real pixels at the
+drift's extremes. A change to any number here has to pass both.
+
+One trap is documented in the file itself because it cost a phase: writing
+`--field-bloom-1-hue: var(--field-family-hue)` on `:root` would substitute the default hue where the
+property is **declared**, before any page family could override it — every page would wear the same
+green, with every test passing. The family pair is read on the sheet that paints it; the test holds
+the alias's absence and the pixel audit holds the result.
 
 ## 2. Base layer — `source/styles/base.css`
 
@@ -353,9 +396,13 @@ invisible here; the focus ring is the site's ink too. So every control in the ba
 accessibility sweep measures the result against the composited glass rather than against the page.
    The first run of that sweep measured the bar's symbol link at **1.47:1** for exactly this reason.
 3. **The glass shows the scene behind it.** The bar is translucent — the stage's own colour at an
-alpha, with a backdrop blur — because the atom is the point and the controls are the annotation. It is
-the only blurred surface on the site, and it is the only one that could be: what is behind it is a
-drawing, not text.
+alpha, with a backdrop blur — because the atom is the point and the controls are the annotation. It
+was the site's only blurred surface until the living paper's masthead learned to frost (§9), and the
+two are not the same kind of blur: the bar shows a *drawing* behind it, and its controls are read
+against the composited glass, while the frost is paper at a derived 0.96 behind an 8 px blur — near
+enough to opaque that the band is paper with a suggestion of what is under it, its minimum derived so
+the faintest ink the band carries keeps AA over anything a page can scroll beneath it. No text is
+read against a scene anywhere else on the site, and no third blurred surface exists.
 4. **The stage is sized by the page, not by the viewport.** `--atom-stage-height` is the stage's own
 height, and the bar floats inside it at `--atom-bar-inset`; the bar wraps to two rows under `40rem`
 rather than scrolling, and the stage grows to hold them. A horizontally scrolling control bar on a
@@ -367,3 +414,27 @@ A **style guide page** rendering every token and every component in isolation: t
 the type scale, the spacing scale, all eleven group colours with their foregrounds and a contrast
 result, each component in each state. It is a development tool, excluded from the built output and
 from the sitemap, and it is the fastest possible way to verify this layer.
+
+## 9. The living paper — the field and its bound
+
+The page's field is a designed surface, not a leftover: three layers compose it — a wash of four
+group-hue blooms, one of them the page family's own (read from the hue-and-alpha pair the family
+sheet itself paints), the atom stage's lattice at hairline weight, and grain — with two sheets
+drifting on a slow compositor-only turn. Over it sit the programme's motion and its one depth step:
+sections rise once as they enter, a white light follows a fine pointer, the masthead frosts after
+the first scroll, a forward navigation dissolves, and the elevation ladder gains its third step.
+The light is white-based, so it can only raise luminance; the frost's paper minimum and the drift's
+extent are derived, not chosen; and the reveal is the movement alone — **opacity is animated
+nowhere on the site**, so no scroll position draws text below the contrast its tokens promise.
+
+The bound comes first in the arithmetic, and §1.8 states it: `--ink-faint` keeps 4.99:1 on bare
+paper, the whole field at its worst leaves the conservative model's floor at 4.53:1, and each
+bloom's ceiling is computed per hue against those two before anything is drawn. Then it is measured
+in real pixels behind real text, at the drift's extremes, by
+`workspace/tools/visual/audit-atmosphere.mjs` — 106 of 106 claims, with the motion layer's own gate
+beside it at 62 of 62 (`audit-motion.mjs`). Reduced motion is the designed still composition rather
+than a blank page; print renders all four printable sheets as `display: none` over bare paper;
+without scripting the field is drawn and stays still. The derivation is
+`docs/research/06-living-background-and-motion-audit.md` §6, the decision record is ADR-008, and the
+single amendment to the brand's preserved list is recorded in `BRAND_GUIDELINES.md` §3 with ADR-008
+as its reason.

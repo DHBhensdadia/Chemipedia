@@ -12,7 +12,9 @@ were discovered), a searchable index of all 118 elements, eleven group pages, a 
 terms, a live temperature converter, and **an atom viewer**: `/atoms/` draws the chosen element in
 three dimensions — a nucleus of protons and neutrons, electrons orbiting on their shells, a camera you
 can swing — with a translucent bar at the bottom of the stage driving it, and each element page linking
-straight to its own atom.
+straight to its own atom. And the whole site is read on its own designed field — the **living
+paper**: soft washes of the site's own group hues, a hairline lattice and grain, drifting slowly —
+with its sections rising as they enter, for any reader who has not asked for stillness.
 
 That is the whole product. There is nothing else, and that is on purpose.
 
@@ -42,6 +44,13 @@ design language* with the reference, not as a copy of it. The boundary is writte
 `workspace/docs/BRAND_GUIDELINES.md` §2, and enforced automatically — a brand scan runs before every
 phase-completion commit and a single match blocks it.
 
+**One deliberate departure is recorded.** The reference's page field is flat, and ours was too until
+a review found it reads as static; the living paper — the field and its motion — is the programme
+that answers that, and it is the only place the reproduction is knowingly amended. The amendment is
+written down in `workspace/docs/BRAND_GUIDELINES.md` §3, its decision is ADR-008, its derivation is
+`workspace/docs/research/06-living-background-and-motion-audit.md` §6, and the bound it was cut
+against is measured in composited pixels and frame time (106 and 62 claims).
+
 **One page comes from a second source.** The atom viewer was asked for against a different site, whose
 whole subject is a three-dimensional atom. What that site does — its scene parameters, its palette, its
 bar's geometry — was measured and recorded in `workspace/docs/research/04-reference-atom-viewer-audit.md`,
@@ -69,7 +78,7 @@ design, and the reason is recorded in `workspace/docs/IMPLEMENTATION_PLAN.md` §
 | No runtime dependencies | No `node_modules` in the built site. Even the dev server is plain Node. |
 | Data-driven | 118 element pages and 418 glossary pages come from one template each, not from 536 hand-written files. |
 | Must survive interruption | Work is committed in small units, and `workspace/RUN_STATE.md` records exactly where a session stopped. |
-| Must look right, not just work | Four browser sweeps measure every page: accessibility, responsive at four widths, performance in a real browser, and Lighthouse — each exiting non-zero on the defect it owns. |
+| Must look right, not just work | Four browser sweeps measure every page: accessibility, responsive at four widths, performance in a real browser, and Lighthouse — each exiting non-zero on the defect it owns — and the living paper adds two gates of its own that read composited pixels and frame time. |
 
 ## What "done" looks like
 
@@ -86,9 +95,13 @@ published, and four gates green — 0 accessibility defects across 19 pages, 76 
 combinations fitting their viewport, a worst layout shift of 0, and Lighthouse at 100 for
 accessibility, best-practices and SEO.
 
-**The atom viewer is the last release**, published as `v1.1.0` after four more phases: the page above,
-plus the hand-written WebGL2 underneath it (ADR-007). The build writes **563 routes**, the
-suite holds **681 tests**, the sidebar numbers are **0 defects across 20 pages** and **80 of 80**
-page-and-width combinations, and the page holds the browser's 16.70 ms frame cadence with the heaviest
-atom the controls allow turning. The evidence behind every number is in
-`workspace/progress/PHASE_LOG.md`; `workspace/RUN_STATE.md` is where to resume.
+**The atom viewer followed**, published as `v1.1.0` after four more phases: the page above, plus the
+hand-written WebGL2 underneath it (ADR-007).
+
+**The living paper closes the programme** — three more phases (16–18): the field every page is read
+on, and the motion over it (ADR-008). The build writes **563 routes**, the suite holds **732 tests**,
+the sidebar numbers are **0 defects across 20 pages** and **80 of 80** page-and-width combinations,
+the field's own gate holds **106 of 106** claims and the motion's **62 of 62**, and `/atoms/` holds
+the browser's 16.70 ms frame cadence with the heaviest atom the controls allow turning. The evidence
+behind every number is in `workspace/progress/PHASE_LOG.md`; `workspace/RUN_STATE.md` is where to
+resume.

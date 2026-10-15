@@ -6,11 +6,11 @@
 > **It is not sufficient on its own.** Always reconcile it with `git log`, `git status`, the
 > working tree, and the tests before acting. See `WORKING_AGREEMENT.md` §7.
 
-**Last updated:** 2026-10-07 (the session that committed the review change, the swap's head fix and the
-field, merged `feature/atom-3d` into `main` with `--no-ff` as `ad58ee2`, pushed, watched the Pages run
-go green, verified `/atoms/` and a live client-side navigation **in a browser** on the published site,
-and tagged `v1.1.0` on the close-out commit. **Phases 12–15 are all `COMPLETE`, the feature is
-released, and nothing is outstanding.**)
+**Last updated:** 2026-10-15 (the **Phase 17** session: the motion and the depth built, audited and
+closed — the pointer light, the frosted masthead, the rising sections, the route cross-fade and the
+depth step, with their own gate at **62 of 62 claims** — and **Phase 17 closed `COMPLETE`** on
+`feature/living-paper`, local only. **Nothing is merged, pushed or tagged; the delivery waits for the
+author's word.**)
 
 ---
 
@@ -18,72 +18,34 @@ released, and nothing is outstanding.**)
 
 | Field | Value |
 |---|---|
-| **Phase** | **Phases 12, 13 and 14 are `COMPLETE`** — the renderer, the model and its scene, and the page a reader can reach — and **Phase 15 — Quality, delivery and the second reference's line — is `IN_PROGRESS`**: all four gates have now been run with `/atoms/` in their lists, the page's own frame-time budget is measured and recorded, and every document the plan names has been written (ADR-007, `DESIGN_SYSTEM` §1.7 and §7, `BRAND_GUIDELINES` §9, `DATA_SOURCES` §7, all four guides, the README, the measurements file, this file). **The delivery is done, on the author's word:** `feature/atom-3d` merged `--no-ff` into `main` as `ad58ee2`, pushed (`a22c0d2..ad58ee2`), the Pages run green, `/atoms/` and a live client-side navigation verified **in a browser** on the published site rather than by `curl`, and `v1.1.0` tagged on the close-out commit. The atom viewer's four phases (12–15) are planned in `docs/IMPLEMENTATION_PLAN.md` §3; phases 0–11 are `COMPLETE`, and the site is published |
-| **Branch** | `feature/atom-3d` was cut from `main` at `a22c0d2`, carried the plan and the feature's four phases, and is **merged into `main` with `--no-ff` as `ad58ee2` and deleted** (`docs/GIT_WORKFLOW.md` §6). `main` is the released line: `ad58ee2`, pushed, then the close-out commit tagged `v1.1.0` |
-| **Objective (this feature)** | A page at `/atoms/`, in the navigation as **Atoms** between *Periodic Table* and *Elements*, that draws the chosen element as a three-dimensional atom: a nucleus of protons and neutrons, electrons orbiting on rings, free counts on all three particles, a speed control, a shake and a reset — and a translucent bar pinned to the bottom centre carrying the element card, the three steppers, the speed and the legend. Hand-written WebGL2 (ADR-004), a deep pine stage inside a paper-light page (ADR-006), the element's shell diagram built at build time as the fallback, and a new token group in `tokens.css` as the only place any of its values live. The reference it replicates, and what we deliberately leave behind, are measured in `docs/research/04-reference-atom-viewer-audit.md` |
-| **Work item (previous phase)** | Phase 11 closed on four sweeps that measure rather than inspect, seven accessibility defects found and fixed (two by our own sweep, four by Lighthouse, one by the browser's own contrast maths), one performance defect found and fixed at its cause, per-page metadata with the two crawl files, a Pages workflow, and 482 green tests. **All twelve phases are `COMPLETE`**, and the deployment the plan asked for is now **live** at `https://dhbhensdadia.github.io/Chemipedia/` — the author's one-time push ran on request, the live address then exposed a defect no local run could (`bd338dd`), and the corrected build was redeployed and verified |
-| **Status (this feature)** | **Phase 14 is `COMPLETE`**, and the feature is now a page a reader can reach. `/atoms/` is declared with `nav: { label: "Atoms", order: 2 }` — *Periodic Table*, **Atoms**, *Elements*, *Glossary*, *Calculators* — the build writes 563 routes, and the page arrives finished before any script runs: the hero, the element's shell diagram, the counts in words and the whole bar, with the canvas replacing the diagram only once a frame has actually been drawn. `tools/visual/audit-atom.mjs` asks **54 questions** and they all hold with **0 console messages and 0 failed requests** — the stage paints in the token layer's colours, every control changes the render by pixel hash, the bar is walked **by the keyboard alone** (15 controls in document order, forwards and backwards, a visible ring on the dark stage, and a count typed and submitted turning the stage into iron), a paused loop is byte-identical frame to frame, a reduced-motion reader gets a still frame and a working Play, a reader with no WebGL2 keeps the diagram and the reason, a reader with no scripting keeps the whole built bar, `/atoms/#uranium` opens on uranium, and the one link an element page carries into the viewer is followed by a real click and lands on that element. Every element page now carries that link — *See Iron in three dimensions* at `/atoms/#iron` — and `/atoms/` has joined the two site-wide sweeps: **0 defects and 29 informational lines across 20 pages**, and **80 of 80** page-and-width combinations fit. Three defects were found by measuring rather than by reading: a repository passed where a list was expected (which the unit test could not see because it was handed the same wrong thing), the bar's one link at **1.47:1** on the dark glass, and the route manifest crossing the project's 400-line ceiling — the last split into `router/routes.js` (362) and `router/route-sheets.js` (64). Suite: **658 pass, 0 fail**. Phase 13 is `COMPLETE`: the point distribution, the model and the scene are committed and green, and the phase's exit criteria are measured rather than asserted — `tools/visual/audit-atom-scene.mjs` puts all 118 records through the guide's own picker, hashes frames across an element change and a count change, renders every extreme the plan names, classifies the stage's pixels against the token layer's colours, and records the heaviest atom the feature allows at 1280 x 800: 382 particles and 7 rings in 8 draw calls at **0.258 ms** a frame against a 16.70 ms cadence, with 0 console messages and 0 failed requests. Neither the model nor the scene is on a page yet. Phase 13's pure half is in and proved: `scripts/lib/point-sphere.js` (the golden-angle spiral, deterministic, centred, rescaled so the radius asked for is the cluster's outer edge) and `scripts/lib/atom-model.js` — a record plus three counts becomes every nucleon's place and kind, a nucleus radius, one ring per shell taken from the record's own `shells`, and each electron's phase — 27 tests over the real 118 records and the scale read out of `tokens.css`. On top of it `scripts/components/atom-scene.js` brings the model to life: one instanced draw for the whole atom, one ring per shell, the electrons on the scene's own clock so a speed change cannot make them jump, an impulse shake with an exponential decay, and 19 tests through a recording canvas. What is left of the phase is the style guide driving it and the recorded frame time. Phase 12 is `COMPLETE` and **proved in a browser rather than in a stub**: the layer draws a moving frame on the style guide's stage with **0 console messages and 0 failed requests**, and its own numbers are recorded in `docs/research/05-atom-renderer-measurements.md` — 43 particles and 3 orbits in **4 draw calls** at 0.10 ms in the layer, 125 and 7 in **8 draw calls** at 0.20 ms, against a 16.70 ms vsync-bound cadence on an Apple M4 through ANGLE. The suite is **577 pass, 0 fail**; the accessibility sweep still reports **0 defects across 19 pages** and the responsive sweep **76 of 76**. Measuring found the one defect no unit test could: the particle draw used a vertex array that left the sphere's own attributes unbound, so every sphere collapsed to a point at its centre and the frame showed only the orbits — and the fix carries a regression test that was run against the defective revision and failed there. No page uses the layer yet |
-| **Objective achieved** | The replica is a finished product. Every page is rendered at build time rather than assembled by the browser, so a crawler and a reader whose script did not run both see the site. Every page carries a title, a description, a canonical link, Open Graph metadata and JSON-LD, and the build writes `sitemap.xml` from the routes it actually wrote plus a `robots.txt` naming it. Twenty pages now pass an accessibility sweep with 0 defects (nineteen at publish, before `/atoms/` existed) and all 80 page-and-width combinations fit their viewport (76 of 76 at publish), the worst layout shift on any page is 0, and Lighthouse scores accessibility, best-practices and SEO at 100 across seven sampled pages |
-| **Status** | `COMPLETE` and **published**. The live site answers 200 for `/`, a stylesheet, a module, the icon, `data/elements.json`, an element page, `sitemap.xml` and `robots.txt`, all under `/Chemipedia/`, and the domain root answers 404 — which is the point of the path. Locally, as the branch stands today: `node --test source/tests` → **681 pass, 0 fail** (497 when the site was published). The build writes **563 routes** plus the not-found page and reports **0 waiting** (562 at publish). Three of the four gates have been re-run with `/atoms/` in their page lists — accessibility **0 defects / 29 informational lines across 20 pages**, responsive **80 of 80**, and the performance and Lighthouse sweeps are Phase 15's to re-run; their publish-time readings were **worst shift 0, slowest cold load 38–41ms, 0 long tasks** and **accessibility 100, best-practices 100, SEO 100, performance 89 mean (82–98, recorded not gated)**. A clone into an empty directory builds and passes the suite with nothing installed |
-| **Current commit** | on `main`, clean and pushed at `5b0a2dc`, tagged `v1.1.0`: `feature/atom-3d` (the plan first — the second reference's audit, then the four phases with the checkpoint and the handoff — then Phase 12 in five commits (the arithmetic `e748de5`, the camera `19bc719`, the meshes `f557ea3`, the four modules the layer is `adcbbe5`, the browser proof `cb570b3`), Phase 13 in five (`c3b2aaf`..`86da30b`), and Phase 14 in two: the route, the page, the bar and the navbar item in `861307d`, and the close-out `190a08b` with the way in from every element page, the fragment, the keyboard and fragment claims, the two site-wide sweeps and the split the line ceiling forced), and then `cd18435` the review's geometry, light and field, `c3ff53a` the head a swap used to leave behind and `529fbe0` their documentation. That branch was merged into `main` with `--no-ff` as `ad58ee2` and pushed; `5b0a2dc` records the release and is the commit `v1.1.0` is tagged on. The earlier releases are untouched: `v1.0.1` on `bd338dd` (the deployment fix — every URL the site writes stays inside the path it is published under) and `v1.0.0` on `e035c6f`, the release whose publication exposed that defect |
-| **Review change, the swap defect and the field (committed)** | **`cd18435`** carries the atom and its stage and **`c3ff53a`** the head a swap used to leave behind, and the delivery the author then authorized is done: merged as `ad58ee2`, published as `v1.1.0`. **The author reviewed the built page and asked for a closer copy of the reference**, naming three things: too much gap between the nucleons, a nucleus that looked too large, and a scene that read as *electrons wandering around*. All three were the same mistake — the first reading had taken the reference's palette and counts and skipped its geometry — and all three are now measured against it: the cluster is packed at the reference's own `0.9 ∛N` nucleon radii (iron's nucleons went from `1.27` diameters apart to `0.76`, oganesson's from `0.98` to `0.59`), **each shell lies in a plane of its own** (one upright, one flat, one diagonal, the rest turned by the golden angle on all three axes — the reference's own rule), the rings stand off the nucleus by its own share (`1 + 0.15 · clusterRadius`) so a heavier atom's rings reach past a heavier nucleus, the camera came in from `17` to `13.1` (the reference's own distance divided by the model scale its radii already carry), and the light became a sky over a ground with a specular highlight whose width is a roughness and whose tint is a metalness — the reference's `0.4` and `0.2`. **Measured in a browser, both pages:** the nucleus is `0.1360` of the frame's height against the reference's `0.1237` (it was `0.1599`), and `0.203` of the atom around it against `0.211` (it was `0.361`). The reference's palette is still nowhere in the repository; the electron was raised to a brighter blue of our own hue. All three atom audits hold (57, 33, 25 claims), the layer is still 0.10 ms and the page still vsync-bound at 16.70 ms, the three site-wide sweeps are unchanged — **0 defects across 20 pages**, **80 of 80**, worst shift 0 and a 40 ms slowest cold load — and the suite is **664 pass, 0 fail**. The audits were run once more against the build the branch ends on, after `atom-model.js`'s moving half was split into the new `lib/atom-orbit.js` (121 lines) to bring the model back under the ceiling: all 57, 33 and 25 claims hold, exit 0, 0 console messages. Recorded in `docs/research/04` §6, `docs/research/05` and `progress/PHASE_LOG.md`. **Then the author found a defect by using the site**: every client-side navigation arrived unstyled until a reload — the router had swapped the body and left the head since Phase 5, so a page reached by a click wore the page it came from's stylesheets. Fixed with `router/page-head.js`, which puts the arriving page's sheets in place and waits for them before the swap, carries a shared sheet across as the element it already is, and takes the same canonical link and metadata; verified in a browser by comparing a swapped page with a full load — identical sheets, identical computed styles on **every element**, and identical screenshots on three of four navigations (the fourth is the atom turning, and its markup differs only by the `tabindex` the router puts on `main`). **And the author asked for the reference's grid behind the scene, with a better field**: the field is now the scene's own first pass (`components/atom-field.js` and `GRID_PROGRAM`) rather than a stylesheet pattern, because this canvas is opaque for a measured reason — a translucent ring blended into a transparent buffer comes out at a third of the opacity it was asked for — at 28 CSS pixels between lines, every fourth stronger, the field a shade darker towards the corners, over a lifted `#0d2b28` field; the bar's glass moved to the reference's measured values (blur 15px, radius 0.75rem, fill 0.55, border 0.18, and the 40px halo of its own accent in our electron's hue); and `atom-pixels.mjs` learned the panel is two colours so the pixel audits still measure the scene (**0.39%** of the stage lit on the light atom). Suite: **681 pass, 0 fail**. **Merged into `main` as `ad58ee2` and published as `v1.1.0`** |
-| **Next action** | **Nothing is outstanding.** The site is published at `v1.1.0`: the atom viewer, the review change, the field and the head fix are live at <https://dhbhensdadia.github.io/Chemipedia/atoms/> and were verified in a browser. The next work item is whatever the author asks for next; the three deferrals below and the ceiling list are the only known remainder, and `docs/IMPLEMENTATION_PLAN.md` §3 is spent |
+| **Phase** | Phases 0–15 are `COMPLETE` and the site is published at `v1.1.0`. **Phases 16–17 — the field, then the motion and the depth — are `COMPLETE` on `feature/living-paper`** (their own entries in `progress/PHASE_LOG.md`); **Phase 18 — quality and delivery — is `NOT_STARTED`**. **ADR-008 is `ACCEPTED`** |
+| **Branch** | `feature/living-paper`, cut from `main` at `0ba6b04`, carries the whole feature so far — the plan, the audit, the field and its gate, and the motion layer with its own gate. **Local only — not merged, not pushed** (`docs/GIT_WORKFLOW.md` §8): merging, pushing and tagging wait for the author's word |
+| **Objective (this programme)** | Answer the review finding that the page field is a flat fill and a reader's first impression is a static document. The field is four CSS layers drawn from the site's own group colours — the wash with the page family's own bloom, the lattice (the atom stage's own 28 px grid at paper strength), and the grain — with a slow compositor-only drift; the planned fourth layer, the vignette, was **cut in the build** and the cut recorded (`docs/research/06` §8). Phase 17 adds the motion-and-depth layer, now built and audited: platform-native reveals that rise and never fade, a pointer light that only brightens, a masthead that frosts on scroll, a route cross-fade that refuses under reduced motion, and one measured depth pass over the elevation ladder. Every hue is a `--g-*` token, the contrast bound is derived from `--ink-faint`'s own 4.99:1, print and reduced motion get the designed still field, nothing depends on script, and no animation spends a contrast the tokens never promised. Planned in `docs/IMPLEMENTATION_PLAN.md` §3; measured in `docs/research/06`; ADR-008 governs |
+| **Work item (previous phase)** | 16.2 `COMPLETE`: the style guide's living-paper section, one page per family seen at 1280/768/375 with the two small repairs, and the three sweeps unchanged — recorded in the Phase 16 entry |
+| **Status (this feature)** | **Phase 17 `COMPLETE`.** Delivered: `scripts/components/pointer-light.js` (224 lines; fine pointers only, absent under reduce, touch never), `scripts/components/masthead-frost.js` (109; the class fallback where scroll timelines are absent), `styles/motion.css` (65; the rise over a fixed 300 px of scroll — movement only, no opacity — and the cross-fade's 0.3 s), the router's `commit`/`mayFade()` wrap, `--shadow-lg` with the ladder placement, and `workspace/tools/visual/audit-motion.mjs` — **62 of 62 claims, exit 0** (light 5,660 samples lifted ≤ 4 LSB with no drop; frost `#f3f2f1`, faint **4.61 : 1**; twelve pages settle every reveal; reduce **0 animations** on all twelve; cross-fade 0.3 s, history restoring 800 px; frame clock 16.7 ms turning against 16.7 ms still, 0 long tasks). The split the plan sanctioned: `tools/visual/lib/pixels.mjs` shared, `audit-atmosphere.mjs` 394 → 370 lines with **106 of 106** still holding. The Lighthouse sweep's first full battery failed five pages' colour-contrast on the entrance fade — the reveal lost its fade, the a11y sweep learned ancestor opacity, **Lighthouse a11y 100 on all eight pages** — recorded in `docs/research/06` §9. Suite **732 pass, 0 fail**; a11y 0 defects / 29 informational; responsive 80 of 80; performance worst shift 0. **Phase 18 is the next work item**; merging, pushing and tagging remain the author's call |
+| **Current commit** | `feature/living-paper` at the Phase 17 close-out commits, clean. `main` at `0ba6b04` with `v1.1.0` on the release line. Nothing is pushed |
+| **Next action** | Begin **Phase 18 — quality and delivery** (`docs/IMPLEMENTATION_PLAN.md` §3): the documentation close-out (ADR-008's measured numbers, `DESIGN_SYSTEM.md` §1.8, `BRAND_GUIDELINES.md`, `TESTING_STRATEGY.md`, the guides, the README), the four site-wide gates re-run with the motion layer in, and the delivery — merge `--no-ff`, push, live check, tag `v1.2.0` — **on the author's word only** |
 
 ## Files expected to change in the next work item
 
 ```
-Phase 12  source/scripts/lib/matrix4.js            ✅ the 4x4 arithmetic              e748de5
-          source/scripts/lib/orbit-camera.js       ✅ the camera, pure                19bc719
-          source/scripts/lib/primitive-geometry.js ✅ a sphere's and a ring's buffers  f557ea3
-          source/scripts/components/frame-loop.js  ✅ when a frame is drawn           adcbbe5
-          source/scripts/components/atom-shaders.js ✅ the GLSL, and createProgram    adcbbe5
-          source/scripts/components/atom-meshes.js ✅ the vertices and the buffers    adcbbe5
-          source/scripts/components/atom-view.js   ✅ the WebGL2 layer                adcbbe5
-          source/styleguide/atom-demo.js           ✅ the layer, driven on the guide  cb570b3
-          source/styles/tokens.css                 ✅ §21 the scene's palette and numbers cb570b3
-          source/tests/components/webgl-stub.js    ✅ the recording stub both layers are judged through
-          source/tests/{lib,components}/*.test.js  ✅ one per module
-Phase 13  source/scripts/lib/point-sphere.js       ✅ even points on a sphere        c3b2aaf
-          source/scripts/lib/atom-model.js         ✅ record + counts = the model    7223652
-          source/scripts/components/atom-scene.js  ✅ the model, alive               b1e7761
-          source/styleguide/atom-demo.js           ✅ the scene, driven on the guide  3cf6661
-          workspace/tools/visual/audit-atom-scene.mjs ✅ 33 questions, all held       3cf6661
-Phase 14  source/pages/atoms.html                  ✅ the template                 861307d
-          source/scripts/pages/atoms.js            ✅ the page, as the build writes it 861307d
-          source/scripts/components/atom-bar.js    ✅ the bar's markup               861307d
-          source/scripts/components/atom-stage.js  ✅ the page in a browser          861307d
-          source/scripts/lib/atom-words.js         ✅ the sentences both halves read  861307d
-          source/styles/pages/atoms.css            ✅ the page's own sheet            861307d
-          source/styles/components/atom-*.css      ✅ the stage's and the bar's sheets 861307d
-          source/styles/tokens.css                 ✅ §21: the stage, the glass and the bar 861307d
-          source/scripts/router/routes.js          ✅ the route and nav 2; 401 → 362 lines, split  190a08b
-          source/scripts/router/route-sheets.js    ✅ new: the sheet sets the routes share      190a08b
-          source/scripts/app.js                    ✅ the behaviour entry             861307d
-          source/scripts/pages/element-detail.js   ✅ the one link into the viewer, on all 118  190a08b
-          source/styles/pages/element-detail.css   ✅ the pill that link is drawn as           190a08b
-          workspace/tools/visual/audit-atom.mjs    ✅ 54 questions, including the keyboard and the fragment
-          workspace/tools/visual/audit-{a11y,responsive}.mjs ✅ /atoms/ in the lists: 20 pages, 80 of 80
-Phase 15  workspace/tools/visual/audit-atom.mjs    ✅ the frame-time budget: 57 claims       this commit
-          workspace/tools/visual/audit-performance.mjs ✅ /atoms/ in the list: 0 shift, 0 long task
-          workspace/tools/visual/audit-lighthouse.mjs  ✅ /atoms/ in the list: 100/100/68/100 on the
-                                                    delivery build (performance recorded, not gated)
-          source/tests/brand/brand.test.js         ✅ both references' names under the scan  this commit
-          workspace/docs/ARCHITECTURE.md           ✅ ADR-007                              this commit
-          workspace/docs/DESIGN_SYSTEM.md          ✅ §1.7 the tokens, §7 the dark stage    this commit
-          workspace/docs/BRAND_GUIDELINES.md       ✅ §9 the second reference              this commit
-          workspace/docs/DATA_SOURCES.md           ✅ §7 no new data, copper's exception   this commit
-          workspace/guides/*, README.md            ✅ corrected against the source         this commit
-          workspace/docs/research/05-*.md          ✅ the page's own frame time and gates  this commit
-          the delivery                             ✅ merge --no-ff, push, Pages 37638178700, live
-                                                    check in a browser, tagged v1.1.0   ad58ee2
+Phase 18  workspace/docs/*, guides/, README.md    🚧 the close-out documentation
+          workspace/docs/ARCHITECTURE.md          🚧 ADR-008's measured numbers join the record
+          workspace/tools/visual/*.mjs            🚧 the four site-wide gates re-run
+          the delivery                            🚧 merge --no-ff, push, live check, tagged v1.2.0
+                                                     — on the author's word only
 ```
 
-The plan is delivered end to end, and the site is live. If a later phase reopens a page, the pieces
-to touch are the page's family module, its template, its sheet, its entry in the route manifest and
-its tests; `docs/MIND_MAP.md` §4 answers "which file owns this" for every case, and every new file
-must appear there in the same commit. Anything that writes a URL — markup a page or a component
-builds, a data file a repository reads, a link the browser writes after a page has loaded — must be
-checked against a deployment served from a path, not only against the development server at a root.
+Phases 16–17's files now exist (the block above listed them while they were planned; the ledger and
+the phase entries are their record). The programme touches the global layer, not the page families:
+the family fields key off the body's existing `data-page`, the motion layer is one global sheet plus
+two components, and no page's markup changed. If a family needs a stronger field than the shell can
+express, the owner is that family's sheet, and `docs/MIND_MAP.md` §4 answers "which file owns this"
+for everything else. Every new file must appear in the mind map in the same commit; `styles/tokens.css`
+is over the ceiling and the §23 additions were kept to one group; `motion.css` shipped at 65 lines,
+`pointer-light.js` at 224 and `masthead-frost.js` at 109, all under the 400-line law; and
+`tests/components/pointer-light.test.js` crossed the ceiling at 412 — recorded in the Phase 17 entry
+with its seam named.
 
 ## Work item ledger
 
@@ -127,13 +89,24 @@ checked against a deployment served from a path, not only against the developmen
 | 15.2 The page's own frame time, measured against itself | `COMPLETE` | `audit-atom.mjs` measures the browser's own `requestAnimationFrame` timings over 90 frames twice — with the heaviest atom the published controls allow turning, and with the same page held still — and counts long tasks in both windows. The page is vsync-bound and stays vsync-bound: **median 16.70 ms turning, 16.70 ms still, worst 16.80 ms, 0 long tasks**. 54 → **57** claims, all held, exit 0; recorded in `docs/research/05` | this commit |
 | 15.3 ADR-007 and the documentation | `COMPLETE` | `ARCHITECTURE.md` gains **ADR-007** (raw WebGL2, no library, tokens as the palette, progressive enhancement, the model pure and the scene clocked) with its options, consequences and reversal cost; `DESIGN_SYSTEM.md` gains §1.7 (the 53-value token group) and §7 (the dark stage's four rules); `BRAND_GUIDELINES.md` §9 (the second reference: what we took, what never enters the repository); `DATA_SOURCES.md` §7 (no new data, and copper as the derived number's visible exception); all four guides and the tour corrected against the source; the README at the branch's own counts. **And the second reference's name is now enforced** by `tests/brand/brand.test.js` rather than verified by hand | this commit |
 | 15.4 The delivery | `COMPLETE` | **Done on the author's word.** `feature/atom-3d` merged `--no-ff` as `ad58ee2` and pushed; the **Pages run `37638178700` succeeded** (build and deploy, with the two known Node 20 deprecation notices); the subpath build wrote **564 documents with 0 URLs outside `/Chemipedia/`**; six browser audits on that build held — atom **57**, scene **33**, renderer **25**, accessibility **0 defects / 29 informational across 20 pages**, responsive **80 of 80**, performance **worst shift 0, 38 ms slowest cold load, 0 long tasks**; and **live in a browser**: `/atoms/` answers, draws (the canvas not hidden, the atom's name on it, 0 console errors, 0 failed requests) and a real click from `/periodic-table/properties-and-states/` to `/elements/` lands on the same 11 stylesheets, the same measured styles and the same screenshot as a full load. `v1.1.0` is tagged on the close-out commit | `ad58ee2` + the close-out commit |
+| 16.0 The plan, the branch and the living-paper audit | `COMPLETE` | `docs/IMPLEMENTATION_PLAN.md` §3's Phases 16–18, with §2's programme paragraph, §4's graph, §5's estimate and §6's six new risks; `docs/research/06-living-background-and-motion-audit.md` — eight reference-grade sites' fields measured in the same headless Chrome the visual harness uses, the seven techniques that recur, and the contrast budget derived from `--ink-faint`'s own 4.99:1; `docs/ARCHITECTURE.md` ADR-008 `PROPOSED`; `MIND_MAP.md`; `AGENTS.md`'s ADR table brought current; this file and `HANDOFF.md`. Branch `feature/living-paper` cut from `main` at `0ba6b04`; no source file exists yet | this branch's first two commits |
+| 16.1 The field: tokens, the sheet, the bound and the gate | `COMPLETE` | `tokens.css` §22 — every bloom a `--g-*` reference with its anchor and its alpha cut under its own derived ceiling, the lattice at the table's own 28 px pitch and 1.1 %, the grain at 1 % effective, the 4 % bleed corrected by the 1.08 scale, the drift at 180 s / 240 s, the family map, and the narrow query's 0.88 wash. `styles/atmosphere.css` (260 lines): four fixed pseudo-elements on `html`/`body` at `z-index: -1`, no background on `html` so the canvas keeps propagating, the family overrides keyed off `body[data-page]` — nine names, four default templates — two animations inside the no-preference gate, print strips all four; the build links it as the fourth global sheet. `tests/lib/backdrop.test.js` grew to **14 tests**, including the plan's overlap bound scanned over every family × four reference viewports with the texture charged at its worst: floor **4.575 : 1**. `audit-atmosphere.mjs`: **106 of 106 claims, exit 0** — worst on-field text **4.79 : 1**, the kill switch moving 4–7 LSB, print bare paper, the no-script anchor `#f8f8f6`, three phone frames at 0 px, and a lived-in drift window at **120 frames / 16.7 ms median / 0 long tasks / 0 shift**. The family-pair defect the pixels caught (a `:root` alias froze the family hue before any page override; the fix reads the pair on the sheet that paints it) is recorded in the Phase 16 entry. Suite **695 pass, 0 fail** | `ae2fad9` · `ba1647a` · `e4b4c00` · `27115dc` · `53c5715` · `6336dc0` · `a34b552` |
+| 16.2 The style guide, the widths and the close-out | `COMPLETE` | The guide's **the living paper** section: a swatch per bloom and per family — each the composite the tokens draw — the pages each family covers read off the atmosphere sheet, all **54** `--field-*` tokens listed with computed values, and a live reduced-motion line; everything read from the stylesheets the page renders. Seen at 1280/768/375, with two small repairs (the token rows and the type scale's demo words now wrap; the guide fits every width). One page per family seen at all three widths, differences named in the entry (family anchors from `#fcf6f3` table to `#f8f7f5` default at 1280/768; at 375 the masthead's paper band covers the bloom's core — recorded in `research/06` §8). The three site-wide sweeps unchanged: **0 defects / 29 informational across 20 pages**, **80 of 80**, **worst shift 0, 37 ms slowest load, 0 long tasks**; print re-measured as **8 PDFs, 1 sheet each**; console and network clean across twelve pages and the guide. `research/06` §8, the Phase 16 entry, this file and `HANDOFF.md` | `6b1cb2d` + the close-out commit |
+| 17.1 The light that only brightens | `COMPLETE` | `scripts/components/pointer-light.js` (224 lines): a 46vmax white disc at α 0.4, clean again at 70 % of its radius, driven through three custom properties (tokens §23); fine pointers only and absent under reduced motion, each watched so the preference flips both ways; a touch never drives it even where the primary pointer is fine; eased at the orbit camera's own 8/s and off the shared frame loop the moment it arrives — a page nobody is pointing at writes nothing. 16 tests; wired once in `app.js` | `6016588` |
+| 17.2 The frosted band | `COMPLETE` | `scripts/components/masthead-frost.js` (109 lines) answers for the readers the timeline gate leaves out — no scroll-driven animations, or reduce — with the `is-frosted` class, the same frost applied instantly; where the timeline runs, `site-header.css` frosts the band at paper 0.96 behind an 8 px blur over 160 px, derived so the faintest ink keeps AA over the darkest ground the site can scroll beneath it (4.64 : 1 over the stage, 4.57 : 1 over black). No listener where the timeline runs | `d232d30` |
+| 17.3 The rise | `COMPLETE` | `styles/motion.css` (65 lines): sections and the `-list`/`-grid`/`-cards` lists rise as they enter through `animation-timeline: view()` inside `@supports`, over a fixed 300 px of scroll, scrubbed `linear`; the unsupported and reduced-motion baselines are the finished page; the build links it as a global sheet. The first build faded as it rose — 17.6 records what the gate did with that | `9fa4267` |
+| 17.4 The cross-fade | `COMPLETE` | `commit(next, top)`/`mayFade()` in `router.js` wrap only the swap and the settle, feature-detected and refused under reduce; history moves never fade; the wrap lands after the head so the arriving page is only ever faded in in its own sheets; `motion.css` gives both root snapshots the house's 0.3 s instead of the platform's default. `tests/router/dom-fixtures.js` extracted — `router.test.js` 484 → 342, back under the ceiling — and `tests/router/crossfade.test.js` holds the four decisions | `5279ae0` |
+| 17.5 The ladder, one step | `COMPLETE` | `--shadow-lg: 0 10px 30px #15403d12` (α 0.071, under md's 0.078; faint over the wash 4.51 / 4.35 / 4.43 : 1 across sm / md / lg). Cards, tiles, chips and the similar-element tiles lift on hover and focus alike; the pinned chip holds md (its own rule, so hover wins); member rows stay sm; panels stay flat; the group surfaces gained their `:focus-visible` twins | `a357370` |
+| 17.6 The gate, the split, and the fade the gate refused | `COMPLETE` | `tools/visual/lib/pixels.mjs` extracted (audit-atmosphere 394 → 370, **106 of 106** still holding); `audit-motion.mjs` written — **62 of 62 claims, exit 0**: the light follows to 1.000 and lifts 5,660 samples ≤ 4 LSB with none dropped, absent under stillness and on a coarse pointer; the frost over the stage `#f3f2f1`, faint **4.61 : 1**, the fallback identical; twelve family pages walked, every reveal settled (7/7 home, 53/53 glossary); reduce settles everything at load with **0 animations**, print likewise; a forward move is one fade at 0.3 s landing at the top with focus on `main`, history restoring 800 px without one; the ladder read back to the token; 16.7 ms median turning against 16.7 ms still, 0 long tasks. The battery's first run failed where the eye could not — Lighthouse a11y 96–97 on five pages, against a fade the a11y sweep could not see — so the reveal became the movement alone, the a11y sweep composites the ancestor chain, and a mid-rise section is held fully opaque. After: **Lighthouse a11y 100 on all eight pages**, a11y **0 defects / 29 informational**, responsive **80 of 80**, performance **worst shift 0, 79 ms slowest, 0 long tasks**; suite **732 pass, 0 fail** | `54a44a6` + the close-out commit |
 
 Status vocabulary: `NOT_STARTED` · `IN_PROGRESS` · `BLOCKED` · `VERIFIED` · `COMPLETE`.
 A `VERIFIED` row **must** name the evidence. A `COMPLETE` row **must** name its commit hash.
 
 ## Accepted decisions
 
-All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 11 join the set:
+All **eight** ADRs stand, and **ADR-008 (the living paper) is `ACCEPTED`** — the author approved the
+plan in `docs/IMPLEMENTATION_PLAN.md` §3, and the measured numbers of its three phases join the
+record when Phase 18 closes the programme. Four decisions from Phase 11 join the set:
 
 | Decision | Why |
 |---|---|
@@ -143,7 +116,9 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 | **The deployment is a workflow; publication is the author's step.** | `docs/GIT_WORKFLOW.md` §8 makes publishing deliberate and author-approved. The workflow, the routing fallback and the README's steps are the deliverable; the push was not claimed until it happened, and it happened on the author's instruction. |
 | **A site that declares where it lives must place every URL inside that path.** | The live address is a project site, served from `/Chemipedia/`. A path written from the site's own root is right locally and leaves the site in production, and two of them cannot be rewritten after the fact: a request for a data file, and a link the browser writes after the page has loaded. So the deployment's path is read once in the build (`tools/site-origin.js` → `rootedAt` in `tools/document.js`) and once in the browser (`scripts/lib/site-path.js`, off the module's own address) — and a deployment served from a path is a case the suite covers, not a hope. |
 | **Derive a claim rather than assert it.** | Unchanged, and now applied to nine families: the fading ceiling is derived from the eleven group fills by `lowestAlphaForAA` rather than chosen, and a test holds every fading token above it. |
-| ADR-001..006 | Unchanged; see `docs/ARCHITECTURE.md` and the previous sessions' notes in the phase log. |
+| **The field's contrast budget is derived from the ink ladder, not chosen.** | The living paper's caps — one bloom at a time where text sits, ≤ 5 % for the four dark group hues, ≤ 8 % for the light ones, lattice and grain ≤ 2.5 % — are spent from `--ink-faint`'s own shipped 4.99:1 on the paper, derived in `docs/research/06` §6 and **now held** by `tests/lib/backdrop.test.js` (the overlap scan floors at 4.575 : 1); the browser audit reads the real pixels at the drift's extremes and finds **4.79 : 1** at its worst. The pointer light is white-based, so it can only raise the field's luminance and sits outside the budget by construction. |
+| **The reveal moves and never fades.** | The entrance fade was real for one day of the build: it made a section mid-flight draw its text below the contrast every token promises, and the Lighthouse gate failed five pages for it while a still-page sweep could not see it. The reveal is the rise alone — no opacity is animated anywhere — and `audit-motion.mjs` holds a mid-rise section moved and fully opaque. The general rule: an animation may not spend a contrast the tokens never promised. |
+| ADR-001..008, all accepted | Unchanged; ADR-008's numbers were measured with Phase 16 and are recorded in the phase entry and `docs/research/06` §8. See `docs/ARCHITECTURE.md` and the previous sessions' notes in the phase log. |
 
 ## Known risks and blockers
 
@@ -160,17 +135,24 @@ All six ADRs stand; nothing is blocked on a decision. Four decisions from Phase 
 | `covalentRadius` and `latticeParameters` are `null` for all 118 | Two rows of an element page read "Unknown" | Recorded in `docs/DATA_SOURCES.md`; filling them needs a third source and touches one adapter, no page. |
 | The typeface is not the reference's | Every page's text measures a few per cent differently, which inflates the harness's crop numbers | A Phase 1 deviation, recorded. It is the class of difference the 1280px home capture's 2.31% belongs to. |
 | Lighthouse's performance score moves between runs | A recorded number can look like a regression when the machine is busy | `audit-lighthouse.mjs` records performance and SEO rather than gating them, and the Phase 11 entry states both readings (89 and 92 mean) with the reason. Only accessibility and best-practices gate. |
+| The living paper's field moves, so one screenshot cannot verify it | A moving field behind text is where a contrast defect would hide, and every existing sweep screenshots still pages | The caps are derived from `tokens.css` in `tests/lib/backdrop.test.js` (fourteen tests, overlap floor 4.575 : 1), and `audit-atmosphere.mjs` — built and holding **106 of 106 claims** — samples real composited pixels behind every sampled text run at the drift's extremes, where the field is darkest (worst **4.79 : 1**); `audit-motion.mjs` — **62 of 62 claims** — holds the same discipline for the motion layer, from the light's lifted pixels to a mid-rise section that must stay fully opaque. The programme's full risk register is `docs/IMPLEMENTATION_PLAN.md` §6. |
+| **A custom-property alias at `:root` can freeze a per-page hue** | A `var()` inside a custom property is substituted where the property is **declared**, so an alias on `:root` resolves before any `body[data-page]` override can matter — every computed property and token test reads correct while every page wears one colour. This happened once, in the family bloom, and only the pixel audit caught it | The family pair is read on the sheet that paints it (`atmosphere.css`), never through a root alias; `tests/lib/backdrop.test.js` holds both halves — no root alias for the family hue, and the sheet reads `--field-family-hue`/`--field-family-alpha` itself — and the audit's anchors must differ per family, with the kill switch stopping a vacuous pass on a pale page. Recorded in the Phase 16 entry and `docs/research/06` §8. |
+| **At 375 px the family bloom's core sits behind the masthead** | The masthead's own paper band is 280-odd pixels tall on phones, so the family's tint is not readable at phone width (≤ 2 LSB below the band); the field there is the lattice, the grain and the far sheet's corner blooms | Recorded, not patched: `docs/research/06` §8 and the Phase 16 entry. Phase 17 measured the motion layer and left the composition as it stands — the note remains open, recorded rather than patched — and the family differences are measured present at 1280 and 768. |
+| **An animated ancestor can hide a contrast defect from a still sweep** | Text is composited at its own alpha times every ancestor's; the entrance fade lived on a section, and a sweep reading the text element's own opacity passed the five pages Lighthouse failed | `audit-a11y.mjs` multiplies the whole ancestor chain into the text's alpha the way a browser composites it; no opacity is animated anywhere; and `audit-motion.mjs` holds a mid-rise section fully opaque. Recorded in `docs/research/06` §9 and the Phase 17 deviations table. |
 
 ## Deliberately unfinished
 
-**All fifteen phases are `COMPLETE` and the site is published at `v1.1.0`** — the atom viewer, the
+**Phases 0–15 are `COMPLETE` and the site is published at `v1.1.0`** — the atom viewer, the
 review change that brought its geometry, light and field to the reference's own measured numbers, and
 the head a client-side navigation used to leave behind are all live at
 <https://dhbhensdadia.github.io/Chemipedia/atoms/>, verified in a browser rather than by `curl`.
 
-**Nothing is left on the plan.** The rule that got it here still stands for anything after it:
-**nothing is merged, pushed or tagged without being asked** (`docs/GIT_WORKFLOW.md` §8) — the word was
-given for this delivery, and a later one will need its own.
+**Phases 16–17 are `COMPLETE` on `feature/living-paper` — local only; Phase 18 remains.** The field
+and the motion layer are built, audited and closed per their entries in `progress/PHASE_LOG.md`, and
+the branch carries the whole feature so far: the plan, the audit, the field and its gate, the motion
+layer with its own gate, and the style guide's section. The rule that got the site here still
+stands: **nothing is merged, pushed or tagged without being asked** (`docs/GIT_WORKFLOW.md` §8) —
+the word was given for the `v1.1.0` delivery, and this delivery will need its own.
 
 Four deferrals stand, each recorded where it belongs:
 
@@ -179,18 +161,24 @@ Four deferrals stand, each recorded where it belongs:
 2. **Two schema fields** that no acceptable source supplies (`covalentRadius`, `latticeParameters`) —
    see `docs/DATA_SOURCES.md`.
 3. **The typeface** — not the reference's, recorded as a Phase 1 deviation.
-4. **Eleven files over the 400-line ceiling under `source/`, inherited rather than fixed** —
-   `styles/tokens.css` (824), `styles/pages/element-detail.css` (520, of which this feature's link is
-   about twenty lines), `tests/lib/atom-model.test.js` (518), `tests/router/router.test.js` (484),
+4. **Twelve files over the 400-line ceiling under `source/`, inherited rather than fixed** —
+   `styles/tokens.css` (**993** — it grew from 946 with §23 and remains the standing exception),
+   `styles/pages/element-detail.css` (523), `tests/lib/atom-model.test.js` (518),
    `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457),
    `tests/components/periodic-table.test.js` (444), `scripts/components/atom-view.js` (441),
-   `scripts/lib/matrix4.js` (421), `tests/components/atom-view.test.js` (412) and
-   `scripts/components/periodic-table.js` (418) — plus three in `workspace/tools/visual/`, which ships
-   to no page: `audit-atom.mjs` (596), `compare.mjs` (505) and `audit-atom-scene.mjs` (424). Phase 14
-   split the one file its own work pushed over (`router/routes.js`, now 362 lines plus
-   `router/route-sheets.js` at 64), and this work brought `atom-model.js` back under by splitting out
-   `lib/atom-orbit.js`; the rest is a two-file refactor each, and they are recorded in
-   `progress/PHASE_LOG.md` rather than quietly kept.
+   `scripts/lib/matrix4.js` (421), `tests/components/pointer-light.test.js` (**412** — this phase's
+   crossing; the light's easing and its two environmental answers in one file, and the seam named in
+   the phase entry), `tests/components/atom-view.test.js` (412),
+   `tests/lib/backdrop.test.js` (412 — the Phase 16 overlap scan, seam named there) and
+   `scripts/components/periodic-table.js` (418) — plus four in `workspace/tools/visual/`, which ships
+   to no page: `audit-atom.mjs` (596), `compare.mjs` (505), **`audit-motion.mjs` (686 — this phase's,
+   larger than `audit-atom.mjs`; its six question blocks are self-contained and the frost and the
+   frame clock are the two that would move out first)** and `audit-atom-scene.mjs` (424). Phase 17
+   took `tests/router/router.test.js` **off** the list (484 → 342, the fake page moved to
+   `router/dom-fixtures.js`) and brought `audit-atmosphere.mjs` back under (394 → 370): twelve under
+   `source/` before, twelve after. Phase 14 split the one file its own work pushed over
+   (`router/routes.js`, now 362 lines plus `router/route-sheets.js` at 64); the rest is a two-file
+   refactor each, and they are recorded in `progress/PHASE_LOG.md` rather than quietly kept.
 
 The one-time push is no longer on this list: it ran on the author's instruction on 2026-10-06, and
 the site it published is live.
@@ -201,7 +189,7 @@ the site it published is live.
 git log --oneline -20             # what has actually been committed
 git status --short                # anything half-done?
 cat workspace/RUN_STATE.md        # this file
-node --test source/tests          # is the last checkpoint real?  expect: 681 passing
+node --test source/tests          # is the last checkpoint real?  expect: 732 passing
 node source/tools/build.js        # renders 563 routes, 0 waiting
 SITE_ORIGIN=https://<owner>.github.io/<repo> node source/tools/build.js   # the deployed shape
 node source/tools/serve.js --port 4180   # the site
@@ -217,12 +205,17 @@ And the four gates, from `workspace/tools/visual` after `npm install` — all fo
 ```bash
 node audit-a11y.mjs         # 0 defects across 20 pages
 node audit-responsive.mjs   # 80 of 80 fit
-node audit-performance.mjs  # seven pages: shift 0, slowest load 35–40ms across runs, no long task
+node audit-performance.mjs  # seven pages: shift 0, slowest load 79ms this run, no long task
 node audit-lighthouse.mjs   # eight pages: accessibility 100, best-practices 100, seo 100 (performance recorded)
+node audit-atmosphere.mjs   # 106 of 106 claims: the field itself, at the drift's extremes (same server)
+node audit-motion.mjs       # 62 of 62 claims: the light, the frost, the reveals, the cross-fade, the ladder, the frame clock (same server)
 ```
 
 Then open `workspace/progress/PHASE_LOG.md` at Phase 11 for the evidence behind each number, at Phase
-14 for the page's and at Phase 15 for the gates and the frame time.
+14 for the page's, at **Phase 15** for the gates and the frame time, at **Phase 16** for the field —
+its numbers, the alias defect the pixels caught and the recorded deviations — and at **Phase 17**
+for the motion: its numbers, the fade the Lighthouse gate refused, and the discipline
+`audit-a11y.mjs` and `audit-motion.mjs` now share.
 
 The atom viewer's own audits run the same way, against a server on 4188:
 
@@ -233,3 +226,9 @@ BASE=http://127.0.0.1:4188 node audit-atom.mjs        # 57 claims, the page itse
 BASE=http://127.0.0.1:4188 node audit-atom-scene.mjs  # 33 claims, the style guide driving the scene
 BASE=http://127.0.0.1:4188 node audit-atom-renderer.mjs # 25 claims, the drawing layer alone
 ```
+
+Phase 17 is **closed**; Phase 18 — quality and delivery — begins next at
+`docs/IMPLEMENTATION_PLAN.md` §3, on branch `feature/living-paper`. The motion layer's gate is
+`node audit-motion.mjs` — real pixels and real frame time: **62 claims, exit 0** — and the field's
+own gate still holds **106 of 106**. The delivery (merge, push, tag `v1.2.0`) is Phase 18's and
+waits for the author's word.

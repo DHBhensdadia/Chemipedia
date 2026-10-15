@@ -39,10 +39,15 @@
     box-shadow var(--dur-fast) var(--ease-out);
 }
 
-/* Pointed at, reached by keyboard, or pinned by a press: the same small lift. The outline for
+/* Pointed at or reached by keyboard: the chip rises to the ladder's top step. The outline for
    the keyboard case comes from base.css, so the ring is never replaced by the shadow. */
 .chip:hover,
-.chip:focus-visible,
+.chip:focus-visible {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(var(--lift-tile-sm));
+}
+
+/* Pinned by a press: the chip sits raised, a step under the pointer's own lift. */
 .chip.is-active {
   box-shadow: var(--shadow-md);
   transform: translateY(var(--lift-tile-sm));

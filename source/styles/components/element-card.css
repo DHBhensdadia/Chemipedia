@@ -32,7 +32,7 @@
    base.css, so a focused card is marked twice over rather than not at all. */
 .card__link:hover,
 .card__link:focus-visible {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   transform: translateY(var(--lift-tile-sm));
 }
 

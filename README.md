@@ -23,14 +23,24 @@ translucent bar driving it. It is hand-written WebGL2 (`docs/ARCHITECTURE.md`, A
 dependency and no data, and it degrades to the element's own shell diagram rather than to a blank
 stage. **It is published in `v1.1.0`**; everything below is measured on the released commit.
 
+**Three more phases drew the living paper.** The field every page is read on is a designed
+composition — soft washes of the site's own group hues, the atom stage's lattice at paper strength,
+and grain, with a slow compositor-only drift — and over it the pages move: sections rise as they
+enter, a soft white light follows the pointer, the masthead frosts once the page has scrolled, a
+route change dissolves, and the elevation ladder gains its third step. Every value is a token, the
+contrast bound is derived from `--ink-faint`'s shipped ratio before anything is drawn, and the whole
+programme is gated in real pixels and real frame time — **106 of 106 field claims, 62 of 62 motion
+claims** (`docs/ARCHITECTURE.md`, ADR-008).
+
 | | |
 |---|---|
 | Published at | <https://dhbhensdadia.github.io/Chemipedia/> — a GitHub Pages project site, so served from the path `/Chemipedia/` rather than from a domain root |
 | Routes the build writes | 563, plus `404.html` |
-| Tests | `node --test source/tests` — 681 passing, 0 failing, with nothing installed |
+| Tests | `node --test source/tests` — 732 passing, 0 failing, with nothing installed |
 | Accessibility | 0 defects across 20 pages from our own sweep; Lighthouse 100 on eight sampled pages |
 | Responsive | 80 of 80 page-and-width combinations fit at 375 / 768 / 1024 / 1440 |
-| Performance | worst layout shift 0, slowest cold load 25–41ms across the recorded runs (38ms on the release build), no long task on any page, and `/atoms/` holds the browser's 16.70ms frame cadence with its heaviest atom turning |
+| The living paper | The field and its motion are gated in real pixels and frame time: `audit-atmosphere.mjs` **106 of 106 claims**, `audit-motion.mjs` **62 of 62** |
+| Performance | worst layout shift 0, slowest cold load 25–107ms across the recorded runs (107ms and 102ms on the closing pair), no long task in the field's own drift windows, and `/atoms/` holds the browser's 16.70ms frame cadence with its heaviest atom turning |
 | SEO | Lighthouse 100: canonical, Open Graph, JSON-LD, `sitemap.xml` and `robots.txt` |
 
 | | |
@@ -89,7 +99,7 @@ The individual steps, if you want them separately:
 git clone <this repository> && cd chemipedia
 node source/tools/build.js     # render every route into dist/   -> "Built 563 routes and the not-found page"
 node source/tools/serve.js     # serve dist/ locally
-node --test source/tests       # run the test suite             -> "tests 681 · pass 681 · fail 0"
+node --test source/tests       # run the test suite             -> "tests 732 · pass 732 · fail 0"
 ```
 
 The same three commands are available as `npm run build`, `npm start` and `npm test`. The built
@@ -98,9 +108,9 @@ generated from it.
 
 ## The quality gates
 
-`node --test source/tests` is the gate that must pass, and it needs nothing installed. The four
-sweeps behind the table above are development-only: they live in `workspace/tools/visual`, drive the
-system Chrome through Playwright, and are the evidence rather than the opinion.
+`node --test source/tests` is the gate that must pass, and it needs nothing installed. The sweeps
+and audits behind the table above are development-only: they live in `workspace/tools/visual`, drive
+the system Chrome through Playwright, and are the evidence rather than the opinion.
 
 ```bash
 node source/tools/serve.js --port 4180 &
@@ -112,6 +122,8 @@ node audit-lighthouse.mjs   # Lighthouse's own four categories, eight pages
 node audit-atom.mjs         # the atoms page itself: 57 claims, from its pixels to its keyboard
 node audit-atom-scene.mjs   # the style guide driving the model: all 118 elements, every extreme
 node audit-atom-renderer.mjs # the drawing layer on the style guide: buffers, calls and pixels
+node audit-atmosphere.mjs   # the living paper's field: 106 claims, one page per family, real pixels
+node audit-motion.mjs       # the motion over it: 62 claims, from the pointer light to the frame clock
 ```
 
 Each of them exits non-zero on the defect it owns — an unreadable colour, a page that scrolls

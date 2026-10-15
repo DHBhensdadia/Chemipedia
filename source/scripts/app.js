@@ -20,6 +20,8 @@
  */
 
 import { createRouter } from "./router/router.js";
+import { startPointerLight } from "./components/pointer-light.js";
+import { startMastheadFrost } from "./components/masthead-frost.js";
 
 /**
  * The pages with behaviour of their own, keyed by the template name the built body carries.
@@ -100,6 +102,14 @@ export function startApp({ document: doc = document, window: win = window, fetch
   });
 
   router.start();
+
+  // The light is chrome, like the router: every page gets it, no page starts it, and it removes
+  // itself where it should not run — no fine pointer, or a reduced-motion preference.
+  startPointerLight({ document: doc, window: win });
+
+  // The masthead's scrolled state is chrome too. Where the platform can scroll-animate it the
+  // stylesheet owns it; this module answers for the readers that gate leaves out.
+  startMastheadFrost({ document: doc, window: win });
 
   const name = typeof doc.body?.dataset?.page === "string" ? doc.body.dataset.page : "";
 

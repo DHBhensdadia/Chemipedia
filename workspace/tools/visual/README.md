@@ -49,7 +49,28 @@ accessibility, best-practices and SEO audit. Chrome comes from `chrome-launcher`
 from Lighthouse itself, so the numbers are not ours to argue with. It exits non-zero when
 accessibility is not perfect or best-practices drops below 0.95; performance and SEO are recorded
 rather than gated, because a 100 on loopback would be a claim about the harness. It is the slowest
-of the five tools — a run over the default pages takes about a minute — so run it last.
+of these tools — a run over the default pages takes about a minute — so run it last.
+
+**The living paper's gate.** `node audit-atmosphere.mjs` is the field's own gate, because the field
+is composited by a browser: one page per family, each read as pixels in four states — still under
+reduced motion, the drift frozen at each of its extremes, print, scripting off — with every
+on-field text run's background sampled and asked the WCAG question, the family bloom's anchor
+compared against the composite derived from the geometry tokens with the site's own contrast
+library, a kill switch requiring the pixels to move when the family pair is zeroed, an opaque
+surface proving the field stays under it, and a lived-in window holding a drift cycle to no long
+task and no shift. It reads its pixels through `lib/pixels.mjs`. It exits non-zero on any failed
+claim.
+
+**The motion gate.** `node audit-motion.mjs` holds what only a browser can say about the motion
+layer: the light follows the pointer without dropping a pixel, and is absent under stillness and on
+a touch screen; the frosted masthead is sampled over the dark stage it scrolls across and its
+faintest ink asked the WCAG question, on the scroll-timeline path and the class fallback alike;
+every family's page is walked so every reveal settles, with a census proving a page runs exactly
+its designed animations — and that a page under reduced motion runs zero; a cross-fade is counted,
+timed at the house's 0.3s and required to land at the top of the right page with focus on the
+content, while a history move stays a cut that puts the reader's place back; every rung of the
+elevation ladder is read back from a hovered surface with the keyboard's equal; and a drift window
+is timed turning and still. It exits non-zero on any failed claim.
 
 **The performance sweep.** `node audit-performance.mjs` measures six pages — home, the elements
 index, an element, a table view, the glossary and the calculator — in a fresh context each and on a

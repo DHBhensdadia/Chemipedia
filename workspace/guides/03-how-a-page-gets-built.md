@@ -128,6 +128,13 @@ The stylesheets and the JavaScript are referenced, but nothing in the content de
 search engine, a screen reader, and a `curl` request all see the same complete page. That is the
 whole reason this architecture is worth its build step.
 
+The stylesheets include the programme's two new sheets, global the same way `tokens.css` is:
+`styles/atmosphere.css` draws the field — the blooms, the lattice, the grain — and `styles/motion.css`
+carries the rise and the frost's settle, so every page is read on the field without any page family
+knowing it exists. Both are gated: the rise lives inside `@supports`, the drift and the reveals stand
+down under reduced motion, and their baseline is the finished page — no script draws the field, and
+nothing on it is hidden from a browser that has not got the feature.
+
 ### Step 4 — Browser: the shell boots
 
 `scripts/app.js` runs on load — `startApp()` — and does exactly two things, in order:
@@ -146,7 +153,8 @@ and the group index have no entry. They are markup, links and the router, and th
 
 ### Step 5 — Browser: nothing happens, and that is the design
 
-An element page has no entry in `PAGE_BEHAVIOUR`, so `scripts/app.js` starts nothing on it. Every
+An element page has no entry in `PAGE_BEHAVIOUR`, so `scripts/app.js` starts nothing on it — beyond
+the shell's own two, the pointer light and the frost, which every page gets the same way. Every
 piece of that page arrived finished, built by `elementPageValues()` and its helpers:
 
 - the **miniature periodic table**, with this element highlighted, from `elementMiniTable()`, which
@@ -163,6 +171,11 @@ That last point is a rule worth stating plainly: **derived content is computed f
 duplicated in markup.** If an element's boiling point appears in three places on the page, all three
 read from one record — and because all three are built from it, a page cannot print a number that
 contradicts itself.
+
+The field is delivered the same way. `atmosphere.css` paints it, the reveals are the platform's own
+scroll timelines, the frost is the masthead's own scroll animation with a class fallback, and the
+cross-fade is the router's (step 6); the one script that touches the field writes three custom
+properties for a fine pointer and nothing else. A browser without any of it draws the finished page.
 
 ### Step 6 — Browser: navigating to another element
 
@@ -249,7 +262,9 @@ site, as long as the page without it is already a finished one.
 Per `workspace/docs/TESTING_STRATEGY.md`: run the unit tests (`node --test source/tests`), then run
 the four sweeps in `workspace/tools/visual` — accessibility over 20 pages, responsive at
 375 / 768 / 1024 / 1440, performance on a cold cache, and Lighthouse over eight pages — plus the atom
-viewer's own three (`audit-atom.mjs`, `audit-atom-scene.mjs`, `audit-atom-renderer.mjs`), and compare
+viewer's own three (`audit-atom.mjs`, `audit-atom-scene.mjs`, `audit-atom-renderer.mjs`) and the
+living paper's two (`audit-atmosphere.mjs` — the field's 106 claims, sampled in real pixels;
+`audit-motion.mjs` — the motion's 62, from the pointer light to the frame clock), and compare
 against the reference at the widths that matter. Check the console. Then write down what you saw; each
 sweep exits non-zero on the defect it owns, so "it passed" is a measurement and not an impression.
 A page that has not been measured has not been verified — and the two defects this project is

@@ -1,8 +1,9 @@
 # Guide 4 — Interview quick reference
 
-> **Complete as of `v1.1.0`, the release that added the atom viewer.** Every row names a real file
-> and a real function, and the function name is the one the code actually exports. If a row here and
-> the code disagree, the code is right and this file is a defect — fix it in the same commit.
+> **Complete as of `v1.1.0`, the release that added the atom viewer — and of the living paper, the
+> programme that closes the site (ADR-008).** Every row names a real file and a real function, and
+> the function name is the one the code actually exports. If a row here and the code disagree, the
+> code is right and this file is a defect — fix it in the same commit.
 
 Two ways to use this. **Before an interview**, read the "Thirty-second pitch" and the top ten rows.
 **During preparation**, pick a question, open the file it names, and read the code until you can
@@ -22,11 +23,14 @@ explain it without the file.
 > isolated in pure modules with unit tests. There are 482 tests, and four browser sweeps behind the
 > accessibility, responsive, performance and Lighthouse numbers.
 >
-> The release adds one more page and 199 tests: **563 pages and 681 tests**, and that page — `/atoms/`, which draws
-> any element's atom in three dimensions. That one is hand-written WebGL2: matrices, a spherical
-> camera, mesh generation and a point distribution, all under `lib/` so they are testable in Node,
-> and a drawing layer proved by reading the pixels back out of the canvas. No library, still no
-> dependency, and the page a reader without WebGL sees is the element's own shell diagram."
+> The releases add one drawing page and 250 tests: **563 routes and 732 tests**. That page —
+> `/atoms/` — draws any element's atom in three dimensions: hand-written WebGL2 — matrices, a
+> spherical camera, mesh generation and a point distribution, all under `lib/` so they are testable
+> in Node — with a drawing layer proved by reading the pixels back out of the canvas. No library,
+> still no dependency, and the page a reader without WebGL sees is the element's own shell diagram.
+> The latest three phases add the **living paper** — the field behind every page, and the motion over
+> it — every value a token, the contrast bound derived before it was drawn and measured after by its
+> own two gates (106 of 106 and 62 of 62 claims)."
 
 ## If asked "walk me through your architecture"
 
@@ -74,6 +78,12 @@ both. Full detail in `workspace/guides/02-tour-of-the-codebase.md`.
 | Where does the atom viewer get its colours? | `source/styles/tokens.css` §21 via `getComputedStyle` | `atomScale(tokens)` and `tokenReader(doc)` in `components/atom-stage.js` |
 | How does an element page reach the viewer? | `source/scripts/pages/element-detail.js`, `components/atom-stage.js` | `elementViewerLink({ element })` writes `/atoms/#<slug>`; `elementFromFragment(hash, repository)` opens on it |
 | Why is the 3D written by hand? | `workspace/docs/ARCHITECTURE.md` | ADR-007 — raw WebGL2, no library, tokens as the palette |
+| Where is the page's field? | `source/styles/atmosphere.css` + `source/styles/tokens.css` §22 | the blooms, the lattice, the grain and the drift; every hue a `--g-*` token |
+| Where is the pointer light? | `source/scripts/components/pointer-light.js` + `tokens.css` §23 | the light is one more gradient on the near sheet; the module writes three custom properties and stops its frames the moment the light has arrived |
+| Where does the masthead frost? | `source/scripts/components/masthead-frost.js` + `source/styles/components/site-header.css` | where scroll timelines run, the band's own scroll animation frosts it; where they do not, the module draws the identical band with a class |
+| Where is the reveal? | `source/styles/motion.css` | a rise through `view()` inside `@supports` — a movement, never a fade; the settled page is the baseline |
+| Where is the route cross-fade? | `source/scripts/router/router.js` | `mayFade()` and the transition wrap — 0.3 s, refused under reduced motion and against history moves |
+| Why can the field not fail contrast? | `source/tests/lib/backdrop.test.js` + `workspace/tools/visual/audit-atmosphere.mjs` | the ceilings re-derived from `tokens.css` and held, then measured behind real text in composited pixels (`docs/research/06` §6) |
 | Where's the dev server? | `source/tools/serve.js` | — |
 | Where does the data build script live? | `source/tools/build-data.js` | fetches, merges, verifies, **then** writes |
 | How do I find any file in this project? | `workspace/docs/MIND_MAP.md` | — |
@@ -125,15 +135,17 @@ ceiling is **derived** from the eleven group fills by `lowestAlphaForAA()` rathe
 test holds every fading token above it — because 0.9 of the ink felt fine and was 4.32:1.
 
 **"How do you test something visual?"**
-Unit tests cover the logic: 482 on the published site, 681 on the release that adds the atom viewer,
-with nothing installed. Structure and appearance are checked by sweeps in `workspace/tools/visual`,
-which drive the real Chrome through Playwright: an accessibility sweep over 20 pages, a responsive
-sweep at 375 / 768 / 1024 / 1440, a performance sweep that measures layout shift and long tasks on a
-cold cache, and Lighthouse over eight pages. Each exits non-zero on the defect it owns, so a phase can
+Unit tests cover the logic: 482 on the published site, 732 at the close of the programme, with
+nothing installed. Structure and appearance are checked by sweeps in `workspace/tools/visual`, which
+drive the real Chrome through Playwright: an accessibility sweep over 20 pages, a responsive sweep at
+375 / 768 / 1024 / 1440, a performance sweep that measures layout shift and long tasks on a cold
+cache, and Lighthouse over eight pages. Each exits non-zero on the defect it owns, so a phase can
 gate on them. That is how both of the defects I am proudest of finding were found — by measurement,
-not by looking. The viewer adds three of its own: they read the drawing buffer back out of the canvas
-and classify its pixels against the same tokens the renderer was handed. The full procedure is in
-`docs/TESTING_STRATEGY.md`.
+not by looking. The viewer adds three of its own — they read the drawing buffer back out of the
+canvas and classify its pixels against the same tokens the renderer was handed — and the living
+paper adds two: the field audit samples the composited pixels behind real text at the drift's
+extremes, and the motion audit holds the light, the frost, the reveals, the cross-fade, the ladder
+and the frame clock (106 and 62 claims). The full procedure is in `docs/TESTING_STRATEGY.md`.
 
 **"How do you test a WebGL renderer, then?"**
 By splitting it so that almost nothing needs a browser. Every awkward part — 4×4 matrices, the
@@ -146,14 +158,23 @@ because the calls were issued exactly as designed. Reading the pixels back found
 the tests now: the stub canvas holds the call sequence, and a browser audit holds the picture.
 
 **"What's the hardest bug you hit?"**
-Two, and both are specific. **The home page's 0.315 layout shift**: the shipped document held four
-empty hosts and the table arrived after paint, so the page grew by 926px under the reader — and a
-crawler saw nothing. The fix was to compute the same four blocks at build time through the same table
-engine the four views already used and leave the browser only the attaching. It measures 0 now.
+Three, and each one is specific. **The home page's 0.315 layout shift**: the shipped document held
+four empty hosts and the table arrived after paint, so the page grew by 926px under the reader — and
+a crawler saw nothing. The fix was to compute the same four blocks at build time through the same
+table engine the four views already used and leave the browser only the attaching. It measures 0 now.
 **And a contrast defect our own tool could not see**: a tile's faded label was 4.32:1 against the
 actinide sage, below AA at 8.8px, because our sweep read the text colour but did not composite the
 element's own `opacity` before checking it. Lighthouse caught it. The sweep now composites, the
 fading ceiling is derived from the eleven fills rather than chosen, and a test keeps it there.
+**And one an animation hid from our own sweep.** The living paper's first reveal faded as it rose.
+Lighthouse failed five pages' colour-contrast at 96–97 — a section caught mid-fade draws its text
+below AA for a stretch of the scroll — while the site's own accessibility sweep passed them, because
+it composited the text element's own opacity but never its ancestors', and the fade lived on the
+section. Two instruments disagreed and only one was right. The fix became a rule: **an animation may
+not spend a contrast the tokens never promised.** The reveal is the movement alone; opacity is
+animated nowhere on the site; the sweep now multiplies every ancestor's opacity the way a browser
+composites; and the motion audit holds a mid-rise section as displaced and fully opaque. Lighthouse
+after the change: 100 on all eight pages.
 
 **"Where does your content come from?"**
 Facts come from two openly licensed sources — PubChem's PUG REST service (public domain) and Wikidata
@@ -181,7 +202,7 @@ the 443 contrast failures it found had been in the palette since the design syst
 
 ## Things to be able to demonstrate live
 
-Five, in this order, because each one gets harder than the last:
+Six, in this order, because each one gets harder than the last:
 
 1. **Hover a legend chip** on the home page — the group isolates in the table. One attribute on one
    element; the sheet does the rest, and it dims the fill rather than the text so the labels stay
@@ -199,3 +220,8 @@ Five, in this order, because each one gets harder than the last:
    and the matrices, the camera and the geometry generation all as pure modules with tests. Then turn
    the script off and reload: the same page is still a finished one, with the element's shell diagram
    in place of the scene. That is the answer to "what happens when it does not work?"
+6. **Scroll the home page slowly, then move the pointer.** The sections rise as they enter — the
+   platform's scroll timeline, no script — the masthead frosts once you have scrolled, and a soft
+   white light follows the pointer across the field. Then turn reduced motion on and reload: the same
+   field, held still — a designed composition, not a blank page. Shows the living paper end to end,
+   bounded by tokens and measured by its own two gates (106 + 62 claims).

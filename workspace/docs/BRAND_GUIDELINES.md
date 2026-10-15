@@ -79,12 +79,23 @@ These are the *design language* — reproduce them deliberately:
 - The overall page rhythm: generous vertical space, content on a ruled baseline grid.
 - The **1px dotted rule in the ink colour** as the signature divider and panel border.
 - Near-square corners (`2px`) with larger radius (`8px`) reserved for raised panels.
-- Flat colour fills with no gradients, no glassmorphism, no drop-shadow flourish (only the two
-  defined soft shadows).
+- Flat colour fills with no gradients, no glassmorphism, no drop-shadow flourish (only the soft
+  shadows `tokens.css` defines — a three-step ladder).
 - The relationship between a group colour and its foreground: dark ink on pale fills, cream on dark
   fills.
 - The motion character: short, decelerating, upward-entrance, staggered lists.
 - The information architecture: table first, then browse, then deepen, then reference.
+
+**One recorded exception — the living paper (ADR-008).** The page's *field* — the surface behind
+every data surface — may carry the programme's soft washes, its lattice and its grain, because the
+field is not a data surface: tiles, chips, badges, panels and cards stay flat, the field's hues are
+the same `--g-*` group tokens the table paints with, and its bound is derived from `--ink-faint`'s
+shipped ratio before anything is drawn and measured in composited pixels after
+(`docs/research/06-living-background-and-motion-audit.md` §6). The rest of the list reads as it
+always did: the elevation ladder the bullet above counts is now three defined steps (`--shadow-lg`
+included — a token, not a flourish), and the masthead's scrolled frost is paper at a derived
+near-opaque minimum, not translucent glass. Neither is a second exception. The reason the field
+outranks fidelity to a flat page is ADR-008's.
 
 ## 4. Colour
 

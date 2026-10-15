@@ -4,6 +4,8 @@
 **Course:** University JavaScript capstone
 **Design reference:** `https://www.breakingatom.com/` (structure and behaviour only — never brand or prose)
 **Status:** accepted. ADR-001, ADR-002 and ADR-003 confirmed 2026-10-01; see `docs/ARCHITECTURE.md`.
+Phases 12–15 (the atom viewer) are delivered at `v1.1.0`; **Phases 16–18 (the living paper) are
+planned and await the author's go-ahead**, and ADR-008 is `PROPOSED` until they are approved.
 
 ---
 
@@ -72,6 +74,14 @@ spins electrons around a nucleus of protons and neutrons — and asked for that 
 periodic-table and statistics pages are out of scope. Nothing of that reference enters this
 repository but the idea of the page and the shape of its controls. The measurements live in
 [`docs/research/04-reference-atom-viewer-audit.md`](research/04-reference-atom-viewer-audit.md).
+
+Rows 1–17 are the pages. The programme in §3's closing section — **the living paper** — is not a page
+but the surface they are read on: the page field stops being a flat fill, and the site's own group
+colours, its atom stage's lattice and a measured motion budget become the atmosphere every family is
+read in. It is the one place this project deliberately leaves the reference's flat-fill language
+behind, on the author's instruction after a review of the built site; the brand document records the
+amendment with its reason, and ADR-008 records the decision. The measurements are in
+[`docs/research/06-living-background-and-motion-audit.md`](research/06-living-background-and-motion-audit.md).
 
 ---
 
@@ -608,6 +618,160 @@ author asked for by name.
 
 ---
 
+### Phases 16–18 — the living paper
+
+The site is complete, published and measured at `v1.1.0`, and the atom viewer proved how a feature is
+added to a finished product: a layer at a time, each one provable on its own. This programme answers
+one review finding — the page field is a flat fill, and a reader's first impression is a static
+document — and it is planned as three phases for the same reason the viewer was four: the field must
+be drawn and proved before motion is layered over it, and the motion must be measured before anything
+is delivered.
+
+**What the programme is.** The surface every page is read on is drawn as four CSS layers — a wash of
+the site's own group colours, the atom stage's lattice at paper strength, a grain, and a vignette —
+with a slow drift that only ever touches `transform`; and on top of that, a motion-and-depth layer:
+platform-native reveals, a pointer light that only brightens, a masthead that frosts on scroll, a
+short crossfade between routes, and one measured depth pass over the site's surfaces. The audit behind
+the design — eight reference-grade fields opened and their machinery read — is
+[`docs/research/06-living-background-and-motion-audit.md`](research/06-living-background-and-motion-audit.md);
+the decision is **ADR-008**.
+
+**What it must respect.** Five constraints shape every deliverable below:
+
+1. **One theme, one palette, no new colours (ADR-006).** Every field hue resolves to a `--g-*` token
+   the data layer already ships, and a test holds that from `tokens.css` itself, so the field cannot
+   acquire a palette of its own.
+2. **The bound is derived, then measured.** The caps come from `--ink-faint`'s own shipped 4.99:1
+   (`docs/research/06` §6): one bloom at a time where text sits, ≤ 5 % for the four dark group hues,
+   ≤ 8 % for the light ones, lattice and grain ≤ 2.5 %. `tests/lib/backdrop.test.js` derives the
+   ceilings from the token file; `audit-atmosphere.mjs` then samples real composited pixels behind
+   text at the drift's extremes.
+3. **Compositor-only motion, and the still page is the page.** `transform` and `opacity` only; no
+   animated full-screen blur; reveals through the platform's own scroll timelines behind `@supports`,
+   whose unsupported baseline is the finished page; reduced motion gets the designed still
+   composition; no motion path depends on script.
+4. **The data surfaces stay flat.** Group fills, tiles and chips keep the reference's flat language;
+   the field is the page behind them. This is the one recorded amendment to the preserved list in
+   `BRAND_GUIDELINES.md` §3.
+5. **The printable pages lose nothing and gain nothing.** The field is stripped in `@media print`,
+   and the measured print page counts stay what they are.
+
+**What is explicitly not in this programme:** a dark theme or a theme switcher (ADR-006); neon,
+gradient text, glass behind prose, or any second palette; particle fields, canvases or any
+dependency of any kind; motion that carries information; and any change to the data, the routes or
+the copy.
+
+### Phase 16 — The field: the living paper, drawn and bounded
+
+**Goal:** the static field becomes the four-layer living paper, drawn entirely in CSS, bounded by
+tokens, and provable in a browser — before a single behaviour is written.
+
+**Deliverables**
+
+- `tokens.css` §22 ("the living paper"): the wash's three to four blooms — each hue a `--g-*`
+  reference, each with its anchor, radius and capped alpha, the caps carrying their derivation in a
+  comment — the lattice (colour, the stage's own 28 px pitch, ≤ 2.5 % alpha, its fade), the grain (an
+  inline SVG turbulence data-URI at ≤ 2.5 %), the vignette, the family fields (one override per page
+  family, each naming declared group hues), and the drift (durations 90–240 s, eased, with a
+  ≤ 4 %-of-viewport travel that keeps blooms apart).
+- `source/styles/atmosphere.css` — the field as pseudo-elements on `html` and `body` (`position:
+  fixed`, behind content, `pointer-events: none`): the four layers, the per-family overrides keyed
+  off the body's `data-page`, the drift animations (transform only), masks that keep the reading
+  column at paper, the `@media print` strip, and reduced-motion rules that hold the still
+  composition. Linked by `build.js` as the fourth global sheet, after `layout.css`.
+- The still composition is the shipped default: what a reduced-motion, print or no-script reader
+  gets is the same four layers, held.
+- `tests/lib/backdrop.test.js` — reads `tokens.css`: every field hue resolves to a `--g-*` token;
+  the permitted overlap of blooms keeps `--ink-faint` at or above 4.5:1 on the darkest composite the
+  tokens can produce; every family field names declared hues; lattice and grain sit under their
+  ceilings.
+- The style guide's **the living paper** section: the four layers, every field token, a swatch per
+  family field, and the reduced-motion state — the fastest way to see the field in one screen.
+- `workspace/tools/visual/audit-atmosphere.mjs` — the field's own gate: the four layers present on
+  one page per family; composited pixels behind every sampled text run inside the derived bound, at
+  the drift's extremes (animation offsets forced to the darkest phase); each family's own field
+  colour present; no horizontal overflow at 375 px; the field absent under print emulation and
+  unchanged with scripting off; no long task and no layout shift across a drift cycle.
+
+**Exit criteria**
+
+- The audit exits 0, and its claim count and numbers are recorded in `docs/research/06`'s successor
+  entry in `progress/PHASE_LOG.md`.
+- The three site-wide sweeps hold unchanged: accessibility 0 defects across 20 pages, responsive 80
+  of 80, performance worst shift 0 with no long task.
+- The printable periodic table and the element card keep their measured page counts at A4 and Letter.
+- The style guide's section and one page per family are seen at 1280 / 768 / 375 px, and differences
+  are named in the phase log.
+- No literal value outside `tokens.css`; every new file in `MIND_MAP.md` in the same commit.
+
+### Phase 17 — The motion and the depth
+
+**Goal:** the field moves, the surfaces lift, and navigation feels continuous — each axis measured,
+feature-gated, and independently reversible.
+
+**Deliverables**
+
+- **Reveals.** Sections and card grids rise once as they enter, through the platform's own
+  scroll-driven animations (`animation-timeline: view()`, `@supports`-gated): the unsupported
+  baseline is the finished page and reduced motion is the finished page, because nothing may be
+  hidden by a browser that has not got the feature. No script is involved.
+- **The pointer light.** `scripts/components/pointer-light.js` — a white-based soft light following
+  the pointer across the field, fine pointers only, rAF-throttled, eased with the orbit camera's own
+  frame-rate-independent damping, absent on touch and under reduced motion; wired once in `app.js`;
+  its pure parts — the easing, the clamping, the decision — under
+  `tests/components/pointer-light.test.js`.
+- **The masthead's scrolled state.** The sticky masthead frosts once the page has scrolled (paper at
+  a derived minimum opacity behind a small backdrop blur) and reverts at the top; the minimum
+  opacity is derived so ink over frosted paper above any scrolling content stays AA. Implemented
+  scroll-timeline-first with a class-toggle fallback; both audited.
+- **The depth pass.** One measured elevation pass over the site's surfaces — tiles, chips, cards,
+  panels and the home hero — a one-step extension of the elevation ladder in tokens, with hover and
+  focus depth consistent across components, and every contrast and focus rule held by the sweeps.
+- **The route transition.** A short crossfade between pages where the View Transitions API exists:
+  feature-detected, off under reduced motion, with today's instant swap untouched as the fallback;
+  `tests/router/router.test.js` grows the refusals (never without support, never under reduced
+  motion, never against a history move).
+- `audit-atmosphere.mjs` grows the motion and depth claims — the light follows and is absent where
+  it should be, the frosted masthead meets AA over real scrolled content, reveals never hide content,
+  a crossfade lands on the right scroll and focus, and a drift cycle's frame cost is recorded — and
+  splits into `audit-motion.mjs` if the line ceiling says so.
+
+**Exit criteria**
+
+- All four site-wide sweeps pass with the motion layer in: 0 defects, 80 of 80, worst shift 0, no
+  long task, Lighthouse accessibility and best-practices held.
+- A reduced-motion page runs zero animations, verified by count.
+- The router's tests and the browser audit hold focus, scroll and head behaviour through a
+  crossfade.
+- The frame cost of a drifting page is measured and recorded, turning and still.
+
+### Phase 18 — Quality, delivery and the living paper
+
+**Goal:** close the programme the way Phase 11 and Phase 15 closed theirs: measured, documented, and
+delivered on the author's word.
+
+**Deliverables**
+
+- The four site-wide gates re-run with every page; the field and motion audits as gates; the print
+  checks re-measured.
+- Documentation: `DESIGN_SYSTEM.md` §1.8 (the token group in the specification) and its closing
+  section on the field and its bound; `BRAND_GUIDELINES.md` §3's amendment — the preserved list's
+  one deliberate exception, with the reason; `ARCHITECTURE.md` ADR-008 from `PROPOSED` to `ACCEPTED`
+  with the measured numbers; `MIND_MAP.md`, the guides, the README, `progress/PHASE_LOG.md`,
+  `RUN_STATE.md`, `HANDOFF.md`, and `docs/research/06` completed with the programme's own numbers.
+- Delivery: merged to `main` with `--no-ff`, pushed, the Pages run green, the live field verified
+  **in a browser** at the project's address (the field present, the drift running, reduced motion
+  still, zero console errors, zero failed requests), and tagged `v1.2.0`.
+
+**Exit criteria**
+
+- All gates pass with their numbers recorded, and no document contradicts another; the mind map has
+  no missing file.
+- The live site is verified in a browser, not only by `curl`.
+- `v1.2.0` is tagged on the close-out commit.
+
+---
+
 ## 4. Phase dependency graph
 
 ```
@@ -637,12 +801,21 @@ Phase 13 The atom model    (needs 2 for the records, 12 for the camera and the g
 Phase 14 The page + nav + bar  (needs 1, 2, 13)
    │
 Phase 15 Quality, delivery  (needs 14; closes on the live page)
+   │
+Phase 16 The field          (needs 1: the tokens and the styleguide to be seen on; needs no feature)
+   │
+Phase 17 The motion + depth (needs 16)
+   │
+Phase 18 Quality, delivery  (needs 17; closes on the live field)
 ```
 
 Phases 6, 7 and 8 may be reordered freely. Phase 3 must precede 4, 7 and 8. Phase 5 is
 independent of 3 but shares the design system. Phase 12 depends on no feature phase — it is the one
 piece of work in the project that can be built, seen and tested on its own — and Phase 13 can begin
-as soon as the camera and the sphere geometry exist, before the view has its backdrop.
+as soon as the camera and the sphere geometry exist, before the view has its backdrop. Phase 16
+stands to the field as Phase 12 does to the renderer: it can be built, seen and measured on its
+own, with no feature phase in the way, and Phase 17 adds motion only over a field that already
+passes its gates.
 
 ## 5. Estimate
 
@@ -664,6 +837,9 @@ as soon as the camera and the sphere geometry exist, before the view has its bac
 | 13 The atom model and the live scene | medium-large, and mostly arithmetic that tests can hold |
 | 14 The page, the bar and the navigation | medium — the design work is the bar |
 | 15 Quality, delivery and documentation | medium, and it ends with a live page and a tag |
+| 16 The field (the wash, lattice, grain, the bound and its audit) | medium-large — mostly design work, and the derivation and the audit are the proof |
+| 17 The motion and the depth | medium-large — each axis is small; the audit is the work |
+| 18 Quality, delivery and the living paper | medium, and it ends with a live field and a tag |
 
 ## 6. Risks and how the plan absorbs them
 
@@ -680,6 +856,12 @@ as soon as the camera and the sphere geometry exist, before the view has its bac
 | A canvas is invisible to assistive technology, and a dark stage is a contrast risk | The canvas is `role="img"` with a name that states the current atom, every control is a native control with a label, a polite live region announces changes, and the bar's labels are contrast-checked against the glass they sit on — which is exactly what `audit-a11y.mjs` composites. |
 | The second reference is a different site with its own brand | Its palette, copy, datasets and assets are recorded in `docs/research/04` as measurements and never shipped; the brand scan already walks `source/` for the name of a reference, and Phase 14's exit criteria require the scan to stay clean. |
 | Scope creep from the second reference's other pages | `/periodic-table` and `/statistics` are excluded by the author's instruction and recorded as such in `docs/research/04` §1, so their absence is a decision rather than an unfinished task. |
+| A living field is a contrast risk precisely where text sits on it | The ink ladder is the budget and the caps are spent from it: one bloom at a time where text sits, ≤ 5 % for the four dark group hues and ≤ 8 % for the light ones, lattice and grain ≤ 2.5 % (`docs/research/06` §6). `tests/lib/backdrop.test.js` derives the ceilings from `tokens.css` itself, and `audit-atmosphere.mjs` samples real composited pixels behind every sampled text run at the drift's extremes — a still screenshot cannot verify a moving field, so the audit samples the dark phase directly. The pointer light is white-based and can only raise the field's luminance, so it sits outside the budget by construction. |
+| Ambient motion is a battery and a jank risk | Every animated layer is compositor-only (`transform`/`opacity`), the drift is measured in tens of seconds rather than in frames, no full-screen blur is ever animated, and the drift's frame cost and long-task count are audited in the same tool that already holds the shift contract. |
+| A gradient field is one `fill` away from the generated look the brief rejects | The palette is not new: every field hue resolves to a `--g-*` token, held by a test, and the alphas are capped so far below saturation that the field reads as tint. The anti-pattern list in `docs/research/06` §5 names the rejections — neon, gradient text, glass behind prose — and the review is against that list, not only the gates. |
+| Motion is an accessibility risk | Reduced motion is a designed still composition — the same four layers, held — not an absence; reveals use the platform's scroll timelines behind `@supports`, whose unsupported baseline is the finished page with nothing hidden; the pointer light is fine-pointer only; the route transition is feature-detected and off under reduced motion. A reduced-motion page's animation count is asserted at zero in Phase 17. |
+| The printable pages must not gain any ink | The field is stripped under `@media print`, and the print page counts for the periodic table and the element card are re-measured at A4 and Letter in Phases 16 and 18. |
+| The router and the field interact | The field is CSS on `html` and `body` and is touched by no module, so it cannot be forgotten on a client-side navigation; the one router-adjacent addition, the crossfade, is feature-detected and sits over the existing swap, with the swap's own tests holding focus, scroll and head adoption through it. |
 
 ---
 

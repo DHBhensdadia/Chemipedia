@@ -147,6 +147,28 @@ for (const path of PAGES) {
         continue;
       }
 
+      // Text is composited at its own alpha times every ancestor's, and a hidden ancestor means
+      // the text is not on the page at all. The ancestor half matters because the entrance reveal
+      // used to fade whole sections: this sweep read the text element's own opacity, 1, and
+      // passed the page the Lighthouse gate failed.
+      let alpha = Number(style.opacity);
+      let hidden = false;
+
+      for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        const up = getComputedStyle(ancestor);
+
+        if (up.display === "none") {
+          hidden = true;
+          break;
+        }
+
+        alpha *= Number(up.opacity);
+      }
+
+      if (hidden || alpha === 0) {
+        continue;
+      }
+
       if (style.clipPath !== "none" || (style.position === "absolute" && style.width === "1px")) {
         continue; // the visually hidden pattern: it is for screen readers, not for pixels
       }
@@ -159,10 +181,10 @@ for (const path of PAGES) {
         continue;
       }
 
-      // An element's own `opacity` fades its text towards whatever is behind it, which is how a
+      // The alpha composited above fades the text towards whatever is behind it, which is how a
       // tile's atomic number is made secondary — and it is composited before anyone reads the
       // colour, so a sweep that reads `color` alone reports a ratio the reader never sees.
-      const colour = { ...painted, a: painted.a * Number(style.opacity) };
+      const colour = { ...painted, a: painted.a * alpha };
       const size = parseFloat(style.fontSize);
       const weight = Number(style.fontWeight) || 400;
       const large = size >= 24 || (size >= 18.66 && weight >= 700);
