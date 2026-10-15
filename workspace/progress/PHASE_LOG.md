@@ -32,6 +32,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 14 | The page, the bar and the navigation | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
 | 15 | Quality, delivery and the second reference's line | `COMPLETE` | `cd18435`, `c3ff53a`, `529fbe0` on `feature/atom-3d`, merged into `main` as `ad58ee2` and pushed; Pages `37638178700` green; the live page verified in a browser; tagged `v1.1.0` |
 | 16 | The field: the living paper, drawn and bounded | `COMPLETE` | `409036e`..`6b1cb2d` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
+| 17 | The motion and the depth | `COMPLETE` | `6016588`..`54a44a6` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
 
 ---
 
@@ -2097,6 +2098,116 @@ section · the close-out commit.
 
 ---
 
+## Phase 17 — The motion and the depth
+
+**Goal:** the field moves, the surfaces lift, and navigation feels continuous — each axis measured,
+feature-gated, and independently reversible.
+
+**17.1 — the light that only brightens.** `scripts/components/pointer-light.js` (224 lines): the soft
+white light that follows the pointer across the field — one more gradient on the near sheet (tokens
+§23: a 46vmax disc at α 0.4, clean again at 70 % of the radius), driven through three custom
+properties. Fine pointers only and absent under a reduced-motion preference — each read at start and
+watched, so the preference flips both ways — and a touch never drives it even where the primary
+pointer is fine. It eases with the orbit camera's own frame-rate-independent damping (8/s), riding
+the shared frame loop, which it stops the moment the light arrives: a page nobody is pointing at
+runs no frames and writes no styles. White-based, so it can only raise the field's luminance. Wired
+once in `app.js`; **16 tests** hold the easing, the clamping, the two environmental answers and the
+loop's stop. `6016588`.
+
+**17.2 — the frosted band.** `scripts/components/masthead-frost.js` (109 lines) answers for the
+readers the timeline gate leaves out — no scroll-driven animations, or a reduced-motion preference —
+with the `is-frosted` class: the same frost, applied instantly. Where the timeline runs,
+`site-header.css` frosts the band with its own scroll animation: paper at a derived `0.96` behind an
+8 px blur over 160 px, the opacity derived so the faintest ink the band carries keeps AA over the
+darkest ground the site can scroll beneath it (4.64 : 1 over the stage; 4.57 : 1 over black). Where
+the timeline runs the module does nothing — no listener, no class. 207 lines of tests hold the
+decision against the stylesheet's gate exactly. `d232d30`.
+
+**17.3 — the rise.** `styles/motion.css` and `tests/lib/motion.test.js`: the page's sections and its
+lists, grids and card grids rise as they enter, through `animation-timeline: view()` inside
+`@supports`, over a fixed 300 px of scroll, scrubbed `linear` — a scrub, not a trigger, so an
+element's rise is a function of where it is. The build links the sheet as a global. The first
+version faded as it rose; the Lighthouse gate later refused that, and **17.6** records what it
+became. `9fa4267`.
+
+**17.4 — the cross-fade.** `commit(next, top)` and `mayFade()` in `router.js` wrap only the swap and
+the settle in a view transition, feature-detected and refused under reduced motion; history moves
+never fade; the wrap happens after the head, so the arriving page is only ever faded in in its own
+sheets; fire-and-forget, so the reader never waits. `motion.css` gives both root snapshots the
+house's 0.3 s `--ease-soft` instead of the platform's default. The router's fake page moved to
+`tests/router/dom-fixtures.js` — `router.test.js` 484 → **342** lines, back under the ceiling — and
+`tests/router/crossfade.test.js` holds the four decisions. `5279ae0`.
+
+**17.5 — the ladder, one step.** `--shadow-lg: 0 10px 30px #15403d12` (α 0.071, under md's 0.078, so
+the spill of faint never drops — 4.51 / 4.35 / 4.43 : 1 across sm / md / lg over the faint wash).
+Cards, tiles, chips and the similar-element tiles lift to it on hover and on focus alike; the pinned
+chip holds md (its own rule, so hover still wins); a group member row stays at sm; both group
+surfaces gained the `:focus-visible` twins they were missing. Panels stay flat on purpose. `a357370`.
+
+**17.6 — the gate, the split, and the fade the gate refused.** The plan sanctioned splitting the
+audit, and the line ceiling said so: `tools/visual/lib/pixels.mjs` now owns what both audits mean by
+a pixel (`audit-atmosphere.mjs` 394 → 370 lines, 106 of 106 claims still holding), and
+`audit-motion.mjs` — **62 claims, all holding** — asks the motion layer's six questions in pixels
+and in frame time. The light follows to exactly the pointer (live 1.000 at 24.0 px / 150.0 px), lifts
+**5,660 sampled pixels** by at most 4 LSB and drops none, changes nothing under stillness and never
+wakes on a coarse pointer. The frost over the atom stage reads `#f3f2f1`, **4.61 : 1** under the
+faintest ink, the fallback drawing the identical band, the revert at the top. A walk settles every
+reveal on all twelve family pages (7/7 home, 7/7 hydrogen, **53/53 glossary**); reduced motion
+settles everything at load with **zero animations**, print likewise. A forward move is one fade at
+0.3 s landing at the top of the right page with focus on `main`, stillness keeps the cut, and a
+history move restores 800 px without a second fade. The ladder reads back to the token for both
+hands, and the frame clock pays **16.7 ms median turning against 16.7 ms still, zero long tasks**.
+And the run's first battery failed where the eye could not: Lighthouse colour-contrast at 96–97 on
+five pages — a section sampled mid-fade draws its text below AA — while the site's own a11y sweep
+passed, blind to ancestor opacity. The reveal became the movement alone — no opacity is animated
+anywhere now, and a mid-rise section is held moved and fully opaque — the a11y sweep composites the
+whole ancestor chain, and the record is in `docs/research/06` §9. Lighthouse after the fix:
+**100 on all eight pages**.
+
+**Phase 17 verification**
+
+```
+[✓] node --test source/tests ................ pass  732 pass, 0 fail — the motion sheet's structure,
+                                              the light's 16, the frost's and the cross-fade's tests
+[✓] node --check on every changed module .... pass  pointer-light.js, masthead-frost.js, router.js,
+                                              audit-motion.mjs, audit-a11y.mjs, lib/pixels.mjs
+[✓] Brand scan .............................. PASS: brand scan clean (inside the suite)
+[✓] Console/network on every touched page ... zero console messages, zero failed requests — the gate
+                                              walks twelve pages without either
+[✓] Accessibility tree reviewed ............. audit-a11y: 0 defects, 29 informational across 20
+                                              pages, with the ancestor-opacity model the Lighthouse
+                                              failure forced
+[✓] Keyboard traversal ...................... the ladder's lifts answer focus as well as hover (card,
+                                              tile and member row read back equal in the audit); the
+                                              motion layer adds no controls
+[✓] Reduced motion .......................... twelve pages settle at load with 0 animations by
+                                              count; the light writes nothing; the cross-fade refuses;
+                                              print settles every reveal
+[✓] 1280 px screenshot vs reference ......... deliberate programme (ADR-008): motion is ours; the
+                                              settle captured live against stillness, and the pages
+                                              seen at every width
+[✓] 768 px screenshot vs reference .......... hydrogen at 768 and the glossary at 375 captured; no
+                                              difference a reader can name
+[✓] Regression check on an earlier phase .... responsive 80 of 80 and performance worst shift 0 with
+                                              the motion layer in; the field's audit 106 of 106
+[✓] Deliberate deviations recorded .......... the split (plan-sanctioned), the fade cut (the
+                                              Lighthouse failure), the over-ceiling crossings — all
+                                              in the deviations log and research/06 §9
+[✓] docs/MIND_MAP.md updated ................ rows for the four new components, the two audits, the
+                                              helper library, the sheet and the tests, in their commits
+[✓] RUN_STATE.md + HANDOFF.md updated ....... in the close-out commit
+[✓] The audits exit 0 ....................... audit-motion 62 of 62 claims; audit-atmosphere 106 of 106
+[✓] The four sweeps hold with the motion in . a11y 0 defects / 29 informational; responsive 80 of 80;
+                                              performance worst shift 0, 79 ms slowest load, 0 long
+                                              tasks; Lighthouse accessibility 100 and best-practices
+                                              100 on all eight pages, performance recorded (mean 88)
+```
+
+**Commits.** `6016588` the light · `d232d30` the frost · `9fa4267` the rise · `5279ae0` the
+cross-fade · `a357370` the ladder · `54a44a6` the gate · the close-out commit.
+
+---
+
 ## Blockers and deviations log
 
 Record anything that stopped progress, and any deliberate deviation from the reference.
@@ -2135,6 +2246,9 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-15 | 16 | Deviation | **The vignette was cut from the four layers.** `docs/research/06` §5 promised a 2 % edge shade; the build does not draw it. | Recorded in `research/06` §8. The lattice's own mask already fades the grid toward the frame, and the corners are where the bloom anchors already sit; a third charge on the same pixels buys nothing the budget's margin should pay for. |
 | 2026-10-15 | 16 | Observation | **At 375 px the masthead's paper band (280-odd px tall) covers the family bloom's core (10 % / 6 %).** The visible share of the bloom below the masthead measures ≤ 2 LSB of tint on the sampled column; the field at phone width is the lattice, the grain and the far sheet's corner blooms. | Recorded in `research/06` §8 and here rather than patched: whether the family bloom should follow the masthead's height on phones is a composition question for Phase 17. The family differences are measured present at 1280 and 768. |
 | 2026-10-15 | 16 | Deviation | **The 400-line ceiling after the field: `tests/lib/backdrop.test.js` crossed it (316 → 412).** The plan asked the test to hold the field's overlap bound itself, and the scan is what crossed the line; `styles/tokens.css` grew 824 → 946 with §22, staying the standing exception it has been since Phase 1. | Recorded. The seam is named: the bound scan is self-contained and would live as `tests/lib/backdrop-bound.test.js` if the file is split. `atmosphere.css` ships at 260 lines and `audit-atmosphere.mjs` at 394, both under. |
+| 2026-10-15 | 17 | Fixed | **The entrance fade failed the contrast gate, and the sweep that had passed it was blind.** The reveal's first build faded as it rose; the Lighthouse sweep sampled a section mid-fade and failed five pages' colour-contrast at 96–97, while the site's own a11y sweep — reading only the text element's own opacity, never its ancestors' — passed them. | The reveal is now the movement alone: opacity is not animated anywhere, and a mid-rise section is displaced and fully opaque. `audit-a11y.mjs` multiplies every ancestor's opacity into the text's alpha the way a browser composites it, and `audit-motion.mjs` holds the new claim directly. Lighthouse after the fix: **100 on all eight pages**; a11y 0 defects. Recorded in `docs/research/06` §9. |
+| 2026-10-15 | 17 | Observation | **The tenth animation was the frost.** An early probe of the home page expected nine animations at load — seven reveals and two drifts — and counted ten; the gate's census named it: the frost's own scroll-timeline animation had been there all along. | Hydrogen's census now asserts the designed set exactly — its reveals, two drift sheets, one frost, nothing else — and reduced motion asserts **zero animations** on all twelve family pages. Recorded in `docs/research/06` §9. |
+| 2026-10-15 | 17 | Deviation | **The 400-line ceiling after the motion: twelve files under `source/` before, twelve after — one left, one joined.** `tests/router/router.test.js` came back under at **342** (the fake page moved to `tests/router/dom-fixtures.js`), and `tests/components/pointer-light.test.js` crossed at **412**. `styles/tokens.css` grew 946 → **993** with §23. In `workspace/tools/visual/`, `audit-motion.mjs` ships at **686** lines — the largest tool — with its seam named: its six question blocks are self-contained, and the frost and the frame clock are the two that would move out first; `audit-atmosphere.mjs` came back under (394 → 370) with the split. | Recorded rather than kept quiet. Every other Phase 17 file ships under 400. |
 
 ---
 

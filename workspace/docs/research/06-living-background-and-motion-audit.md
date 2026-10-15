@@ -290,3 +290,67 @@ The honest summary of this audit, for the interview: eight fields were opened an
 read, the techniques that recur are small and countable, the one that matters — keeping the text
 out of the colour — is the one our own contrast maths independently demands, and everything else is
 discipline about small numbers.
+
+## 9. What Phase 17 added — the motion and the depth
+
+Phase 17 wrote the behaviour over Phase 16's field. This section is the record of where the build
+differs from §5, what the numbers finally were, and the one defect only the gate caught. Everything
+above stands as written — and §5's own wording, "sections and card grids rise once as they enter",
+turned out to be both the strictest and the truest description of what was possible.
+
+**The rise moves and does not fade.** The reveal was first built as a fade-and-rise, and Phase 17's
+Lighthouse sweep failed five pages' colour-contrast at 96–97: a section caught mid-fade draws its
+text below AA for a stretch of the scroll, and the gate samples the page exactly as a reader meets
+it. The site's own accessibility sweep had passed those pages — it composited the text element's
+*own* opacity but not its ancestors', and the fade lived on the section — so for one run two
+instruments disagreed and only one of them was right. The reveal is now the rise alone: **opacity is
+not animated anywhere on the site**, an element's colour is its colour at every scroll position, and
+"nothing may be hidden" got its strictest reading — nothing is even dimmed. The a11y sweep now
+multiplies every ancestor's opacity into the text's alpha the way a browser composites it, and
+`audit-motion.mjs` holds the claim directly: a section caught mid-rise sits up to 8 px low and fully
+opaque. After the change, accessibility is **100 on all eight Lighthouse pages** and the a11y sweep
+is back to **0 defects**.
+
+**The numbers, as shipped** (tokens §23; each is held by a test or measured by the audit):
+
+| | Shipped | The bound it was cut against |
+|---|---|---|
+| Pointer light | white at α 0.4, a 46vmax disc fading clean at 70 %, damping 8/s | white-based: it can only raise the field's luminance, so §6's budget cannot be spent by it |
+| Masthead frost | paper at **0.96** behind an 8 px blur, settling over 160 px | the faintest ink the band carries keeps AA over anything the page can scroll under it: 4.64 : 1 over the stage, 4.57 : 1 over black |
+| Reveals | an 8 px rise over a fixed 300 px through the fold, `linear`, `view()` inside `@supports` | the finished page for every reader the feature misses — and the rise spends no opacity, so no scroll position draws text below its promised contrast |
+| Cross-fade | the house's 0.3 s `--ease-soft` dissolve | feature-detected; refused under reduced motion and against history moves; the instant cut is the fallback |
+| Depth | `--shadow-lg: 0 10px 30px #15403d12` — α 0.071, under md's 0.078 | the spill of faint never drops: 4.51 / 4.35 / **4.43 : 1** at sm / md / lg over the faint wash |
+
+**The count that was never one over.** An early probe of the home page expected nine animations at
+load — seven reveals and two drifts — and counted ten. The motion audit's census named the tenth:
+the frost's own scroll-timeline animation had been there all along, and hydrogen's census resolves
+to exactly its designed set — its seven reveals, two drift sheets and one frost, and nothing else.
+Under a reduced-motion preference the same audit asserts **zero animations**, on every one of the
+twelve family pages: the phase's stiffest exit criterion, kept by count rather than by trust.
+
+**The gate split.** The plan sanctioned splitting the audit if the line ceiling said so, and it did:
+the pixel readings both audits share moved to `tools/visual/lib/pixels.mjs` (a hex and back, a
+patch's median, the tolerance comparison, a strip's commonest colour), bringing
+`audit-atmosphere.mjs` from 394 lines to 370 — 106 of 106 claims still holding — and the motion
+layer's claims became their own gate, `audit-motion.mjs`: the light, the frost, the reveals, the
+cross-fade, the ladder and the frame clock, **62 claims** with nothing in it a file can prove alone.
+
+**What the gate measured.** The light follows to exactly the pointer (live 1.000 at 24.0 px /
+150.0 px), lifts **5,660 sampled pixels** by at most **4 LSB** and drops none, changes nothing under
+a stillness preference (no property written, no pixel moved) and never wakes on a coarse pointer;
+the frost over the atom stage reads `#f3f2f1`, **4.61 : 1** under the faintest ink, with the class
+fallback drawing the identical band; every family's walk settles every reveal — 7/7 on the home
+page, 7/7 on hydrogen, **53/53 on the glossary** — and reduced motion is everything settled at load
+with 0 animations, on all twelve pages, print likewise; a forward move is one fade at the house's
+**0.3 s**, landing on `/elements/` at the top with focus on `main`, stillness keeps the cut, and a
+history move restores the reader's place at 800 px without a second fade; the ladder reads back
+exactly (a card and a tile at `rgba(21, 64, 61, 0.07) 0 10px 30px`, the pinned chip one step under,
+a member row at the floor, the keyboard equal to the pointer); and the frame clock pays nothing for
+the life — **16.7 ms median turning with the light following, 16.7 ms still, zero long tasks in
+either window**.
+
+**The sweeps, with the motion layer in.** Accessibility **0 defects / 29 informational across 20
+pages** (with the ancestor-opacity model above); responsive **80 of 80**; performance **worst
+layout shift 0, slowest cold load 79 ms, 0 long tasks**; Lighthouse **accessibility 100 and
+best-practices 100 on all eight pages**, SEO 100, performance recorded at a mean of 88. The suite is
+**732 pass, 0 fail**.
