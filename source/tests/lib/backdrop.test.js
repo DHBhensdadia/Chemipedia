@@ -261,6 +261,25 @@ test("the family map is exhaustive, declared, and exclusive", () => {
   }
 });
 
+test("the family pair is read where it is overridden, not through a root alias", () => {
+  assert.ok(
+    !declared.has("--field-bloom-1-hue") && !declared.has("--field-bloom-1-alpha"),
+    "an alias at the root would freeze the family's pair before a page could override it",
+  );
+
+  const sheet = rules.find(([selectors]) => selectors === "body::before");
+
+  assert.ok(sheet, "the family sheet is missing");
+  assert.ok(
+    sheet[1].includes("var(--field-family-hue)"),
+    "the family bloom does not read the family hue on its own sheet",
+  );
+  assert.ok(
+    sheet[1].includes("var(--field-family-alpha)"),
+    "the family bloom does not read the family alpha on its own sheet",
+  );
+});
+
 test("print takes the whole field off", () => {
   const print = atmosphere.match(/@media print\s*\{([\s\S]*)\}\s*$/);
 

@@ -77,14 +77,17 @@ html::before {
     );
 }
 
-/* Sheet two: the family bloom and the pale blue (body::before). */
+/* Sheet two: the family bloom and the pale blue (body::before). The family bloom's hue and alpha
+   are read straight from `--field-family-hue` / `--field-family-alpha` on this declaration — not
+   through an alias in the token layer — because that is the one place where a page family's
+   `body[data-page]` override is visible to substitution. See the note in tokens §22. */
 body::before {
   background-image:
     radial-gradient(
       circle var(--field-bloom-radius) at
         calc((var(--field-bloom-1-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
         calc((var(--field-bloom-1-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
-      color-mix(in srgb, var(--field-bloom-1-hue) calc(var(--field-bloom-1-alpha) * var(--field-wash-focus) * 100%), transparent),
+      color-mix(in srgb, var(--field-family-hue) calc(var(--field-family-alpha) * var(--field-wash-focus) * 100%), transparent),
       transparent var(--field-bloom-fade)
     ),
     radial-gradient(

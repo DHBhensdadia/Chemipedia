@@ -831,8 +831,11 @@
   --field-bloom-fade: 72%; /* the fraction of that radius the fade to nothing takes */
   --field-bloom-1-x: 10%; /* the family bloom: the one bloom whose hue a page family changes */
   --field-bloom-1-y: 6%;
-  --field-bloom-1-hue: var(--field-family-hue);
-  --field-bloom-1-alpha: var(--field-family-alpha);
+  /* Its hue and alpha are the family pair below, and the sheet draws them from the pair itself.
+     There is deliberately no `--field-bloom-1-hue` alias here: a var() written inside a custom
+     property is substituted where the property is declared, so an alias on the root element would
+     freeze the default before any page could override it — every page would wear the same green.
+     The test holds the alias's absence and the audit holds the pixel. */
   --field-bloom-2-hue: var(--g-noble-gases);
   --field-bloom-2-alpha: 0.042;
   --field-bloom-2-x: 92%;
