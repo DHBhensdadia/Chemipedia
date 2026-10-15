@@ -45,11 +45,23 @@ test("the reveals name the page's sections and its lists, grids and card grids, 
       "@media screen and (prefers-reduced-motion: no-preference)",
       "@supports (animation-timeline: view())",
       'main section, main ul[class$="-list"], main ul[class$="-grid"], main ul[class$="-cards"]',
+      "::view-transition-old(root), ::view-transition-new(root)",
       "@keyframes reveal",
       "from",
       "to",
     ],
     "the sheet carries a rule the reveals do not explain",
+  );
+});
+
+test("the route cross-fade is the house's timing, not the platform's default", () => {
+  assert.ok(
+    bare.includes("animation-duration: var(--dur-base)"),
+    "the cross-fade does not read the house duration",
+  );
+  assert.ok(
+    bare.includes("animation-timing-function: var(--ease-soft)"),
+    "the cross-fade does not read the house curve",
   );
 });
 

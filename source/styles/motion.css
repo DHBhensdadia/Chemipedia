@@ -1,5 +1,6 @@
 /* ==========================================================================
-   The motion — the paper's scroll-driven life.
+   The motion — the paper's life as it is scrolled, and the site's move
+   between pages.
 
    The reveals: sections and card grids rise once as they enter, through the
    platform's own scroll-driven animations. It is a scrub, not a trigger — an
@@ -10,17 +11,26 @@
    fold (tokens §23) rather than a fraction of the element, so a tall section
    and a short one take the same scroll to arrive.
 
-   Every rule in this file sits inside `@media screen and
-   (prefers-reduced-motion: no-preference)` and
-   `@supports (animation-timeline: view())`: a reader who has asked for
-   stillness, a browser that has never heard of scroll timelines, and a
-   printed sheet all get the finished page, because nothing may be hidden by
-   a sheet that is not running. No script is involved.
+   The cross-fade: a route change is two documents dissolved into one another
+   by the platform's view transition, started by the router — see
+   scripts/router/router.js for when it refuses one. This file's share is the
+   timing: the house's own duration and curve in place of the platform's
+   default, because a page change is a change of scene, not a performance.
 
-   The selectors name the two things the design reveals — the page's sections
-   and its card grids and lists — and deliberately nothing else: a legend, a
-   search's results and the atom bar are instruments, not content, and an
-   instrument that fades in is an instrument that can be missed.
+   Every rule in this file sits inside `@media screen and
+   (prefers-reduced-motion: no-preference)`, and the reveals sit additionally
+   inside `@supports (animation-timeline: view())`. The cross-fade needs no
+   such gate of its own: it cannot run unless the router starts one, and the
+   router asks the document for the API and the reader for their preference
+   first. A reader who has asked for stillness, a browser that has never
+   heard of scroll timelines or of view transitions, and a printed sheet all
+   get the finished page, because nothing may be hidden by a sheet that is
+   not running.
+
+   The reveal selectors name the two things the design reveals — the page's
+   sections and its card grids and lists — and deliberately nothing else: a
+   legend, a search's results and the atom bar are instruments, not content,
+   and an instrument that fades in is an instrument that can be missed.
    ========================================================================== */
 
 @media screen and (prefers-reduced-motion: no-preference) {
@@ -33,6 +43,12 @@
       animation-timeline: view();
       animation-range: entry 0% entry var(--reveal-travel);
     }
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: var(--dur-base);
+    animation-timing-function: var(--ease-soft);
   }
 }
 
