@@ -2,10 +2,10 @@
 
 > **This describes the repository as it ships.** ADR-001 settled on the zero-dependency Node static
 > site generator and every folder below exists. `v1.0.0` published the site; `v1.1.0` added the atom
-> viewer (the four `atom-*` components, the `atom-*` lib modules and one page family); the living
-> paper, the programme that closes the site, adds the field and the motion (ADR-008) —
-> `atmosphere.css`, `motion.css` and the two components they drive. Where a name here and the code
-> disagree, the code is right and this guide is a defect — fix it in the same commit.
+> viewer (the four `atom-*` components, the `atom-*` lib modules and one page family); `v1.2.0` added
+> the living paper — the field and the motion (ADR-008): `atmosphere.css`, `motion.css` and the two
+> components they drive. Where a name here and the code disagree, the code is right and this guide is
+> a defect — fix it in the same commit.
 
 ## The one rule that decides everything
 

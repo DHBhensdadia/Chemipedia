@@ -98,8 +98,9 @@ accessibility, best-practices and SEO.
 **The atom viewer followed**, published as `v1.1.0` after four more phases: the page above, plus the
 hand-written WebGL2 underneath it (ADR-007).
 
-**The living paper closes the programme** — three more phases (16–18): the field every page is read
-on, and the motion over it (ADR-008). The build writes **563 routes**, the suite holds **732 tests**,
+**The living paper closes the programme**, published as `v1.2.0` — three more phases (16–18): the
+field every page is read on, and the motion over it (ADR-008). The build writes **563 routes**, the
+suite holds **732 tests**,
 the sidebar numbers are **0 defects across 20 pages** and **80 of 80** page-and-width combinations,
 the field's own gate holds **106 of 106** claims and the motion's **62 of 62**, and `/atoms/` holds
 the browser's 16.70 ms frame cadence with the heaviest atom the controls allow turning. The evidence

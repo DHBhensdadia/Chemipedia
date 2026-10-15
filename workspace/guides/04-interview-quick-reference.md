@@ -1,7 +1,7 @@
 # Guide 4 — Interview quick reference
 
-> **Complete as of `v1.1.0`, the release that added the atom viewer — and of the living paper, the
-> programme that closes the site (ADR-008).** Every row names a real file and a real function, and
+> **Complete as of `v1.2.0`, the release that closed the programme: the site, the atom viewer and
+> the living paper (ADR-008).** Every row names a real file and a real function, and
 > the function name is the one the code actually exports. If a row here and the code disagree, the
 > code is right and this file is a defect — fix it in the same commit.
 

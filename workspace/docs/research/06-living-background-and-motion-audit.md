@@ -359,7 +359,7 @@ best-practices 100 on all eight pages**, SEO 100, performance recorded at a mean
 
 The four site-wide gates and the programme's own two re-ran with every page, on the programme's
 final tree. **The field: 106 of 106 claims** — one page per family, every on-field text run sampled
-behind the real text in four states, the worst run at 5.21:1 against the model's 4.53:1 floor, the
+behind the real text in four states, the worst run at 4.79:1 against the model's 4.53:1 floor, the
 drift's lived-in window moving 120 frames at a 16.7 ms median with no long task and no layout shift.
 **The motion: 62 of 62** — the light lifting 5,660 sampled pixels by at most 4 LSB and dropping
 none, the frost at `#f3f2f1` and 4.61:1 under the faintest ink, the reveals settling 7/7 on the home
@@ -371,3 +371,9 @@ windows; Lighthouse accessibility 100 and best-practices 100 on all eight pages*
 performance recorded, mean 89). **The suite: 732 pass, 0 fail.** **The print check:** the four
 printable pages at A4 and Letter — **eight sheets, one each**, with the field's sheets
 `display: none` over bare paper, unchanged from §8.
+
+**Live, in a browser.** The delivery's own check ran against the published site rather than a local
+build: the field's four sheets drawn, both drift animations running with their clocks advancing,
+reduced motion holding the same composition still at **zero animations**, and the load walking
+clean — **zero console errors, zero failed requests, no response over 400** (11 of 11 live checks,
+captured to `workspace/screenshots/`). The numbers above are measured on the tree `v1.2.0` tags.

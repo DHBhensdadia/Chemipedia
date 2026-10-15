@@ -31,9 +31,9 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 13 | The atom model and the live scene | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
 | 14 | The page, the bar and the navigation | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
 | 15 | Quality, delivery and the second reference's line | `COMPLETE` | `cd18435`, `c3ff53a`, `529fbe0` on `feature/atom-3d`, merged into `main` as `ad58ee2` and pushed; Pages `37638178700` green; the live page verified in a browser; tagged `v1.1.0` |
-| 16 | The field: the living paper, drawn and bounded | `COMPLETE` | `409036e`..`6b1cb2d` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
-| 17 | The motion and the depth | `COMPLETE` | `6016588`..`54a44a6` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
-| 18 | Quality, delivery and the living paper | `IN_PROGRESS` | the gates and the documentation are done and committed on `feature/living-paper`; **the delivery — merge, push, Pages, live check, `v1.2.0` — was authorized by the author on 2026-10-16 and follows** |
+| 16 | The field: the living paper, drawn and bounded | `COMPLETE` | `409036e`..`6b1cb2d` on `feature/living-paper`, merged into `main` as `ba3e783`, pushed, and tagged `v1.2.0` |
+| 17 | The motion and the depth | `COMPLETE` | `6016588`..`54a44a6` on `feature/living-paper`, merged into `main` as `ba3e783`, pushed, and tagged `v1.2.0` |
+| 18 | Quality, delivery and the living paper | `COMPLETE` | `511be78` on `feature/living-paper`, merged into `main` as `ba3e783` and pushed; Pages `38803355815` green; the live field verified in a browser (11 of 11 live checks); tagged `v1.2.0` on the close-out commit |
 
 ---
 
@@ -2241,10 +2241,14 @@ them, the front door lists the two new gates and the suite's final count, `docs/
 records what the programme closed on, and the mind map was checked against the tree — **225 files
 under `source/`, none missing**.
 
-**18.3 — the delivery.** Merging, pushing, the Pages run, the live check and `v1.2.0` were withheld
-until the author asked for them (`docs/GIT_WORKFLOW.md` §8); the word was given on 2026-10-16, and
-the delivery follows the record commit — merge `--no-ff`, push, a green Pages run, the live field
-verified in a browser rather than by `curl`, and the tag on the close-out commit.
+**18.3 — the delivery.** Done on the author's word (2026-10-16; `docs/GIT_WORKFLOW.md` §8): the
+branch merged `--no-ff` into `main` as `ba3e783` and pushed; the **Pages run `38803355815`
+succeeded** (build 22 s, deploy 12 s, carrying the known Node 20 deprecation notices); and the live
+field was verified **in a browser** rather than by `curl` — the four sheets drawn, both drift
+animations running with their clocks advancing, reduced motion holding the same composition still
+at **zero animations**, and the load walking clean with **zero console errors, zero failed requests
+and no response over 400** — **11 of 11 live checks**, captured to `workspace/screenshots/`.
+`v1.2.0` is tagged on the close-out commit.
 
 **Phase 18 verification**
 
@@ -2279,6 +2283,8 @@ verified in a browser rather than by `curl`, and the tag on the close-out commit
 [✓] The print check ......................... four pages × A4 and Letter = eight PDFs, one sheet
                                               each
 ```
+
+**Commits.** `511be78` the documentation and the record · the close-out commit.
 
 ---
 
@@ -2322,7 +2328,7 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-15 | 16 | Deviation | **The 400-line ceiling after the field: `tests/lib/backdrop.test.js` crossed it (316 → 412).** The plan asked the test to hold the field's overlap bound itself, and the scan is what crossed the line; `styles/tokens.css` grew 824 → 946 with §22, staying the standing exception it has been since Phase 1. | Recorded. The seam is named: the bound scan is self-contained and would live as `tests/lib/backdrop-bound.test.js` if the file is split. `atmosphere.css` ships at 260 lines and `audit-atmosphere.mjs` at 394, both under. |
 | 2026-10-15 | 17 | Fixed | **The entrance fade failed the contrast gate, and the sweep that had passed it was blind.** The reveal's first build faded as it rose; the Lighthouse sweep sampled a section mid-fade and failed five pages' colour-contrast at 96–97, while the site's own a11y sweep — reading only the text element's own opacity, never its ancestors' — passed them. | The reveal is now the movement alone: opacity is not animated anywhere, and a mid-rise section is displaced and fully opaque. `audit-a11y.mjs` multiplies every ancestor's opacity into the text's alpha the way a browser composites it, and `audit-motion.mjs` holds the new claim directly. Lighthouse after the fix: **100 on all eight pages**; a11y 0 defects. Recorded in `docs/research/06` §9. |
 | 2026-10-15 | 17 | Observation | **The tenth animation was the frost.** An early probe of the home page expected nine animations at load — seven reveals and two drifts — and counted ten; the gate's census named it: the frost's own scroll-timeline animation had been there all along. | Hydrogen's census now asserts the designed set exactly — its reveals, two drift sheets, one frost, nothing else — and reduced motion asserts **zero animations** on all twelve family pages. Recorded in `docs/research/06` §9. |
-| 2026-10-15 | 17 | Deviation | **The 400-line ceiling after the motion: twelve files under `source/` before, twelve after — one left, one joined.** `tests/router/router.test.js` came back under at **342** (the fake page moved to `tests/router/dom-fixtures.js`), and `tests/components/pointer-light.test.js` crossed at **412**. `styles/tokens.css` grew 946 → **993** with §23. In `workspace/tools/visual/`, `audit-motion.mjs` ships at **686** lines — the largest tool — with its seam named: its six question blocks are self-contained, and the frost and the frame clock are the two that would move out first; `audit-atmosphere.mjs` came back under (394 → 370) with the split. | Recorded rather than kept quiet. Every other Phase 17 file ships under 400. |
+| 2026-10-15 | 17 | Deviation | **The 400-line ceiling after the motion: twelve files under `source/` before, twelve after — one left, one joined.** `tests/router/router.test.js` came back under at **342** (the fake page moved to `tests/router/dom-fixtures.js`), and `tests/components/pointer-light.test.js` crossed at **412**. `styles/tokens.css` grew 946 → **995** with §23. In `workspace/tools/visual/`, `audit-motion.mjs` ships at **729** lines — the largest tool — with its seam named: its six question blocks are self-contained, and the frost and the frame clock are the two that would move out first; `audit-atmosphere.mjs` came back under (394 → 370) with the split. | Recorded rather than kept quiet. Every other Phase 17 file ships under 400. |
 | 2026-10-16 | 18 | Observation | **The closing performance runs spread, as they have since Phase 11.** The battery's cold-load run read 107 ms slowest and one 77 ms long task on `/atoms/` (the viewer's own boot on a busy machine); the quiet re-run read 102 ms and none. | Recorded in the phase entry and `docs/research/06` §10. The field added no long task in either run — its gate holds the drift window directly (no long task, 16.7 ms median). The README's performance row carries the spread rather than a single reading. |
 | 2026-10-16 | 18 | Deviation | **The brand's preserved list has its first recorded exception, and two stale counts beside it.** `BRAND_GUIDELINES.md` §3 said the design language has "no gradients" and "only the two defined soft shadows"; the programme's field is gradient washes, and the elevation ladder grew a third defined step in Phase 17. | Recorded the way ADR-008 promised: the exception is the page *field* alone — data surfaces stay flat, the wash spends only `--g-*` tokens, the bound is derived and measured — and the list's wording now counts the ladder as it actually is. Written in `BRAND_GUIDELINES.md` §3 with ADR-008 as the reason. |
 

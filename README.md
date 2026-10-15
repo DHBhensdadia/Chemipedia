@@ -9,7 +9,7 @@ Built with **plain JavaScript, HTML and CSS**. No framework, no TypeScript, no r
 
 ## Status
 
-**Complete at `v1.1.0`**, and published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and
+**Complete at `v1.2.0`**, and published: **<https://dhbhensdadia.github.io/Chemipedia/>**, rebuilt and
 redeployed by `.github/workflows/pages.yml` on every push to `main`.
 
 Twelve phases built the site, and the last of them measured it: 562 routes plus a not-found page, every
@@ -21,7 +21,7 @@ reachable from every element page — draws the chosen element as a three-dimens
 protons and neutrons, electrons orbiting on their shells, a camera a reader can swing, and a
 translucent bar driving it. It is hand-written WebGL2 (`docs/ARCHITECTURE.md`, ADR-007), it adds no
 dependency and no data, and it degrades to the element's own shell diagram rather than to a blank
-stage. **It is published in `v1.1.0`**; everything below is measured on the released commit.
+stage. **It shipped in `v1.1.0`**.
 
 **Three more phases drew the living paper.** The field every page is read on is a designed
 composition — soft washes of the site's own group hues, the atom stage's lattice at paper strength,
@@ -30,7 +30,8 @@ enter, a soft white light follows the pointer, the masthead frosts once the page
 route change dissolves, and the elevation ladder gains its third step. Every value is a token, the
 contrast bound is derived from `--ink-faint`'s shipped ratio before anything is drawn, and the whole
 programme is gated in real pixels and real frame time — **106 of 106 field claims, 62 of 62 motion
-claims** (`docs/ARCHITECTURE.md`, ADR-008).
+claims** (`docs/ARCHITECTURE.md`, ADR-008). **It is published in `v1.2.0`** — the site's last
+release; everything below is measured on the released commit.
 
 | | |
 |---|---|

@@ -298,7 +298,8 @@ CanvasRenderingContext. That is the reason the boundary is drawn where it is.
 ### ADR-008 — The living paper: a designed field, bounded by tokens, moved only by the compositor
 
 **Status:** `ACCEPTED` (2026-10-15, author approval, raised under author instruction) — the programme
-closed in Phase 18; the measured numbers it promised are recorded at the end of this decision
+closed in Phase 18 and was delivered as `v1.2.0` (2026-10-16); the measured numbers it promised are
+recorded at the end of this decision
 **Date raised:** 2026-10-15
 **Governs:** `styles/atmosphere.css` and `tokens.css` §22, the motion additions (the pointer light, the
 masthead's scrolled state, the router's transition), `BRAND_GUIDELINES.md` §3's preserved list, and the
@@ -361,7 +362,7 @@ is feature-gated and independently removable. The programme is built as a slice 
 **The measured numbers, as the programme closes (Phase 18).** The field's gate,
 `audit-atmosphere.mjs`, holds **106 of 106 claims**: every on-field text run's background sampled
 behind the real text in four states — the reduced-motion still, the drift frozen at each of its
-extremes, and print — with the worst run at 5.21:1 against the model's derived 4.53:1 floor, every
+extremes, and print — with the worst run at 4.79:1 against the model's derived 4.53:1 floor, every
 page family's bloom present and provably the family's own, print's sheets invisible over bare paper,
 and a lived-in drift window moving 120 frames at a 16.7 ms median with no long task and no layout
 shift. The motion's gate, `audit-motion.mjs`, holds **62 of 62**: the light follows to exactly the
@@ -374,8 +375,11 @@ The four site-wide gates re-ran with the programme in — accessibility **0 defe
 informational across 20 pages**, responsive **80 of 80**, performance worst layout shift **0** with
 no long task in the field's own windows, Lighthouse **accessibility 100 and best-practices 100 on
 all eight pages** (performance recorded, mean 89) — and the print check re-measured the four
-printable pages at A4 and Letter: **eight sheets, one each**. The evidence behind every number is in
-`progress/PHASE_LOG.md` and `docs/research/06-living-background-and-motion-audit.md` §9–10.
+printable pages at A4 and Letter: **eight sheets, one each**. The delivery's own check ran live, in
+a browser: the four sheets drawn, both drifts running with their clocks advancing, reduced motion
+still at **zero animations**, and **zero console errors, zero failed requests, no response over
+400** (11 of 11 live checks). The evidence behind every number is in `progress/PHASE_LOG.md` and
+`docs/research/06-living-background-and-motion-audit.md` §9–10.
 
 ---
 
