@@ -42,13 +42,17 @@
   .swatch__meta { padding: var(--sp-2) var(--sp-3); font-size: var(--step--1); color: var(--ink-soft); }
   .swatch__name { color: var(--ink); font-family: var(--font-mono); }
   .scale { list-style: none; padding: 0; display: grid; gap: var(--sp-3); }
-  .scale__row { display: flex; align-items: baseline; gap: var(--sp-4); }
+  .scale__row { display: flex; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; }
   .scale__key { flex: none; width: 6rem; font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-faint); }
   .space { display: grid; gap: var(--sp-2); list-style: none; padding: 0; }
   .space__row { display: flex; align-items: center; gap: var(--sp-4); font-family: var(--font-mono); font-size: var(--step--1); }
   .space__bar { height: var(--sp-3); background: var(--ink); }
   .shape-row { display: flex; gap: var(--sp-5); flex-wrap: wrap; }
   .shape { width: var(--sp-8); height: var(--sp-8); background: var(--surface-sunk); border: var(--rule-solid); }
+  .field-list { display: grid; gap: var(--sp-1); list-style: none; padding: 0; margin: var(--sp-5) 0 0; }
+  .field-list__row { display: flex; align-items: baseline; gap: var(--sp-4); font-size: var(--step--1); color: var(--ink-soft); flex-wrap: wrap; }
+  .field-list__key { flex: none; width: 17rem; font-family: var(--font-mono); color: var(--ink); overflow-wrap: anywhere; }
+  .field-list__value { min-width: 0; overflow-wrap: anywhere; }
   .demo { border: var(--rule-dotted); border-radius: var(--radius); overflow: hidden; margin-block-end: var(--sp-5); }
   .demo__label { font-family: var(--font-mono); font-size: var(--step--1); color: var(--ink-faint); padding: var(--sp-2) var(--sp-3); border-bottom: var(--rule-hairline); }
   .guide__section { margin-block-start: var(--sp-7); }
@@ -108,6 +112,31 @@
       the number turns to tell you so.
     </p>
     <div class="swatches" id="group-colours"></div>
+  </section>
+
+  <section class="guide__section section">
+    <h2 class="section__title">The living paper</h2>
+    <p>
+      The field under every page: four fixed sheets drawn in CSS and bounded by tokens §22 —
+      the wash, the page family's bloom, the lattice and the grain. This guide carries the shipped
+      field, so the section demonstrates itself: the blooms in these corners are the blooms in this
+      page's corners, and the lattice under these words is the periodic table's own pitch. Bottom to
+      top, the sheets are <span class="swatch__name">html::before</span> (the coral and the amber),
+      <span class="swatch__name">body::before</span> (the family bloom and the pale blue),
+      <span class="swatch__name">body::after</span> (the lattice, faded toward the frame) and
+      <span class="swatch__name">html::after</span> (the grain). Every swatch below is the composite
+      the tokens actually draw: the hue mixed into the paper at that bloom's own alpha, nothing
+      remembered.
+    </p>
+    <div class="swatches" id="field-blooms"></div>
+    <p>
+      A page family names one of the pairs below — the bloom in the top-left corner — and the pages
+      that carry no family wear the default. The drift is the field's only motion: two transforms on
+      two long timings, compositor-only, and the reader's preference decides —
+      <span id="field-motion-state"></span> In print the sheets are not drawn at all.
+    </p>
+    <div class="swatches" id="field-families"></div>
+    <ul class="field-list" id="field-tokens"></ul>
   </section>
 
   <section class="guide__section section">
@@ -297,6 +326,128 @@
     swatch.append(chip, meta);
     container.append(swatch);
   }
+
+  // The living paper: each bloom's own composite, one swatch per family field, the pages each
+  // family covers, and every token §22 declares — all read from the same stylesheets this page
+  // renders, so the guide cannot drift from the field it documents.
+  const fieldProperty = (name) => tokens.getPropertyValue(name).trim();
+  const fieldNames = [
+    ...new Set(
+      [...document.styleSheets]
+        .flatMap((sheet) => [...sheet.cssRules])
+        .filter((rule) => rule.selectorText === ":root")
+        .flatMap((rule) => [...rule.style])
+        .filter((name) => name.startsWith("--field-")),
+    ),
+  ];
+
+  function fieldSwatch(host, background, meta) {
+    const chip = document.createElement("div");
+    chip.className = "swatch__chip";
+    chip.style.background = background;
+
+    const caption = document.createElement("p");
+    caption.className = "swatch__meta";
+    caption.innerHTML = meta;
+
+    const swatch = document.createElement("div");
+    swatch.className = "swatch";
+    swatch.append(chip, caption);
+    host.append(swatch);
+  }
+
+  // A composite is the hue at the bloom's own alpha over the paper — the pixel, not the pigment.
+  const composite = (hue, alpha) =>
+    `color-mix(in srgb, var(${hue}) calc(var(${alpha}) * 100%), var(--bg))`;
+  const bloomHost = document.querySelector("#field-blooms");
+
+  for (const number of [2, 3, 4]) {
+    fieldSwatch(
+      bloomHost,
+      composite(`--field-bloom-${number}-hue`, `--field-bloom-${number}-alpha`),
+      `<span class="swatch__name">--field-bloom-${number}-hue</span><br>` +
+        `${fieldProperty(`--field-bloom-${number}-hue`)} &middot; ${fieldProperty(`--field-bloom-${number}-x`)} / ${fieldProperty(`--field-bloom-${number}-y`)} &middot; &alpha; ${fieldProperty(`--field-bloom-${number}-alpha`)}`,
+    );
+  }
+
+  const familyPages = new Map();
+
+  for (const sheet of document.styleSheets) {
+    for (const rule of [...sheet.cssRules]) {
+      if (!rule.selectorText?.includes("body[data-page=")) continue;
+
+      const family = rule.style
+        .getPropertyValue("--field-family-hue")
+        .match(/--field-family-([a-z]+)-hue/)?.[1];
+
+      if (!family) continue;
+
+      for (const [, page] of rule.selectorText.matchAll(/data-page="([^"]+)"/g)) {
+        familyPages.set(family, [...(familyPages.get(family) ?? []), page]);
+      }
+    }
+  }
+
+  const families = [
+    { hue: "--field-family-hue", alpha: "--field-family-alpha", pages: [] },
+    ...fieldNames
+      .map((name) => name.match(/^--field-family-([a-z]+)-hue$/)?.[1])
+      .filter(Boolean)
+      .map((family) => ({
+        hue: `--field-family-${family}-hue`,
+        alpha: `--field-family-${family}-alpha`,
+        pages: familyPages.get(family) ?? [],
+      })),
+  ];
+  const familyHost = document.querySelector("#field-families");
+
+  for (const family of families) {
+    const pages =
+      family.pages.length > 0
+        ? `<br>${family.pages.join(" &middot; ")}`
+        : "<br>the pages that carry no family";
+
+    fieldSwatch(
+      familyHost,
+      composite(family.hue, family.alpha),
+      `<span class="swatch__name">${family.hue}</span><br>` +
+        `${fieldProperty(family.hue)} &middot; &alpha; ${fieldProperty(family.alpha)}${pages}`,
+    );
+  }
+
+  const tokenList = document.querySelector("#field-tokens");
+
+  for (const name of fieldNames) {
+    const row = document.createElement("li");
+    row.className = "field-list__row";
+
+    const key = document.createElement("span");
+    key.className = "field-list__key";
+    key.textContent = name;
+
+    const value = document.createElement("span");
+    value.className = "field-list__value";
+    value.textContent = fieldProperty(name);
+
+    if (value.textContent.length > 64) {
+      value.textContent = `${value.textContent.slice(0, 61)}…`;
+    }
+
+    row.append(key, value);
+    tokenList.append(row);
+  }
+
+  const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const motionState = document.querySelector("#field-motion-state");
+
+  function describeMotion() {
+    motionState.textContent = motion.matches
+      ? "this machine is asking for less, so the sheets here are holding the still composition."
+      : "this machine is not asking for less, so the sheets here are turning on their long timings.";
+  }
+
+  describeMotion();
+  motion.addEventListener("change", describeMotion);
 
   // The chrome, rendered by the same components the build uses, for a page that does not exist so
   // that nothing claims to be the current page except the demonstration submenu item.
