@@ -66,7 +66,7 @@ const ROBOTS_FILE = "robots.txt";
  * them, then the shell's components. A page's own stylesheet is appended after these, and only when
  * it exists, so a page family that has not been styled yet still links a working set.
  */
-const GLOBAL_STYLESHEETS = ["styles/tokens.css", "styles/base.css", "styles/layout.css"];
+const GLOBAL_STYLESHEETS = ["styles/tokens.css", "styles/base.css", "styles/layout.css", "styles/atmosphere.css"];
 
 const SHELL_STYLESHEETS = [
   "styles/components/wordmark.css",
