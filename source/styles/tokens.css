@@ -910,6 +910,25 @@
   --field-grain-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E");
   --field-grain-alpha: 0.02;
   --field-grain-sample-opacity: 0.5;
+
+  /* -------------------------------------------------------------------------
+     23. The living paper, the motion: the pointer light.
+
+     The light is white-based, so it can only raise the field's luminance and
+     spends nothing of §22's budget (the derivation is research/06 §6). It
+     rides the near sheet as one more gradient: the first four values are the
+     design; the last three are the module's own
+     (scripts/components/pointer-light.js), and their declared defaults are
+     the absent light — which is also what a reader without a script, without
+     a fine pointer, or asking for less motion gets.
+     ------------------------------------------------------------------------- */
+  --pointer-light-size: 46vmax; /* the radius the light falls off over */
+  --pointer-light-alpha: 0.4; /* the most it brightens the paper */
+  --pointer-light-fade: 70%; /* where along that radius it is clean again */
+  --pointer-light-damping: 8; /* how quickly it reaches the pointer, per second — the camera's own rate, §21 */
+  --pointer-light-x: 50%; /* the light's viewport position, written by the module in pixels */
+  --pointer-light-y: 50%;
+  --pointer-light-live: 0; /* 0–1, written by the module */
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

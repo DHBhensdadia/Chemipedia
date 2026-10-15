@@ -2,8 +2,9 @@
    The living paper — the field every page is read on.
 
    Four sheets hang behind everything, fixed to the frame: the wash (two
-   sheets, four blooms of the site's own group hues), the lattice at the atom
-   stage's own pitch, and grain multiplied over the lot. Nothing here paints
+   sheets — four blooms of the site's own group hues, and the pointer light
+   when there is one —), the lattice at the atom stage's own pitch, and grain
+   multiplied over the lot. Nothing here paints
    above content, nothing here takes a pointer, and the only thing that moves
    is two transforms on the compositor.
 
@@ -13,7 +14,7 @@
    equal z-index:
 
      html::before   the wash's far sheet — the coral and the amber
-     body::before   the wash's near sheet — the family bloom and the pale blue
+     body::before   the wash's near sheet — the pointer light, the family bloom and the pale blue
      body::after    the lattice
      html::after    the grain, on top, multiplied over all of it
 
@@ -83,6 +84,18 @@ html::before {
    `body[data-page]` override is visible to substitution. See the note in tokens §22. */
 body::before {
   background-image:
+    /* The pointer light, on top of the wash's near sheet (tokens §23). Its position and presence
+       are written by scripts/components/pointer-light.js; the declared defaults are the absent
+       light, which is what a reader without a script, without a fine pointer or asking for less
+       motion gets. It is drawn on this sheet's own coordinate shape, so the drift carries it like
+       everything else here, and it is white-based, so it can only raise what is beneath it. */
+    radial-gradient(
+      circle var(--pointer-light-size) at
+        calc((var(--pointer-light-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
+        calc((var(--pointer-light-y) + var(--field-sheet-bleed)) / var(--field-sheet-scale)),
+      color-mix(in srgb, var(--surface) calc(var(--pointer-light-live) * var(--pointer-light-alpha) * 100%), transparent),
+      transparent var(--pointer-light-fade)
+    ),
     radial-gradient(
       circle var(--field-bloom-radius) at
         calc((var(--field-bloom-1-x) + var(--field-sheet-bleed)) / var(--field-sheet-scale))
