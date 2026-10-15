@@ -49,6 +49,11 @@ function resolve(name) {
   return token;
 }
 
+/** A field hue token (`var(--g-noble-gases)`) as the colour it resolves to. */
+function resolvedHue(hue) {
+  return resolve(hue.slice(hue.indexOf("(") + 1, hue.lastIndexOf(")")));
+}
+
 const PAPER = valueOf("--bg");
 const FAINT = valueOf("--ink-faint");
 
@@ -165,6 +170,97 @@ test("the texture alone still leaves the faintest ink at AA", () => {
   assert.ok(
     contrastRatio(FAINT, composite) >= AA_TEXT,
     `lattice and grain alone measure ${contrastRatio(FAINT, composite).toFixed(2)} : 1`,
+  );
+});
+
+test("no overlap of the blooms leaves the faintest ink below AA", () => {
+  // The plan's bound: the deepest composite the tokens can draw, for every family, at every
+  // reference viewport, still clears AA for --ink-faint. The geometry is read from the same
+  // tokens atmosphere.css paints from, and the model charges the texture at its worst on every
+  // sample. The browser audit holds the rendered pixels; this holds the numbers they come from.
+  const baseFocus = Number(tokens.match(/--field-wash-focus:\s*([\d.]+)/)[1]);
+  const narrowFocus = Number(
+    tokens.match(/@media \(max-width: 45rem\)[\s\S]*?--field-wash-focus:\s*([\d.]+)/)?.[1],
+  );
+
+  assert.equal(baseFocus, 1, "the desktop wash factor is no longer 1");
+  assert.ok(narrowFocus > 0 && narrowFocus < 1, "the narrow query no longer steps the wash back");
+
+  const radius = numberToken("--field-bloom-radius") / 100; // `68vmax` — 0.68 of the longer side
+  const fade = numberToken("--field-bloom-fade") / 100;
+  const lattice = numberToken("--field-lattice-alpha");
+  const grain = numberToken("--field-grain-alpha") * numberToken("--field-grain-sample-opacity");
+  const ink = resolve("--field-lattice-hue");
+
+  const layer = (name, hue, alpha) => ({
+    hue,
+    alpha,
+    x: numberToken(`--field-bloom-${name}-x`) / 100,
+    y: numberToken(`--field-bloom-${name}-y`) / 100,
+  });
+
+  // The paint order, bottom to top: sheet one's amber then its coral, sheet two's blue, and the
+  // family bloom last — the order atmosphere.css lays them down.
+  const sheets = [
+    layer("4", resolvedHue(valueOf("--field-bloom-4-hue")), numberToken("--field-bloom-4-alpha")),
+    layer("2", resolvedHue(valueOf("--field-bloom-2-hue")), numberToken("--field-bloom-2-alpha")),
+    layer("3", resolvedHue(valueOf("--field-bloom-3-hue")), numberToken("--field-bloom-3-alpha")),
+  ];
+
+  const families = huePairs()
+    .filter(([name]) => name.startsWith("family"))
+    .map(([name, hue, alpha]) => ({
+      name: name.replace("family ", ""),
+      ...layer("1", resolvedHue(hue), alpha),
+    }));
+
+  assert.equal(families.length, 10, "nine families and the default pair");
+
+  const viewports = [
+    [1280, 900],
+    [1920, 1080],
+    [768, 1024],
+    [375, 812],
+  ];
+
+  let floor = Number.POSITIVE_INFINITY;
+  let where = "";
+
+  for (const [width, height] of viewports) {
+    const focus = width < 720 ? narrowFocus : baseFocus;
+    const reach = radius * Math.max(width, height) * fade;
+    const step = width < 720 ? 12 : 20;
+
+    for (const family of families) {
+      for (let y = 0; y <= height; y += step) {
+        for (let x = 0; x <= width; x += step) {
+          let colour = PAPER;
+
+          for (const bloom of [...sheets, family]) {
+            const distance = Math.hypot(x - bloom.x * width, y - bloom.y * height);
+
+            if (distance < reach) {
+              colour = compositeOver(bloom.hue, colour, bloom.alpha * focus * (1 - distance / reach));
+            }
+          }
+
+          colour = compositeOver(ink, colour, lattice);
+          colour = compositeOver("#000000", colour, grain);
+
+          const ratio = contrastRatio(FAINT, colour);
+
+          if (ratio < floor) {
+            floor = ratio;
+            where = `${family.name} at ${width}×${height}`;
+          }
+        }
+      }
+    }
+  }
+
+  assert.ok(
+    floor >= AA_TEXT,
+    `the darkest composite measures ${floor.toFixed(3)} : 1 — ${where}`,
   );
 });
 
