@@ -797,6 +797,116 @@
   --atom-bar-ink-dim: #b6c6c2;
   --atom-on-particle: #10201f; /* text on a particle-coloured chip; all three particles are light */
   --atom-focus: #ffd9a0; /* the focus ring, because the site's own is the ink and the stage is dark */
+
+  /* -------------------------------------------------------------------------
+     22. The living paper — the field every page is read on.
+
+     The ground is still the paper (--bg, §1). Everything here is weather on
+     it: four blooms of the site's own group hues, anchored in the frame's
+     outer tenth; the atom stage's own lattice at paper strength (28 CSS
+     pixels, §21); grain. Two of the four sheets drift, and nothing above
+     transform and opacity ever moves.
+
+     **Every number here was solved, not chosen.** docs/research/06-living-
+     background-and-motion-audit.md holds the derivation. The book is the
+     reading column: --ink-faint keeps 4.99 : 1 on bare paper, and under the
+     whole field — grain at its worst pixel, a lattice line under the text,
+     every bloom stacked as the geometry allows — the conservative model's
+     floor is 4.53 : 1, so no point of any page can leave AA. What a bloom
+     may carry *alone* was computed with the site's own contrast library
+     (source/scripts/lib/contrast.js): the deepest hue saturates at 5.35 %
+     alpha, the mid greys and the violet at 7.00–7.70 %, the light hues at
+     9.15–11.95 %. Every alpha below sits at least 15 % under its hue's own
+     ceiling; the deepest hues appear only as a family field, at a third of
+     theirs.
+
+     The washes mix from the very tokens the table paints its tiles with, so
+     a group's colour is one fact about the data, not two. tests/lib/
+     backdrop.test.js re-derives the ceilings from this file and holds them;
+     the browser audit (workspace/tools/visual/audit-atmosphere.mjs)
+     re-measures the composite in real pixels at the drift's extremes. A
+     change to any number here has to pass both.
+     ------------------------------------------------------------------------- */
+  --field-bloom-radius: 68vmax; /* how far a bloom's colour reaches before it is paper again */
+  --field-bloom-fade: 72%; /* the fraction of that radius the fade to nothing takes */
+  --field-bloom-1-x: 10%; /* the family bloom: the one bloom whose hue a page family changes */
+  --field-bloom-1-y: 6%;
+  --field-bloom-1-hue: var(--field-family-hue);
+  --field-bloom-1-alpha: var(--field-family-alpha);
+  --field-bloom-2-hue: var(--g-noble-gases);
+  --field-bloom-2-alpha: 0.042;
+  --field-bloom-2-x: 92%;
+  --field-bloom-2-y: 14%;
+  --field-bloom-3-hue: var(--g-non-metals);
+  --field-bloom-3-alpha: 0.058;
+  --field-bloom-3-x: 8%;
+  --field-bloom-3-y: 92%;
+  --field-bloom-4-hue: var(--g-unknown);
+  --field-bloom-4-alpha: 0.045;
+  --field-bloom-4-x: 94%;
+  --field-bloom-4-y: 88%;
+  /* On a narrow frame the four reaches overlap most of the width at once, so the wash steps back
+     rather than compound. The factor is the only value the narrow query at the file's end changes:
+     measured, it lifts the conservative model's floor from 4.47 to 4.53. */
+  --field-wash-focus: 1;
+
+  /* The family field: the hue the family bloom wears. The default is the site's own pale green
+     (the section's first group hue); each page family names one declared hue and the alpha its
+     ceiling allows. Nothing here may exceed its hue's computed ceiling — the test reads both. */
+  --field-family-hue: var(--g-post-transition-metals); /* home, About, Contact, the missing page */
+  --field-family-alpha: 0.055;
+  --field-family-element-hue: var(--g-actinides); /* an element's page; the hero's own wash still carries its category */
+  --field-family-element-alpha: 0.048;
+  --field-family-table-hue: var(--g-transition-metals); /* the index of elements and the groups */
+  --field-family-table-alpha: 0.055;
+  --field-family-states-hue: var(--g-non-metals); /* properties and states */
+  --field-family-states-alpha: 0.058;
+  --field-family-scene-hue: var(--g-metalloids); /* the atom's pages: the viewer, the orbitals */
+  --field-family-scene-alpha: 0.034;
+  --field-family-ranking-hue: var(--g-unknown); /* the ranked measurements */
+  --field-family-ranking-alpha: 0.058;
+  --field-family-calculator-hue: var(--g-alkali-metals); /* the temperature calculator */
+  --field-family-calculator-alpha: 0.033;
+  --field-family-glossary-hue: var(--g-noble-gases); /* the glossary, index and terms */
+  --field-family-glossary-alpha: 0.046;
+  --field-family-evolution-hue: var(--g-lanthanides); /* the history of the table */
+  --field-family-evolution-alpha: 0.044;
+  --field-family-downloads-hue: var(--g-halogens); /* the printables */
+  --field-family-downloads-alpha: 0.032;
+
+  /* The drift: two sheets, one slow turn each. The durations are long enough that a reader never
+     catches the field moving — they find it moved. Travel stays under the sheets' own 4 % bleed,
+     so no edge can ever show. */
+  --field-drift-duration-a: 180s;
+  --field-drift-duration-b: 240s;
+  --field-drift-x: 2.2%;
+  --field-drift-y: 1.6%;
+  --field-drift-ease: ease-in-out;
+
+  /* The lattice: the stage's grid brought up to the page, at hairline weight. Its own bound, held
+     by the test with the grain below: line and grain alone keep --ink-faint at 4.70 : 1 over bare
+     paper, so the texture can never be what fails a page. The mask lets the grid thin towards the
+     frame, so the paper's edge reads quieter than its middle. */
+  --field-lattice-hue: var(--ink);
+  --field-lattice-alpha: 0.011;
+  --field-lattice-pitch: 28px; /* the stage's own pitch (§21's --atom-grid-pitch), in CSS pixels */
+  --field-lattice-mask-centre: 50% 34%;
+  --field-lattice-mask-reach: 128% 102%;
+  --field-lattice-mask-hold: 42%; /* the mask holds full strength this far out, then falls away */
+  --field-lattice-mask-floor: 0.4;
+
+  /* The two drifting sheets bleed this far past the frame and everything inside them is corrected
+     for it, so a bloom's coordinates mean the frame's own percentages (the correction's shape is
+     (x + bleed) / scale, and the test holds scale = 1 + 2 × bleed). */
+  --field-sheet-bleed: 4%;
+  --field-sheet-scale: 1.08;
+
+  /* The grain: fractal noise, desaturated, one 160 px tile, multiplied over what is beneath it. The
+     alpha is the layer's; --field-grain-sample-opacity is the tile's own rect, and the product —
+     one percent of a channel at its darkest — is the same 1 % the derivation's model charges. */
+  --field-grain-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='160'%20height='160'%3E%3Cfilter%20id='n'%3E%3CfeTurbulence%20type='fractalNoise'%20baseFrequency='0.8'%20numOctaves='2'%20stitchTiles='stitch'/%3E%3CfeColorMatrix%20type='saturate'%20values='0'/%3E%3C/filter%3E%3Crect%20width='160'%20height='160'%20filter='url(%23n)'%20opacity='0.5'/%3E%3C/svg%3E");
+  --field-grain-alpha: 0.02;
+  --field-grain-sample-opacity: 0.5;
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at
@@ -820,5 +930,14 @@
 @media (min-width: 56rem) {
   :root {
     --type-jumbo: 4.8rem;
+  }
+}
+
+/* The living paper on a narrow frame: at 375 px the four bloom reaches overlap most of the width
+   at once, so the wash steps back by 12 % rather than compound (the arithmetic is in
+   docs/research/06-living-background-and-motion-audit.md). One factor, no second field. */
+@media (max-width: 45rem) {
+  :root {
+    --field-wash-focus: 0.88;
   }
 }
