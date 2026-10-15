@@ -31,7 +31,7 @@
 .tile:hover,
 .tile:focus-visible {
   z-index: 2;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   transform: translateY(var(--lift-tile)) scale(var(--scale-tile));
 }
 

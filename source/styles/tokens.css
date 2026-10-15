@@ -175,6 +175,10 @@
 
   --shadow-sm: 0 1px 2px #15403d0f;
   --shadow-md: 0 4px 16px #15403d14;
+  /* The ladder's top step: higher and wider than md, and a hair thinner in ink (18 against md's
+     20 parts, per 255), so a surface can rise without the spill under the faintest text deepening
+     with it — elevation is bought with geometry, never with darkness. */
+  --shadow-lg: 0 10px 30px #15403d12;
 
   /* -------------------------------------------------------------------------
      6. Motion.

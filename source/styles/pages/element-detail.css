@@ -333,11 +333,14 @@ main {
   color: var(--on-fill, var(--ink-body));
   border-radius: var(--radius);
   text-decoration: none;
-  transition: transform var(--dur-fast) var(--ease-out);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .el-similar__tile:hover,
 .el-similar__tile:focus-visible {
+  box-shadow: var(--shadow-lg);
   transform: translateY(var(--lift-tile-sm));
 }
 
