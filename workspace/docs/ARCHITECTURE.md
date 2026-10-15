@@ -295,6 +295,71 @@ CanvasRenderingContext. That is the reason the boundary is drawn where it is.
 
 ---
 
+### ADR-008 — The living paper: a designed field, bounded by tokens, moved only by the compositor
+
+**Status:** `PROPOSED` (2026-10-15, author instruction) — to be marked `ACCEPTED` with measured numbers
+in the phase that closes the programme
+**Date raised:** 2026-10-15
+**Governs:** `styles/atmosphere.css` and `tokens.css` §22, the motion additions (the pointer light, the
+masthead's scrolled state, the router's transition), `BRAND_GUIDELINES.md` §3's preserved list, and the
+audits that hold them
+
+**Context.** The built site inherits the reference's page field faithfully — flat fills, two soft
+shadows, and exactly the language `BRAND_GUIDELINES.md` §3 preserves — and a review of the built product
+returned one visual finding: the field is static and plain, and the page reads like a wiki. The author's
+instruction is a designed, living surface in the site's own identity, explicitly not the neon look that
+gives generated work away. Four constraints cannot move: ADR-004 (no dependencies), ADR-006 (one light
+theme), the verified AA contrast everywhere, and the measured gates (shift 0, no long tasks, print,
+reduced motion). The audit behind this decision, measured against eight reference-grade fields, is
+`docs/research/06-living-background-and-motion-audit.md`.
+
+**Options considered**
+
+| Option | Description | Strengths | Costs |
+|---|---|---|---|
+| **A. Keep the field flat; change only type and spacing** | Leave the surface as the reference defines it. | No risk of any kind; the replica language stays pure. | The finding *is* the flat field. Typography cannot answer "the page reads as static". |
+| **B. A new palette and saturated gradients** | A visibly "designed" field with its own colours. | Fastest to make impressions move. | Breaks ADR-006's identity, adds a palette the tests cannot hold to the data, and courts exactly the generated look the brief rules out. |
+| **C. The living paper** *(chosen)* | The field becomes four CSS layers — a wash of the site's own group hues at capped alphas, the atom stage's lattice at paper strength, grain, a vignette — with slow compositor-only drift; motion and depth follow as an optional layer. | Every value is a token; every hue is the data's own; the reading column stays near paper; the bound is derived before a line is drawn; the mood is carried by restraint — small alphas, long durations — so nothing can fail a gate. | The field moves, so one screenshot can no longer verify it: the cost is two-state pixel sampling and a derived test. |
+
+**Decision.** Option C, with five rules that carry it beyond the choice of technique:
+
+1. **The data surfaces stay flat.** Tiles, chips, badges and group fills keep the reference's flat
+   language; the living paper is the page behind them. This is the one amendment to the preserved list
+   in `BRAND_GUIDELINES.md` §3, and it is recorded there with this ADR as its reason.
+2. **Every hue is the site's own.** Each field hue resolves to a `--g-*` token, and
+   `tests/lib/backdrop.test.js` holds that from the token file itself, so the field cannot acquire a
+   palette of its own.
+3. **The bound is derived, then measured.** The caps on the field's alphas come from `--ink-faint`'s own
+   shipped 4.99:1 against the paper (`docs/research/06` §6): one bloom at a time where text sits, ≤ 5 %
+   for the four dark group hues, ≤ 8 % for the light ones, lattice and grain ≤ 2.5 %. The unit test
+   derives the ceilings from `tokens.css`; `audit-atmosphere.mjs` then samples real composited pixels
+   behind text at the drift's extremes. The pointer light is white-based and can only *raise* the
+   field's luminance, so it sits outside the budget by construction.
+4. **Motion is compositor-only, slow, and optional.** `transform` and `opacity` only; no animated
+   full-screen blur; drift measured in tens of seconds, not frames; reveals through the platform's own
+   scroll timelines behind `@supports`, whose unsupported baseline is the finished page; reduced motion
+   gets the designed still composition — the same four layers, held.
+5. **Nothing is hidden before the platform arrives.** No motion path may depend on script; the page with
+   no script is the page, held still.
+
+**Consequences**
+
+- Positive: the field becomes the one place the site's colour identity is felt before a word is read,
+  and the reference's flat page field becomes a **deliberate, recorded deviation** — its choice, kept by
+  us without question until a review found it reads as undesigned.
+- Positive: the technique budget is countable and interviewable — four layers, up to four hues at five
+  per cent, one lattice the atom stage already draws, one grain, one light that only adds.
+- Negative: `tokens.css` grows (already over the 400-line ceiling and recorded; the field keeps to one
+  new group, §22).
+- Accepted: the brand's "flat colour fills with no gradients" preservation line is amended — for the
+  page field only — in `BRAND_GUIDELINES.md` §3, once, with this record as the reason.
+
+**Reversal cost.** Low, and deliberately shaped that way. `atmosphere.css` is one global sheet: removing
+its link returns the site to the flat reference field and leaves the tokens unused, and each motion axis
+is feature-gated and independently removable. The programme is built as a slice that can be lifted out.
+
+---
+
 ## Part 3 — Sub-questions resolved with ADR-001
 
 **Generated output is ignored, and rebuilt on demand.** The repository holds authored source only;

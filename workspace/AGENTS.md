@@ -123,8 +123,12 @@ than an edit.
 | ADR-004 | JavaScript-only, zero-runtime-dependency constraint | ACCEPTED |
 | ADR-005 | Data provenance and licensing | ACCEPTED |
 | ADR-006 | Single light theme; no dark variant, no switcher | ACCEPTED |
+| ADR-007 | The atom viewer: raw WebGL2, no library, tokens as its palette | ACCEPTED |
+| ADR-008 | The living paper: a designed field, bounded by tokens, compositor-only motion | PROPOSED |
 
-No decisions are currently open. Add a new ADR for anything consequential and awkward to reverse.
+ADR-007 was accepted with the atom viewer's delivery. **ADR-008 (the living paper) is `PROPOSED`** and
+awaits the author's go-ahead on the plan in `docs/IMPLEMENTATION_PLAN.md` §3. Add a new ADR for
+anything consequential and awkward to reverse.
 
 ---
 
