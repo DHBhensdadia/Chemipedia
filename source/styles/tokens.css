@@ -929,6 +929,22 @@
   --pointer-light-x: 50%; /* the light's viewport position, written by the module in pixels */
   --pointer-light-y: 50%;
   --pointer-light-live: 0; /* 0–1, written by the module */
+
+  /* --- The masthead's scrolled state. ------------------------------------
+     The frost is paper at a derived minimum opacity behind a small blur,
+     settling over the first 160px of a scroll. The opacity is derived so the
+     faintest ink the band carries — the search field's placeholder and icon,
+     `--ink-faint` at its shipped 4.99:1 on paper — keeps AA above anything
+     the page can scroll beneath it: against the darkest ground the site can
+     put there (`--atom-stage`, #0d2b28) it reads 4.64:1, and against pure
+     black, which the site never draws, 4.57:1 — the round number that holds
+     both. The blur is small on purpose: at 0.96 the band is paper with a
+     suggestion of what is under it, not glass. The range is a little under
+     three band heights, so the frost settles while the band's own rule is
+     still on screen. */
+  --masthead-frost-paper: 0.96;
+  --masthead-frost-blur: 8px;
+  --masthead-frost-range: 160px;
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at
