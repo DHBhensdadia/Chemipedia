@@ -297,8 +297,8 @@ CanvasRenderingContext. That is the reason the boundary is drawn where it is.
 
 ### ADR-008 — The living paper: a designed field, bounded by tokens, moved only by the compositor
 
-**Status:** `PROPOSED` (2026-10-15, author instruction) — to be marked `ACCEPTED` with measured numbers
-in the phase that closes the programme
+**Status:** `ACCEPTED` (2026-10-15, author approval, raised under author instruction) — the measured
+numbers of the closing phase (18) join it when the programme completes
 **Date raised:** 2026-10-15
 **Governs:** `styles/atmosphere.css` and `tokens.css` §22, the motion additions (the pointer light, the
 masthead's scrolled state, the router's transition), `BRAND_GUIDELINES.md` §3's preserved list, and the
