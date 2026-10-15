@@ -33,6 +33,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 15 | Quality, delivery and the second reference's line | `COMPLETE` | `cd18435`, `c3ff53a`, `529fbe0` on `feature/atom-3d`, merged into `main` as `ad58ee2` and pushed; Pages `37638178700` green; the live page verified in a browser; tagged `v1.1.0` |
 | 16 | The field: the living paper, drawn and bounded | `COMPLETE` | `409036e`..`6b1cb2d` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
 | 17 | The motion and the depth | `COMPLETE` | `6016588`..`54a44a6` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
+| 18 | Quality, delivery and the living paper | `IN_PROGRESS` | the gates and the documentation are done and committed on `feature/living-paper`; **the delivery — merge, push, Pages, live check, `v1.2.0` — was authorized by the author on 2026-10-16 and follows** |
 
 ---
 
@@ -2208,6 +2209,79 @@ cross-fade · `a357370` the ladder · `54a44a6` the gate · the close-out commit
 
 ---
 
+## Phase 18 — Quality, delivery and the living paper
+
+**Goal:** close the programme the way Phase 11 closed the site and Phase 15 closed the viewer —
+every gate re-run on the programme's final tree, every document finished and agreeing, then merged,
+pushed, verified live in a browser and tagged `v1.2.0` on the author's word.
+
+**18.1 — the gates, re-run with the programme in.** The four site-wide sweeps and the programme's
+own two all ran again, every page in their lists. Accessibility: **0 defects and 29 informational
+lines across 20 pages** (with the ancestor-opacity model Phase 17's defect forced). Responsive:
+**80 of 80** page-and-width combinations. Performance: **worst layout shift 0**; the slowest cold
+load read 107 ms in the battery run and **102 ms** on a quiet re-run, with one 77 ms long task on
+`/atoms/` in the battery and none in the quiet run — the run-to-run spread this project has
+recorded since Phase 11 rather than a gate — and the field's own drift windows paid no long task in
+either. Lighthouse: **accessibility 100 and best-practices 100 on all eight pages**, SEO 100,
+performance recorded (mean 89 this run against 88 last). The field's gate: **106 of 106 claims.
+The motion's: 62 of 62.** And the print check re-measured: the four printable pages at A4 and
+Letter render **eight sheets, one each** — unchanged from Phase 16. The six logs are kept in
+`workspace/screenshots/` (local run records, like every phase's).
+
+**18.2 — the documentation finished.** The programme's own exit criterion is that no document
+contradicts another and no reader meets a stale one, so every file that describes the field or the
+motion was brought to the tree. `DESIGN_SYSTEM.md` gains **§1.8** — the field's and the motion's
+token groups, `tokens.css` §22–23 — and the closing **§9** stating the field and its derived bound,
+and corrects two claims the programme made stale: the shadow list behind the elevation ladder, and
+§7's "the only blurred surface on the site", which the frosted masthead ended.
+`BRAND_GUIDELINES.md` §3 records the **one deliberate exception** ADR-008 promised, with its
+reason: the field may carry the wash, and every data surface stays flat. `ARCHITECTURE.md`'s
+ADR-008 stops promising numbers and carries them. The four guides walk the new files and answer for
+them, the front door lists the two new gates and the suite's final count, `docs/research/06` **§10**
+records what the programme closed on, and the mind map was checked against the tree — **225 files
+under `source/`, none missing**.
+
+**18.3 — the delivery.** Merging, pushing, the Pages run, the live check and `v1.2.0` were withheld
+until the author asked for them (`docs/GIT_WORKFLOW.md` §8); the word was given on 2026-10-16, and
+the delivery follows the record commit — merge `--no-ff`, push, a green Pages run, the live field
+verified in a browser rather than by `curl`, and the tag on the close-out commit.
+
+**Phase 18 verification**
+
+```
+[✓] node --test source/tests ................ pass  732 pass, 0 fail
+[✓] node --check on every changed module .... pass  no source module changed this phase; the
+                                              programme's final tree is the one Phase 17 gated
+[✓] Brand scan .............................. PASS: brand scan clean (inside the suite)
+[✓] Console/network on every touched page ... zero console messages, zero failed requests — the
+                                              motion gate walks twelve family pages without either
+[✓] Accessibility tree reviewed ............. audit-a11y: 0 defects, 29 informational across 20
+                                              pages
+[✓] Keyboard traversal ...................... unchanged this phase; the ladder's lift answers focus
+                                              as well as hover, and the audit's claims hold
+[✓] Reduced motion .......................... twelve pages settle at load with 0 animations by
+                                              count; the field is the designed still
+[✓] 1280 px screenshot vs reference ......... deliberate programme (ADR-008): the field and the
+                                              motion are ours; compared live against the
+                                              reference's flat field
+[✓] 768 px screenshot vs reference .......... unchanged from Phase 17 — no source change this phase
+[✓] 375 px screenshot vs reference .......... unchanged from Phase 17 — no source change this phase
+[✓] Regression check on an earlier phase .... every gate re-ran on every page — a11y 20 pages,
+                                              responsive 80 of 80, Lighthouse 8, performance 7; both
+                                              programme audits 106 of 106 and 62 of 62
+[✓] Deliberate deviations recorded .......... the performance spread and the brand exception — in
+                                              the deviations log and research/06 §10
+[✓] docs/MIND_MAP.md updated ................ checked against the tree: 225 files under source/,
+                                              none missing; nothing added, renamed or moved
+[✓] RUN_STATE.md + HANDOFF.md updated ....... in the close-out commit
+[✓] All six gates exit 0 .................... a11y, responsive, performance, lighthouse,
+                                              atmosphere, motion
+[✓] The print check ......................... four pages × A4 and Letter = eight PDFs, one sheet
+                                              each
+```
+
+---
+
 ## Blockers and deviations log
 
 Record anything that stopped progress, and any deliberate deviation from the reference.
@@ -2249,6 +2323,8 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-15 | 17 | Fixed | **The entrance fade failed the contrast gate, and the sweep that had passed it was blind.** The reveal's first build faded as it rose; the Lighthouse sweep sampled a section mid-fade and failed five pages' colour-contrast at 96–97, while the site's own a11y sweep — reading only the text element's own opacity, never its ancestors' — passed them. | The reveal is now the movement alone: opacity is not animated anywhere, and a mid-rise section is displaced and fully opaque. `audit-a11y.mjs` multiplies every ancestor's opacity into the text's alpha the way a browser composites it, and `audit-motion.mjs` holds the new claim directly. Lighthouse after the fix: **100 on all eight pages**; a11y 0 defects. Recorded in `docs/research/06` §9. |
 | 2026-10-15 | 17 | Observation | **The tenth animation was the frost.** An early probe of the home page expected nine animations at load — seven reveals and two drifts — and counted ten; the gate's census named it: the frost's own scroll-timeline animation had been there all along. | Hydrogen's census now asserts the designed set exactly — its reveals, two drift sheets, one frost, nothing else — and reduced motion asserts **zero animations** on all twelve family pages. Recorded in `docs/research/06` §9. |
 | 2026-10-15 | 17 | Deviation | **The 400-line ceiling after the motion: twelve files under `source/` before, twelve after — one left, one joined.** `tests/router/router.test.js` came back under at **342** (the fake page moved to `tests/router/dom-fixtures.js`), and `tests/components/pointer-light.test.js` crossed at **412**. `styles/tokens.css` grew 946 → **993** with §23. In `workspace/tools/visual/`, `audit-motion.mjs` ships at **686** lines — the largest tool — with its seam named: its six question blocks are self-contained, and the frost and the frame clock are the two that would move out first; `audit-atmosphere.mjs` came back under (394 → 370) with the split. | Recorded rather than kept quiet. Every other Phase 17 file ships under 400. |
+| 2026-10-16 | 18 | Observation | **The closing performance runs spread, as they have since Phase 11.** The battery's cold-load run read 107 ms slowest and one 77 ms long task on `/atoms/` (the viewer's own boot on a busy machine); the quiet re-run read 102 ms and none. | Recorded in the phase entry and `docs/research/06` §10. The field added no long task in either run — its gate holds the drift window directly (no long task, 16.7 ms median). The README's performance row carries the spread rather than a single reading. |
+| 2026-10-16 | 18 | Deviation | **The brand's preserved list has its first recorded exception, and two stale counts beside it.** `BRAND_GUIDELINES.md` §3 said the design language has "no gradients" and "only the two defined soft shadows"; the programme's field is gradient washes, and the elevation ladder grew a third defined step in Phase 17. | Recorded the way ADR-008 promised: the exception is the page *field* alone — data surfaces stay flat, the wash spends only `--g-*` tokens, the bound is derived and measured — and the list's wording now counts the ladder as it actually is. Written in `BRAND_GUIDELINES.md` §3 with ADR-008 as the reason. |
 
 ---
 

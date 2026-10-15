@@ -297,8 +297,8 @@ CanvasRenderingContext. That is the reason the boundary is drawn where it is.
 
 ### ADR-008 — The living paper: a designed field, bounded by tokens, moved only by the compositor
 
-**Status:** `ACCEPTED` (2026-10-15, author approval, raised under author instruction) — the measured
-numbers of the closing phase (18) join it when the programme completes
+**Status:** `ACCEPTED` (2026-10-15, author approval, raised under author instruction) — the programme
+closed in Phase 18; the measured numbers it promised are recorded at the end of this decision
 **Date raised:** 2026-10-15
 **Governs:** `styles/atmosphere.css` and `tokens.css` §22, the motion additions (the pointer light, the
 masthead's scrolled state, the router's transition), `BRAND_GUIDELINES.md` §3's preserved list, and the
@@ -357,6 +357,25 @@ reduced motion). The audit behind this decision, measured against eight referenc
 **Reversal cost.** Low, and deliberately shaped that way. `atmosphere.css` is one global sheet: removing
 its link returns the site to the flat reference field and leaves the tokens unused, and each motion axis
 is feature-gated and independently removable. The programme is built as a slice that can be lifted out.
+
+**The measured numbers, as the programme closes (Phase 18).** The field's gate,
+`audit-atmosphere.mjs`, holds **106 of 106 claims**: every on-field text run's background sampled
+behind the real text in four states — the reduced-motion still, the drift frozen at each of its
+extremes, and print — with the worst run at 5.21:1 against the model's derived 4.53:1 floor, every
+page family's bloom present and provably the family's own, print's sheets invisible over bare paper,
+and a lived-in drift window moving 120 frames at a 16.7 ms median with no long task and no layout
+shift. The motion's gate, `audit-motion.mjs`, holds **62 of 62**: the light follows to exactly the
+pointer (live 1.000) and lifts 5,660 sampled pixels by at most 4 LSB, dropping none; the frost reads
+`#f3f2f1`, 4.61:1 under the faintest ink; every reveal settles on all twelve family pages (53/53 on
+the glossary) and reduced motion is zero animations on every one; a forward move is one 0.3 s fade
+landing at the top with focus on `main`, and history moves never fade; the ladder reads back to the
+token; the frame clock is 16.7 ms turning against 16.7 ms still. The suite is **732 pass, 0 fail**.
+The four site-wide gates re-ran with the programme in — accessibility **0 defects / 29
+informational across 20 pages**, responsive **80 of 80**, performance worst layout shift **0** with
+no long task in the field's own windows, Lighthouse **accessibility 100 and best-practices 100 on
+all eight pages** (performance recorded, mean 89) — and the print check re-measured the four
+printable pages at A4 and Letter: **eight sheets, one each**. The evidence behind every number is in
+`progress/PHASE_LOG.md` and `docs/research/06-living-background-and-motion-audit.md` §9–10.
 
 ---
 

@@ -354,3 +354,20 @@ pages** (with the ancestor-opacity model above); responsive **80 of 80**; perfor
 layout shift 0, slowest cold load 79 ms, 0 long tasks**; Lighthouse **accessibility 100 and
 best-practices 100 on all eight pages**, SEO 100, performance recorded at a mean of 88. The suite is
 **732 pass, 0 fail**.
+
+## 10. What the programme closed on — the gates at delivery
+
+The four site-wide gates and the programme's own two re-ran with every page, on the programme's
+final tree. **The field: 106 of 106 claims** — one page per family, every on-field text run sampled
+behind the real text in four states, the worst run at 5.21:1 against the model's 4.53:1 floor, the
+drift's lived-in window moving 120 frames at a 16.7 ms median with no long task and no layout shift.
+**The motion: 62 of 62** — the light lifting 5,660 sampled pixels by at most 4 LSB and dropping
+none, the frost at `#f3f2f1` and 4.61:1 under the faintest ink, the reveals settling 7/7 on the home
+page, 7/7 on hydrogen and 53/53 on the glossary, reduced motion zero animations on all twelve family
+pages, the cross-fade at the house's 0.3 s, the ladder reading back to the token, and the frame
+clock at 16.7 ms either way. **The sweeps: accessibility 0 defects / 29 informational across 20
+pages; responsive 80 of 80; performance worst layout shift 0, no long task in the field's own drift
+windows; Lighthouse accessibility 100 and best-practices 100 on all eight pages** (SEO 100;
+performance recorded, mean 89). **The suite: 732 pass, 0 fail.** **The print check:** the four
+printable pages at A4 and Letter — **eight sheets, one each**, with the field's sheets
+`display: none` over bare paper, unchanged from §8.

@@ -1,11 +1,11 @@
 # Guide 2 — Tour of the codebase
 
 > **This describes the repository as it ships.** ADR-001 settled on the zero-dependency Node static
-> site generator, every folder below exists, and `v1.1.0` closed the last phase of the feature: `v1.0.0`
-> published the site and `v1.1.0` added the atom viewer — the four `atom-*` components, the `atom-*` lib
-> modules and one page
-> family. Where a name here and
-> the code disagree, the code is right and this guide is a defect — fix it in the same commit.
+> site generator and every folder below exists. `v1.0.0` published the site; `v1.1.0` added the atom
+> viewer (the four `atom-*` components, the `atom-*` lib modules and one page family); the living
+> paper, the programme that closes the site, adds the field and the motion (ADR-008) —
+> `atmosphere.css`, `motion.css` and the two components they drive. Where a name here and the code
+> disagree, the code is right and this guide is a defect — fix it in the same commit.
 
 ## The one rule that decides everything
 
@@ -121,6 +121,8 @@ source/
 │   │   ├── atom-bar.js        the glass bar's markup
 │   │   ├── atom-stage.js      the page's browser half: builds the scene, wires the bar
 │   │   ├── frame-loop.js      when a frame is drawn
+│   │   ├── pointer-light.js   the field's one script: the white light that follows a fine pointer
+│   │   ├── masthead-frost.js  the frost's class fallback where scroll timelines are absent
 │   │   └── site-header.js, submenu.js, site-footer.js, wordmark.js
 │   ├── pages/                 ← Layer 4: one module per page family
 │   │   ├── home.js
@@ -156,6 +158,8 @@ source/
 │   ├── tokens.css             ALL design values. No literal colour or size exists outside this file.
 │   ├── base.css               reset, typography defaults, focus, selection, reduced motion
 │   ├── layout.css             shell, ruled sections, spacing, the dotted-rule utilities
+│   ├── atmosphere.css         the living paper's field: the blooms, the lattice, the grain (§22)
+│   ├── motion.css             the rise, the frost's settle, the cross-fade's timing (§23)
 │   ├── components/            one stylesheet per component, same name as its module
 │   └── pages/                 one stylesheet per page family, same name as its module
 │                              one theme only: the light palette in tokens.css (ADR-006)
@@ -182,7 +186,7 @@ source/
 │   ├── build-data.js          fetches the open datasets and emits normalised JSON
 │   └── data-sources/          the transforms: pubchem.js, wikidata.js, layout.js, configuration.js
 │
-└── tests/                     Node's built-in test runner. No dependencies. 681 tests.
+└── tests/                     Node's built-in test runner. No dependencies. 732 tests.
     └── brand/  components/  data/  lib/  pages/  router/  tools/
 ```
 
@@ -217,6 +221,8 @@ source/
 | What the atom viewer draws | `source/scripts/lib/atom-model.js` (a record and three counts) and `source/scripts/components/atom-scene.js` (the same, alive) |
 | What the atom viewer looks like | `source/styles/tokens.css` §21 — the renderer reads those values at runtime |
 | How an element page reaches the viewer | `source/scripts/pages/element-detail.js` (`elementViewerLink`) and `elementFromFragment` in `components/atom-stage.js` |
+| The field behind every page | `source/styles/atmosphere.css`, with every value in `source/styles/tokens.css` §22 |
+| The motion (rise, light, frost, cross-fade) | `source/styles/motion.css`, `source/scripts/components/{pointer-light,masthead-frost}.js`, `source/scripts/router/router.js` |
 | The dev server | `source/tools/serve.js` |
 | Any file at all | `workspace/docs/MIND_MAP.md` |
 
