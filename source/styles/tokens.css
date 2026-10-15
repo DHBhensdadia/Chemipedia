@@ -945,6 +945,14 @@
   --masthead-frost-paper: 0.96;
   --masthead-frost-blur: 8px;
   --masthead-frost-range: 160px;
+
+  /* The reveals' travel: how far an element moves through the bottom of the
+     screen before it is settled. A fixed distance rather than a fraction of
+     the element, so a tall section and a short one settle alike, and small
+     enough that anything whose top is already this far above the fold when a
+     page loads is settled from its first frame: the rise belongs at the edge
+     of the screen, not in the middle of a reader's first view. */
+  --reveal-travel: 300px;
 }
 
 /* The glossary's two headings step down below the shell, where the reference's own do: measured at

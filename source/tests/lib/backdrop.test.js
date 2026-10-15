@@ -397,7 +397,7 @@ test("the drift is gated on the motion preference", () => {
   assert.ok(animations[0].index > gate, "an animation runs outside the gate");
 });
 
-test("every page links the field, after the layout it sits under", () => {
+test("every page links the field, after the layout it sits under, and the motion after the field", () => {
   const sheets = build.match(/GLOBAL_STYLESHEETS = \[([^\]]+)\]/);
 
   assert.ok(sheets, "the build declares no global sheets");
@@ -408,5 +408,11 @@ test("every page links the field, after the layout it sits under", () => {
     order.indexOf("styles/atmosphere.css") > order.indexOf("styles/layout.css"),
     "the field loads before the layout",
   );
+  assert.ok(order.includes("styles/motion.css"), "the build does not ship the motion");
+  assert.ok(
+    order.indexOf("styles/motion.css") > order.indexOf("styles/atmosphere.css"),
+    "the motion loads before the field",
+  );
   assert.ok(styleguide.includes("/styles/atmosphere.css"), "the styleguide does not show the field");
+  assert.ok(styleguide.includes("/styles/motion.css"), "the styleguide does not show the motion");
 });

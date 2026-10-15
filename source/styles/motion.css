@@ -1,0 +1,49 @@
+/* ==========================================================================
+   The motion — the paper's scroll-driven life.
+
+   The reveals: sections and card grids rise once as they enter, through the
+   platform's own scroll-driven animations. It is a scrub, not a trigger — an
+   element's rise is a function of where it is, so a reader who scrolls back
+   and forth sees it rise again rather than having missed it, and an element
+   that is already in view when a page loads resolves to its settled state
+   instead of freezing mid-fade. The range is a fixed distance through the
+   fold (tokens §23) rather than a fraction of the element, so a tall section
+   and a short one take the same scroll to arrive.
+
+   Every rule in this file sits inside `@media screen and
+   (prefers-reduced-motion: no-preference)` and
+   `@supports (animation-timeline: view())`: a reader who has asked for
+   stillness, a browser that has never heard of scroll timelines, and a
+   printed sheet all get the finished page, because nothing may be hidden by
+   a sheet that is not running. No script is involved.
+
+   The selectors name the two things the design reveals — the page's sections
+   and its card grids and lists — and deliberately nothing else: a legend, a
+   search's results and the atom bar are instruments, not content, and an
+   instrument that fades in is an instrument that can be missed.
+   ========================================================================== */
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    main section,
+    main ul[class$="-list"],
+    main ul[class$="-grid"],
+    main ul[class$="-cards"] {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry var(--reveal-travel);
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-sm));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
