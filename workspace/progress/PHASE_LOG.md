@@ -31,6 +31,7 @@ Update it **after every meaningful milestone**, not only at the end of a phase. 
 | 13 | The atom model and the live scene | `COMPLETE` | `c3b2aaf`..`86da30b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
 | 14 | The page, the bar and the navigation | `COMPLETE` | `861307d`, `190a08b` on `feature/atom-3d`, merged into `main` as `ad58ee2`, pushed, tagged `v1.1.0` |
 | 15 | Quality, delivery and the second reference's line | `COMPLETE` | `cd18435`, `c3ff53a`, `529fbe0` on `feature/atom-3d`, merged into `main` as `ad58ee2` and pushed; Pages `37638178700` green; the live page verified in a browser; tagged `v1.1.0` |
+| 16 | The field: the living paper, drawn and bounded | `COMPLETE` | `409036e`..`6b1cb2d` on `feature/living-paper` (local only — not merged, not pushed), plus the close-out commit |
 
 ---
 
@@ -1980,6 +1981,122 @@ one hash, `757dc410977ae08e`, for both.
 
 ---
 
+## Phase 16 — The field: the living paper, drawn and bounded
+
+**Goal:** the static field becomes the four-layer living paper — drawn entirely in CSS, bounded by
+tokens, and provable in a browser — before a single behaviour is written.
+
+**16.1 — the token layer and the sheet.** `tokens.css` §22 declares the field: the blooms (three
+numbered plus the family pair) each a `--g-*` reference with its anchor, its alpha cut at least 15 %
+under its own hue's AA ceiling and the derivation in a comment; the lattice at the table's own 28 px
+pitch, 1.1 % ink, with its fade mask; the grain as an inline turbulence tile at 0.02 × 0.5 — 1 %
+effective, multiplied; the sheet's 4 % bleed and the 1.08 scale that corrects it; the drift at 180 s
+and 240 s, alternate, 2.2 % / 1.6 %; the family map; and the narrow query that steps the wash to
+0.88 under 45 rem. `styles/atmosphere.css` (260 lines) draws them: four fixed pseudo-elements on
+`html` and `body`, `z-index: -1`, `pointer-events: none`, no background on `html` so the canvas keeps
+propagating; the family overrides keyed off the body's existing `data-page` — nine names, four
+default templates; two animations, both inside the no-preference gate; print strips all four sheets.
+The build links the sheet after `layout.css` as the fourth global sheet.
+
+**16.2 — the bound, derived in the suite.** `tests/lib/backdrop.test.js` grew to **14 tests**: every
+field hue resolved to a declared `--g-*` token; every shipped alpha ≤ 0.85 of its hue's ceiling,
+where the ceiling is computed live by the site's own contrast library against `tokens.css` itself;
+the texture alone still above AA; the grain tile's inline opacity matched to the token it charges;
+the family map exhaustive against the route manifest, one family per rule, every template mapped or
+defaulted; **the family pair read where it is overridden, not through a root alias** (the test the
+trap below demanded); the drift slow, small, and unable to open an edge; the sheets fixed, behind and
+deaf; print's four selects; the build's sheet order; and the plan's own overlap bound — every family
+scanned at four reference viewports with the texture charged at its worst on every sample, floor
+**4.575 : 1** at the element family on 375 px.
+
+**16.3 — the gate.** `workspace/tools/visual/audit-atmosphere.mjs`: **106 claims, all holding,
+exit 0**, one page per family read across its states — still, the drift frozen at each extreme,
+print, and scripting off. The four sheets present and fixed and deaf; every on-field text
+run's own ground sampled 5 px outside its box and asked the WCAG question — worst real reading
+**4.79 : 1**; the family anchor against the composite derived from the geometry tokens with the
+site's own contrast library; the **kill switch** — zero the family pair and require the anchor pixel
+to move, measured **4 to 7 LSB** on every page, which is what stops a pale family passing on a page
+whose bloom never painted; an opaque surface sampled on a 25-point grid to prove the field stays
+under it; print's sheets at `display: none` over bare paper; the no-script reading (`#f8f8f6`, five
+off paper, with scripting off); three phone frames with no sideways scroll; and one lived-in drift
+window — **120 frames, median gap 16.7 ms, zero long tasks, zero layout shift**. The run is saved at
+`workspace/screenshots/phase-16-audit-atmosphere.txt`. Mid-run history, kept because it is the
+phase's real story: the first version asked 94 claims and failed 6 — five anchors and one surface —
+and every anchor failure was the defect below.
+
+**16.4 — the defect only the pixels caught.** The family bloom's hue was first written as a root
+alias (`--field-bloom-1-hue: var(--field-family-hue)`). A `var()` inside a custom property is
+substituted where the property is *declared*, so the alias resolved to the default green on `:root`
+before any `body[data-page]` override could matter: `getComputedStyle` read the right hue per page,
+the token tests passed, and **every page wore the same green**. The audit's anchor caught it — the
+sampled pixel did not match the derived family composite — a column probe showed two different
+family pages reading identically, and the fix (`53c5715`) reads `--field-family-hue` /
+`--field-family-alpha` on the sheet that paints them, where the overrides are visible to
+substitution. `backdrop.test.js` now holds both halves: no root alias may return, and the family
+sheet must read the pair itself. After the fix the anchors differ per family, as they should.
+
+**16.5 — the sweeps, and the print counts.** Accessibility **0 defects and 29 informational across
+20 pages**; responsive **80 of 80**; performance **worst layout shift 0, slowest cold load 37 ms,
+0 long tasks in total**. Console and network clean — **zero console messages, zero failed or 4xx
+requests** — across the twelve swept pages and the style guide. Print re-measured the way Phase 10
+measured it: `/`, `/periodic-table/properties-and-states/`, `/elements/hydrogen/` and
+`/elements/iron/` rendered to PDF at A4 and Letter, the page objects counted in each file —
+**8 files, 1 sheet each, unchanged**.
+
+**16.6 — the style guide, and the families at three widths.** The guide gains **the living paper**:
+the four sheets named bottom to top, a swatch for each numbered bloom and for every family field —
+each chip the composite the tokens actually draw, mixed at the bloom's own alpha over the paper —
+with the pages every family covers read off the atmosphere sheet, every `--field-*` token with its
+computed value listed (54 rows), and a line reporting whether the machine is honouring reduced
+motion as you read. Everything is read from the stylesheets the page renders, so the guide cannot
+drift from the field. Two repairs it surfaced: the token rows wrap instead of pushing the guide
+6 px wide, and the type scale's demo words wrap at 375 — the guide now fits every width it is looked
+at. One page per family was captured at 1280 / 768 / 375 and their differences named: at desktop and
+tablet the frame's top-left carries the family's own composite — table amber `#fcf6f3`, glossary
+coral `#fbf6f4`, scene violet `#f8f5f7`, states blue `#f8f8f7`, ranking yellow `#fcf8f3`, evolution
+pink `#faf5f6`, downloads halogens `#f8f6f6`, calculator alkali `#f7f6f6`, element `#f5f5f2`, the
+default `#f8f7f5` at one sampled point; at 375 the masthead's own paper band (280-odd px) covers the
+family bloom's core and the field reads as the lattice, the grain and the far sheet's corner blooms —
+recorded in `docs/research/06` §8 as a composition question for Phase 17, not a patch here.
+
+**Phase 16 verification**
+
+```
+[✓] node --test source/tests ................ pass  695 pass, 0 fail — 14 new in tests/lib/backdrop.test.js
+                                              (the branch cut at 681)
+[✓] node --check on every changed module .... pass  backdrop.test.js, build.js, audit-atmosphere.mjs
+[✓] Brand scan .............................. PASS: brand scan clean (inside the suite)
+[✓] Console/network on every touched page ... zero console messages, zero failed or 4xx requests
+                                              across the twelve swept pages and the style guide
+[✓] Accessibility tree reviewed ............. audit-a11y: 0 defects, 29 informational across 20 pages
+[✓] Keyboard traversal ...................... unchanged pages; the field adds no controls
+[✓] Reduced motion .......................... honoured — the audit's still state has zero animations,
+                                              and both drift animations sit inside the no-preference gate
+[✓] 1280 px screenshot vs reference ......... deliberate deviation (ADR-008): the reference's field is a
+                                              flat fill; ours is the four bounded sheets. One page per
+                                              family captured; the family anchors named in 16.6
+[✓] 768 px screenshot vs reference .......... same, anchors named
+[✓] 375 px screenshot vs reference .......... same; the family core's occlusion behind the masthead
+                                              recorded in research/06 §8
+[✓] Regression check on an earlier phase .... 20 pages × 4 widths: 80 of 80 fit; the four printable
+                                              pages re-rendered to PDF at A4 and Letter, 8 files, 1 sheet
+                                              each; performance worst shift 0
+[✓] Deliberate deviations recorded .......... the vignette cut, the 375 family occlusion, the over-
+                                              ceiling test file, and tokens.css's growth — all below
+[✓] docs/MIND_MAP.md updated ................ rows for the audit, the sheet, the tests and the guide's
+                                              section, in their own commits
+[✓] RUN_STATE.md + HANDOFF.md updated ....... in this commit
+[✓] The audit exits 0 ....................... audit-atmosphere.mjs: 106 of 106 claims hold
+```
+
+**Commits.** `409036e` the field audit · `84cec12` the plan · `a286cd2` ADR-008 accepted ·
+`ae2fad9` tokens §22 · `ba1647a` the sheet and its build link · `e4b4c00` the bounds in tests ·
+`27115dc` the door file's ADR table · `53c5715` the family pair drawn where it is read ·
+`6336dc0` the pixel audit · `a34b552` the overlap bound in the test · `6b1cb2d` the style guide's
+section · the close-out commit.
+
+---
+
 ## Blockers and deviations log
 
 Record anything that stopped progress, and any deliberate deviation from the reference.
@@ -2014,6 +2131,10 @@ Record anything that stopped progress, and any deliberate deviation from the ref
 | 2026-10-07 | 15 | Work item | **The reference's grid, and the bar's glass brought to its measured values.** The author asked for the reference's grid behind the scene and a better field. The reference draws its own as an SVG graph-paper pattern (a 1px rule every 10px, one heavier rule every 100px, `#9C92AC` at 3%) on a `#1a1f26` field *behind a transparent canvas*; ours is the scene's own first pass instead, because the canvas here is opaque for a measured reason — a translucent ring blended into a transparent buffer and composited afterwards comes out at a third of the opacity it was asked for. So `GRID_PROGRAM` and `scripts/components/atom-field.js`: one full-screen triangle whose corners come from the vertex' own index (no buffer, no vertex array), lines placed from the fragment's own position and one pixel wide at any pixel ratio, every fourth line stronger, the field a shade darker towards the corners. Five tokens, and the bar's glass moved to the reference's own measured values (blur 14 → **15px**, radius 1.25rem → **0.75rem**, fill 0.62 → **0.55**, border 0.24 → **0.18**, plus the 40px halo of its own accent, in our electron's hue rather than its cyan); the field's own colour lifted from `#08211f` to `#0d2b28` so the grid has somewhere to sit. `atom-pixels.mjs` learned the panel is two colours now (field and line, both faded towards the corners) so the pixel audits keep measuring the scene rather than the panel: the light atom is back to **0.39%** of the stage. | Evaluated in a browser: the grid is 56 device pixels apart at a ratio of two (28 CSS), its lines are the token's exact colour, and the corner measures `(6, 20, 18)` — the shader's own formula to the unit. All 57 + 33 + 25 atom claims hold, the frame is still vsync-bound at 16.70 ms with 0 long tasks, and accessibility is 0 defects across 20 pages. Suite: 672 → **681**. |
 | 2026-10-07 | 15 | Deviation | **The review change's split, and the four files the second reading pushed over the ceiling.** The plane-and-placement half of the atom moved out of `scripts/lib/atom-model.js` — which came back **under** at 360 — into the new `scripts/lib/atom-orbit.js` at 121, a split along the picture's real seam (what an atom *is* against what *moves*). Four files crossed 400 for the first time: `scripts/lib/matrix4.js` (421, the three-axis turn and the direction transform the planes are built from), `scripts/components/atom-view.js` (425, the five light uniforms and the per-ring orientation upload), `tests/lib/atom-model.test.js` (**518**, the packing held against all 118 records) and `styles/tokens.css` (795 → **811**, the sky/ground/roughness/metalness/specular values and the ring spread). The over-ceiling list is now **ten under `source/`**: those four plus `styles/pages/element-detail.css` (520), `tests/pages/glossary.test.js` (473), `styles/components/periodic-table.css` (457), `tests/components/periodic-table.test.js` (444), `tests/router/router.test.js` (427) and `scripts/components/periodic-table.js` (418); and the same three workspace tools that no page ships (`audit-atom.mjs` 596, `compare.mjs` 505, `audit-atom-scene.mjs` 424). | Recorded rather than kept quiet. `matrix4.js` splits cleanly down the middle — its perspective-and-view half belongs beside `orbit-camera.js`, which is the only caller of it — and `atom-view.js`'s particle draw and ring draw are the next seam; both are named as candidates rather than left implicit, and neither is this change's work. |
 | 2026-10-05 | 3–4 | Resolved | **Screenshot capture failed for two sessions running.** `preview_screenshot` reported that the webview produced no frames — three times in the session that built the engine, twice more at the start of the next, with `preview_resize {fill: true}` and once in a freshly opened tab. | **Resolved by the author's instruction to fix the tooling.** Track B of `docs/research/02` was adopted: `workspace/tools/visual` drives the system Chrome headlessly and captures, diffs and measures both pages. Both phases now close `COMPLETE` on captures, and the panel's own screenshot tool is no longer on the critical path for any phase. |
+| 2026-10-15 | 16 | Fixed | **The family bloom never wore its family, and only the pixels said so.** The bloom's hue was aliased on `:root` (`--field-bloom-1-hue: var(--field-family-hue)`), and a `var()` inside a custom property is substituted where the property is **declared** — so the alias resolved to the default green on the root element before any `body[data-page]` override could matter. Every computed property read correctly per page; every token test passed; every page wore the same green. | Found by the audit — the anchor's sampled pixel did not match the derived family composite — and fixed in `53c5715` by reading `--field-family-hue`/`--field-family-alpha` on the sheet that paints them. `backdrop.test.js` now holds both halves: no root alias may return, and the family sheet must read the pair itself. The family anchors now differ per page (16.6). |
+| 2026-10-15 | 16 | Deviation | **The vignette was cut from the four layers.** `docs/research/06` §5 promised a 2 % edge shade; the build does not draw it. | Recorded in `research/06` §8. The lattice's own mask already fades the grid toward the frame, and the corners are where the bloom anchors already sit; a third charge on the same pixels buys nothing the budget's margin should pay for. |
+| 2026-10-15 | 16 | Observation | **At 375 px the masthead's paper band (280-odd px tall) covers the family bloom's core (10 % / 6 %).** The visible share of the bloom below the masthead measures ≤ 2 LSB of tint on the sampled column; the field at phone width is the lattice, the grain and the far sheet's corner blooms. | Recorded in `research/06` §8 and here rather than patched: whether the family bloom should follow the masthead's height on phones is a composition question for Phase 17. The family differences are measured present at 1280 and 768. |
+| 2026-10-15 | 16 | Deviation | **The 400-line ceiling after the field: `tests/lib/backdrop.test.js` crossed it (316 → 412).** The plan asked the test to hold the field's overlap bound itself, and the scan is what crossed the line; `styles/tokens.css` grew 824 → 946 with §22, staying the standing exception it has been since Phase 1. | Recorded. The seam is named: the bound scan is self-contained and would live as `tests/lib/backdrop-bound.test.js` if the file is split. `atmosphere.css` ships at 260 lines and `audit-atmosphere.mjs` at 394, both under. |
 
 ---
 

@@ -220,6 +220,72 @@ claim.
   **ADR-008** records the line it walks: the reference's flat field becomes a deliberate deviation;
   the data surfaces stay flat; the field stays bounded; motion stays optional.
 
+## 8. What Phase 16 shipped — the record
+
+Phase 16 built the field. This section is the record of where the build deliberately differs from §5,
+what the numbers finally were, and the one defect that only the pixels caught. Everything above
+stands as written.
+
+**The vignette was cut.** §5's table carried one — a 2 % edge shade to ground the masthead and stop
+the field reading as an endless sheet. The build does not draw it. The lattice's own mask already
+fades the grid toward the frame, and that fade is what does the grounding; a vignette on top would be
+a third charge on the same corner pixels — where the bloom anchors already sit — for a job two
+layers already do. The budget's margin is spent on colour that carries meaning. Cut in the build,
+recorded here rather than kept as a layer nobody measured.
+
+**The numbers, as shipped** (tokens §22; each is held by a test or measured by the audit):
+
+| | Shipped | The bound it was cut against |
+|---|---|---|
+| Bloom radius / fade | `68vmax`, transparent at 72 % of it | reaches every reference viewport's frame from its corner |
+| Bloom alphas | 0.032 (halogens) … 0.058 (the states' pale blue) | ≥ 15 % under each hue's own AA ceiling (§6) |
+| Anchors | corners: 10 %/6 %, 92 %/14 %, 8 %/92 %, 94 %/88 % | the outer band; the counter-phase drift keeps them apart |
+| Wash focus | 1, stepping to **0.88** under 45 rem | the narrow viewport's tighter ink budget |
+| Lattice / grain | 1.1 % ink at 28 px; 0.02 × 0.5 = **1 %** effective, multiplied | ≤ 2.5 % each (§6) |
+| Sheet bleed / scale | 4 %, corrected by `(x + bleed) / 1.08` | the drift can never open an edge |
+| Drift | 180 s / 240 s, alternate, `ease-in-out`, 2.2 % / 1.6 % | ≤ 4 % of the sheet, counter-phased |
+
+The conservative scan — every family × four reference viewports, the texture charged at its worst on
+every sample — floors at **4.575 : 1** (the element family at 375 px), and `backdrop.test.js` holds
+that scan. The browser audit's worst real on-field text reads **4.79 : 1** at the drift's extremes.
+Both clear AA, which is what it means to spend ink headroom in a place a reader never rests their
+eye.
+
+**The family trap, found by pixels and not by tokens.** The family bloom's hue was first written as a
+root alias — `--field-bloom-1-hue: var(--field-family-hue)` on `:root`. A `var()` written inside a
+custom property is substituted **where the property is declared**, so the alias resolved to the
+default green on the root element before any `body[data-page]` override could matter: the computed
+property read correctly per page, the token tests passed, and every page wore the same green. The
+audit caught it — the anchor's sampled pixel did not match the derived family colour — the fix reads
+`--field-family-hue`/`--field-family-alpha` on the sheet that paints them, and `backdrop.test.js`
+now holds both halves: no root alias may return, and the family sheet must read the pair itself.
+That is this audit's reason to exist stated as one incident: **tokens can be individually true and
+collectively wrong, and only the rendered pixel settles it.**
+
+**The phone, recorded honestly.** At 375 px the masthead's own paper band is 280-odd pixels tall and
+the family bloom's core (10 %/6 %) sits behind it; the visible share of the bloom below the masthead
+measures ≤ 2 LSB of tint on the sampled column, and the narrow query has already stepped the wash to
+0.88. The field at phone width is the lattice, the grain and the far sheet's corner blooms; the
+family differences are measured present at 1280 and 768 (table amber `#fcf6f3`, glossary coral
+`#fbf6f4`, scene violet `#f8f5f7` at one sampled point, every family distinct). Whether the family
+bloom should follow the masthead's height on phones is a composition question for Phase 17, not a
+defect to patch here.
+
+**The gate, and what it asks.** `workspace/tools/visual/audit-atmosphere.mjs` reads the field as
+pixels on one page per family — still, the drift frozen at each extreme, print and scripting off —
+and asks **106 claims**, all holding, exit 0: the four sheets present and fixed and
+deaf; every on-field text run's own sampled ground above AA (worst **4.79 : 1**); the family anchor
+against the composite derived from the geometry tokens with the site's own contrast library; the
+**kill switch** (zero the family pair and require the pixel to move — 4 to 7 LSB everywhere), which
+is what stops a pale family passing on a page whose bloom never painted; an opaque surface sampled on
+a grid to prove the field stays under it; print's sheets at `display: none` over bare paper; the
+no-script reading (anchor `#f8f8f6`, five off paper, no JavaScript); three phone frames with no
+sideways scroll; and one lived-in drift window — **120 frames, 16.7 ms median, zero long tasks, zero
+layout shift**. The suite itself is **695 pass, 0 fail**, and the three site-wide sweeps are
+unchanged (accessibility 0 defects across 20 pages, responsive 80 of 80, performance worst shift 0,
+0 long tasks). Print counts re-measured by rendering to PDF at A4 and Letter and counting the page
+objects: the four pages Phase 10 measured are **1 sheet each, 8 files, no change**.
+
 The honest summary of this audit, for the interview: eight fields were opened and their machinery
 read, the techniques that recur are small and countable, the one that matters — keeping the text
 out of the colour — is the one our own contrast maths independently demands, and everything else is
