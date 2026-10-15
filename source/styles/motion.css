@@ -7,7 +7,7 @@
    element's rise is a function of where it is, so a reader who scrolls back
    and forth sees it rise again rather than having missed it, and an element
    that is already in view when a page loads resolves to its settled state
-   instead of freezing mid-fade. The range is a fixed distance through the
+   instead of freezing mid-rise. The range is a fixed distance through the
    fold (tokens §23) rather than a fraction of the element, so a tall section
    and a short one take the same scroll to arrive.
 
@@ -26,6 +26,12 @@
    heard of scroll timelines or of view transitions, and a printed sheet all
    get the finished page, because nothing may be hidden by a sheet that is
    not running.
+
+   The rise moves an element and never fades one: an entrance that spent
+   opacity would draw text at a ratio no token promises for a stretch of the
+   scroll, and a contrast gate that samples the page as the reader meets it
+   is right to refuse that. An element's colour is its colour at every scroll
+   position; only its place changes.
 
    The reveal selectors name the two things the design reveals — the page's
    sections and its card grids and lists — and deliberately nothing else: a
@@ -54,12 +60,10 @@
 
 @keyframes reveal {
   from {
-    opacity: 0;
     transform: translateY(var(--rise-sm));
   }
 
   to {
-    opacity: 1;
     transform: none;
   }
 }

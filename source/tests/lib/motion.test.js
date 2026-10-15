@@ -72,9 +72,8 @@ test("the rise and the range come from the token layer, and the scrub is linear"
     "the travel does not read the token layer",
   );
   // Linear on purpose: a scroll timeline is scrubbed by the reader, not
-  // played by the clock, so the honest mapping is position — and it is what
-  // keeps an element peeking over the fold at load almost invisible instead
-  // of a front-loaded ghost.
+  // played by the clock, so the honest mapping is position — a constant pace
+  // through the fold rather than a curve that front-loads the motion.
   assert.ok(bare.includes("animation: reveal linear both"), "the scrub is not linear");
 });
 
@@ -88,13 +87,18 @@ test("every token the sheet reads is one the token layer declares", () => {
   }
 });
 
-test("the reveal's last frame is the finished page", () => {
+test("the reveal moves the page and never fades it", () => {
   const from = bare.match(/from\s*\{([^}]*)\}/);
   const to = bare.match(/to\s*\{([^}]*)\}/);
 
   assert.ok(from, "the keyframes declare no first frame");
   assert.ok(to, "the keyframes declare no last frame");
-  assert.ok(/opacity:\s*0\b/.test(from[1]), "the first frame is not absent");
-  assert.ok(/opacity:\s*1\b/.test(to[1]), "the last frame is not present");
+  assert.ok(
+    /transform:\s*translateY\(var\(--rise-sm\)\)/.test(from[1]),
+    "the first frame is not the rise",
+  );
   assert.ok(/transform:\s*none/.test(to[1]), "the last frame is not settled");
+  // No opacity in either frame: an entrance fade draws text below the contrast every token
+  // promises for a stretch of the scroll, and the Lighthouse gate rightly refuses it.
+  assert.ok(!/opacity/.test(from[1]) && !/opacity/.test(to[1]), "the reveal spends opacity");
 });

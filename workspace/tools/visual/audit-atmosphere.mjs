@@ -23,6 +23,7 @@
 import { chromium } from "playwright";
 import { PNG } from "pngjs";
 import { compositeOver, contrastRatio, AA_LARGE, AA_TEXT } from "../../../source/scripts/lib/contrast.js";
+import { asHex, close, hexOf, patchMedian, pixelAt } from "./lib/pixels.mjs";
 
 const BASE = process.env.BASE ?? "http://127.0.0.1:4180";
 const DESKTOP = { width: 1280, height: 900 };
@@ -54,31 +55,6 @@ const fail = (claim, detail) => {
 const pass = (claim) => claims.push({ claim, ok: true });
 
 const browser = await chromium.launch({ channel: "chrome" });
-
-const asHex = ({ r, g, b }) => "#" + [r, g, b].map((c) => c.toString(16).padStart(2, "0")).join("");
-const hexOf = (hex) => ({ r: parseInt(hex.slice(1, 3), 16), g: parseInt(hex.slice(3, 5), 16), b: parseInt(hex.slice(5, 7), 16) });
-const pixelAt = (png, x, y) => {
-  const i = (y * png.width + x) * 4;
-  return { r: png.data[i], g: png.data[i + 1], b: png.data[i + 2] };
-};
-
-/** The middle of a small patch — the reading that survives one lattice hairline or a glyph's edge. */
-const patchMedian = (png, x, y, size = 3) => {
-  const channels = [[], [], []];
-  for (let dy = -size; dy <= size; dy += 1) {
-    for (let dx = -size; dx <= size; dx += 1) {
-      const px = pixelAt(png, Math.max(0, Math.min(png.width - 1, x + dx)), Math.max(0, Math.min(png.height - 1, y + dy)));
-      channels[0].push(px.r);
-      channels[1].push(px.g);
-      channels[2].push(px.b);
-    }
-  }
-  const median = channels.map((list) => list.sort((a, b) => a - b)[(list.length - 1) >> 1]);
-  return { r: median[0], g: median[1], b: median[2] };
-};
-
-const close = (a, b, tolerance) =>
-  Math.abs(a.r - b.r) <= tolerance && Math.abs(a.g - b.g) <= tolerance && Math.abs(a.b - b.b) <= tolerance;
 
 /** Runs in the page: the text that actually sits on the field — nothing between it and body paints. */
 const onFieldText = () =>
